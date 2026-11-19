@@ -1,6 +1,6 @@
 # HarnessPack
 
-给 Claude Code / Codex / Cursor / DSH 等 harness 生态里的插件做的 **Star 竞速榜**：每天抓一次 star，按日增、周/月增速、总 star、名次跃升、新秀排出榜单，曲线可查。
+只收录 **DeepSeek Harness（DSH）插件** 的 **Star 竞速榜**：每天抓一次 star，按日增、周/月增速、总 star、名次跃升、新秀排出榜单，曲线可查。
 
 > 当前阶段：Phase 0（数据地基）+ Phase 1（只读 API + Web 前端）。押注、账号、推荐位在后续阶段。
 
@@ -8,9 +8,9 @@
 
 | 路径 | 作用 |
 | --- | --- |
-| `data/plugins.seed.json` | 入选名单（100 个仓库，人工复核） |
+| `data/plugins.seed.json` | 入选名单（100 个 DSH 插件，人工复核） |
 | `data/snapshots/YYYY-MM-DD.json` | 每日快照，由 Actions 提交进 git，是唯一事实源 |
-| `scripts/snapshot.py` | 抓取器（GitHub REST，ETag/退避/失败隔离） |
+| `scripts/snapshot.py` | 抓取器（GitHub REST，退避/失败隔离） |
 | `scripts/validate.py` | 快照与名单校验 |
 | `backend/app` | FastAPI + SQLite（导入、榜单、/api/v1） |
 | `backend/tests` | pytest |

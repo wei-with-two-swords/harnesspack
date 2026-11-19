@@ -14,12 +14,17 @@ export default function About() {
       <header>
         <h1 className="text-2xl font-semibold text-white">数据口径与收录规则</h1>
         <p className="mt-2 text-muted">
-          HarnessPack 只做一件事：把 harness 扩展的 star 变化如实记录下来，并让增速可比。
+          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 star 变化如实记录下来，并让增速可比。
         </p>
       </header>
 
       <section className="card card-pad space-y-2">
         <h2 className="text-base font-semibold text-white">数据从哪来</h2>
+        <p className="text-muted">
+          只收录 DeepSeek Harness（DSH）插件：仓库必须能通过 <code>dsh plugin add</code> 安装
+          （package.json 含 <code>dsh.bundle</code> 或 <code>dsh.client</code>），DSH 本体、桌面客户端、
+          纯收录清单与跨 harness 应用不在范围内。
+        </p>
         <p className="text-muted">
           全部数字来自 GitHub 公开 REST API 的 <code className="num text-body">stargazers_count</code>。
           每天 UTC 00:10 由 GitHub Actions 抓取一次并提交快照，站点只读这些快照，不临场请求 GitHub。
@@ -51,7 +56,7 @@ export default function About() {
           每期最多 5 席（5%），结算周冻结。
         </p>
         <ul className="list-disc space-y-1 pl-5 text-muted">
-          <li>硬性资格：公开非 fork、品类匹配、近 180 天活跃、README 与 LICENSE、star ≥ 100。</li>
+          <li>硬性资格：可安装进 DSH、公开非 fork、近 180 天活跃、README 与 LICENSE、star ≥ 100。</li>
           <li>退出原因：删除 / 归档、定位改变、90 天无更新、违规、被挑战替换、作者申请。</li>
           <li>退出后保留历史曲线，不 404；次日退出榜单；冷却 30 天，12 个月内最多进出 2 次。</li>
           <li>所有变更写入 changelog 并随 seed 文件提交到 git，可审计。</li>

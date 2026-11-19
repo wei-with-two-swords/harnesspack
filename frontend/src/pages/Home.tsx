@@ -41,12 +41,12 @@ export default function Home() {
   return (
     <>
       <section className="mb-8">
-        <div className="pill mb-3">HARNESS EXTENSIONS · DAILY SNAPSHOT</div>
+        <div className="pill mb-3">DSH PLUGINS · DAILY SNAPSHOT</div>
         <h1 className="max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          100 个 harness 扩展，<span className="text-teal">真实 star 增速</span>的竞速场
+          100 个 DSH 插件，<span className="text-teal">真实 star 增速</span>的竞速场
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          覆盖 Claude Code、Codex、Cursor、DSH 等扩展生态。每天 00:10 UTC 抓取一次 GitHub
+          只收录可安装进 DeepSeek Harness（DSH）的插件。每天 00:10 UTC 抓取一次 GitHub
           star，只展示可核对的数字：不回填、不美化、异常单独标注。
         </p>
         {data?.as_of ? (

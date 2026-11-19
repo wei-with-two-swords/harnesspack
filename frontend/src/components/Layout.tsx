@@ -52,8 +52,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="border-t border-line/70 py-6">
         <div className="shell flex flex-col gap-2 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            HarnessPack 收录 Claude Code / Codex / Cursor / DSH 等 harness 扩展，数据来自 GitHub
-            公开 API。
+            HarnessPack 只收录 DeepSeek Harness（DSH）插件，数据来自 GitHub 公开 API。
           </p>
           <p>
             非官方项目 ·{' '}

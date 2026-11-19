@@ -15,7 +15,7 @@ export default function Sponsors() {
         <h2 className="text-base font-semibold text-white">三条底线</h2>
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-muted">
           <li>物理隔离：赞助内容只出现在标注区块，不混排进榜单。</li>
-          <li>品质门槛：只接受与 harness 扩展相关的项目，拒绝与收录名单直接竞争排名的投放。</li>
+          <li>品质门槛：只接受 DSH 插件或面向 DSH 开发者的工具，拒绝与收录名单直接竞争排名的投放。</li>
           <li>可关闭：用户可折叠，首屏不遮挡数据。</li>
         </ul>
       </section>
