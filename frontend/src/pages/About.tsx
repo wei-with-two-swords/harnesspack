@@ -25,7 +25,7 @@ export default function About() {
           每天 UTC 00:10 由 GitHub Actions 抓取一次并提交快照，站点只读这些快照，不临场请求 GitHub。
         </p>
         <p className="text-muted">
-          快照自 2026-11-19 开始，不做历史回填。曲线少于 3 个点时显示「数据积累中」——这是产品规则，不是 bug。
+          快照自 2026-11-19 开始，不做历史回填。快照少于 2 天时显示「数据积累中」——这是产品规则，不是 bug。
         </p>
       </section>
 

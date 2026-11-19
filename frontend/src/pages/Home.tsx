@@ -74,9 +74,9 @@ export default function Home() {
               hint="自 2026-11-19 起"
             />
             <StatCard
-              label="今日新收录"
+              label="今日入库"
               value={formatNumber(data.kpis.new_today)}
-              hint="按首次入库日计"
+              hint="按首次观测计"
             />
           </section>
 

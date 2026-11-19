@@ -123,7 +123,7 @@ export default function PluginDetail() {
               <dd className="num text-body">{formatDate(data.repo_created_at)}</dd>
             </div>
             <div className="flex justify-between gap-4">
-              <dt className="text-muted">最近今日增量</dt>
+              <dt className="text-muted">最新日增量</dt>
               <dd className="num text-body">{formatDelta(data.delta)}</dd>
             </div>
           </dl>
