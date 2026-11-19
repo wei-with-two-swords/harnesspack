@@ -8,7 +8,7 @@
 
 | 路径 | 作用 |
 | --- | --- |
-| `data/plugins.seed.json` | 入选名单（100 个 DSH 插件，人工复核） |
+| `data/plugins.seed.json` | 入选名单（500 个 DSH 插件，人工复核） |
 | `data/snapshots/YYYY-MM-DD.json` | 每日快照，由 Actions 提交进 git，是唯一事实源 |
 | `scripts/snapshot.py` | 抓取器（GitHub REST，退避/失败隔离） |
 | `scripts/validate.py` | 快照与名单校验 |
@@ -16,7 +16,7 @@
 | `backend/tests` | pytest |
 | `frontend/` | React + TS + Vite + Tailwind，构建产物由后端托管 |
 | `docs/需求分析.md` | 系统架构与功能需求 |
-| `docs/收录规则.md` | 100 名单的进入、退出与替换机制 |
+| `docs/收录规则.md` | 500 名单的进入、退出与替换机制 |
 | `docs/adr/` | 架构决策记录 |
 | `deploy/` | Nginx、systemd、同步/备份脚本与部署手册 |
 
@@ -50,11 +50,11 @@ pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 
 ```powershell
 $env:GITHUB_TOKEN = "<fine-grained PAT, public repos read-only>"
-python scripts/snapshot.py            # 全量 100 个仓库
+python scripts/snapshot.py            # 全量 500 个仓库
 python scripts/validate.py            # 校验
 ```
 
-- 未认证只有 60 次/小时，跑不满 100 个仓库，必须提供 token。
+- 未认证只有 60 次/小时，跑不满 500 个仓库，必须提供 token。
 - 每天 00:10 UTC 由 `.github/workflows/snapshot.yml` 自动执行；漏跑可手动 `workflow_dispatch`。
 
 ## API（v1）

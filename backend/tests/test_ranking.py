@@ -87,6 +87,31 @@ def test_empty_database(tmp_path):
     conn.close()
 
 
+def test_category_board_filters_and_reranks(db):
+    payload = ranking.board(db, "total", category="workflow")
+    assert [item["slug"] for item in payload["items"]] == ["alpha-one", "delta-four"]
+    assert [item["rank"] for item in payload["items"]] == [1, 2]
+    assert payload["items"][0]["prev_rank"] == 1
+
+    velocity = ranking.board(db, "velocity", category="workflow")
+    assert [item["slug"] for item in velocity["items"]] == ["alpha-one", "delta-four"]
+
+    rookie = ranking.rookie_board(db, category="workflow")
+    assert rookie["items"] == []
+    assert ranking.rookie_board(db, category="coding")["items"][0]["slug"] == "beta-two"
+
+
+def test_categories_index(db):
+    payload = ranking.categories(db)
+    by_name = {item["category"]: item for item in payload["items"]}
+    assert set(by_name) == {"workflow", "coding", "design"}
+    workflow = by_name["workflow"]
+    assert workflow["count"] == 2
+    assert workflow["total_stars"] == 210 + 140
+    assert [t["slug"] for t in workflow["top"]] == ["alpha-one", "delta-four"]
+    assert payload["items"][0]["category"] == "workflow"
+
+
 def test_plugin_detail_and_series(db):
     detail = ranking.plugin_detail(db, "alpha-one")
     assert detail is not None

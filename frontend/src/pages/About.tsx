@@ -35,7 +35,7 @@ export default function About() {
       </section>
 
       <section className="card card-pad">
-        <h2 className="text-base font-semibold text-white">五个榜单怎么算</h2>
+        <h2 className="text-base font-semibold text-white">榜单怎么算</h2>
         <dl className="mt-3 divide-y divide-line/60">
           {BOARDS.map(([name, desc]) => (
             <div key={name} className="flex gap-4 py-2.5">
@@ -46,14 +46,15 @@ export default function About() {
         </dl>
         <p className="mt-3 text-xs text-muted">
           所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
+          分类榜（UI / 上下文 / 模型 / 工具 / 媒体等）只在同一分类内重新排名。
         </p>
       </section>
 
       <section className="card card-pad space-y-2">
         <h2 className="text-base font-semibold text-white">收录与退出</h2>
         <p className="text-muted">
-          名单上限 100 个，是容量而不是终身席位。每月首个周一做准入评审；每周结算后允许挑战者替换，
-          每期最多 5 席（5%），结算周冻结。
+          名单上限 500 个，是容量而不是终身席位。每月首个周一做准入评审；每周结算后允许挑战者替换，
+          每期最多 10 席（2%），结算周冻结。
         </p>
         <ul className="list-disc space-y-1 pl-5 text-muted">
           <li>硬性资格：可安装进 DSH、公开非 fork、近 180 天活跃、README 与 LICENSE、star ≥ 100。</li>

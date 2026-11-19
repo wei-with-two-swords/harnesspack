@@ -1,5 +1,6 @@
 import type {
   BoardResponse,
+  CategoriesResponse,
   Dashboard,
   ListResponse,
   PluginDetail,
@@ -38,10 +39,17 @@ async function get<T>(path: string): Promise<T> {
 
 export const api = {
   dashboard: () => get<Dashboard>('/api/v1/dashboard'),
-  board: (board: string, window?: number) =>
-    get<BoardResponse>(
-      `/api/v1/rankings/${encodeURIComponent(board)}${window ? `?window=${window}` : ''}`,
-    ),
+  board: (board: string, window?: number, category?: string, limit?: number) => {
+    const params = new URLSearchParams();
+    if (window) params.set('window', String(window));
+    if (category) params.set('category', category);
+    if (limit) params.set('limit', String(limit));
+    const qs = params.toString();
+    return get<BoardResponse>(
+      `/api/v1/rankings/${encodeURIComponent(board)}${qs ? `?${qs}` : ''}`,
+    );
+  },
+  categories: () => get<CategoriesResponse>('/api/v1/categories'),
   plugin: (slug: string) => get<PluginDetail>(`/api/v1/plugins/${encodeURIComponent(slug)}`),
   series: (slug: string, days = 90) =>
     get<SeriesResponse>(`/api/v1/plugins/${encodeURIComponent(slug)}/series?days=${days}`),

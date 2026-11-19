@@ -6,6 +6,8 @@ import Rankings from './pages/Rankings';
 import PluginDetail from './pages/PluginDetail';
 import About from './pages/About';
 import Sponsors from './pages/Sponsors';
+import Categories from './pages/Categories';
+import CategoryBoard from './pages/CategoryBoard';
 import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
@@ -23,7 +25,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/rankings" element={<Navigate to="/rankings/velocity" replace />} />
+        <Route path="/rankings/category/:category" element={<CategoryBoard />} />
         <Route path="/rankings/:board" element={<Rankings />} />
+        <Route path="/categories" element={<Categories />} />
         <Route path="/plugins/:slug" element={<PluginDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/sponsors" element={<Sponsors />} />

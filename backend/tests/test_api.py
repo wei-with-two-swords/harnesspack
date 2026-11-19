@@ -31,6 +31,22 @@ def test_rankings_reject_bad_input(client):
     assert client.get("/api/v1/rankings/growth?window=5").status_code == 400
 
 
+def test_categories_endpoint(client):
+    payload = client.get("/api/v1/categories").json()
+    names = [item["category"] for item in payload["items"]]
+    assert "workflow" in names
+    workflow = next(item for item in payload["items"] if item["category"] == "workflow")
+    assert workflow["count"] == 2
+    assert payload["as_of"] == "2026-11-12"
+
+
+def test_rankings_category_filter(client):
+    payload = client.get("/api/v1/rankings/total?category=workflow").json()
+    assert payload["total"] == 2
+    assert [item["slug"] for item in payload["items"]] == ["alpha-one", "delta-four"]
+    assert client.get("/api/v1/rankings/total?category=nope").json()["total"] == 0
+
+
 def test_plugins_search(client):
     payload = client.get("/api/v1/plugins?query=beta").json()
     assert payload["total"] == 1
@@ -78,7 +94,9 @@ def test_robots_and_sitemap(client):
     body = sitemap.text
     assert "http://testserver/rankings/velocity" in body
     assert "http://testserver/plugins/alpha-one" in body
-    assert body.count("<url>") == 13
+    assert "http://testserver/categories" in body
+    assert "http://testserver/rankings/category/workflow" in body
+    assert body.count("<url>") == 17
 
 
 def test_spa_missing_dist_returns_404(client):

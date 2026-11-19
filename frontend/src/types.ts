@@ -21,6 +21,7 @@ export interface BoardResponse {
   as_of: string | null;
   window: number | null;
   items: RankingItem[];
+  total?: number;
   reason?: string;
 }
 
@@ -95,4 +96,16 @@ export interface ListResponse<T> {
   items: T[];
   total: number;
   as_of: string | null;
+}
+
+export interface CategorySummary {
+  category: string;
+  count: number;
+  total_stars: number;
+  top: { slug: string; name: string; stars: number }[];
+}
+
+export interface CategoriesResponse {
+  as_of: string | null;
+  items: CategorySummary[];
 }

@@ -38,6 +38,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </Link>
           <nav className="flex items-center gap-1 text-sm">
             <NavItem to="/rankings/velocity">榜单</NavItem>
+            <NavItem to="/categories">分类榜</NavItem>
             <NavItem to="/about">收录规则</NavItem>
             <NavItem to="/sponsors">推荐位</NavItem>
           </nav>

@@ -33,18 +33,20 @@ def _previous_date(conn: sqlite3.Connection, day: str) -> str | None:
     return row["d"] if row and row["d"] else None
 
 
-def _rows_on(conn: sqlite3.Connection, day: str) -> list[dict[str, Any]]:
-    rows = conn.execute(
-        """
+def _rows_on(conn: sqlite3.Connection, day: str, category: str | None = None) -> list[dict[str, Any]]:
+    sql = """
         SELECT p.slug, p.owner, p.repo, p.name, p.description, p.category,
                p.harness, p.url, p.repo_created_at, p.stars_latest,
                s.count AS stars, s.delta, s.is_anomaly
         FROM stars s
         JOIN plugins p ON p.id = s.plugin_id
         WHERE s.date = ? AND p.status = 'active'
-        """,
-        (day,),
-    ).fetchall()
+        """
+    params: list[Any] = [day]
+    if category:
+        sql += " AND p.category = ?"
+        params.append(category)
+    rows = conn.execute(sql, params).fetchall()
     return [dict(r) for r in rows]
 
 
@@ -83,7 +85,13 @@ def _empty(board: str, day: str | None, window: int | None, reason: str) -> dict
     }
 
 
-def board(conn: sqlite3.Connection, name: str, window: int = 7, on: str | None = None) -> dict[str, Any]:
+def board(
+    conn: sqlite3.Connection,
+    name: str,
+    window: int = 7,
+    on: str | None = None,
+    category: str | None = None,
+) -> dict[str, Any]:
     if name not in BOARDS:
         raise BoardError(f"unknown board: {name}")
     if name in ("growth", "darkhorse") and window not in WINDOWS:
@@ -92,9 +100,9 @@ def board(conn: sqlite3.Connection, name: str, window: int = 7, on: str | None =
     if day is None:
         return _empty(name, None, window if name in ("growth", "darkhorse") else None, "no snapshots")
 
-    rows = _rows_on(conn, day)
+    rows = _rows_on(conn, day, category)
     prev_day = _previous_date(conn, day)
-    prev_rank = _rank_map(_rows_on(conn, prev_day)) if prev_day else {}
+    prev_rank = _rank_map(_rows_on(conn, prev_day, category)) if prev_day else {}
 
     if name == "total":
         items = []
@@ -117,7 +125,7 @@ def board(conn: sqlite3.Connection, name: str, window: int = 7, on: str | None =
         return {"board": name, "as_of": day, "window": None, "items": items}
 
     base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
-    base_rows = _rows_on(conn, base_day)
+    base_rows = _rows_on(conn, base_day, category)
     if not base_rows:
         return _empty(name, day, window, f"missing snapshot for {base_day}")
 
@@ -156,14 +164,16 @@ def board(conn: sqlite3.Connection, name: str, window: int = 7, on: str | None =
     return {"board": name, "as_of": day, "window": window, "items": items}
 
 
-def rookie_board(conn: sqlite3.Connection, on: str | None = None) -> dict[str, Any]:
+def rookie_board(
+    conn: sqlite3.Connection, on: str | None = None, category: str | None = None
+) -> dict[str, Any]:
     day = on or latest_date(conn)
     if day is None:
         return {"board": "rookie", "as_of": None, "window": None, "items": []}
     cutoff = (Date.fromisoformat(day) - timedelta(days=ROOKIE_DAYS)).isoformat()
     rows = [
         r
-        for r in _rows_on(conn, day)
+        for r in _rows_on(conn, day, category)
         if r["repo_created_at"] and cutoff <= r["repo_created_at"][:10] <= day
     ]
     rows.sort(key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
@@ -175,10 +185,43 @@ def rookie_board(conn: sqlite3.Connection, on: str | None = None) -> dict[str, A
     }
 
 
-def get_board(conn: sqlite3.Connection, name: str, window: int = 7, on: str | None = None) -> dict[str, Any]:
+def get_board(
+    conn: sqlite3.Connection,
+    name: str,
+    window: int = 7,
+    on: str | None = None,
+    category: str | None = None,
+) -> dict[str, Any]:
     if name == "rookie":
-        return rookie_board(conn, on)
-    return board(conn, name, window=window, on=on)
+        return rookie_board(conn, on, category)
+    return board(conn, name, window=window, on=on, category=category)
+
+
+def categories(conn: sqlite3.Connection, on: str | None = None) -> dict[str, Any]:
+    """Board-ready category index: seat count, total stars and the top three."""
+    day = on or latest_date(conn)
+    if day is None:
+        return {"as_of": None, "items": []}
+    rows = _rows_on(conn, day)
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        groups.setdefault(row["category"] or "other", []).append(row)
+    items = []
+    for name, group in groups.items():
+        group.sort(key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
+        items.append(
+            {
+                "category": name,
+                "count": len(group),
+                "total_stars": sum(r["stars"] for r in group),
+                "top": [
+                    {"slug": r["slug"], "name": r["name"], "stars": r["stars"]}
+                    for r in group[:3]
+                ],
+            }
+        )
+    items.sort(key=lambda c: (c["category"] == "other", -c["total_stars"], c["category"]))
+    return {"as_of": day, "items": items}
 
 
 def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) -> dict[str, Any] | None:

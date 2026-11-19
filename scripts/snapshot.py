@@ -161,7 +161,23 @@ def load_seed(path: Path) -> list[dict]:
     return plugins
 
 
+def _load_dotenv() -> None:
+    """Load simple KEY=VALUE pairs from <repo>/.env (gitignored) without overriding env."""
+    path = ROOT / ".env"
+    if not path.exists():
+        return
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key, value = key.strip(), value.strip().strip('"').strip("'")
+        if key:
+            os.environ.setdefault(key, value)
+
+
 def main(argv: list[str] | None = None) -> int:
+    _load_dotenv()
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--date", help="UTC date YYYY-MM-DD (default: today)")
     ap.add_argument("--seed", type=Path, default=DEFAULT_SEED)

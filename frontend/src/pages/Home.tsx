@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
-import type { Dashboard, RankingItem } from '../types';
+import type { CategoriesResponse, Dashboard, RankingItem } from '../types';
 import { StatCard } from '../components/StatCard';
 import { DeltaBadge } from '../components/DeltaBadge';
 import { EmptyState, ErrorState, Loading } from '../components/States';
-import { formatCompact, formatDate, formatDelta, formatNumber } from '../lib/format';
+import { categoryLabel, formatCompact, formatDate, formatDelta, formatNumber } from '../lib/format';
 
 function MiniList({ items, empty }: { items: RankingItem[]; empty: string }) {
   if (items.length === 0) return <EmptyState title={empty} />;
@@ -37,13 +37,14 @@ function MiniList({ items, empty }: { items: RankingItem[]; empty: string }) {
 
 export default function Home() {
   const { data, error, loading } = useApi<Dashboard>(api.dashboard, []);
+  const { data: categories } = useApi<CategoriesResponse>(api.categories, []);
 
   return (
     <>
       <section className="mb-8">
         <div className="pill mb-3">DSH PLUGINS · DAILY SNAPSHOT</div>
         <h1 className="max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          100 个 DSH 插件，<span className="text-teal">真实 star 增速</span>的竞速场
+          500 个 DSH 插件，<span className="text-teal">真实 star 增速</span>的竞速场
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
           只收录可安装进 DeepSeek Harness（DSH）的插件。每天 00:10 UTC 抓取一次 GitHub
@@ -62,7 +63,7 @@ export default function Home() {
       {data ? (
         <>
           <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <StatCard label="收录插件" value={formatNumber(data.kpis.tracked)} hint="在册上限 100" />
+            <StatCard label="收录插件" value={formatNumber(data.kpis.tracked)} hint="在册上限 500" />
             <StatCard
               label="总 Star"
               value={formatCompact(data.kpis.total_stars)}
@@ -116,6 +117,34 @@ export default function Home() {
             </div>
             <p className="mb-2 text-xs text-muted">仓库创建于 30 天内、且已进入收录名单</p>
             <MiniList items={data.newest} empty="名单内暂无 30 天内新建的仓库" />
+          </section>
+
+          <section className="mt-4">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="section-title">分类榜</h2>
+              <Link className="text-xs text-teal hover:underline" to="/categories">
+                全部分类 →
+              </Link>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {(categories?.items ?? []).slice(0, 6).map((item) => (
+                <Link
+                  key={item.category}
+                  to={`/rankings/category/${encodeURIComponent(item.category)}`}
+                  className="card px-4 py-3 transition hover:border-teal/40"
+                >
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-sm font-medium text-white">
+                      {categoryLabel(item.category)}榜
+                    </span>
+                    <span className="num text-xs text-muted">{item.count} 个</span>
+                  </div>
+                  <div className="mt-1 truncate text-xs text-muted">
+                    {item.top.map((entry) => entry.name).join(' · ') || '暂无数据'}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </section>
 
           <section className="mt-4 flex flex-col gap-3 rounded-xl border border-gold/25 bg-gold/5 p-4 sm:flex-row sm:items-center sm:justify-between">

@@ -54,6 +54,11 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         _url_entry(f"{base}/rankings", lastmod),
     ]
     urls += [_url_entry(f"{base}/rankings/{board}", lastmod) for board in BOARD_PATHS]
+    urls.append(_url_entry(f"{base}/categories", lastmod))
+    urls += [
+        _url_entry(f"{base}/rankings/category/{item['category']}", lastmod)
+        for item in ranking.categories(conn)["items"]
+    ]
     rows = conn.execute(
         "SELECT slug FROM plugins WHERE status = 'active' ORDER BY slug"
     ).fetchall()

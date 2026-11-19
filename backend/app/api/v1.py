@@ -41,16 +41,22 @@ def dashboard(conn: sqlite3.Connection = Depends(get_conn)) -> dict:
     return ranking.dashboard(conn)
 
 
+@router.get("/categories")
+def categories(conn: sqlite3.Connection = Depends(get_conn)) -> dict:
+    return ranking.categories(conn)
+
+
 @router.get("/rankings/{board_name}")
 def rankings(
     board_name: str,
     window: int = Query(7),
-    limit: int = Query(50, ge=1, le=100),
+    category: str | None = Query(None, max_length=40),
+    limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     conn: sqlite3.Connection = Depends(get_conn),
 ) -> dict:
     try:
-        payload = ranking.get_board(conn, board_name, window=window)
+        payload = ranking.get_board(conn, board_name, window=window, category=category)
     except ranking.BoardError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     items = payload["items"]
@@ -66,7 +72,7 @@ def plugins(
     query: str | None = Query(None, max_length=80),
     harness: str | None = Query(None, max_length=20),
     category: str | None = Query(None, max_length=40),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     conn: sqlite3.Connection = Depends(get_conn),
 ) -> dict:

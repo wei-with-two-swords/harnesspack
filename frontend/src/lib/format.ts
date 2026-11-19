@@ -30,6 +30,25 @@ export function formatPercent(value: number | null | undefined, digits = 1): str
   return `${(value * 100).toFixed(digits)}%`;
 }
 
+export const CATEGORY_LABELS: Record<string, string> = {
+  ui: 'UI',
+  context: '上下文',
+  model: '模型',
+  search: '搜索',
+  channel: '渠道',
+  media: '媒体',
+  skin: '皮肤',
+  market: '市场',
+  tools: '工具',
+  workflow: '工作流',
+  other: '其他',
+};
+
+export function categoryLabel(slug: string | null | undefined): string {
+  if (!slug) return '其他';
+  return CATEGORY_LABELS[slug] ?? slug;
+}
+
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return '—';
   const d = new Date(`${iso.slice(0, 10)}T00:00:00Z`);
