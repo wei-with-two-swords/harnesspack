@@ -704,13 +704,13 @@
       "note": "OpenCode skills"
     },
     {
-      "owner": "ningsimu",
+      "owner": "ningzimu",
       "repo": "codex-ppt-skill",
-      "slug": "ningsimu-codex-ppt-skill",
+      "slug": "ningzimu-codex-ppt-skill",
       "name": "codex-ppt-skill",
       "category": "presentation",
       "harness": "codex",
-      "url": "https://github.com/ningsimu/codex-ppt-skill",
+      "url": "https://github.com/ningzimu/codex-ppt-skill",
       "note": "Codex PPT 生成"
     },
     {
