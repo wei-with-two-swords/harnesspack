@@ -36,8 +36,8 @@ jobs:
 
       - name: Commit and push
         run: |
-          git config user.name "harnessrank-bot"
-          git config user.email "harnessrank-bot@users.noreply.github.com"
+          git config user.name "harnesspack-bot"
+          git config user.email "harnesspack-bot@users.noreply.github.com"
           git add data/snapshots
           if git diff --cached --quiet; then
             echo "no snapshot changes"

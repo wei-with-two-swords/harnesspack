@@ -1,4 +1,4 @@
--- HarnessRank schema (SQLite, WAL). Dates are UTC ISO dates: YYYY-MM-DD.
+-- HarnessPack schema (SQLite, WAL). Dates are UTC ISO dates: YYYY-MM-DD.
 PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = ON;
 

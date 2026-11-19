@@ -1,0 +1,9 @@
+[Unit]
+Description=HarnessPack SQLite backup timer (00:40 UTC)
+
+[Timer]
+OnCalendar=*-*-* 00:40:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

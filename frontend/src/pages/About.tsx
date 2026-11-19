@@ -14,7 +14,7 @@ export default function About() {
       <header>
         <h1 className="text-2xl font-semibold text-white">数据口径与收录规则</h1>
         <p className="mt-2 text-muted">
-          HarnessRank 只做一件事：把 harness 扩展的 star 变化如实记录下来，并让增速可比。
+          HarnessPack 只做一件事：把 harness 扩展的 star 变化如实记录下来，并让增速可比。
         </p>
       </header>
 

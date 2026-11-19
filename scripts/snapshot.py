@@ -62,10 +62,10 @@ def _opener() -> urllib.request.OpenerDirector:
     On Windows urllib honours the registry proxy settings, which can point at a
     shared egress whose unauthenticated GitHub quota is already exhausted (or
     whose IP GitHub throttles). Direct connections work fine from here, so we
-    bypass proxies unless HARNESSRANK_USE_PROXY=1 explicitly asks for them.
+    bypass proxies unless HARNESSPACK_USE_PROXY=1 explicitly asks for them.
     """
     if not hasattr(_local, "opener"):
-        if os.environ.get("HARNESSRANK_USE_PROXY") == "1":
+        if os.environ.get("HARNESSPACK_USE_PROXY") == "1":
             _local.opener = urllib.request.build_opener()
         else:
             _local.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -82,7 +82,7 @@ def _headers(token: str | None) -> dict[str, str]:
     h = {
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
-        "User-Agent": "HarnessRank-snapshot/0.1",
+        "User-Agent": "HarnessPack-snapshot/0.1",
     }
     if token:
         h["Authorization"] = f"Bearer {token}"

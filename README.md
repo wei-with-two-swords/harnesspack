@@ -1,4 +1,4 @@
-# HarnessRank
+# HarnessPack
 
 给 Claude Code / Codex / Cursor / DSH 等 harness 生态里的插件做的 **Star 竞速榜**：每天抓一次 star，按日增、周/月增速、总 star、名次跃升、新秀排出榜单，曲线可查。
 
@@ -18,6 +18,7 @@
 | `docs/需求分析.md` | 系统架构与功能需求 |
 | `docs/收录规则.md` | 100 名单的进入、退出与替换机制 |
 | `docs/adr/` | 架构决策记录 |
+| `deploy/` | Nginx、systemd、同步/备份脚本与部署手册 |
 
 ## 本地运行
 
@@ -70,6 +71,12 @@ GET /api/v1/sponsors
 ```
 
 列表统一返回 `{items, total, as_of}`；`growth` / `darkhorse` 需要恰好的基准日快照，缺失时返回空列表与 `reason`。
+
+## 部署
+
+上线目标：`https://harnesspack.dev`（单台 2C1G 海外服务器，Nginx + systemd + SQLite）。
+步骤见 [deploy/README.md](deploy/README.md)：DNS → 系统用户 → venv → rsync 前端产物 → systemd → Nginx/TLS → 验收。
+服务器只拉快照，不持有 GitHub token；快照缺失不补、不猜。
 
 ## 数据口径
 

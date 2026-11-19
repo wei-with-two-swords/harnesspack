@@ -85,7 +85,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="harnessrank", description="HarnessRank operator CLI")
+    parser = argparse.ArgumentParser(prog="harnesspack", description="HarnessPack operator CLI")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("init-db", help="create the SQLite schema")
     sub.add_parser("ingest", help="replay snapshot files into the database")

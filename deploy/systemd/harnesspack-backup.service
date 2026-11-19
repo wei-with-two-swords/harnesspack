@@ -1,0 +1,12 @@
+[Unit]
+Description=HarnessPack SQLite backup (00:40 UTC)
+After=harnesspack-snapshot.service
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=APP_ROOT=/opt/harnesspack
+ExecStart=/opt/harnesspack/deploy/scripts/backup.sh
+Nice=10

@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="shell flex h-14 items-center gap-4 sm:gap-6">
           <Link to="/" className="flex items-center gap-2">
             <Logo />
-            <span className="text-base font-semibold tracking-tight text-white">HarnessRank</span>
+            <span className="text-base font-semibold tracking-tight text-white">HarnessPack</span>
             <span className="pill hidden sm:inline-flex">beta</span>
           </Link>
           <nav className="flex items-center gap-1 text-sm">
@@ -52,7 +52,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="border-t border-line/70 py-6">
         <div className="shell flex flex-col gap-2 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            HarnessRank 收录 Claude Code / Codex / Cursor / DSH 等 harness 扩展，数据来自 GitHub
+            HarnessPack 收录 Claude Code / Codex / Cursor / DSH 等 harness 扩展，数据来自 GitHub
             公开 API。
           </p>
           <p>

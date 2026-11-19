@@ -1,0 +1,14 @@
+[Unit]
+Description=HarnessPack daily sync (git pull + validate + ingest)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=APP_ROOT=/opt/harnesspack
+ExecStart=/opt/harnesspack/deploy/scripts/sync.sh
+TimeoutStartSec=300
+Nice=10

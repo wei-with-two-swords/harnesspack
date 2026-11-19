@@ -1,0 +1,32 @@
+[Unit]
+Description=HarnessPack API (FastAPI + uvicorn)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=PYTHONUNBUFFERED=1
+Environment=HARNESSPACK_ENV=production
+Environment=HARNESSPACK_BASE_URL=https://harnesspack.dev
+Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
+Environment=HARNESSPACK_SNAPSHOTS=/opt/harnesspack/data/snapshots
+Environment=HARNESSPACK_FRONTEND=/opt/harnesspack/frontend/dist
+Environment=HARNESSPACK_INGEST=0
+ExecStart=/opt/harnesspack/.venv/bin/uvicorn backend.app.main:app \
+    --host 127.0.0.1 --port 8000 --workers 1 \
+    --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=always
+RestartSec=3
+TimeoutStopSec=15
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/harnesspack/data
+
+[Install]
+WantedBy=multi-user.target

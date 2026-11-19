@@ -1,0 +1,10 @@
+[Unit]
+Description=HarnessPack daily snapshot sync timer (00:20 UTC)
+
+[Timer]
+OnCalendar=*-*-* 00:20:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

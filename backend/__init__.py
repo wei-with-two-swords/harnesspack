@@ -1,1 +1,1 @@
-"""HarnessRank backend package."""
+"""HarnessPack backend package."""
