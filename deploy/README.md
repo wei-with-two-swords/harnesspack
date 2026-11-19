@@ -105,6 +105,9 @@ sudo certbot certonly --webroot -w /var/www/certbot \
   --email <you>@example.com --agree-tos --no-eff-email
 sudo nginx -t && sudo systemctl reload nginx
 
+# 若先跑过 HTTP-only 配置（deploy/nginx/harnesspack.dev.http.conf），
+# 签完证书后把 sites-available/harnesspack.dev 换成 harnesspack.dev.conf 再 reload。
+
 # 续期后自动 reload
 sudo install -m 755 deploy/scripts/certbot-deploy.sh /etc/letsencrypt/renewal-hooks/deploy/harnesspack.sh
 sudo certbot renew --dry-run
@@ -138,6 +141,14 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 - **日志**：`journalctl -u harnesspack-api -f`、`-u harnesspack-snapshot`。
 - **监控**：`/health` 返回 200；Nginx access log 观察 5xx；内存超 400MB 时先查 stats/连接数。
 
-## 10. 可选：Cloudflare
+## 10. Cloudflare（当前已启用）
 
-站点稳定后再接：DNS 改由 Cloudflare 托管（A 记录指向服务器、开启橙云），SSL 模式 Full (strict)，保留 Nginx 的 HSTS。注意 Cloudflare 免费版会缓存 `/assets/`，与现有 immutable 策略一致。
+`harnesspack.dev` 的 DNS 托管在 Cloudflare 并开启了代理（橙云），SSL 模式为 **Full**：
+Cloudflare 回源到本机 443，Nginx 使用 Let's Encrypt 证书（已签发，2027-02 到期，自动续期）。
+
+- HTTP-01 校验可以穿过 Cloudflare 代理：ACME 请求走 `http://harnesspack.dev/.well-known/acme-challenge/`
+  → Cloudflare 回源 80 → Nginx 直接响应 webroot 文件，`certbot renew --dry-run` 已通过。
+- 若要升级到 **Full (strict)**：在 Cloudflare 控制台生成 Origin Certificate（15 年），
+  替换 Nginx 的 `ssl_certificate/ssl_certificate_key` 即可，无需重新签发 LE。
+- 保持 `Always Use HTTPS` 开启；站点自身的 80→443 跳转与之不冲突。
+

@@ -13,7 +13,7 @@ Phase 0 数据管线与只读 API 已在本地跑通（100 仓快照、SQLite、
 2. **品牌统一为 HarnessPack**：站点名、包名、文档、环境变量 `HARNESSPACK_*` 全部改名；域名 `harnesspack.dev` 与品牌一致。
 3. **仓库公开**：快照与收录变更可审计，符合「数据可信」定位；Actions 用内置 token。
 4. **前端不在服务器构建**：构建产物由本地/CI 生成后 rsync 到 `/opt/harnesspack/frontend/dist`，避免 1G 内存 OOM。
-5. **TLS 用 Let's Encrypt webroot + 自动续期 deploy hook**；Cloudflare 作为后续可选项。
+5. **TLS 用 Let's Encrypt webroot + 自动续期 deploy hook**；域名已接入 Cloudflare 代理（SSL 模式 Full），HTTP-01 可穿过代理回源 80，续期已验证。后续可换 Cloudflare Origin Certificate 升级到 Full (strict)。
 6. **数据同步单向下行**：Actions 抓取 → git 提交 → 服务器 `git pull` + `validate` + `ingest`，服务器不持有 GitHub token。
 
 ## 后果

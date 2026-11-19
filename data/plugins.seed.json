@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-11-19",
+  "updated_at": "2026-11-19T05:47:30Z",
   "inclusion_rule": "收录以发布 harness 扩展为主要目的的公开仓库；排除 harness 本体（claude-code/codex/gemini-cli）、大型应用与框架、纯 awesome 列表，以及仅顺带提供 skill 的产品仓库。",
   "plugins": [
     {
@@ -112,16 +112,6 @@
       "harness": "multi",
       "url": "https://github.com/affaan-m/ecc",
       "note": "多 harness 操作层（agents+skills+hooks）"
-    },
-    {
-      "owner": "affaan-m",
-      "repo": "everything-claude-code",
-      "slug": "affaan-m-everything-claude-code",
-      "name": "everything-claude-code",
-      "category": "workflow",
-      "harness": "claude",
-      "url": "https://github.com/affaan-m/everything-claude-code",
-      "note": "Claude Code 全量配置集合"
     },
     {
       "owner": "multica-ai",
@@ -665,12 +655,12 @@
     },
     {
       "owner": "jabrena",
-      "repo": "cursor-rules-java",
-      "slug": "jabrena-cursor-rules-java",
-      "name": "cursor-rules-java",
+      "repo": "plinth",
+      "slug": "jabrena-plinth",
+      "name": "plinth",
       "category": "java-jvm",
       "harness": "cursor",
-      "url": "https://github.com/jabrena/cursor-rules-java",
+      "url": "https://github.com/jabrena/plinth",
       "note": "Java Cursor 规则"
     },
     {
@@ -734,13 +724,13 @@
       "note": "Codex CLI 技能"
     },
     {
-      "owner": "ifuryst",
-      "repo": "open-codex-computer-use",
-      "slug": "ifuryst-open-codex-computer-use",
-      "name": "open-codex-computer-use",
+      "owner": "iFurySt",
+      "repo": "open-computer-use",
+      "slug": "ifuryst-open-computer-use",
+      "name": "open-computer-use",
       "category": "automation",
       "harness": "codex",
-      "url": "https://github.com/ifuryst/open-codex-computer-use",
+      "url": "https://github.com/iFurySt/open-computer-use",
       "note": "计算机操作"
     },
     {
@@ -764,13 +754,13 @@
       "note": "视频制作"
     },
     {
-      "owner": "santifer",
+      "owner": "career-ops-hq",
       "repo": "career-ops",
-      "slug": "santifer-career-ops",
+      "slug": "career-ops-hq-career-ops",
       "name": "career-ops",
       "category": "resume",
       "harness": "claude",
-      "url": "https://github.com/santifer/career-ops",
+      "url": "https://github.com/career-ops-hq/career-ops",
       "note": "求职流水线"
     },
     {
@@ -924,13 +914,13 @@
       "note": "Sahil 技能集"
     },
     {
-      "owner": "worldwonderer",
+      "owner": "zenstory-ai",
       "repo": "oh-story-claudecode",
-      "slug": "worldwonderer-oh-story-claudecode",
+      "slug": "zenstory-ai-oh-story-claudecode",
       "name": "oh-story-claudecode",
       "category": "writing",
       "harness": "claude",
-      "url": "https://github.com/worldwonderer/oh-story-claudecode",
+      "url": "https://github.com/zenstory-ai/oh-story-claudecode",
       "note": "中文小说写作"
     },
     {
@@ -1002,6 +992,16 @@
       "harness": "claude",
       "url": "https://github.com/galaxy-dawn/claude-scholar",
       "note": "学术加速器"
+    },
+    {
+      "owner": "github",
+      "repo": "github-mcp-server",
+      "slug": "github-github-mcp-server",
+      "name": "github-mcp-server",
+      "category": "tools",
+      "harness": "multi",
+      "url": "https://github.com/github/github-mcp-server",
+      "note": "GitHub 官方 MCP Server"
     }
   ]
 }

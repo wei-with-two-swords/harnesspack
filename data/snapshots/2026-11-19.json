@@ -1,9 +1,9 @@
 {
  "date": "2026-11-19",
- "fetched_at": "2026-11-19T04:58:17+00:00",
+ "fetched_at": "2026-11-19T05:47:31+00:00",
  "source": "github-api",
  "authenticated": false,
- "elapsed_s": 1.13,
+ "elapsed_s": 0.63,
  "total": 100,
  "ok": 100,
  "failed": 0,
@@ -210,31 +210,6 @@
    "default_branch": "main",
    "stars": 306645,
    "slug": "affaan-m-ecc"
-  },
-  {
-   "owner": "affaan-m",
-   "repo": "everything-claude-code",
-   "status": "ok",
-   "forks_count": 45145,
-   "created_at": "2026-01-18T00:51:51Z",
-   "pushed_at": "2026-11-17T06:41:46Z",
-   "archived": false,
-   "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-   "topics": [
-    "ai-agents",
-    "anthropic",
-    "claude",
-    "claude-code",
-    "developer-tools",
-    "llm",
-    "mcp",
-    "productivity"
-   ],
-   "html_url": "https://github.com/affaan-m/ECC",
-   "license": "MIT",
-   "default_branch": "main",
-   "stars": 306645,
-   "slug": "affaan-m-everything-claude-code"
   },
   {
    "owner": "multica-ai",
@@ -1595,7 +1570,7 @@
   },
   {
    "owner": "jabrena",
-   "repo": "cursor-rules-java",
+   "repo": "plinth",
    "status": "ok",
    "forks_count": 96,
    "created_at": "2025-02-08T23:14:36Z",
@@ -1627,7 +1602,7 @@
    "license": "Apache-2.0",
    "default_branch": "main",
    "stars": 462,
-   "slug": "jabrena-cursor-rules-java"
+   "slug": "jabrena-plinth"
   },
   {
    "owner": "spencerpauly",
@@ -1742,8 +1717,8 @@
    "slug": "skills-directory-skill-codex"
   },
   {
-   "owner": "ifuryst",
-   "repo": "open-codex-computer-use",
+   "owner": "iFurySt",
+   "repo": "open-computer-use",
    "status": "ok",
    "forks_count": 278,
    "created_at": "2026-04-17T06:51:32Z",
@@ -1776,7 +1751,7 @@
    "license": "MIT",
    "default_branch": "main",
    "stars": 3024,
-   "slug": "ifuryst-open-codex-computer-use"
+   "slug": "ifuryst-open-computer-use"
   },
   {
    "owner": "heygen-com",
@@ -1827,7 +1802,7 @@
    "slug": "bradautomates-claude-video"
   },
   {
-   "owner": "santifer",
+   "owner": "career-ops-hq",
    "repo": "career-ops",
    "status": "ok",
    "forks_count": 15330,
@@ -1861,7 +1836,7 @@
    "license": "MIT",
    "default_branch": "main",
    "stars": 83594,
-   "slug": "santifer-career-ops"
+   "slug": "career-ops-hq-career-ops"
   },
   {
    "owner": "hugohe3",
@@ -2277,7 +2252,7 @@
    "slug": "slavingia-skills"
   },
   {
-   "owner": "worldwonderer",
+   "owner": "zenstory-ai",
    "repo": "oh-story-claudecode",
    "status": "ok",
    "forks_count": 1229,
@@ -2311,7 +2286,7 @@
    "license": "MIT",
    "default_branch": "main",
    "stars": 8742,
-   "slug": "worldwonderer-oh-story-claudecode"
+   "slug": "zenstory-ai-oh-story-claudecode"
   },
   {
    "owner": "jnmetacode",
@@ -2479,6 +2454,26 @@
    "default_branch": "main",
    "stars": 6071,
    "slug": "galaxy-dawn-claude-scholar"
+  },
+  {
+   "owner": "github",
+   "repo": "github-mcp-server",
+   "status": "ok",
+   "forks_count": 5372,
+   "created_at": "2025-03-04T16:42:04Z",
+   "pushed_at": "2026-11-18T21:55:34Z",
+   "archived": false,
+   "description": "GitHub's official MCP Server",
+   "topics": [
+    "github",
+    "mcp",
+    "mcp-server"
+   ],
+   "html_url": "https://github.com/github/github-mcp-server",
+   "license": "MIT",
+   "default_branch": "main",
+   "stars": 34578,
+   "slug": "github-github-mcp-server"
   }
  ]
 }
