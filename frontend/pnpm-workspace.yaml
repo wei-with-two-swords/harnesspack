@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - esbuild
+
+# The esbuild platform binary ships as an optional dependency, so the skipped
+# postinstall is harmless. Skip pnpm's implicit verification install on run.
+verifyDepsBeforeRun: false
