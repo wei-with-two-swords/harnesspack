@@ -14,6 +14,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from .api.site import router as site_router
 from .api.v1 import router as v1_router
 from .config import Settings, get_settings
 from .db import connect, init_db
@@ -37,6 +38,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="HarnessRank API", version="0.1.0", lifespan=lifespan)
     app.state.settings = settings
     app.include_router(v1_router, prefix="/api/v1")
+    app.include_router(site_router)
 
     dist = Path(settings.frontend_dist)
     if dist.exists():

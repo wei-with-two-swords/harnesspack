@@ -67,5 +67,19 @@ def test_sponsors_empty(client):
     assert payload["disclosure"] == "sponsored"
 
 
+def test_robots_and_sitemap(client):
+    robots = client.get("/robots.txt")
+    assert robots.status_code == 200
+    assert "Sitemap: http://testserver/sitemap.xml" in robots.text
+
+    sitemap = client.get("/sitemap.xml")
+    assert sitemap.status_code == 200
+    assert sitemap.headers["content-type"].startswith("application/xml")
+    body = sitemap.text
+    assert "http://testserver/rankings/velocity" in body
+    assert "http://testserver/plugins/alpha-one" in body
+    assert body.count("<url>") == 13
+
+
 def test_spa_missing_dist_returns_404(client):
     assert client.get("/").status_code == 404
