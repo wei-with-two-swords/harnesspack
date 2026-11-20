@@ -63,6 +63,17 @@ python scripts/validate.py            # 校验
 - 未认证只有 60 次/小时，跑不满上万仓库；GraphQL 批量抓取必须提供 token（PAT 5000 点/小时足够）。
 - 每天 00:10 UTC 由 `.github/workflows/snapshot.yml` 自动执行；漏跑可手动 `workflow_dispatch`。
 
+### 快照监控
+
+`scripts/check_snapshot.py` 检查指定日期（默认今天 UTC）的快照是否存在、ok 率是否 ≥99%、是否覆盖完整 seed、历史有没有断档。`.github/workflows/snapshot-monitor.yml` 每天 01:30 / 04:30 UTC 各跑一次，异常时自动开 issue（已有同类 issue 则追加评论）并让本次 run 失败——这样你会同时收到 issue 通知和 GitHub 的失败邮件。
+
+```powershell
+python scripts/check_snapshot.py                      # 检查今天
+python scripts/check_snapshot.py --date 2026-11-20    # 检查指定日期
+```
+
+> 注意：GitHub 对 60 天没有提交的仓库会暂停定时工作流；如果长期不动代码，记得每月手动跑一次 `workflow_dispatch` 或提交一次小改动。
+
 ## API（v1）
 
 ```

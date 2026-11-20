@@ -1,0 +1,64 @@
+name: Snapshot monitor
+
+on:
+  schedule:
+    # The daily snapshot starts at 00:10 UTC; check after it should have finished,
+    # plus a second pass as a safety net.
+    - cron: "30 1 * * *"
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: snapshot-monitor
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Verify today's snapshot
+        id: check
+        shell: bash
+        run: |
+          set +e
+          python scripts/check_snapshot.py --min-ok-rate 0.99 | tee /tmp/report.json
+          status=${PIPESTATUS[0]}
+          echo "exit=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Open or update an issue when unhealthy
+        if: steps.check.outputs.exit != '0'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          DATE=$(date -u +%F)
+          existing=$(gh issue list --state open --search "snapshot in:title" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file /tmp/report.json
+          else
+            gh issue create \
+              --title "快照异常 snapshot: $DATE" \
+              --body-file /tmp/report.json
+          fi
+
+      - name: Fail the run when unhealthy
+        if: steps.check.outputs.exit != '0'
+        run: |
+          echo "snapshot check failed; see the issue for details" >&2
+          exit 1
