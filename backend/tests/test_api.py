@@ -100,7 +100,9 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/rankings/category/workflow" in body
     assert "http://testserver/status" in body
     assert "http://testserver/about/terms" in body
-    assert body.count("<url>") == 23
+    assert "http://testserver/about/api" in body
+    assert "http://testserver/rankings/quality" in body
+    assert body.count("<url>") == 25
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -144,6 +146,10 @@ def test_badge_og_and_feed(client):
     assert badge.headers["content-type"].startswith("image/svg+xml")
     assert "HarnessPack" in badge.text
 
+    site_og = client.get("/og/site.png")
+    assert site_og.status_code == 200
+    assert site_og.headers["content-type"] == "image/png"
+
     og = client.get("/og/alpha-one.png")
     assert og.status_code == 200
     assert og.headers["content-type"] == "image/png"
@@ -156,10 +162,45 @@ def test_badge_og_and_feed(client):
 
 
 def test_plugin_page_injects_social_meta(client_with_dist):
-    html = client_with_dist.get("/plugins/alpha-one").text
+    response = client_with_dist.get("/plugins/alpha-one")
+    assert response.status_code == 200
+    html = response.text
     assert 'property="og:image"' in html
     assert "http://testserver/og/alpha-one.png" in html
     assert "<title>Alpha One" in html
+    assert 'rel="canonical" href="http://testserver/plugins/alpha-one"' in html
+    assert "application/ld+json" in html
+    assert '"@type":"SoftwareApplication"' in html
+
+
+def test_home_page_has_dataset_metadata(client_with_dist):
+    html = client_with_dist.get("/").text
+    assert 'rel="canonical" href="http://testserver/"' in html
+    assert 'property="og:image" content="http://testserver/og/site.png"' in html
+    assert 'name="twitter:card" content="summary_large_image"' in html
+    assert '"@type":"Dataset"' in html
+
+
+def test_board_page_has_item_list(client_with_dist):
+    response = client_with_dist.get("/rankings/total")
+    assert response.status_code == 200
+    html = response.text
+    assert "<title>总榜 · HarnessPack</title>" in html
+    assert 'rel="canonical" href="http://testserver/rankings/total"' in html
+    assert '"@type":"ItemList"' in html
+
+
+def test_unknown_plugin_returns_404_and_noindex(client_with_dist):
+    response = client_with_dist.get("/plugins/does-not-exist")
+    assert response.status_code == 404
+    assert 'name="robots" content="noindex,follow"' in response.text
+
+
+def test_compare_page_is_noindex(client_with_dist):
+    response = client_with_dist.get("/compare?slugs=alpha-one,beta-two")
+    assert response.status_code == 200
+    assert 'name="robots" content="noindex,follow"' in response.text
+    assert 'rel="canonical" href="http://testserver/compare"' in response.text
 
 
 def test_status_exposes_snapshot_and_database_health(client):

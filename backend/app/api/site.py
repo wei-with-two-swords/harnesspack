@@ -8,11 +8,12 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import Response
 
 from ..db import connect
+from ..seo import BOARDS as BOARD_LABELS
 from ..services import ranking
 
 router = APIRouter()
 
-BOARD_PATHS = ["velocity", "growth", "total", "darkhorse", "rookie"]
+BOARD_PATHS = list(BOARD_LABELS)
 
 
 def get_conn(request: Request):
@@ -40,6 +41,7 @@ def robots(request: Request) -> Response:
     body = (
         "User-agent: *\n"
         "Allow: /\n"
+        "Disallow: /api/\n"
         f"Sitemap: {_base_url(request)}/sitemap.xml\n"
     )
     return Response(body, media_type="text/plain; charset=utf-8")
@@ -69,6 +71,7 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         _url_entry(f"{base}/about/rules", lastmod),
         _url_entry(f"{base}/about/changelog", lastmod),
         _url_entry(f"{base}/about/terms", lastmod),
+        _url_entry(f"{base}/about/api", lastmod),
         _url_entry(f"{base}/sponsors", lastmod),
         _url_entry(f"{base}/submit", lastmod),
         _url_entry(f"{base}/status", lastmod),

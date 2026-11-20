@@ -3,18 +3,24 @@
 On startup the schema is created and every snapshot file is ingested
 (idempotent), so a fresh server only needs ``data/snapshots`` to come up.
 The built SPA in ``frontend/dist`` is served from the same port.
+
+For crawlers the SPA shell is rewritten per route with title, description,
+canonical link, social cards and JSON-LD (see :mod:`backend.app.seo`).
 """
 
 from __future__ import annotations
 
 import re
 from contextlib import asynccontextmanager
+from html import escape as html_escape
 from pathlib import Path
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
+from . import seo
 from .api.meta import router as meta_router
 from .api.site import router as site_router
 from .api.v1 import router as v1_router
@@ -24,41 +30,190 @@ from .rate_limit import install_rate_limit
 from .services import ranking
 from .services.ingest import ingest
 
+_META_RE = re.compile(
+    r'\s*<meta\s+(?:property="og:[^"]*"|name="(?:twitter:[^"]*|description|robots)")[^>]*>'
+)
+_CANONICAL_RE = re.compile(r'\s*<link\s+rel="canonical"[^>]*>')
+_JSONLD_RE = re.compile(r'\s*<script\s+type="application/ld\+json">.*?</script>', re.S)
+_TITLE_RE = re.compile(r"<title>.*?</title>", re.S)
 
 
-def _inject_meta(html: str, title: str | None, description: str | None, image: str | None, url: str) -> str:
-    """Rewrite the SPA shell for crawlers and social cards.
-
-    The React app sets titles client-side, which social crawlers never execute,
-    so the same metadata is injected server-side for shareable routes.
-    """
-    if title:
-        html = re.sub(r"<title>.*?</title>", f"<title>{title}</title>", html, count=1, flags=re.S)
-    if description:
-        html = re.sub(
-            r'<meta name="description" content="[^"]*"',
-            f'<meta name="description" content="{description}"',
-            html,
-            count=1,
-        )
-    html = re.sub(r'\s*<meta\s+(?:property="og:[^"]*"|name="twitter:[^"]*"|name="description")[^>]*>', "", html)
-    tags = [
-        f'<meta property="og:url" content="{url}"',
-        f'<meta property="og:type" content="article"',
-    ]
-    if title:
-        tags.append(f'<meta property="og:title" content="{title}"')
-    if description:
-        tags.append(f'<meta property="og:description" content="{description}"')
-    if image:
-        tags.append(f'<meta property="og:image" content="{image}"')
-        tags.append('<meta name="twitter:card" content="summary_large_image"')
-        tags.append(f'<meta name="twitter:image" content="{image}"')
-    tags.append('<link rel="alternate" type="application/rss+xml" title="HarnessPack" href="/feed.xml"')
-    block = "\n    ".join(
-        (tag if tag.endswith(">") else tag + ">") for tag in tags
+def _render_shell(
+    html: str,
+    *,
+    title: str,
+    description: str,
+    canonical: str,
+    image: str,
+    robots: str,
+    jsonld: list[dict[str, Any]],
+) -> str:
+    html = _TITLE_RE.sub(lambda _match: f"<title>{html_escape(title)}</title>", html, count=1)
+    html = _META_RE.sub("", html)
+    html = _CANONICAL_RE.sub("", html)
+    html = _JSONLD_RE.sub("", html)
+    block = seo.build_tags(
+        title=title,
+        description=description,
+        canonical=canonical,
+        image=image,
+        robots=robots,
+        jsonld=jsonld,
     )
     return html.replace("</head>", f"    {block}\n  </head>", 1)
+
+
+def _meta(
+    *,
+    title: str,
+    description: str,
+    canonical: str,
+    image: str,
+    robots: str = "index,follow",
+    jsonld: list[dict[str, Any]] | None = None,
+    status: int = 200,
+) -> dict[str, Any]:
+    return {
+        "title": title,
+        "description": description,
+        "canonical": canonical,
+        "image": image,
+        "robots": robots,
+        "jsonld": jsonld or [],
+        "status": status,
+    }
+
+
+def _not_found(base: str, title: str, description: str) -> dict[str, Any]:
+    return _meta(
+        title=title,
+        description=description,
+        canonical=f"{base}/",
+        image=f"{base}/og/site.png",
+        robots="noindex,follow",
+        status=404,
+    )
+
+
+def _day_range(conn) -> tuple[str | None, str | None]:
+    row = conn.execute("SELECT MIN(date) AS first, MAX(date) AS last FROM stars").fetchone()
+    if not row:
+        return None, None
+    return row["first"], row["last"]
+
+
+def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
+    image = f"{base}/og/site.png"
+    first_day, last_day = _day_range(conn)
+
+    if path == "":
+        return _meta(
+            title=seo.SITE_TITLE,
+            description=seo.SITE_DESCRIPTION,
+            canonical=f"{base}/",
+            image=image,
+            jsonld=seo.website_jsonld(base, first_day, last_day),
+        )
+
+    if path.startswith("plugins/"):
+        parts = path.split("/")
+        if len(parts) != 2 or not parts[1]:
+            return _not_found(base, "页面未找到 · HarnessPack", "这个地址不存在。")
+        slug = parts[1]
+        detail = ranking.plugin_detail(conn, slug)
+        if detail is None:
+            return _not_found(
+                base,
+                "插件未找到 · HarnessPack",
+                "这个插件不在当前名单里，可能已被上游移除、改名或从未收录。",
+            )
+        canonical = f"{base}/plugins/{detail['slug']}"
+        return _meta(
+            title=f"{detail['name']} · {detail['owner']}/{detail['repo']} · HarnessPack",
+            description=seo.truncate(detail.get("description")),
+            canonical=canonical,
+            image=f"{base}/og/{detail['slug']}.png",
+            jsonld=seo.plugin_jsonld(detail, base),
+        )
+
+    if path == "plugins":
+        label, description = seo.PAGES["plugins"]
+        return _meta(
+            title=f"{label} · HarnessPack",
+            description=description,
+            canonical=f"{base}/plugins",
+            image=image,
+        )
+
+    if path == "categories":
+        label, description = seo.PAGES["categories"]
+        return _meta(
+            title=f"{label} · HarnessPack",
+            description=description,
+            canonical=f"{base}/categories",
+            image=image,
+        )
+
+    if path == "rankings":
+        return _meta(
+            title="榜单 · HarnessPack",
+            description=seo.BOARDS["velocity"][1],
+            canonical=f"{base}/rankings/velocity",
+            image=image,
+        )
+
+    if path.startswith("rankings/category/"):
+        parts = path.split("/")
+        category = parts[2] if len(parts) >= 3 else ""
+        label = seo.CATEGORY_LABELS.get(category)
+        if label is None:
+            return _not_found(base, "分类未找到 · HarnessPack", "这个分类不在上游清单的 23 个分类里。")
+        canonical = f"{base}/rankings/category/{category}"
+        result = ranking.board(conn, "total", category=category)
+        items = result["items"][:10]
+        return _meta(
+            title=f"{label}分类榜 · HarnessPack",
+            description=f"{label}分类下的 DSH 插件按当前 star 排名，共 {len(result['items'])} 个在册插件。",
+            canonical=canonical,
+            image=image,
+            jsonld=seo.board_jsonld(f"{label}分类榜", items, base, canonical),
+        )
+
+    if path.startswith("rankings/"):
+        name = path.split("/", 1)[1].split("/")[0]
+        board = seo.BOARDS.get(name)
+        if board is None:
+            return _not_found(base, "榜单未找到 · HarnessPack", "这个榜单不存在。")
+        label, description = board
+        canonical = f"{base}/rankings/{name}"
+        items = ranking.get_board(conn, name)["items"][:10]
+        return _meta(
+            title=f"{label} · HarnessPack",
+            description=description,
+            canonical=canonical,
+            image=image,
+            jsonld=seo.board_jsonld(label, items, base, canonical),
+        )
+
+    if path == "compare":
+        return _meta(
+            title="插件对比 · HarnessPack",
+            description="把 2-5 个 DSH 插件放在同一张 star 曲线上对比，缺快照的日子留空、不插值。",
+            canonical=f"{base}/compare",
+            image=image,
+            robots="noindex,follow",
+        )
+
+    if path in seo.PAGES:
+        label, description = seo.PAGES[path]
+        return _meta(
+            title=f"{label} · HarnessPack",
+            description=description,
+            canonical=f"{base}/{path}",
+            image=image,
+        )
+
+    return _not_found(base, "页面未找到 · HarnessPack", "这个地址不存在。")
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -114,24 +269,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 raise HTTPException(status_code=404, detail="not found")
             html = index_file.read_text(encoding="utf-8")
             base = str(request.base_url).rstrip("/")
-            title = description = image = None
-            if full_path.startswith("plugins/"):
-                slug = full_path.split("/", 1)[1]
-                conn = connect(settings.db_path)
-                try:
-                    detail = ranking.plugin_detail(conn, slug)
-                finally:
-                    conn.close()
-                if detail is not None:
-                    title = f"{detail['name']} · {detail['owner']}/{detail['repo']} · HarnessPack"
-                    description = (detail.get("description") or "DSH 插件 star 竞速榜").replace('"', " ")
-                    image = f"{base}/og/{slug}.png"
-            elif full_path.startswith("rankings/"):
-                title = "榜单 · HarnessPack"
-            elif full_path == "categories":
-                title = "分类榜 · HarnessPack"
-            html = _inject_meta(html, title, description, image, f"{base}/{full_path}")
-            return Response(content=html, media_type="text/html")
+            path = full_path.strip("/")
+            conn = connect(settings.db_path)
+            try:
+                meta = _route_meta(conn, path, base)
+            finally:
+                conn.close()
+            html = _render_shell(
+                html,
+                title=meta["title"],
+                description=meta["description"],
+                canonical=meta["canonical"],
+                image=meta["image"],
+                robots=meta["robots"],
+                jsonld=meta["jsonld"],
+            )
+            return Response(content=html, media_type="text/html", status_code=meta["status"])
 
     return app
 

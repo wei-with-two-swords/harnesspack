@@ -98,6 +98,52 @@ def badge(slug: str, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     return _badge_svg("HarnessPack", " · ".join(parts))
 
 
+@router.get("/og/site.png")
+def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
+    """Site-wide social card used by the home page and every non-plugin route."""
+    from PIL import Image, ImageDraw
+
+    day = ranking.latest_date(conn) or "unknown"
+    row = conn.execute(
+        "SELECT COUNT(*) AS plugins, COALESCE(SUM(stars_latest), 0) AS stars FROM plugins WHERE status = 'active'"
+    ).fetchone()
+    days = conn.execute("SELECT COUNT(DISTINCT date) AS days FROM stars").fetchone()["days"]
+    cache_dir = Path(request.app.state.settings.db_path).parent / "cache" / "og"
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cached = cache_dir / f"site-{re.sub(r'[^0-9a-zA-Z_-]', '-', day)}.png"
+    headers = {"Cache-Control": "public, max-age=3600"}
+    if cached.exists():
+        return Response(content=cached.read_bytes(), media_type="image/png", headers=headers)
+
+    width, height = 1200, 630
+    image = Image.new("RGB", (width, height), INK)
+    draw = ImageDraw.Draw(image)
+    draw.rectangle([0, 0, width, 6], fill=BLUE)
+    draw.text((100, 70), "HarnessPack", font=_font(40), fill=BLUE)
+    draw.text((100, 124), "DSH plugin star race / daily snapshot", font=_font(20), fill=MUTED)
+    draw.rounded_rectangle([60, 180, 1140, 470], radius=24, fill=SURFACE, outline=LINE, width=2)
+
+    stats = [
+        ("PLUGINS TRACKED", f"{row['plugins']:,}"),
+        ("TOTAL STARS", f"{row['stars']:,}"),
+        ("SNAPSHOT DAYS", str(days)),
+    ]
+    x = 100
+    for label, value in stats:
+        draw.text((x, 220), label, font=_font(18), fill=MUTED)
+        draw.text((x, 252), value, font=_font(72), fill=WHITE)
+        x += 340
+
+    draw.text((100, 380), "Ranks by real daily star velocity, not by ads.", font=_font(22), fill=GOLD)
+    draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
+
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG", optimize=True)
+    payload = buffer.getvalue()
+    cached.write_bytes(payload)
+    return Response(content=payload, media_type="image/png", headers=headers)
+
+
 @router.get("/og/{slug}.png")
 def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     from PIL import Image, ImageDraw

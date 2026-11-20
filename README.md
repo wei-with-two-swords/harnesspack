@@ -48,7 +48,17 @@ pnpm dev          # http://127.0.0.1:5173，/api 代理到 8000
 pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 ```
 
-页面：`/` 首页、`/rankings/{board}` 五个榜单、`/categories` 分类榜（23 类）、`/plugins/{slug}` 详情与曲线、`/about` 数据口径、`/sponsors` 推荐位说明。
+页面：`/` 首页、`/rankings/{board}` 六个榜单、`/rankings/category/{category}` 分类榜、`/categories` 分类索引、`/plugins` 插件库、`/plugins/{slug}` 详情与曲线、`/compare` 插件对比、`/about/*` 数据口径/规则/变更/条款/API、`/status` 数据状态、`/submit` 提交、`/sponsors` 推荐位说明。
+
+### SEO
+
+SPA 的抓取信息由后端注入（`backend/app/main.py` 的 SPA handler + `backend/app/seo.py`），不依赖 JS：
+
+- 每个公开路由都有独立的 `<title>`、`meta description`、canonical 与 Open Graph / Twitter 卡片；
+- 首页注入 WebSite + Dataset JSON-LD，榜单注入 ItemList，插件详情注入 SoftwareApplication + BreadcrumbList；
+- 未知插件/榜单/分类返回 404 + `noindex`，`/compare` 恒为 `noindex`（参数页）；
+- 首页与通用页共用 `/og/site.png`（1200×630，按快照日缓存）；
+- `sitemap.xml` 覆盖全部在册插件、六个榜单、23 个分类与静态页；`robots.txt` 禁止抓取 `/api/`。
 
 ## 抓取
 
