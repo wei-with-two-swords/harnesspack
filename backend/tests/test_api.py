@@ -194,6 +194,7 @@ def test_unknown_plugin_returns_404_and_noindex(client_with_dist):
     response = client_with_dist.get("/plugins/does-not-exist")
     assert response.status_code == 404
     assert 'name="robots" content="noindex,follow"' in response.text
+    assert 'rel="canonical"' not in response.text
 
 
 def test_compare_page_is_noindex(client_with_dist):

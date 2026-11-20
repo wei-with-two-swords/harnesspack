@@ -181,19 +181,25 @@ def build_tags(
     *,
     title: str,
     description: str,
-    canonical: str,
+    canonical: str | None,
     image: str,
     robots: str,
     jsonld: list[dict[str, Any]],
 ) -> str:
     tags = [
         f'<meta name="description" content="{escape(description, quote=True)}">',
-        f'<link rel="canonical" href="{escape(canonical, quote=True)}">',
+    ]
+    if canonical:
+        tags.append(f'<link rel="canonical" href="{escape(canonical, quote=True)}">')
+    tags += [
         f'<meta name="robots" content="{escape(robots, quote=True)}">',
         '<meta property="og:site_name" content="HarnessPack">',
         '<meta property="og:locale" content="zh_CN">',
         '<meta property="og:type" content="website">',
-        f'<meta property="og:url" content="{escape(canonical, quote=True)}">',
+    ]
+    if canonical:
+        tags.append(f'<meta property="og:url" content="{escape(canonical, quote=True)}">')
+    tags += [
         f'<meta property="og:title" content="{escape(title, quote=True)}">',
         f'<meta property="og:description" content="{escape(description, quote=True)}">',
         f'<meta property="og:image" content="{escape(image, quote=True)}">',
