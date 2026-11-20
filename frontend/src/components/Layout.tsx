@@ -65,6 +65,10 @@ export default function Layout({ children }: { children: ReactNode }) {
               数据口径
             </Link>{' '}
             ·{' '}
+            <Link to="/about/api" className="text-teal hover:underline">
+              API
+            </Link>{' '}
+            ·{' '}
             <Link to="/sponsors" className="text-teal hover:underline">
               推荐位说明
             </Link>

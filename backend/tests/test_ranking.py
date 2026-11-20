@@ -145,3 +145,14 @@ def test_dashboard_kpis(db):
     assert payload["kpis"]["stars_delta"] == 5
     assert len(payload["top_velocity"]) == 4
     assert payload["top_total"][0]["slug"] == "alpha-one"
+
+
+def test_detail_exposes_availability_and_peers(db):
+    from backend.app.services import ranking
+
+    detail = ranking.plugin_detail(db, "alpha-one")
+    assert detail is not None
+    assert detail["available"] is True
+    assert detail["status"] == "active"
+    assert [p["slug"] for p in detail["peers"]]
+    assert all(p["slug"] != "alpha-one" for p in detail["peers"])

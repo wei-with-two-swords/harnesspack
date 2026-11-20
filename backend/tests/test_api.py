@@ -127,3 +127,10 @@ def test_changelog_endpoint(client):
     assert resp.status_code == 200
     body = resp.json()
     assert isinstance(body["items"], list)
+
+
+def test_openapi_and_health_fields(client):
+    body = client.get("/api/v1/openapi.json").json()
+    assert body["info"]["title"] == "HarnessPack API"
+    health = client.get("/api/v1/health").json()
+    assert "exited" in health

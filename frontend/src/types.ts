@@ -25,6 +25,13 @@ export interface BoardResponse {
   reason?: string;
 }
 
+export interface PeerItem {
+  slug: string;
+  name: string;
+  stars: number;
+  rank: number;
+}
+
 export interface PluginDetail {
   slug: string;
   name: string;
@@ -40,12 +47,17 @@ export interface PluginDetail {
   added_at: string | null;
   as_of: string | null;
   stars: number | null;
+  stars_at: string | null;
+  available: boolean;
+  exited_at: string | null;
+  exit_reason: string | null;
   delta: number | null;
   is_anomaly: boolean;
   rank_total: number | null;
   rank_velocity: number | null;
   rank_growth7: number | null;
   rank_darkhorse7: number | null;
+  peers: PeerItem[];
 }
 
 export interface SeriesPoint {
@@ -123,4 +135,16 @@ export interface ChangelogEntry {
 export interface ChangelogResponse {
   items: ChangelogEntry[];
   as_of: string | null;
+}
+
+export interface ComparePlugin {
+  slug: string;
+  name: string;
+  series: SeriesPoint[];
+}
+
+export interface CompareResponse {
+  as_of: string | null;
+  days: number;
+  plugins: ComparePlugin[];
 }

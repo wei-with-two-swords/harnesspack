@@ -109,3 +109,36 @@ def test_bad_file_is_skipped_without_blocking(db, tmp_path: Path):
     assert stats.snapshots == 0
     assert stats.skipped and "date does not match" in stats.skipped[0]["reason"]
     conn.close()
+
+
+def test_seed_removal_marks_exited_and_readd_revives(tmp_path: Path):
+    snaps = tmp_path / "snapshots"
+    snaps.mkdir()
+    payload = {
+        "date": "2026-11-01",
+        "plugins": [
+            {"slug": "a-b", "owner": "a", "repo": "b", "name": "AB",
+             "status": "ok", "stars": 10},
+        ],
+    }
+    (snaps / "2026-11-01.json").write_text(json.dumps(payload), encoding="utf-8")
+    seed = tmp_path / "seed.json"
+    conn = connect(tmp_path / "exit.db")
+    init_db(conn)
+    seed.write_text(json.dumps({"plugins": [{"owner": "a", "repo": "b", "slug": "a-b"}]}),
+                    encoding="utf-8")
+    ingest(conn, snaps, seed)
+    seed.write_text(json.dumps({"plugins": [{"owner": "x", "repo": "y", "slug": "x-y"}]}),
+                    encoding="utf-8")
+    stats = ingest(conn, snaps, seed)
+    row = conn.execute("SELECT status, exited_at FROM plugins WHERE slug = 'a-b'").fetchone()
+    assert row["status"] == "exited"
+    assert row["exited_at"] == "2026-11-01"
+    assert stats.exited == 1
+    seed.write_text(json.dumps({"plugins": [{"owner": "a", "repo": "b", "slug": "a-b"}]}),
+                    encoding="utf-8")
+    ingest(conn, snaps, seed)
+    row = conn.execute("SELECT status, exited_at FROM plugins WHERE slug = 'a-b'").fetchone()
+    assert row["status"] == "active"
+    assert row["exited_at"] is None
+    conn.close()

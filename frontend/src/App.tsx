@@ -11,6 +11,8 @@ import CategoryBoard from './pages/CategoryBoard';
 import Plugins from './pages/Plugins';
 import Rules from './pages/Rules';
 import Changelog from './pages/Changelog';
+import Compare from './pages/Compare';
+import ApiDocs from './pages/ApiDocs';
 import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
@@ -36,6 +38,8 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/about/rules" element={<Rules />} />
         <Route path="/about/changelog" element={<Changelog />} />
+        <Route path="/about/api" element={<ApiDocs />} />
+        <Route path="/compare" element={<Compare />} />
         <Route path="/sponsors" element={<Sponsors />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

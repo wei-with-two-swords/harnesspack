@@ -39,6 +39,7 @@ class IngestStats:
     rows: int = 0
     inserted: int = 0
     ignored: int = 0
+    exited: int = 0
     dates: list[str] = field(default_factory=list)
     skipped: list[dict] = field(default_factory=list)
 
@@ -49,6 +50,7 @@ class IngestStats:
             "rows": self.rows,
             "inserted": self.inserted,
             "ignored": self.ignored,
+            "exited": self.exited,
             "dates": self.dates,
             "skipped": self.skipped,
         }
@@ -98,7 +100,10 @@ ON CONFLICT(slug) DO UPDATE SET
     description = COALESCE(NULLIF(excluded.description, ''), plugins.description),
     category = COALESCE(NULLIF(excluded.category, ''), plugins.category),
     harness = COALESCE(NULLIF(excluded.harness, ''), plugins.harness),
-    url = excluded.url
+    url = excluded.url,
+    status = 'active',
+    exited_at = NULL,
+    exit_reason = NULL
 """
 
 
@@ -199,6 +204,32 @@ def _ingest_record(conn: sqlite3.Connection, record: dict, day: str, stats: Inge
     )
 
 
+def _mark_exited(conn: sqlite3.Connection, seed_slugs: set[str], files: list[Path]) -> int:
+    """Mark catalog-removed plugins as exited, keeping their star history.
+
+    The catalog is the membership authority: a repo that disappears from it is
+    no longer ranked, but its historical curve stays available on the detail
+    page. Re-adding a slug revives it via ``upsert_seed``.
+    """
+    day = "1970-01-01"
+    if files:
+        match = DATE_FILE_RE.match(files[-1].name)
+        if match:
+            day = match.group(1)
+    rows = conn.execute("SELECT slug FROM plugins WHERE status = 'active'").fetchall()
+    crossed = 0
+    for row in rows:
+        if row["slug"] in seed_slugs:
+            continue
+        conn.execute(
+            "UPDATE plugins SET status = 'exited', exited_at = ?, "
+            "exit_reason = 'removed from awesome-dsh-plugin catalog' WHERE slug = ?",
+            (day, row["slug"]),
+        )
+        crossed += 1
+    return crossed
+
+
 def _ingest_file(
     conn: sqlite3.Connection,
     path: Path,
@@ -297,6 +328,10 @@ def ingest(
     seed_path: Path | None = None,
 ) -> IngestStats:
     stats = IngestStats()
+    snapshot_dir = Path(snapshot_dir)
+    files = sorted(
+        p for p in snapshot_dir.glob("*.json") if DATE_FILE_RE.match(p.name)
+    ) if snapshot_dir.exists() else []
     seed_slugs: set[str] | None = None
     if seed_path is not None and Path(seed_path).exists():
         seed_plugins = load_seed(Path(seed_path))
@@ -305,11 +340,7 @@ def ingest(
             (p.get("slug") or slugify(str(p["owner"]), str(p["repo"]))).strip()
             for p in seed_plugins
         }
-
-    snapshot_dir = Path(snapshot_dir)
-    files = sorted(
-        p for p in snapshot_dir.glob("*.json") if DATE_FILE_RE.match(p.name)
-    ) if snapshot_dir.exists() else []
+        stats.exited = _mark_exited(conn, seed_slugs, files)
     for path in files:
         _ingest_file(conn, path, stats, seed_slugs)
 

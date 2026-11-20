@@ -243,6 +243,11 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
         "harness": plugin["harness"],
         "url": plugin["url"],
         "status": plugin["status"],
+        "exited_at": plugin["exited_at"],
+        "exit_reason": plugin["exit_reason"],
+        "available": plugin["stars_latest"] is not None,
+        "stars_at": plugin["stars_at"],
+        "peers": [],
         "archived": bool(plugin["archived"]),
         "repo_created_at": plugin["repo_created_at"],
         "added_at": plugin["added_at"],
@@ -277,6 +282,25 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
     detail["rank_velocity"] = _rank(board(conn, "velocity", on=day))
     detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
     detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
+
+    if plugin["category"]:
+        same = _rows_on(conn, day, plugin["category"])
+        ordered = sorted(same, key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
+        peers = []
+        for i, row in enumerate(ordered):
+            if row["slug"] == slug:
+                continue
+            peers.append(
+                {
+                    "slug": row["slug"],
+                    "name": row["name"],
+                    "stars": row["stars"],
+                    "rank": i + 1,
+                }
+            )
+            if len(peers) == 5:
+                break
+        detail["peers"] = peers
     return detail
 
 

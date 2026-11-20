@@ -28,12 +28,16 @@ def health(conn: sqlite3.Connection = Depends(get_conn)) -> dict:
     plugins = int(conn.execute("SELECT COUNT(*) FROM plugins").fetchone()[0])
     stars = int(conn.execute("SELECT COUNT(*) FROM stars").fetchone()[0])
     days = int(conn.execute("SELECT COUNT(DISTINCT date) FROM stars").fetchone()[0])
+    exited = int(
+        conn.execute("SELECT COUNT(*) FROM plugins WHERE status = 'exited'").fetchone()[0]
+    )
     return {
         "status": "ok" if day else "starting",
         "as_of": day,
         "plugins": plugins,
         "stars": stars,
         "days": days,
+        "exited": exited,
     }
 
 
