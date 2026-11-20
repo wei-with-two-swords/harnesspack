@@ -156,3 +156,33 @@ def test_detail_exposes_availability_and_peers(db):
     assert detail["status"] == "active"
     assert [p["slug"] for p in detail["peers"]]
     assert all(p["slug"] != "alpha-one" for p in detail["peers"])
+
+
+def test_quality_board_drops_anomaly_days(db):
+    beta_id = db.execute("SELECT id FROM plugins WHERE slug = 'beta-two'").fetchone()[0]
+    db.execute(
+        "UPDATE stars SET delta = 500, is_anomaly = 1 WHERE plugin_id = ? AND date = '2026-11-10'",
+        (beta_id,),
+    )
+    db.commit()
+
+    payload = ranking.board(db, "quality", window=7)
+    items = payload["items"]
+    assert [item["slug"] for item in items] == [
+        "alpha-one",
+        "beta-two",
+        "gamma-three",
+        "delta-four",
+    ]
+    alpha, beta = items[0], items[1]
+    assert alpha["growth"] == 10.0
+    assert alpha["real_delta"] == 70
+    assert alpha["observed_days"] == 7
+    assert alpha["anomaly_days"] == 0
+    # The 500-star spike is dropped from both the sum and the day count.
+    assert beta["real_delta"] == 30
+    assert beta["observed_days"] == 6
+    assert beta["anomaly_days"] == 1
+    assert beta["growth"] == 5.0
+    assert items[2]["growth"] == 0.0
+    assert items[3]["growth"] == -10.0

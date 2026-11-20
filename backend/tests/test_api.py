@@ -98,7 +98,8 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/plugins" in body
     assert "http://testserver/about/rules" in body
     assert "http://testserver/rankings/category/workflow" in body
-    assert body.count("<url>") == 21
+    assert "http://testserver/status" in body
+    assert body.count("<url>") == 22
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -158,3 +159,15 @@ def test_plugin_page_injects_social_meta(client_with_dist):
     assert 'property="og:image"' in html
     assert "http://testserver/og/alpha-one.png" in html
     assert "<title>Alpha One" in html
+
+
+def test_status_exposes_snapshot_and_database_health(client):
+    response = client.get("/api/v1/status")
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["snapshots"]["days"] == 12
+    assert payload["snapshots"]["latest"]["ok"] == 4
+    assert payload["database"]["plugins"] == 4
+    assert payload["database"]["active"] == 4
+    assert payload["database"]["stars_rows"] == 48
+    assert payload["snapshots"]["coverage"] is None or 0 <= payload["snapshots"]["coverage"] <= 1

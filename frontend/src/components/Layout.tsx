@@ -72,6 +72,10 @@ export default function Layout({ children }: { children: ReactNode }) {
               API
             </Link>{' '}
             ·{' '}
+            <Link to="/status" className="text-teal hover:underline">
+              数据状态
+            </Link>{' '}
+            ·{' '}
             <Link to="/sponsors" className="text-teal hover:underline">
               推荐位说明
             </Link>

@@ -1,0 +1,733 @@
+{
+ "updated_at": "2026-11-20T02:09:09Z",
+ "aliases": {
+  "1834395550/dsh-session-tabs": {
+   "owner": "P-PPJ",
+   "repo": "dsh-session-tabs",
+   "url": "https://github.com/P-PPJ/dsh-session-tabs",
+   "slug": "p-ppj-dsh-session-tabs",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:52Z"
+  },
+  "19952730389/dsh-app-updater": {
+   "owner": "ccgo26",
+   "repo": "dsh-app-updater",
+   "url": "https://github.com/ccgo26/dsh-app-updater",
+   "slug": "ccgo26-dsh-app-updater",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:52Z"
+  },
+  "3341284397-max/dsh-question-bubbles": {
+   "owner": "Aurophyllis",
+   "repo": "dsh-question-bubbles",
+   "url": "https://github.com/Aurophyllis/dsh-question-bubbles",
+   "slug": "aurophyllis-dsh-question-bubbles",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:55Z"
+  },
+  "398894496-arch/dsh-krouter": {
+   "owner": "398894496-arch",
+   "repo": "KRouter",
+   "url": "https://github.com/398894496-arch/KRouter",
+   "slug": "398894496-arch-krouter",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:55Z"
+  },
+  "6mikao9/dsh-wsl-workspace": {
+   "owner": "dsh-wsl-workspace-maintainers",
+   "repo": "dsh-wsl-workspace",
+   "url": "https://github.com/dsh-wsl-workspace-maintainers/dsh-wsl-workspace",
+   "slug": "dsh-wsl-workspace-maintainers-dsh-wsl-workspace",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:55Z"
+  },
+  "antonio-mastropaolo/dsh-anthropic-membership": {
+   "owner": "antonio-mastropaolo",
+   "repo": "dsh-model-hub",
+   "url": "https://github.com/antonio-mastropaolo/dsh-model-hub",
+   "slug": "antonio-mastropaolo-dsh-model-hub",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:06:57Z"
+  },
+  "baisbt/baisbt-dsh-service-manager": {
+   "owner": "Baisbt",
+   "repo": "dsh-service-manager",
+   "url": "https://github.com/Baisbt/dsh-service-manager",
+   "slug": "baisbt-dsh-service-manager",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:03Z"
+  },
+  "bangbang-03/dsh-memory": {
+   "owner": "BangBang-03",
+   "repo": "dsh-memory-portrait",
+   "url": "https://github.com/BangBang-03/dsh-memory-portrait",
+   "slug": "bangbang-03-dsh-memory-portrait",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:03Z"
+  },
+  "blindcat-10835/dsh-session-manager": {
+   "owner": "blindcat-10835",
+   "repo": "dsh-session-studio",
+   "url": "https://github.com/blindcat-10835/dsh-session-studio",
+   "slug": "blindcat-10835-dsh-session-studio",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:03Z"
+  },
+  "canary-builds/dsh-mobile-ui": {
+   "owner": "canarybuilds",
+   "repo": "dsh-mobile-ui",
+   "url": "https://github.com/canarybuilds/dsh-mobile-ui",
+   "slug": "canarybuilds-dsh-mobile-ui",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "ch4acko3/bites-the-dsh": {
+   "owner": "memorax-ai",
+   "repo": "bites-the-dsh",
+   "url": "https://github.com/memorax-ai/bites-the-dsh",
+   "slug": "memorax-ai-bites-the-dsh",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "ch4acko3/dsh-render-engine": {
+   "owner": "memorax-ai",
+   "repo": "dsh-render-engine",
+   "url": "https://github.com/memorax-ai/dsh-render-engine",
+   "slug": "memorax-ai-dsh-render-engine",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "ch4acko3/dsh-turn-fold": {
+   "owner": "memorax-ai",
+   "repo": "dsh-turn-fold",
+   "url": "https://github.com/memorax-ai/dsh-turn-fold",
+   "slug": "memorax-ai-dsh-turn-fold",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "ch4acko3/the-binding-of-dsh": {
+   "owner": "memorax-ai",
+   "repo": "the-binding-of-dsh",
+   "url": "https://github.com/memorax-ai/the-binding-of-dsh",
+   "slug": "memorax-ai-the-binding-of-dsh",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "chaoge762/dsh-ears-prosody": {
+   "owner": "futureChanger53",
+   "repo": "dsh-ears-prosody",
+   "url": "https://github.com/futureChanger53/dsh-ears-prosody",
+   "slug": "futurechanger53-dsh-ears-prosody",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "clair0314/dsh-bilibili-viral": {
+   "owner": "nekonya77",
+   "repo": "dsh-bilibili-viral",
+   "url": "https://github.com/nekonya77/dsh-bilibili-viral",
+   "slug": "nekonya77-dsh-bilibili-viral",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:10Z"
+  },
+  "clair0314/dsh-qq-radar": {
+   "owner": "nekonya77",
+   "repo": "dsh-qq-radar",
+   "url": "https://github.com/nekonya77/dsh-qq-radar",
+   "slug": "nekonya77-dsh-qq-radar",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:10Z"
+  },
+  "creatjy/dsh-context-control": {
+   "owner": "createjy",
+   "repo": "dsh-context-control",
+   "url": "https://github.com/createjy/dsh-context-control",
+   "slug": "createjy-dsh-context-control",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "ctianye/dsh_gearbox": {
+   "owner": "ctianye",
+   "repo": "dsh-gearbox",
+   "url": "https://github.com/ctianye/dsh-gearbox",
+   "slug": "ctianye-dsh-gearbox",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "cxdyun/dsh-skills-marketplace": {
+   "owner": "cxdywhb",
+   "repo": "dsh-skills-marketplace",
+   "url": "https://github.com/cxdywhb/dsh-skills-marketplace",
+   "slug": "cxdywhb-dsh-skills-marketplace",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "doctor-pan-code/dsh-useof-skill-panel": {
+   "owner": "doctorpancode",
+   "repo": "dsh-useof-skill-panel",
+   "url": "https://github.com/doctorpancode/dsh-useof-skill-panel",
+   "slug": "doctorpancode-dsh-useof-skill-panel",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "doctor-pan-code/ncm-player5": {
+   "owner": "doctorpancode",
+   "repo": "ncm-player5",
+   "url": "https://github.com/doctorpancode/ncm-player5",
+   "slug": "doctorpancode-ncm-player5",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "elk-9527/dsh-auto-archive": {
+   "owner": "StanElka",
+   "repo": "dsh-auto-archive",
+   "url": "https://github.com/StanElka/dsh-auto-archive",
+   "slug": "stanelka-dsh-auto-archive",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "ethanyoq/ai-novel-writer": {
+   "owner": "EthanYoQ",
+   "repo": "Pagekin",
+   "url": "https://github.com/EthanYoQ/Pagekin",
+   "slug": "ethanyoq-pagekin",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:26Z"
+  },
+  "fitbbc/dsh-plugin-tokenmarket": {
+   "owner": "Duqiyan2",
+   "repo": "dsh-plugin-tokenmarket",
+   "url": "https://github.com/Duqiyan2/dsh-plugin-tokenmarket",
+   "slug": "duqiyan2-dsh-plugin-tokenmarket",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:29Z"
+  },
+  "flashpoint007/dsh-wecom-soul-bot": {
+   "owner": "clickyotter",
+   "repo": "dsh-wecom-soul-bot",
+   "url": "https://github.com/clickyotter/dsh-wecom-soul-bot",
+   "slug": "clickyotter-dsh-wecom-soul-bot",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:29Z"
+  },
+  "ghostmss86-afk/dsh-skin-studio": {
+   "owner": "ghostmss86-afk",
+   "repo": "dsh-mixin",
+   "url": "https://github.com/ghostmss86-afk/dsh-mixin",
+   "slug": "ghostmss86-afk-dsh-mixin",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "glk1220/dsh-session-git": {
+   "owner": "golemkit",
+   "repo": "dsh-session-git",
+   "url": "https://github.com/golemkit/dsh-session-git",
+   "slug": "golemkit-dsh-session-git",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "gongfpp/dsh-man-031": {
+   "owner": "gongfpp",
+   "repo": "dsh-man-report",
+   "url": "https://github.com/gongfpp/dsh-man-report",
+   "slug": "gongfpp-dsh-man-report",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "gugu123a/dsh-tool-see-image": {
+   "owner": "guguthecoder",
+   "repo": "dsh-tool-see-image",
+   "url": "https://github.com/guguthecoder/dsh-tool-see-image",
+   "slug": "guguthecoder-dsh-tool-see-image",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "hairyf/dsh-office-kit": {
+   "owner": "Tranquillitatis-Lab",
+   "repo": "dsh-office-kit",
+   "url": "https://github.com/Tranquillitatis-Lab/dsh-office-kit",
+   "slug": "tranquillitatis-lab-dsh-office-kit",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "hairyf/dsh-tool-activator": {
+   "owner": "Tranquillitatis-Lab",
+   "repo": "dsh-tool-activator",
+   "url": "https://github.com/Tranquillitatis-Lab/dsh-tool-activator",
+   "slug": "tranquillitatis-lab-dsh-tool-activator",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:32Z"
+  },
+  "haydensmith1121/dsh-opencode-go-plus": {
+   "owner": "DPH-1121",
+   "repo": "dsh-opencode-go-plus",
+   "url": "https://github.com/DPH-1121/dsh-opencode-go-plus",
+   "slug": "dph-1121-dsh-opencode-go-plus",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:33Z"
+  },
+  "haydensmith1121/dsh-wallhaven-wallpaper": {
+   "owner": "DPH-1121",
+   "repo": "dsh-wallhaven-wallpaper",
+   "url": "https://github.com/DPH-1121/dsh-wallhaven-wallpaper",
+   "slug": "dph-1121-dsh-wallhaven-wallpaper",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:33Z"
+  },
+  "hongcheng-li/dsh-magpie": {
+   "owner": "Hongcheng-LI",
+   "repo": "dsh-magpie-quota",
+   "url": "https://github.com/Hongcheng-LI/dsh-magpie-quota",
+   "slug": "hongcheng-li-dsh-magpie-quota",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:33Z"
+  },
+  "jerryxff26-alt/dsh-delivery-board": {
+   "owner": "jerryxff26-alt",
+   "repo": "delivery-board",
+   "url": "https://github.com/jerryxff26-alt/delivery-board",
+   "slug": "jerryxff26-alt-delivery-board",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:41Z"
+  },
+  "jidekaixin2dian/dsh-context-budget": {
+   "owner": "jidekaixin2dian",
+   "repo": "dsh-toolgate",
+   "url": "https://github.com/jidekaixin2dian/dsh-toolgate",
+   "slug": "jidekaixin2dian-dsh-toolgate",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:43Z"
+  },
+  "kadima-code/dsh-subagent-fold": {
+   "owner": "Kadima-code",
+   "repo": "dsh-subagent-toolkit",
+   "url": "https://github.com/Kadima-code/dsh-subagent-toolkit",
+   "slug": "kadima-code-dsh-subagent-toolkit",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:48Z"
+  },
+  "kingcharleslzy-ai/dsh-qwen-studio": {
+   "owner": "kingcharleslzy-ai",
+   "repo": "DSH-Spicy",
+   "url": "https://github.com/kingcharleslzy-ai/DSH-Spicy",
+   "slug": "kingcharleslzy-ai-dsh-spicy",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:52Z"
+  },
+  "klrsl/dsh-biomemory": {
+   "owner": "K-W7",
+   "repo": "dsh-memory-layer",
+   "url": "https://github.com/K-W7/dsh-memory-layer",
+   "slug": "k-w7-dsh-memory-layer",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:53Z"
+  },
+  "klrsl/dsh-packer": {
+   "owner": "K-W7",
+   "repo": "dsh-packer",
+   "url": "https://github.com/K-W7/dsh-packer",
+   "slug": "k-w7-dsh-packer",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:53Z"
+  },
+  "ldq0102261819/dsh-market-seed": {
+   "owner": "mysteriousPldq",
+   "repo": "dsh-market-seed",
+   "url": "https://github.com/mysteriousPldq/dsh-market-seed",
+   "slug": "mysteriouspldq-dsh-market-seed",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/agent-loop-workflow": {
+   "owner": "YaoleWu",
+   "repo": "agent-loop-workflow",
+   "url": "https://github.com/YaoleWu/agent-loop-workflow",
+   "slug": "yaolewu-agent-loop-workflow",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/dsh-fleet-audit": {
+   "owner": "YaoleWu",
+   "repo": "dsh-fleet-audit",
+   "url": "https://github.com/YaoleWu/dsh-fleet-audit",
+   "slug": "yaolewu-dsh-fleet-audit",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/dsh-md-preview": {
+   "owner": "YaoleWu",
+   "repo": "dsh-md-preview",
+   "url": "https://github.com/YaoleWu/dsh-md-preview",
+   "slug": "yaolewu-dsh-md-preview",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/dsh-ops-kit": {
+   "owner": "YaoleWu",
+   "repo": "dsh-ops-kit",
+   "url": "https://github.com/YaoleWu/dsh-ops-kit",
+   "slug": "yaolewu-dsh-ops-kit",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/dsh-session-search-pro": {
+   "owner": "YaoleWu",
+   "repo": "dsh-session-search-pro",
+   "url": "https://github.com/YaoleWu/dsh-session-search-pro",
+   "slug": "yaolewu-dsh-session-search-pro",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/dsh-task-relay": {
+   "owner": "YaoleWu",
+   "repo": "dsh-task-relay",
+   "url": "https://github.com/YaoleWu/dsh-task-relay",
+   "slug": "yaolewu-dsh-task-relay",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lesliewylie/review-workflow": {
+   "owner": "YaoleWu",
+   "repo": "review-workflow",
+   "url": "https://github.com/YaoleWu/review-workflow",
+   "slug": "yaolewu-review-workflow",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lianzhimanye/dsh-bard-0.03": {
+   "owner": "lianzhimanye",
+   "repo": "dsh-bard-0.10",
+   "url": "https://github.com/lianzhimanye/dsh-bard-0.10",
+   "slug": "lianzhimanye-dsh-bard-0-10",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "lihongxu0221/dsh-workspace-browser": {
+   "owner": "lihongxu0221",
+   "repo": "dsh-workspace-ui",
+   "url": "https://github.com/lihongxu0221/dsh-workspace-ui",
+   "slug": "lihongxu0221-dsh-workspace-ui",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "liushqaq/dsh-anywhere": {
+   "owner": "liushQAQ",
+   "repo": "dsh-anywhere-hub",
+   "url": "https://github.com/liushQAQ/dsh-anywhere-hub",
+   "slug": "liushqaq-dsh-anywhere-hub",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:56Z"
+  },
+  "lizzzmax/dsh-tool-index": {
+   "owner": "LizzzMax",
+   "repo": "dsh-lean-context",
+   "url": "https://github.com/LizzzMax/dsh-lean-context",
+   "slug": "lizzzmax-dsh-lean-context",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:07:56Z"
+  },
+  "lwsyidong/dsh-window-fit": {
+   "owner": "Yi-qing-dev",
+   "repo": "dsh-window-fit",
+   "url": "https://github.com/Yi-qing-dev/dsh-window-fit",
+   "slug": "yi-qing-dev-dsh-window-fit",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:03Z"
+  },
+  "makotonikki/dsh-discord-rich": {
+   "owner": "wisqqud",
+   "repo": "dsh-discord-rich",
+   "url": "https://github.com/wisqqud/dsh-discord-rich",
+   "slug": "wisqqud-dsh-discord-rich",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:05Z"
+  },
+  "minglink/dsh-infinite-gen-4": {
+   "owner": "Minglink",
+   "repo": "dsh-infinite-gen-5",
+   "url": "https://github.com/Minglink/dsh-infinite-gen-5",
+   "slug": "minglink-dsh-infinite-gen-5",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:08Z"
+  },
+  "missher12/dsh-project-ops": {
+   "owner": "Missher12",
+   "repo": "Missher-DSH-Project-Ops",
+   "url": "https://github.com/Missher12/Missher-DSH-Project-Ops",
+   "slug": "missher12-missher-dsh-project-ops",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:11Z"
+  },
+  "mkiea/qq-integration": {
+   "owner": "mkiea",
+   "repo": "omnichannel-bridge",
+   "url": "https://github.com/mkiea/omnichannel-bridge",
+   "slug": "mkiea-omnichannel-bridge",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:11Z"
+  },
+  "ningyuanlee/dsh-minimax-byapi": {
+   "owner": "NingYuanLee",
+   "repo": "dsh-minimax-api",
+   "url": "https://github.com/NingYuanLee/dsh-minimax-api",
+   "slug": "ningyuanlee-dsh-minimax-api",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:13Z"
+  },
+  "oscarka/deepseekharness-remotecontrol": {
+   "owner": "oscarka",
+   "repo": "pocketagent",
+   "url": "https://github.com/oscarka/pocketagent",
+   "slug": "oscarka-pocketagent",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:13Z"
+  },
+  "qcwygm/dsh-config-sync": {
+   "owner": "QcWyGm",
+   "repo": "dsh-config-sync-plugin",
+   "url": "https://github.com/QcWyGm/dsh-config-sync-plugin",
+   "slug": "qcwygm-dsh-config-sync-plugin",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:14Z"
+  },
+  "qianling-0831/dsh-memory-plus": {
+   "owner": "QIANLING-0831",
+   "repo": "dsh-memory-pro",
+   "url": "https://github.com/QIANLING-0831/dsh-memory-pro",
+   "slug": "qianling-0831-dsh-memory-pro",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:14Z"
+  },
+  "qiu-kkkk/deepseek-harness-bt-": {
+   "owner": "QIU-KKKK",
+   "repo": "DeepSeek-Harness-BT",
+   "url": "https://github.com/QIU-KKKK/DeepSeek-Harness-BT",
+   "slug": "qiu-kkkk-deepseek-harness-bt",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:15Z"
+  },
+  "sev7een7/sieve": {
+   "owner": "Sev7eEn7",
+   "repo": "dsh-sieve",
+   "url": "https://github.com/Sev7eEn7/dsh-sieve",
+   "slug": "sev7een7-dsh-sieve",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:16Z"
+  },
+  "shadowminer/hermes-dsh-bridge": {
+   "owner": "newbeebnb",
+   "repo": "hermes-dsh-bridge",
+   "url": "https://github.com/newbeebnb/hermes-dsh-bridge",
+   "slug": "newbeebnb-hermes-dsh-bridge",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:16Z"
+  },
+  "songoao25/dsh-chatgpt-subscription": {
+   "owner": "songoao25",
+   "repo": "dsh-chatgpt-sub",
+   "url": "https://github.com/songoao25/dsh-chatgpt-sub",
+   "slug": "songoao25-dsh-chatgpt-sub",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:18Z"
+  },
+  "tkaiz0406/dsh-subagent-route-pin": {
+   "owner": "tkaiz0406",
+   "repo": "dsh-delegation-hub",
+   "url": "https://github.com/tkaiz0406/dsh-delegation-hub",
+   "slug": "tkaiz0406-dsh-delegation-hub",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:22Z"
+  },
+  "vast-ai-research/tripo3d-plugin-dsh": {
+   "owner": "Tripo-Developer",
+   "repo": "Tripo3D-Plugin-dsh",
+   "url": "https://github.com/Tripo-Developer/Tripo3D-Plugin-dsh",
+   "slug": "tripo-developer-tripo3d-plugin-dsh",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:22Z"
+  },
+  "vitas/dsh-web-search-openrouter": {
+   "owner": "vitas",
+   "repo": "dsh-web-search-gateway",
+   "url": "https://github.com/vitas/dsh-web-search-gateway",
+   "slug": "vitas-dsh-web-search-gateway",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:26Z"
+  },
+  "wang1462604987/dsh-wsl-sidebar": {
+   "owner": "WangJialong19",
+   "repo": "dsh-wsl-sidebar",
+   "url": "https://github.com/WangJialong19/dsh-wsl-sidebar",
+   "slug": "wangjialong19-dsh-wsl-sidebar",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:26Z"
+  },
+  "wfengq/dsh": {
+   "owner": "wfengq",
+   "repo": "dsh-Tally",
+   "url": "https://github.com/wfengq/dsh-Tally",
+   "slug": "wfengq-dsh-tally",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:28Z"
+  },
+  "wojiao42/dsh-memory-file": {
+   "owner": "wojiao42",
+   "repo": "dsh-long-term-memory",
+   "url": "https://github.com/wojiao42/dsh-long-term-memory",
+   "slug": "wojiao42-dsh-long-term-memory",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:28Z"
+  },
+  "wujiaojue/dsh-herdr-site": {
+   "owner": "dsh-plugin-collection",
+   "repo": "dsh-herdr-site",
+   "url": "https://github.com/dsh-plugin-collection/dsh-herdr-site",
+   "slug": "dsh-plugin-collection-dsh-herdr-site",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:34Z"
+  },
+  "wyr-233/dsh-memory-lite": {
+   "owner": "WYR-233",
+   "repo": "dsh-memory-markdown",
+   "url": "https://github.com/WYR-233/dsh-memory-markdown",
+   "slug": "wyr-233-dsh-memory-markdown",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:34Z"
+  },
+  "xdtrees/dsh-workbuddy-xdpool": {
+   "owner": "XDTrees",
+   "repo": "dsh-xdpool",
+   "url": "https://github.com/XDTrees/dsh-xdpool",
+   "slug": "xdtrees-dsh-xdpool",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:34Z"
+  },
+  "xianyuyijinban/boardwise": {
+   "owner": "XiangyuYue",
+   "repo": "boardwise",
+   "url": "https://github.com/XiangyuYue/boardwise",
+   "slug": "xiangyuyue-boardwise",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:35Z"
+  },
+  "xiaoshihou514/dsh-tui": {
+   "owner": "xiaoshihou514",
+   "repo": "archived_dsh-tui",
+   "url": "https://github.com/xiaoshihou514/archived_dsh-tui",
+   "slug": "xiaoshihou514-archived-dsh-tui",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:35Z"
+  },
+  "xiaoshihou514/dsh-vision": {
+   "owner": "xiaoshihou514",
+   "repo": "archived_dsh-vision",
+   "url": "https://github.com/xiaoshihou514/archived_dsh-vision",
+   "slug": "xiaoshihou514-archived-dsh-vision",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:35Z"
+  },
+  "xuzihao66/dsh-token-frugal": {
+   "owner": "Dreverie",
+   "repo": "dsh-token-frugal",
+   "url": "https://github.com/Dreverie/dsh-token-frugal",
+   "slug": "dreverie-dsh-token-frugal",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:41Z"
+  },
+  "yaanlaan/deepseek-colorful": {
+   "owner": "yaanlaan",
+   "repo": "dsh-colorful",
+   "url": "https://github.com/yaanlaan/dsh-colorful",
+   "slug": "yaanlaan-dsh-colorful",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:41Z"
+  },
+  "yeweiliang7063/dsh-tcm": {
+   "owner": "yeweiliang7063",
+   "repo": "dsh-tcm-xueli",
+   "url": "https://github.com/yeweiliang7063/dsh-tcm-xueli",
+   "slug": "yeweiliang7063-dsh-tcm-xueli",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:44Z"
+  },
+  "yimengsuper2432/dsh-agent-personality": {
+   "owner": "yimengsuper2432",
+   "repo": "dsh-virtual-person",
+   "url": "https://github.com/yimengsuper2432/dsh-virtual-person",
+   "slug": "yimengsuper2432-dsh-virtual-person",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:45Z"
+  },
+  "yinxe/deepseek-harness-plugins": {
+   "owner": "Yinxe",
+   "repo": "dshp",
+   "url": "https://github.com/Yinxe/dshp",
+   "slug": "yinxe-dshp",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:49Z"
+  },
+  "yuhe248118/dsh-aiyting-image-video": {
+   "owner": "liangyu112212",
+   "repo": "dsh-aiyting-image-video",
+   "url": "https://github.com/liangyu112212/dsh-aiyting-image-video",
+   "slug": "liangyu112212-dsh-aiyting-image-video",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:51Z"
+  },
+  "zf-666888/dsh-session-id-for-desktop": {
+   "owner": "meowmeowloong",
+   "repo": "dsh-session-id-for-desktop",
+   "url": "https://github.com/meowmeowloong/dsh-session-id-for-desktop",
+   "slug": "meowmeowloong-dsh-session-id-for-desktop",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:52Z"
+  },
+  "zhang-eli/dsh-github-trending-masonry": {
+   "owner": "wzvx",
+   "repo": "dsh-github-trending-masonry",
+   "url": "https://github.com/wzvx/dsh-github-trending-masonry",
+   "slug": "wzvx-dsh-github-trending-masonry",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:52Z"
+  },
+  "zhang-eli/dsh-market-dog": {
+   "owner": "wzvx",
+   "repo": "dsh-market-dog",
+   "url": "https://github.com/wzvx/dsh-market-dog",
+   "slug": "wzvx-dsh-market-dog",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:52Z"
+  },
+  "zhang-eli/dsh-one-pack": {
+   "owner": "wzvx",
+   "repo": "dsh-one-pack",
+   "url": "https://github.com/wzvx/dsh-one-pack",
+   "slug": "wzvx-dsh-one-pack",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:52Z"
+  },
+  "zhishengplus/dsh-image-annotate": {
+   "owner": "dsh-plugins",
+   "repo": "dsh-image-annotate",
+   "url": "https://github.com/dsh-plugins/dsh-image-annotate",
+   "slug": "dsh-plugins-dsh-image-annotate",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:08:56Z"
+  },
+  "zsenpro/creating": {
+   "owner": "zsenpro",
+   "repo": "DSH-Voice-output",
+   "url": "https://github.com/zsenpro/DSH-Voice-output",
+   "slug": "zsenpro-dsh-voice-output",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:09:09Z"
+  },
+  "zylzyqzz/dsh-mobile-pwa": {
+   "owner": "zylzyqzz",
+   "repo": "dsbot",
+   "url": "https://github.com/zylzyqzz/dsbot",
+   "slug": "zylzyqzz-dsbot",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T02:09:09Z"
+  }
+ }
+}

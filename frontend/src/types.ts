@@ -14,6 +14,9 @@ export interface RankingItem {
   rank: number;
   prev_rank: number | null;
   growth: number | null;
+  real_delta?: number;
+  observed_days?: number;
+  anomaly_days?: number;
 }
 
 export interface BoardResponse {
@@ -120,6 +123,45 @@ export interface CategorySummary {
 export interface CategoriesResponse {
   as_of: string | null;
   items: CategorySummary[];
+}
+
+export interface StatusSnapshot {
+  date: string;
+  total: number;
+  ok: number;
+  failed: number;
+  elapsed_s: number | null;
+  fetched_at: string | null;
+}
+
+export interface StatusFailure {
+  slug: string;
+  repo: string;
+  status: string;
+  error?: string;
+}
+
+export interface StatusResponse {
+  snapshots: {
+    as_of: string | null;
+    first_date: string | null;
+    days: number;
+    seed_count: number;
+    latest: StatusSnapshot | null;
+    ok_rate: number | null;
+    coverage: number | null;
+    failures: StatusFailure[];
+  };
+  database: {
+    as_of: string | null;
+    plugins: number;
+    active: number;
+    exited: number;
+    unavailable: number;
+    stars_rows: number;
+    anomalies: number;
+  };
+  last_catalog_sync: { at: string; added: number; removed: number; changed: number } | null;
 }
 
 export interface ChangelogEntry {

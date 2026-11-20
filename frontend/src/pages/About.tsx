@@ -7,6 +7,7 @@ const BOARDS = [
   ['总榜', '当前 star 总量；并列按名称升序。'],
   ['黑马', '区间内总榜名次的跃升幅度。'],
   ['新秀', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
+  ['含金量', '剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
 ];
 
 export default function About() {
@@ -49,6 +50,8 @@ export default function About() {
         <p className="mt-3 text-xs text-muted">
           所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
           分类榜沿用上游清单的 23 个分类，只在同一分类内重新排名。
+          含金量榜先剔除被标为异常的单日涨幅，再按剩余天数的日均新增排序，至少 3 天样本才入榜；
+          覆盖率与失败清单见 <Link className="text-teal hover:underline" to="/status">数据状态</Link>。
         </p>
       </section>
 

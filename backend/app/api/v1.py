@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import sqlite3
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from ..db import connect
 from ..services import changelog as changelog_service
+from ..services import status as status_service
 from ..services import ranking
 
 router = APIRouter()
@@ -38,6 +40,27 @@ def health(conn: sqlite3.Connection = Depends(get_conn)) -> dict:
         "stars": stars,
         "days": days,
         "exited": exited,
+    }
+
+
+@router.get("/status")
+def status(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> dict:
+    settings = request.app.state.settings
+    seed_count = 0
+    try:
+        import json
+
+        seed = json.loads(Path(settings.seed_path).read_text(encoding="utf-8"))
+        seed_count = len(seed.get("plugins") or [])
+    except (OSError, ValueError):
+        seed_count = 0
+    snapshots = status_service.snapshot_status(Path(settings.snapshot_dir), seed_count)
+    database = status_service.database_status(conn)
+    latest_changelog = changelog_service.recent(1)
+    return {
+        "snapshots": snapshots,
+        "database": database,
+        "last_catalog_sync": latest_changelog[0] if latest_changelog else None,
     }
 
 

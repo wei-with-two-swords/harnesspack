@@ -6,6 +6,7 @@ export const BOARD_TABS = [
   { id: 'total', label: '总榜', hint: 'star 总量' },
   { id: 'darkhorse', label: '黑马', hint: '名次跃升' },
   { id: 'rookie', label: '新秀', hint: '30 天内新建' },
+  { id: 'quality', label: '含金量', hint: '剔除异常日后的真实日均增速' },
 ] as const;
 
 export function BoardTabs({ active }: { active: string }) {

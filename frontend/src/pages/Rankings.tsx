@@ -18,6 +18,7 @@ const BOARD_TEXT: Record<string, string> = {
   total: '按当前 star 总量排序。并列时按名称升序。',
   darkhorse: '按区间内总榜名次跃升排序，正数为上升。',
   rookie: '收录名单内、仓库创建时间在最近 30 天的项目。',
+  quality: '先剔除被标记为异常的单日涨幅，再按剩余天数的日均新增排序；至少 3 天数据才入榜。',
 };
 
 export default function Rankings() {
@@ -45,7 +46,7 @@ export default function Rankings() {
 
   const label = BOARD_TABS.find((tab) => tab.id === board)?.label ?? board;
   useTitle(`${label}榜`, `${label}榜：${BOARD_TEXT[board] ?? ''}`.trim());
-  const windowed = board === 'growth' || board === 'darkhorse';
+  const windowed = board === 'growth' || board === 'darkhorse' || board === 'quality';
 
   return (
     <section>

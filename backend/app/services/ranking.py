@@ -11,11 +11,12 @@ import sqlite3
 from datetime import date as Date, timedelta
 from typing import Any
 
-BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie")
+BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie", "quality")
 WINDOWS = (7, 30)
 GROWTH_MIN_BASE = 50
 ROOKIE_DAYS = 30
 ROOKIE_MIN_STARS = 10
+QUALITY_MIN_DAYS = 3
 
 
 class BoardError(ValueError):
@@ -36,7 +37,7 @@ def _previous_date(conn: sqlite3.Connection, day: str) -> str | None:
 
 def _rows_on(conn: sqlite3.Connection, day: str, category: str | None = None) -> list[dict[str, Any]]:
     sql = """
-        SELECT p.slug, p.owner, p.repo, p.name, p.description, p.category,
+        SELECT p.id, p.slug, p.owner, p.repo, p.name, p.description, p.category,
                p.harness, p.url, p.repo_created_at, p.stars_latest,
                s.count AS stars, s.delta, s.is_anomaly
         FROM stars s
@@ -95,11 +96,11 @@ def board(
 ) -> dict[str, Any]:
     if name not in BOARDS:
         raise BoardError(f"unknown board: {name}")
-    if name in ("growth", "darkhorse") and window not in WINDOWS:
+    if name in ("growth", "darkhorse", "quality") and window not in WINDOWS:
         raise BoardError(f"window must be one of {WINDOWS}")
     day = on or latest_date(conn)
     if day is None:
-        return _empty(name, None, window if name in ("growth", "darkhorse") else None, "no snapshots")
+        return _empty(name, None, window if name in ("growth", "darkhorse", "quality") else None, "no snapshots")
 
     rows = _rows_on(conn, day, category)
     prev_day = _previous_date(conn, day)
@@ -124,6 +125,52 @@ def board(
             item["prev_rank"] = prev_rank.get(row["slug"])
             items.append(item)
         return {"board": name, "as_of": day, "window": None, "items": items}
+
+    if name == "quality":
+        # Real growth: drop days flagged as star spikes, then average the rest.
+        base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
+        stats = {
+            r["plugin_id"]: dict(r)
+            for r in conn.execute(
+                """
+                SELECT plugin_id,
+                       SUM(CASE WHEN is_anomaly = 0 THEN 1 ELSE 0 END) AS observed_days,
+                       SUM(CASE WHEN is_anomaly = 0 THEN delta ELSE 0 END) AS real_delta,
+                       SUM(CASE WHEN is_anomaly = 1 THEN 1 ELSE 0 END) AS anomaly_days
+                FROM stars
+                WHERE date > ? AND date <= ? AND delta IS NOT NULL
+                GROUP BY plugin_id
+                """,
+                (base_day, day),
+            ).fetchall()
+        }
+        candidates: list[tuple[float, dict[str, Any], dict[str, Any]]] = []
+        for row in rows:
+            stat = stats.get(row.get("id"))
+            if stat is None or stat["observed_days"] < QUALITY_MIN_DAYS:
+                continue
+            daily = stat["real_delta"] / stat["observed_days"]
+            candidates.append((daily, row, stat))
+        candidates.sort(
+            key=lambda c: (-c[0], -c[1]["stars"], c[1]["name"].lower(), c[1]["slug"])
+        )
+        items = []
+        for i, (daily, row, stat) in enumerate(candidates):
+            item = _base_item(row, i + 1)
+            item["growth"] = round(daily, 2)
+            item["real_delta"] = int(stat["real_delta"])
+            item["observed_days"] = int(stat["observed_days"])
+            item["anomaly_days"] = int(stat["anomaly_days"])
+            items.append(item)
+        if not items:
+            return {
+                "board": name,
+                "as_of": day,
+                "window": window,
+                "items": [],
+                "reason": f"需要至少 {QUALITY_MIN_DAYS} 天有效快照（异常日不计入），当前样本不足。",
+            }
+        return {"board": name, "as_of": day, "window": window, "items": items}
 
     base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
     base_rows = _rows_on(conn, base_day, category)
@@ -259,6 +306,7 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
         "rank_velocity": None,
         "rank_growth7": None,
         "rank_darkhorse7": None,
+        "rank_quality7": None,
     }
     if day is None:
         return detail
@@ -282,6 +330,7 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
     detail["rank_velocity"] = _rank(board(conn, "velocity", on=day))
     detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
     detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
+    detail["rank_quality7"] = _rank(board(conn, "quality", window=7, on=day))
 
     if plugin["category"]:
         same = _rows_on(conn, day, plugin["category"])

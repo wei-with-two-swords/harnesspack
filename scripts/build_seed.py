@@ -1,4 +1,4 @@
-﻿"""Build data/plugins.seed.json from the vendored awesome-dsh-plugin catalog.
+"""Build data/plugins.seed.json from the vendored awesome-dsh-plugin catalog.
 
 Membership and categories come from the upstream catalog; this script only
 normalises it into the seed format used by the ingest pipeline. One row per
@@ -31,12 +31,22 @@ def main() -> int:
     catalog_path = ROOT / "data" / "catalog" / "latest.json"
     catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
     repos = catalog.get("repos") or {}
+    aliases_path = ROOT / "data" / "catalog" / "aliases.json"
+    aliases = {}
+    if aliases_path.exists():
+        aliases = json.loads(aliases_path.read_text(encoding="utf-8")).get("aliases") or {}
 
     plugins = []
     for key in sorted(repos):
         item = repos[key]
         owner = item["owner"]
         repo = item["repo"]
+        original = f"{owner}/{repo}"
+        alias = aliases.get(original.lower())
+        canonical = alias is None
+        if alias:
+            owner = alias["owner"]
+            repo = alias["repo"]
         name = str(item.get("name") or f"{owner}/{repo}")
         shown = name.split("#", 1)[0].strip() or repo
         plugins.append(
@@ -49,8 +59,24 @@ def main() -> int:
                 "harness": "dsh",
                 "url": f"https://github.com/{owner}/{repo}",
                 "note": "",
+                "_canonical": canonical,
+                "_original": original,
             }
         )
+
+    # Renames can collide with an existing entry; keep the canonical name.
+    by_repo = {}
+    for plugin in plugins:
+        key = f'{plugin["owner"]}/{plugin["repo"]}'.lower()
+        current = by_repo.get(key)
+        if current is None or (plugin['_canonical'] and not current['_canonical']):
+            by_repo[key] = plugin
+        elif current['_canonical'] == plugin['_canonical'] and len(plugin['name']) < len(current['name']):
+            by_repo[key] = plugin
+    plugins = [by_repo[k] for k in sorted(by_repo)]
+    for plugin in plugins:
+        plugin.pop("_canonical", None)
+        plugin.pop("_original", None)
 
     slugs = [p["slug"] for p in plugins]
     dupes = {s for s in slugs if slugs.count(s) > 1}
@@ -59,7 +85,7 @@ def main() -> int:
         return 1
 
     payload = {
-        "version": 6,
+        "version": 7,
         "updated_at": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d"),
         "source": "awesome-dsh-plugin catalog",
         "inclusion_rule": INCLUSION_RULE,

@@ -28,6 +28,15 @@ function ExtraCell({ item, board }: { item: RankingItem; board: string }) {
       </span>
     );
   }
+  if (board === 'quality') {
+    return (
+      <span className="num text-teal" title={`${item.observed_days ?? 0} 天样本，${item.anomaly_days ?? 0} 天异常`}>
+        {item.growth === null || item.growth === undefined
+          ? '—'
+          : `+${formatNumber(Math.round(item.growth))}/天`}
+      </span>
+    );
+  }
   if (board === 'darkhorse') {
     const jump = item.growth ?? 0;
     return (
@@ -48,7 +57,13 @@ function ExtraCell({ item, board }: { item: RankingItem; board: string }) {
 }
 
 function extraLabel(board: string): string {
-  return board === 'growth' ? '区间增速' : board === 'darkhorse' ? '名次变化' : '排名变化';
+  return board === 'growth'
+    ? '区间增速'
+    : board === 'darkhorse'
+      ? '名次变化'
+      : board === 'quality'
+        ? '真实日均'
+        : '排名变化';
 }
 
 export function RankTable({ items, board }: { items: RankingItem[]; board: string }) {

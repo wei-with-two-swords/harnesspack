@@ -177,7 +177,8 @@ def main() -> int:
         return 3
 
     if existing:
-        merged = {r["slug"]: r for r in existing.get("plugins", [])}
+        seed_slugs = {p["slug"] for p in seed["plugins"]}
+        merged = {r["slug"]: r for r in existing.get("plugins", []) if r["slug"] in seed_slugs}
         for rec in records:
             merged[rec["slug"]] = rec
         seed_order = [p["slug"] for p in seed["plugins"]]

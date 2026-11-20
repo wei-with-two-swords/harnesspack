@@ -2,6 +2,7 @@ import type {
   BoardResponse,
   CategoriesResponse,
   ChangelogResponse,
+  StatusResponse,
   CompareResponse,
   Dashboard,
   ListResponse,
@@ -73,6 +74,7 @@ export const api = {
     return get<ListResponse<PluginListItem>>(`/api/v1/plugins?${params.toString()}`);
   },
   changelog: (limit = 50) => get<ChangelogResponse>(`/api/v1/changelog?limit=${limit}`),
+  status: () => get<StatusResponse>('/api/v1/status'),
   compare: (slugs: string[], days = 90) =>
     get<CompareResponse>(
       `/api/v1/compare?slugs=${encodeURIComponent(slugs.join(','))}&days=${days}`,
