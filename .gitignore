@@ -12,6 +12,7 @@ dist/
 
 # Local data & secrets
 data/_cache/
+data/cache/
 .env
 .env.*
 !/.env.example

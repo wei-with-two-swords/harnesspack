@@ -84,6 +84,14 @@ GET /api/v1/sponsors
 步骤见 [deploy/README.md](deploy/README.md)：DNS → 系统用户 → venv → rsync 前端产物 → systemd → Nginx/TLS → 验收。
 服务器只拉快照，不持有 GitHub token；快照缺失不补、不猜。
 
+
+## 徽章、分享图与订阅
+
+- README 徽章：![](https://harnesspack.dev/badge/<slug>.svg)，显示总榜名次与今日增量。
+- 分享图：https://harnesspack.dev/og/<slug>.png（1200×630，服务端生成并缓存）。
+- RSS：https://harnesspack.dev/feed.xml（竞速榜前 20 + 最近名单变更）。
+- 提交插件：https://harnesspack.dev/submit，名单与分类以上游 awesome-dsh-plugin 为准。
+
 ## 数据口径
 
 - 日期一律 UTC；每个快照记录当天 `stargazers_count`。

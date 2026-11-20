@@ -45,6 +45,9 @@ export default function Layout({ children }: { children: ReactNode }) {
               收录规则
             </NavItem>
             <NavItem to="/sponsors">推荐位</NavItem>
+            <NavItem to="/submit" end>
+              提交插件
+            </NavItem>
           </nav>
           <div className="ml-auto hidden text-xs text-muted md:block">
             每日 00:10 UTC 快照 · 只做真实增速

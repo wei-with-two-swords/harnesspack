@@ -137,3 +137,29 @@ def client(tmp_path: Path, data_dir: tuple[Path, Path]):
     app = create_app(settings)
     with TestClient(app) as test_client:
         yield test_client
+
+
+DIST_HTML = (
+    '<!doctype html><html><head><title>HarnessPack</title>'
+    '<meta name="description" content="placeholder">'
+    '<meta property="og:image" content="">'
+    '<meta name="twitter:card" content="summary">'
+    '</head><body><div id="root"></div></body></html>'
+)
+
+
+@pytest.fixture
+def client_with_dist(tmp_path: Path, data_dir: tuple[Path, Path]):
+    seed, snaps = data_dir
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "index.html").write_text(DIST_HTML, encoding="utf-8")
+    settings = Settings(
+        db_path=tmp_path / "api.db",
+        snapshot_dir=snaps,
+        seed_path=seed,
+        frontend_dist=dist,
+    )
+    app = create_app(settings)
+    with TestClient(app) as test_client:
+        yield test_client

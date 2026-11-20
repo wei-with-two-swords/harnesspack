@@ -98,7 +98,7 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/plugins" in body
     assert "http://testserver/about/rules" in body
     assert "http://testserver/rankings/category/workflow" in body
-    assert body.count("<url>") == 20
+    assert body.count("<url>") == 21
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -134,3 +134,27 @@ def test_openapi_and_health_fields(client):
     assert body["info"]["title"] == "HarnessPack API"
     health = client.get("/api/v1/health").json()
     assert "exited" in health
+
+
+def test_badge_og_and_feed(client):
+    badge = client.get("/badge/alpha-one.svg")
+    assert badge.status_code == 200
+    assert badge.headers["content-type"].startswith("image/svg+xml")
+    assert "HarnessPack" in badge.text
+
+    og = client.get("/og/alpha-one.png")
+    assert og.status_code == 200
+    assert og.headers["content-type"] == "image/png"
+    assert og.content[:8] == b"\x89PNG\r\n\x1a\n"
+
+    feed = client.get("/feed.xml")
+    assert feed.status_code == 200
+    assert "<rss" in feed.text
+    assert "<item>" in feed.text
+
+
+def test_plugin_page_injects_social_meta(client_with_dist):
+    html = client_with_dist.get("/plugins/alpha-one").text
+    assert 'property="og:image"' in html
+    assert "http://testserver/og/alpha-one.png" in html
+    assert "<title>Alpha One" in html

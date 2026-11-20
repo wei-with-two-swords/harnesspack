@@ -13,6 +13,7 @@ import Rules from './pages/Rules';
 import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
+import Submit from './pages/Submit';
 import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/about/changelog" element={<Changelog />} />
         <Route path="/about/api" element={<ApiDocs />} />
         <Route path="/compare" element={<Compare />} />
+        <Route path="/submit" element={<Submit />} />
         <Route path="/sponsors" element={<Sponsors />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
