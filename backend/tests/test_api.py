@@ -95,9 +95,35 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/rankings/velocity" in body
     assert "http://testserver/plugins/alpha-one" in body
     assert "http://testserver/categories" in body
+    assert "http://testserver/plugins" in body
+    assert "http://testserver/about/rules" in body
     assert "http://testserver/rankings/category/workflow" in body
-    assert body.count("<url>") == 17
+    assert body.count("<url>") == 20
 
 
 def test_spa_missing_dist_returns_404(client):
     assert client.get("/").status_code == 404
+
+
+def test_plugins_sort_and_search(client):
+    names = [
+        item["name"]
+        for item in client.get("/api/v1/plugins?sort=name&limit=10").json()["items"]
+    ]
+    assert names == sorted(names, key=str.lower)
+
+    by_stars = client.get("/api/v1/plugins?sort=stars&limit=10").json()["items"]
+    assert by_stars[0]["stars"] >= by_stars[-1]["stars"]
+
+    found = client.get("/api/v1/plugins?query=alpha").json()
+    assert found["total"] == 1
+    assert found["items"][0]["slug"] == "alpha-one"
+
+    assert client.get("/api/v1/plugins?sort=nonsense").status_code == 400
+
+
+def test_changelog_endpoint(client):
+    resp = client.get("/api/v1/changelog?limit=5")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert isinstance(body["items"], list)

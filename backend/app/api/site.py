@@ -55,6 +55,7 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
     ]
     urls += [_url_entry(f"{base}/rankings/{board}", lastmod) for board in BOARD_PATHS]
     urls.append(_url_entry(f"{base}/categories", lastmod))
+    urls.append(_url_entry(f"{base}/plugins", lastmod))
     urls += [
         _url_entry(f"{base}/rankings/category/{item['category']}", lastmod)
         for item in ranking.categories(conn)["items"]
@@ -63,7 +64,12 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         "SELECT slug FROM plugins WHERE status = 'active' ORDER BY slug"
     ).fetchall()
     urls += [_url_entry(f"{base}/plugins/{row['slug']}", lastmod) for row in rows]
-    urls += [_url_entry(f"{base}/about", lastmod), _url_entry(f"{base}/sponsors", lastmod)]
+    urls += [
+        _url_entry(f"{base}/about", lastmod),
+        _url_entry(f"{base}/about/rules", lastmod),
+        _url_entry(f"{base}/about/changelog", lastmod),
+        _url_entry(f"{base}/sponsors", lastmod),
+    ]
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'

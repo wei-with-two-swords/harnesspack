@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
+import { useTitle } from '../lib/useTitle';
 import type { BoardResponse } from '../types';
 import { RankTable } from '../components/RankTable';
 import { Pager } from '../components/Pager';
@@ -12,6 +13,7 @@ const PAGE_SIZE = 100;
 
 export default function CategoryBoard() {
   const { category = 'other' } = useParams<{ category: string }>();
+  useTitle(`${categoryLabel(category)}榜`, '同一分类内按 star 总量排名。');
   const [page, setPage] = useState(0);
   useEffect(() => {
     setPage(0);

@@ -1,6 +1,7 @@
 import type {
   BoardResponse,
   CategoriesResponse,
+  ChangelogResponse,
   Dashboard,
   ListResponse,
   PluginDetail,
@@ -54,9 +55,21 @@ export const api = {
   plugin: (slug: string) => get<PluginDetail>(`/api/v1/plugins/${encodeURIComponent(slug)}`),
   series: (slug: string, days = 90) =>
     get<SeriesResponse>(`/api/v1/plugins/${encodeURIComponent(slug)}/series?days=${days}`),
-  plugins: (query?: string, limit = 50, offset = 0) => {
-    const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
-    if (query) params.set('query', query);
+  plugins: (options: {
+    query?: string;
+    category?: string;
+    sort?: 'stars' | 'name' | 'recent';
+    limit?: number;
+    offset?: number;
+  } = {}) => {
+    const params = new URLSearchParams({
+      limit: String(options.limit ?? 50),
+      offset: String(options.offset ?? 0),
+    });
+    if (options.query) params.set('query', options.query);
+    if (options.category) params.set('category', options.category);
+    if (options.sort) params.set('sort', options.sort);
     return get<ListResponse<PluginListItem>>(`/api/v1/plugins?${params.toString()}`);
   },
+  changelog: (limit = 50) => get<ChangelogResponse>(`/api/v1/changelog?limit=${limit}`),
 };

@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useTitle } from '../lib/useTitle';
 
 export default function Sponsors() {
+  useTitle('推荐位', 'HarnessPack 的推荐位独立展示、明确标注赞助，绝不参与榜单排名。');
   return (
     <article className="max-w-3xl space-y-6 text-sm leading-relaxed text-body">
       <header>

@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
+import { useTitle } from '../lib/useTitle';
 import type { CategoriesResponse } from '../types';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { categoryLabel, formatCompact, formatNumber } from '../lib/format';
 
 export default function Categories() {
+  useTitle('分类榜', '按 awesome-dsh-plugin 的 23 个分类分别排名，只统计在册的 DSH 插件。');
   const { data, error, loading } = useApi<CategoriesResponse>(api.categories, []);
 
   return (

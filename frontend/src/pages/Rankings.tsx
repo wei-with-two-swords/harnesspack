@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
+import { useTitle } from '../lib/useTitle';
 import type { BoardResponse } from '../types';
 import { BoardTabs, BOARD_TABS } from '../components/BoardTabs';
 import { RankTable } from '../components/RankTable';
@@ -43,6 +44,7 @@ export default function Rankings() {
   );
 
   const label = BOARD_TABS.find((tab) => tab.id === board)?.label ?? board;
+  useTitle(`${label}榜`, `${label}榜：${BOARD_TEXT[board] ?? ''}`.trim());
   const windowed = board === 'growth' || board === 'darkhorse';
 
   return (

@@ -11,12 +11,13 @@ function Logo() {
   );
 }
 
-function NavItem({ to, children }: { to: string; children: ReactNode }) {
+function NavItem({ to, children, end }: { to: string; children: ReactNode; end?: boolean }) {
   return (
     <NavLink
       to={to}
+      end={end}
       className={({ isActive }) =>
-        `rounded-lg px-2.5 py-1.5 transition hover:text-white ${
+        `shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1.5 transition hover:text-white ${
           isActive ? 'bg-raise text-white' : 'text-muted'
         }`
       }
@@ -36,10 +37,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             <span className="text-base font-semibold tracking-tight text-white">HarnessPack</span>
             <span className="pill hidden sm:inline-flex">beta</span>
           </Link>
-          <nav className="flex items-center gap-1 text-sm">
+          <nav className="flex min-w-0 items-center gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <NavItem to="/rankings/velocity">榜单</NavItem>
             <NavItem to="/categories">分类榜</NavItem>
-            <NavItem to="/about">收录规则</NavItem>
+            <NavItem to="/plugins">插件库</NavItem>
+            <NavItem to="/about" end>
+              收录规则
+            </NavItem>
             <NavItem to="/sponsors">推荐位</NavItem>
           </nav>
           <div className="ml-auto hidden text-xs text-muted md:block">

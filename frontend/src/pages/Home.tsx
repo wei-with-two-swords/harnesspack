@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
+import { useTitle } from '../lib/useTitle';
 import type { CategoriesResponse, Dashboard, RankingItem } from '../types';
 import { StatCard } from '../components/StatCard';
 import { DeltaBadge } from '../components/DeltaBadge';
@@ -36,6 +37,7 @@ function MiniList({ items, empty }: { items: RankingItem[]; empty: string }) {
 }
 
 export default function Home() {
+  useTitle(undefined, 'HarnessPack：DSH 插件 star 竞速榜，每天一次真实快照，不美化、不回填。');
   const { data, error, loading } = useApi<Dashboard>(api.dashboard, []);
   const { data: categories } = useApi<CategoriesResponse>(api.categories, []);
 

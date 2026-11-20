@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
+import { useTitle } from '../lib/useTitle';
 import type { PluginDetail as Detail, SeriesResponse } from '../types';
 import { StarsChart } from '../components/StarsChart';
 import { DeltaBadge } from '../components/DeltaBadge';
@@ -25,6 +26,7 @@ export default function PluginDetail() {
   const series = useApi<SeriesResponse>(() => api.series(slug, 90), [slug]);
   const points = useMemo(() => series.data?.items ?? [], [series.data]);
   const data = detail.data;
+  useTitle(data ? `${data.name} · ${data.owner}/${data.repo}` : '插件详情', data?.description ?? undefined);
 
   if (detail.error) {
     const err = detail.error;

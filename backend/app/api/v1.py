@@ -7,6 +7,7 @@ import sqlite3
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from ..db import connect
+from ..services import changelog as changelog_service
 from ..services import ranking
 
 router = APIRouter()
@@ -72,14 +73,32 @@ def plugins(
     query: str | None = Query(None, max_length=80),
     harness: str | None = Query(None, max_length=20),
     category: str | None = Query(None, max_length=40),
+    sort: str = Query("stars"),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
     conn: sqlite3.Connection = Depends(get_conn),
 ) -> dict:
+    if sort not in ranking.PLUGIN_SORTS:
+        raise HTTPException(status_code=400, detail="unknown sort")
     items, total = ranking.list_plugins(
-        conn, query=query, harness=harness, category=category, limit=limit, offset=offset
+        conn,
+        query=query,
+        harness=harness,
+        category=category,
+        limit=limit,
+        offset=offset,
+        sort=sort,
     )
     return {"items": items, "total": total, "as_of": ranking.latest_date(conn)}
+
+
+@router.get("/changelog")
+def changelog(
+    limit: int = Query(50, ge=1, le=200),
+    conn: sqlite3.Connection = Depends(get_conn),
+) -> dict:
+    entries = changelog_service.recent(limit=limit)
+    return {"items": list(reversed(entries)), "as_of": ranking.latest_date(conn)}
 
 
 @router.get("/plugins/{slug}")

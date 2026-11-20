@@ -315,6 +315,13 @@ def compare(conn: sqlite3.Connection, slugs: list[str], days: int = 90) -> dict[
     return {"as_of": latest_date(conn), "days": days, "plugins": plugins}
 
 
+PLUGIN_SORTS = {
+    "stars": "stars_latest DESC NULLS LAST, name COLLATE NOCASE, slug",
+    "name": "name COLLATE NOCASE, slug",
+    "recent": "repo_created_at DESC NULLS LAST, stars_latest DESC NULLS LAST, slug",
+}
+
+
 def list_plugins(
     conn: sqlite3.Connection,
     query: str | None = None,
@@ -322,6 +329,7 @@ def list_plugins(
     category: str | None = None,
     limit: int = 50,
     offset: int = 0,
+    sort: str = "stars",
 ) -> tuple[list[dict[str, Any]], int]:
     where = ["status = 'active'"]
     params: list[Any] = []
@@ -336,13 +344,14 @@ def list_plugins(
         where.append("category = ?")
         params.append(category)
     clause = " AND ".join(where)
+    order = PLUGIN_SORTS.get(sort, PLUGIN_SORTS["stars"])
     total = int(
         conn.execute(f"SELECT COUNT(*) FROM plugins WHERE {clause}", params).fetchone()[0]
     )
     rows = conn.execute(
         f"SELECT slug, name, owner, repo, description, category, harness, url, "
         f"stars_latest, stars_at, repo_created_at, archived FROM plugins WHERE {clause} "
-        f"ORDER BY stars_latest DESC NULLS LAST, name COLLATE NOCASE, slug LIMIT ? OFFSET ?",
+        f"ORDER BY {order} LIMIT ? OFFSET ?",
         params + [limit, offset],
     ).fetchall()
     items = [

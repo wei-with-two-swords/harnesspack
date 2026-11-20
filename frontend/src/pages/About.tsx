@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTitle } from '../lib/useTitle';
 
 const BOARDS = [
   ['竞速', '当日新增 star：相邻两个快照的差值，越大越靠前。'],
@@ -9,6 +10,7 @@ const BOARDS = [
 ];
 
 export default function About() {
+  useTitle('数据口径', 'HarnessPack 的数据来源、更新时间、榜单算法与免责声明。');
   return (
     <article className="prose-invert max-w-3xl space-y-6 text-sm leading-relaxed text-body">
       <header>

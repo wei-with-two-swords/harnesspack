@@ -109,3 +109,18 @@ export interface CategoriesResponse {
   as_of: string | null;
   items: CategorySummary[];
 }
+
+export interface ChangelogEntry {
+  at: string | null;
+  added: number;
+  removed: number;
+  changed: number;
+  added_sample: string[];
+  removed_sample: string[];
+  changed_sample: string[];
+}
+
+export interface ChangelogResponse {
+  items: ChangelogEntry[];
+  as_of: string | null;
+}
