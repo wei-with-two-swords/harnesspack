@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
@@ -22,49 +22,78 @@ function Logo() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  // Let Bootstrap's drawer handle closing so the backdrop and scroll lock are released too.
+  const closeDrawer = () => {
+    if (dialogRef.current?.open) closeRef.current?.click();
+  };
 
   return (
     <div className="d-flex flex-column min-vh-100">
       <header className="sticky-top">
-        <nav className="navbar bg-body-tertiary border-bottom">
-          <div className="container flex-wrap align-items-center">
-            <Link to="/" className="navbar-brand d-flex align-items-center gap-2 me-0 mb-0 fw-semibold order-1">
+        <nav className="navbar md:navbar-expand bg-body-tertiary border-bottom">
+          <div className="container">
+            <Link to="/" className="navbar-brand d-flex align-items-center gap-2 fw-semibold">
               <Logo />
               <span>HarnessPack</span>
-              <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex align-self-center">beta</span>
+              <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex align-self-center">
+                beta
+              </span>
             </Link>
 
-            <div className="ms-auto d-flex align-items-center gap-1 order-2 md:order-3">
-              <ThemeSwitcher />
-              <button
-                type="button"
-                className="navbar-toggler hp-toggler"
-                aria-label={open ? '收起导航' : '展开导航'}
-                aria-controls="hp-nav"
-                aria-expanded={open}
-                onClick={() => setOpen((value) => !value)}
-              >
-                <span className="navbar-toggler-icon" />
-              </button>
-            </div>
+            <button
+              className="btn-icon navbar-toggler ms-auto"
+              type="button"
+              data-bs-toggle="drawer"
+              data-bs-target="#navbarDrawer"
+              aria-controls="navbarDrawer"
+              aria-expanded="false"
+              aria-label="展开导航"
+            >
+              <span className="navbar-toggler-icon" aria-hidden="true" />
+            </button>
 
-            <div id="hp-nav" className={`hp-collapse${open ? ' show' : ''}`}>
-              <ul className="navbar-nav">
-                {NAV.map((item) => (
-                  <li key={item.to} className="nav-item">
-                    <NavLink
-                      to={item.to}
-                      end={item.end}
-                      onClick={() => setOpen(false)}
-                      className={({ isActive }) => `nav-link text-nowrap${isActive ? ' active' : ''}`}
-                    >
-                      {item.label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <dialog
+              className="drawer drawer-end"
+              id="navbarDrawer"
+              ref={dialogRef}
+              tabIndex={-1}
+              aria-labelledby="navbarDrawerLabel"
+            >
+              <div className="drawer-header">
+                <h5 className="drawer-title" id="navbarDrawerLabel">
+                  导航
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="drawer"
+                  aria-label="关闭导航"
+                  ref={closeRef}
+                />
+              </div>
+              <div className="drawer-body mb-2 md:mb-0">
+                <ul className="nav navbar-nav me-auto">
+                  {NAV.map((item) => (
+                    <li key={item.to} className="nav-item">
+                      <NavLink
+                        to={item.to}
+                        end={item.end}
+                        onClick={closeDrawer}
+                        className={({ isActive }) =>
+                          `nav-link text-nowrap${isActive ? ' active' : ''}`
+                        }
+                      >
+                        {item.label}
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+                <ThemeSwitcher />
+              </div>
+            </dialog>
           </div>
         </nav>
       </header>
