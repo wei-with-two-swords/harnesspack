@@ -1,17 +1,26 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import type { BoardResponse } from '../types';
 import { RankTable } from '../components/RankTable';
+import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { categoryLabel } from '../lib/format';
 
+const PAGE_SIZE = 100;
+
 export default function CategoryBoard() {
   const { category = 'other' } = useParams<{ category: string }>();
+  const [page, setPage] = useState(0);
+  useEffect(() => {
+    setPage(0);
+  }, [category]);
+
   const label = categoryLabel(category);
   const { data, error, loading } = useApi<BoardResponse>(
-    () => api.board('total', undefined, category, 200),
-    [category],
+    () => api.board('total', undefined, category, PAGE_SIZE, page * PAGE_SIZE),
+    [category, page],
   );
 
   return (
@@ -39,7 +48,15 @@ export default function CategoryBoard() {
       {loading ? <Loading /> : null}
       {!loading && !error && data ? (
         data.items.length > 0 ? (
-          <RankTable items={data.items} board="total" />
+          <>
+            <RankTable items={data.items} board="total" />
+            <Pager
+              page={page}
+              pageSize={PAGE_SIZE}
+              total={data.total ?? data.items.length}
+              onChange={setPage}
+            />
+          </>
         ) : (
           <EmptyState title={`${label}榜暂无数据`}>该分类下还没有已入库的插件。</EmptyState>
         )

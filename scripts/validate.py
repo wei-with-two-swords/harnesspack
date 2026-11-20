@@ -115,7 +115,9 @@ def main(argv: list[str] | None = None) -> int:
                     slug = p["slug"]
                     break
             if slug is None:
-                errors.append(f"{path.name}: repo {rec.get('owner')}/{rec.get('repo')} not in seed")
+                # Historical snapshots may predate the current seed (removed or
+                # renamed plugins keep their curves). Warn, do not fail.
+                warnings.append(f"{path.name}: repo {rec.get('owner')}/{rec.get('repo')} not in current seed")
                 continue
             if slug in local_slugs:
                 errors.append(f"{path.name}: duplicate plugin {slug}")

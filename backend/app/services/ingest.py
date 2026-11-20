@@ -38,6 +38,7 @@ class IngestStats:
     plugins: int = 0
     rows: int = 0
     inserted: int = 0
+    ignored: int = 0
     dates: list[str] = field(default_factory=list)
     skipped: list[dict] = field(default_factory=list)
 
@@ -47,6 +48,7 @@ class IngestStats:
             "plugins": self.plugins,
             "rows": self.rows,
             "inserted": self.inserted,
+            "ignored": self.ignored,
             "dates": self.dates,
             "skipped": self.skipped,
         }
@@ -197,7 +199,12 @@ def _ingest_record(conn: sqlite3.Connection, record: dict, day: str, stats: Inge
     )
 
 
-def _ingest_file(conn: sqlite3.Connection, path: Path, stats: IngestStats) -> None:
+def _ingest_file(
+    conn: sqlite3.Connection,
+    path: Path,
+    stats: IngestStats,
+    seed_slugs: set[str] | None = None,
+) -> None:
     match = DATE_FILE_RE.match(path.name)
     if match is None:
         return
@@ -233,6 +240,14 @@ def _ingest_file(conn: sqlite3.Connection, path: Path, stats: IngestStats) -> No
     )
     for record in records:
         if isinstance(record, dict):
+            slug = record.get("slug") or slugify(
+                str(record.get("owner") or ""), str(record.get("repo") or "")
+            )
+            if seed_slugs is not None and slug not in seed_slugs:
+                # The seed is the membership authority: historical snapshots may
+                # still carry repos that were removed by a later curation pass.
+                stats.ignored += 1
+                continue
             _ingest_record(conn, record, expected, stats)
     stats.snapshots += 1
     stats.dates.append(expected)
@@ -282,15 +297,21 @@ def ingest(
     seed_path: Path | None = None,
 ) -> IngestStats:
     stats = IngestStats()
+    seed_slugs: set[str] | None = None
     if seed_path is not None and Path(seed_path).exists():
-        stats.plugins = upsert_seed(conn, load_seed(Path(seed_path)))
+        seed_plugins = load_seed(Path(seed_path))
+        stats.plugins = upsert_seed(conn, seed_plugins)
+        seed_slugs = {
+            (p.get("slug") or slugify(str(p["owner"]), str(p["repo"]))).strip()
+            for p in seed_plugins
+        }
 
     snapshot_dir = Path(snapshot_dir)
     files = sorted(
         p for p in snapshot_dir.glob("*.json") if DATE_FILE_RE.match(p.name)
     ) if snapshot_dir.exists() else []
     for path in files:
-        _ingest_file(conn, path, stats)
+        _ingest_file(conn, path, stats, seed_slugs)
 
     recompute_anomalies(conn)
     conn.commit()

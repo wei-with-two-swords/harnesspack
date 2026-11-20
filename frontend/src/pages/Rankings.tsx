@@ -5,9 +5,11 @@ import { useApi } from '../lib/useApi';
 import type { BoardResponse } from '../types';
 import { BoardTabs, BOARD_TABS } from '../components/BoardTabs';
 import { RankTable } from '../components/RankTable';
+import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 
 const BOARD_IDS = new Set<string>(BOARD_TABS.map((tab) => tab.id));
+const PAGE_SIZE = 100;
 
 const BOARD_TEXT: Record<string, string> = {
   velocity: '按今日新增 star 排序。只有相邻两个快照都存在时才计算增量。',
@@ -20,18 +22,24 @@ const BOARD_TEXT: Record<string, string> = {
 export default function Rankings() {
   const { board = 'velocity' } = useParams<{ board: string }>();
   const [window, setWindow] = useState(7);
+  const [page, setPage] = useState(0);
   const valid = BOARD_IDS.has(board);
 
   useEffect(() => {
     setWindow(7);
+    setPage(0);
   }, [board]);
+
+  useEffect(() => {
+    setPage(0);
+  }, [window]);
 
   const { data, error, loading } = useApi<BoardResponse>(
     () =>
       valid
-        ? api.board(board, window)
+        ? api.board(board, window, undefined, PAGE_SIZE, page * PAGE_SIZE)
         : Promise.reject(new Error(`未知榜单：${board}`)),
-    [board, window, valid],
+    [board, window, valid, page],
   );
 
   const label = BOARD_TABS.find((tab) => tab.id === board)?.label ?? board;
@@ -72,7 +80,15 @@ export default function Rankings() {
         {loading ? <Loading /> : null}
         {!loading && !error && data ? (
           data.items.length > 0 ? (
-            <RankTable items={data.items} board={board} />
+            <>
+              <RankTable items={data.items} board={board} />
+              <Pager
+                page={page}
+                pageSize={PAGE_SIZE}
+                total={data.total ?? data.items.length}
+                onChange={setPage}
+              />
+            </>
           ) : (
             <EmptyState title={`${label}榜暂无数据`}>
               {data.reason ?? '首次快照已入库，等下一次快照后榜单开始生长。'}

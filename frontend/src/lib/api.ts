@@ -39,11 +39,12 @@ async function get<T>(path: string): Promise<T> {
 
 export const api = {
   dashboard: () => get<Dashboard>('/api/v1/dashboard'),
-  board: (board: string, window?: number, category?: string, limit?: number) => {
+  board: (board: string, window?: number, category?: string, limit?: number, offset?: number) => {
     const params = new URLSearchParams();
     if (window) params.set('window', String(window));
     if (category) params.set('category', category);
     if (limit) params.set('limit', String(limit));
+    if (offset) params.set('offset', String(offset));
     const qs = params.toString();
     return get<BoardResponse>(
       `/api/v1/rankings/${encodeURIComponent(board)}${qs ? `?${qs}` : ''}`,
