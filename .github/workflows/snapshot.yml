@@ -19,17 +19,25 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
       - name: Fetch snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/snapshot.py
+        run: |
+          # Manual re-runs on the same UTC day must not fail: merge instead of overwrite.
+          TODAY=$(date -u +%F)
+          if [ -f "data/snapshots/$TODAY.json" ]; then
+            echo "::notice::snapshot for $TODAY already exists; filling any missing repos"
+            python scripts/snapshot.py --missing-only
+          else
+            python scripts/snapshot.py
+          fi
 
       - name: Validate snapshots
         run: python scripts/validate.py
