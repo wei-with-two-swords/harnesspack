@@ -152,18 +152,24 @@ Cloudflare 回源到本机 443，Nginx 使用 Let's Encrypt 证书（已签发�
   替换 Nginx 的 `ssl_certificate/ssl_certificate_key` 即可，无需重新签发 LE。
 - 保持 `Always Use HTTPS` 开启；站点自身的 80→443 跳转与之不冲突。
 
-### 动态路由（badge / og / feed / plugin meta）
+### 动态路由（badge / og / feed / 页面 SEO）
 
-Nginx 需要把下列路径反代到 API，否则会落到 SPA 的 index.html：
+Nginx 需要把下列路径反代到 API，否则会落到静态 index.html：
 
     location /badge/   { proxy_pass http://harnesspack_api; }
     location /og/      { proxy_pass http://harnesspack_api; }
     location = /feed.xml { proxy_pass http://harnesspack_api; }
     location /plugins/ { proxy_pass http://harnesspack_api; }
+    location /         { proxy_pass http://harnesspack_api; }   # 其余页面由 API 渲染
+
+`location /` 兜底给 API 是必要的：首页、榜单、分类、about 等页面的
+title / description / canonical / JSON-LD 都是 API 按路由注入的；静态
+index.html 里只有默认文案。`/assets/` 与 `/vendor/` 仍然由 Nginx 直接
+静态返回，继续享受长缓存。
 
 服务器上实际启用的站点文件是 sites-enabled/harnesspack.dev.tls，改完
-deploy/nginx/harnesspack.dev.conf 后要同步覆盖该文件再 
-ginx -t && systemctl reload nginx。
+deploy/nginx/harnesspack.dev.conf 后要同步覆盖该文件再
+`nginx -t && systemctl reload nginx`。
 
 ### Cloudflare 缓存
 
