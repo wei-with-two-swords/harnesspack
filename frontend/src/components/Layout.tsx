@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
@@ -22,34 +22,48 @@ function Logo() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className="d-flex flex-column min-vh-100">
       <header className="sticky-top">
-        <nav className="navbar navbar-expand bg-body-tertiary border-bottom">
-          <div className="container flex-wrap gap-2">
+        <nav className="navbar bg-body-tertiary border-bottom">
+          <div className="container flex-wrap align-items-center">
             <Link to="/" className="navbar-brand d-flex align-items-center gap-2 me-0 mb-0 fw-semibold order-1">
               <Logo />
               <span>HarnessPack</span>
               <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex align-self-center">beta</span>
             </Link>
 
-            <ul className="navbar-nav header-nav flex-row flex-nowrap gap-1 order-3 overflow-x-auto nav-scroll min-w-0 md:order-2 md:ms-2 md:me-auto">
-              {NAV.map((item) => (
-                <li key={item.to} className="nav-item">
-                  <NavLink
-                    to={item.to}
-                    end={item.end}
-                    className={({ isActive }) => `nav-link text-nowrap${isActive ? ' active' : ''}`}
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-
-            <div className="ms-auto d-flex align-items-center gap-3 order-2 md:order-3">
-              <span className="navbar-text d-none xl:d-block fs-sm">每日 00:10 UTC 快照 · 只做真实增速</span>
+            <div className="ms-auto d-flex align-items-center gap-1 order-2 md:order-3">
               <ThemeSwitcher />
+              <button
+                type="button"
+                className="navbar-toggler hp-toggler"
+                aria-label={open ? '收起导航' : '展开导航'}
+                aria-controls="hp-nav"
+                aria-expanded={open}
+                onClick={() => setOpen((value) => !value)}
+              >
+                <span className="navbar-toggler-icon" />
+              </button>
+            </div>
+
+            <div id="hp-nav" className={`hp-collapse${open ? ' show' : ''}`}>
+              <ul className="navbar-nav">
+                {NAV.map((item) => (
+                  <li key={item.to} className="nav-item">
+                    <NavLink
+                      to={item.to}
+                      end={item.end}
+                      onClick={() => setOpen(false)}
+                      className={({ isActive }) => `nav-link text-nowrap${isActive ? ' active' : ''}`}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </nav>

@@ -12,19 +12,20 @@ export const BOARD_TABS = [
 export function BoardTabs({ active }: { active: string }) {
   return (
     <div className="card mb-3">
-      <div className="card-body py-2">
-        <div className="nav nav-pills gap-1 overflow-x-auto nav-scroll flex-nowrap">
+      <div className="px-3 pt-2">
+        <ul className="nav nav-tabs flex-nowrap overflow-x-auto nav-scroll">
           {BOARD_TABS.map((tab) => (
-            <Link
-              key={tab.id}
-              to={`/rankings/${tab.id}`}
-              className={`nav-link text-nowrap${active === tab.id ? ' active' : ''}`}
-              title={tab.hint}
-            >
-              {tab.label}
-            </Link>
+            <li key={tab.id} className="nav-item">
+              <Link
+                to={`/rankings/${tab.id}`}
+                className={`nav-link text-nowrap${active === tab.id ? ' active' : ''}`}
+                title={tab.hint}
+              >
+                {tab.label}
+              </Link>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );

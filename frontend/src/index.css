@@ -52,14 +52,49 @@ body {
   opacity: 0.7;
 }
 
-/* The header nav takes its own row on small screens and flows inline from md up. */
-.header-nav {
+/* Collapsing navbar: links stack under the brand on small screens and sit inline from md up. */
+.hp-collapse {
+  display: none;
+  order: 3;
   width: 100%;
+  padding-bottom: 0.5rem;
+}
+
+.hp-collapse.show {
+  display: block;
+}
+
+.hp-collapse .navbar-nav {
+  flex-direction: column;
+  gap: 0.125rem;
+  padding-top: 0.25rem;
+  border-top: var(--bs-border-width, 1px) solid var(--bs-border-color-translucent, rgba(128, 128, 128, 0.2));
+  margin-top: 0.5rem;
+}
+
+.hp-toggler {
+  display: inline-flex;
 }
 
 @media (min-width: 768px) {
-  .header-nav {
+  .hp-collapse {
+    display: flex !important;
+    order: 2;
     width: auto;
     flex: 1 1 auto;
+    padding-bottom: 0;
+  }
+
+  .hp-collapse .navbar-nav {
+    flex-direction: row;
+    gap: 0.25rem;
+    padding-top: 0;
+    border-top: 0;
+    margin-top: 0;
+    margin-inline-start: 0.75rem;
+  }
+
+  .hp-toggler {
+    display: none !important;
   }
 }
