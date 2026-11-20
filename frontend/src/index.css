@@ -104,8 +104,17 @@ body {
 }
 
 .hp-navbar {
-  background: color-mix(in srgb, var(--hp-bg) 88%, transparent);
+  background: color-mix(in srgb, var(--hp-bg) 92%, transparent);
   backdrop-filter: saturate(140%) blur(12px);
+}
+
+/* Drawers and menus are elevated surfaces: white, soft shadow, no outline. */
+.drawer,
+.menu {
+  --bs-drawer-bg: var(--hp-surface);
+  border: 0;
+  background: var(--hp-surface);
+  box-shadow: var(--hp-shadow-hover);
 }
 
 .hp-footer {
