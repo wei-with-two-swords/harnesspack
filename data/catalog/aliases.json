@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-20T02:09:09Z",
+ "updated_at": "2026-11-20T07:07:25Z",
  "aliases": {
   "1834395550/dsh-session-tabs": {
    "owner": "P-PPJ",
@@ -480,6 +480,14 @@
    "slug": "oscarka-pocketagent",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:13Z"
+  },
+  "oscarka/pocketagent": {
+   "owner": "oscarka",
+   "repo": "pocketagents",
+   "url": "https://github.com/oscarka/pocketagents",
+   "slug": "oscarka-pocketagents",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-20T07:07:19Z"
   },
   "qcwygm/dsh-config-sync": {
    "owner": "QcWyGm",
