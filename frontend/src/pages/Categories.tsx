@@ -13,7 +13,7 @@ export default function Categories() {
       <div className="mb-5">
         <h1 className="text-2xl font-semibold text-white">分类榜</h1>
         <p className="mt-1 max-w-2xl text-sm text-muted">
-          按功能域单独排榜：UI、上下文、模型、工具、媒体等分类各自计算名次，只统计在册的 DSH 插件。
+          分类沿用 awesome-dsh-plugin 清单的 23 个分类，每个分类单独按 star 排名，只统计在册的 DSH 插件。
         </p>
       </div>
 

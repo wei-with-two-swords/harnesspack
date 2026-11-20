@@ -16,7 +16,7 @@ concurrency:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -29,6 +29,13 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Sync catalog
+        continue-on-error: true
+        run: python scripts/vendor_catalog.py
+
+      - name: Build seed
+        run: python scripts/build_seed.py
+
       - name: Fetch snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.SNAPSHOT_TOKEN || secrets.GITHUB_TOKEN }}
@@ -40,9 +47,9 @@ jobs:
           TODAY=$(date -u +%F)
           if git cat-file -e "HEAD:data/snapshots/$TODAY.json" 2>/dev/null; then
             echo "::notice::origin/main already has $TODAY snapshot; filling any missing repos"
-            python scripts/snapshot.py --missing-only
+            python scripts/snapshot_graphql.py --missing-only
           else
-            python scripts/snapshot.py
+            python scripts/snapshot_graphql.py
           fi
 
       - name: Validate snapshots
@@ -52,9 +59,9 @@ jobs:
         run: |
           git config user.name "harnesspack-bot"
           git config user.email "harnesspack-bot@users.noreply.github.com"
-          git add data/snapshots
+          git add data/catalog data/plugins.seed.json data/snapshots
           if git diff --cached --quiet; then
-            echo "no snapshot changes"
+            echo "no data changes"
             exit 0
           fi
           git commit -m "data: snapshot $(date -u +%F)"

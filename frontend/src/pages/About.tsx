@@ -5,7 +5,7 @@ const BOARDS = [
   ['增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
   ['总榜', '当前 star 总量；并列按名称升序。'],
   ['黑马', '区间内总榜名次的跃升幅度。'],
-  ['新秀', '收录名单内、仓库创建时间在最近 30 天的项目。'],
+  ['新秀', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
 ];
 
 export default function About() {
@@ -21,13 +21,13 @@ export default function About() {
       <section className="card card-pad space-y-2">
         <h2 className="text-base font-semibold text-white">数据从哪来</h2>
         <p className="text-muted">
-          只收录 DeepSeek Harness（DSH）插件：仓库必须能通过 <code>dsh plugin add</code> 安装
-          （package.json 含 <code>dsh.bundle</code> 或 <code>dsh.client</code>），DSH 本体、桌面客户端、
-          纯收录清单与跨 harness 应用不在范围内。
+          名单与分类来自 <a className="text-teal hover:underline" href="https://awesome-dsh-plugin.com" target="_blank" rel="noreferrer">awesome-dsh-plugin</a> 精选清单（CC0-1.0，约 1.1 万个仓库）：
+          上游要求仓库必须能通过 <code>dsh plugin add</code> 安装（package.json 含 <code>dsh.bundle</code>），
+          DSH 本体、桌面客户端、纯收录清单与跨 harness 应用不在范围内。
         </p>
         <p className="text-muted">
-          全部数字来自 GitHub 公开 REST API 的 <code className="num text-body">stargazers_count</code>。
-          每天 UTC 00:10 由 GitHub Actions 抓取一次并提交快照，站点只读这些快照，不临场请求 GitHub。
+          全部数字来自 GitHub 公开 API 的 <code className="num text-body">stargazerCount</code>。
+          每天 UTC 00:10 由 GitHub Actions 批量抓取一次并提交快照，站点只读这些快照，不临场请求 GitHub。
         </p>
         <p className="text-muted">
           快照自 2026-11-19 开始，不做历史回填。快照少于 2 天时显示「数据积累中」——这是产品规则，不是 bug。
@@ -46,24 +46,24 @@ export default function About() {
         </dl>
         <p className="mt-3 text-xs text-muted">
           所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
-          分类榜（UI / 上下文 / 模型 / 工具 / 媒体等）只在同一分类内重新排名。
+          分类榜沿用上游清单的 23 个分类，只在同一分类内重新排名。
         </p>
       </section>
 
       <section className="card card-pad space-y-2">
         <h2 className="text-base font-semibold text-white">收录与退出</h2>
         <p className="text-muted">
-          名单上限 2000 个，是容量而不是终身席位。每月首个周一做准入评审；每周结算后允许挑战者替换，
-          每期最多 40 席（2%），结算周冻结。
+          名单与分类直接采用 awesome-dsh-plugin 精选清单（CC0-1.0）：作者在该仓库提 PR，合并后我们每日同步，
+          按仓库去重（同一仓库的多个子包只计一次），不重复做人工评审。
         </p>
         <ul className="list-disc space-y-1 pl-5 text-muted">
-          <li>硬性资格：可安装进 DSH、公开非 fork、近 180 天活跃、README 与 LICENSE、star ≥ 100。</li>
-          <li>退出原因：删除 / 归档、定位改变、90 天无更新、违规、被挑战替换、作者申请。</li>
-          <li>退出后保留历史曲线，不 404；次日退出榜单；冷却 30 天，12 个月内最多进出 2 次。</li>
-          <li>所有变更写入 changelog 并随 seed 文件提交到 git，可审计。</li>
+          <li>收录：上游合并即进入名单，次日快照开始计 star；分类沿用上游的 23 个分类。</li>
+          <li>退出：上游删除、仓库 404 / 归档、90 天无 push 且 star 无净增长，标记退出并保留历史曲线，不 404。</li>
+          <li>变更：每次同步写入仓库 changelog，可审计；退出后重新被收录会自动恢复。</li>
+          <li>提交收录请去 <a className="text-teal hover:underline" href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noreferrer">awesome-dsh-plugin</a> 提 PR。</li>
         </ul>
         <p className="text-xs text-muted">
-          完整规则见仓库 <code>docs/收录规则.md</code>；变更公示见后续的 /about/changelog。
+          完整规则见仓库 <code>docs/收录规则.md</code>；同步变更记录在 <code>data/catalog/changelog.jsonl</code>。
         </p>
       </section>
 

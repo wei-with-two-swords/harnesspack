@@ -8,15 +8,19 @@
 
 | 路径 | 作用 |
 | --- | --- |
-| `data/plugins.seed.json` | 入选名单（2000 个 DSH 插件，人工复核） |
+| `data/catalog/latest.json` | 从 awesome-dsh-plugin 同步的名单与分类（CC0-1.0） |
+| `data/plugins.seed.json` | 入库名单（由 catalog 生成，按仓库去重，约 1.1 万个） |
 | `data/snapshots/YYYY-MM-DD.json` | 每日快照，由 Actions 提交进 git，是唯一事实源 |
-| `scripts/snapshot.py` | 抓取器（GitHub REST，退避/失败隔离） |
+| `scripts/vendor_catalog.py` | 同步上游名单（plugins.json），记录增删变更 |
+| `scripts/build_seed.py` | 由 catalog 生成入库名单 |
+| `scripts/snapshot_graphql.py` | 批量抓取器（GitHub GraphQL，100 仓库/请求） |
+| `scripts/snapshot.py` | 单仓抓取兜底（REST，退避/失败隔离） |
 | `scripts/validate.py` | 快照与名单校验 |
 | `backend/app` | FastAPI + SQLite（导入、榜单、/api/v1） |
 | `backend/tests` | pytest |
 | `frontend/` | React + TS + Vite + Tailwind，构建产物由后端托管 |
 | `docs/需求分析.md` | 系统架构与功能需求 |
-| `docs/收录规则.md` | 2000 名单的进入、退出与替换机制 |
+| `docs/收录规则.md` | 名单来源（上游清单）与退出机制 |
 | `docs/adr/` | 架构决策记录 |
 | `deploy/` | Nginx、systemd、同步/备份脚本与部署手册 |
 
@@ -44,17 +48,19 @@ pnpm dev          # http://127.0.0.1:5173，/api 代理到 8000
 pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 ```
 
-页面：`/` 首页、`/rankings/{board}` 五个榜单、`/plugins/{slug}` 详情与曲线、`/about` 数据口径、`/sponsors` 推荐位说明。
+页面：`/` 首页、`/rankings/{board}` 五个榜单、`/categories` 分类榜（23 类）、`/plugins/{slug}` 详情与曲线、`/about` 数据口径、`/sponsors` 推荐位说明。
 
 ## 抓取
 
 ```powershell
 $env:GITHUB_TOKEN = "<fine-grained PAT, public repos read-only>"
-python scripts/snapshot.py            # 全量 2000 个仓库
+python scripts/vendor_catalog.py      # 同步 awesome-dsh-plugin 名单
+python scripts/build_seed.py          # 重建 seed
+python scripts/snapshot_graphql.py    # 全量快照（约 120 次 GraphQL 请求）
 python scripts/validate.py            # 校验
 ```
 
-- 未认证只有 60 次/小时，跑不满 2000 个仓库，必须提供 token。
+- 未认证只有 60 次/小时，跑不满上万仓库；GraphQL 批量抓取必须提供 token（PAT 5000 点/小时足够）。
 - 每天 00:10 UTC 由 `.github/workflows/snapshot.yml` 自动执行；漏跑可手动 `workflow_dispatch`。
 
 ## API（v1）
@@ -85,3 +91,4 @@ GET /api/v1/sponsors
 - 异常标记：`delta > max(5 × 近 7 次日增均值, 20)` 且历史 ≥ 3 次时标记 `is_anomaly`，不删除、不参与真实均值。
 - 增速榜要求基准日 star ≥ 50，避免小数分母失真。
 - 缺失快照不补、不猜：榜单为空并给出原因。
+

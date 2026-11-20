@@ -53,7 +53,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <footer className="border-t border-line/70 py-6">
         <div className="shell flex flex-col gap-2 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>
-            HarnessPack 只收录 DeepSeek Harness（DSH）插件，数据来自 GitHub 公开 API。
+            HarnessPack 的名单来自 awesome-dsh-plugin 清单，star 数据来自 GitHub 公开 API。
           </p>
           <p>
             非官方项目 ·{' '}

@@ -44,11 +44,12 @@ export default function Home() {
       <section className="mb-8">
         <div className="pill mb-3">DSH PLUGINS · DAILY SNAPSHOT</div>
         <h1 className="max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          2000 个 DSH 插件，<span className="text-teal">真实 star 增速</span>的竞速场
+          {data ? formatNumber(data.kpis.tracked) : '上万'} 个 DSH 插件，
+          <span className="text-teal">真实 star 增速</span>的竞速场
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-          只收录可安装进 DeepSeek Harness（DSH）的插件。每天 00:10 UTC 抓取一次 GitHub
-          star，只展示可核对的数字：不回填、不美化、异常单独标注。
+          名单与分类来自 awesome-dsh-plugin 精选清单，只收录可安装进 DeepSeek Harness（DSH）的插件。
+          每天 00:10 UTC 抓取一次 GitHub star，只展示可核对的数字：不回填、不美化、异常单独标注。
         </p>
         {data?.as_of ? (
           <div className="mt-3 text-xs text-muted">
@@ -63,7 +64,7 @@ export default function Home() {
       {data ? (
         <>
           <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <StatCard label="收录插件" value={formatNumber(data.kpis.tracked)} hint="在册上限 2000" />
+            <StatCard label="收录插件" value={formatNumber(data.kpis.tracked)} hint="来自 awesome-dsh-plugin 清单" />
             <StatCard
               label="总 Star"
               value={formatCompact(data.kpis.total_stars)}
@@ -115,7 +116,7 @@ export default function Home() {
                 查看全部 →
               </Link>
             </div>
-            <p className="mb-2 text-xs text-muted">仓库创建于 30 天内、且已进入收录名单</p>
+            <p className="mb-2 text-xs text-muted">仓库创建于 30 天内、已进入收录名单且 star ≥ 10</p>
             <MiniList items={data.newest} empty="名单内暂无 30 天内新建的仓库" />
           </section>
 

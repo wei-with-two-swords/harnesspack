@@ -15,6 +15,7 @@ BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie")
 WINDOWS = (7, 30)
 GROWTH_MIN_BASE = 50
 ROOKIE_DAYS = 30
+ROOKIE_MIN_STARS = 10
 
 
 class BoardError(ValueError):
@@ -174,7 +175,9 @@ def rookie_board(
     rows = [
         r
         for r in _rows_on(conn, day, category)
-        if r["repo_created_at"] and cutoff <= r["repo_created_at"][:10] <= day
+        if r["repo_created_at"]
+        and cutoff <= r["repo_created_at"][:10] <= day
+        and (r["stars"] or 0) >= ROOKIE_MIN_STARS
     ]
     rows.sort(key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
     return {
