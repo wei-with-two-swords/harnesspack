@@ -1,18 +1,25 @@
 import type { ReactNode } from 'react';
 
-export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
-  return (
-    <div className="card">
-      <div className="card-body py-5 text-center">
-        <div className="fw-medium">{title}</div>
-        {children ? (
-          <div className="mx-auto mt-2 fg-secondary" style={{ maxWidth: '32rem' }}>
-            {children}
-          </div>
-        ) : null}
-      </div>
+export function EmptyState({
+  title,
+  children,
+  bare = false,
+}: {
+  title: string;
+  children?: ReactNode;
+  bare?: boolean;
+}) {
+  const body = (
+    <div className="card-body py-5 text-center">
+      <div className="fw-medium">{title}</div>
+      {children ? (
+        <div className="mx-auto mt-2 fg-secondary" style={{ maxWidth: '32rem' }}>
+          {children}
+        </div>
+      ) : null}
     </div>
   );
+  return bare ? body : <div className="card">{body}</div>;
 }
 
 export function ErrorState({ error }: { error: Error }) {

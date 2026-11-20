@@ -30,7 +30,10 @@ function ExtraCell({ item, board }: { item: RankingItem; board: string }) {
   }
   if (board === 'quality') {
     return (
-      <span className="num fg-info" title={`${item.observed_days ?? 0} 天样本，${item.anomaly_days ?? 0} 天异常`}>
+      <span
+        className="num fg-info"
+        title={`${item.observed_days ?? 0} 天样本，${item.anomaly_days ?? 0} 天异常`}
+      >
         {item.growth === null || item.growth === undefined
           ? '—'
           : `+${formatNumber(Math.round(item.growth))}/天`}
@@ -69,87 +72,83 @@ function extraLabel(board: string): string {
 export function RankTable({ items, board }: { items: RankingItem[]; board: string }) {
   return (
     <>
-      <div className="card sm:d-none">
-        <ul className="list-group list-group-flush">
-          {items.map((item) => (
-            <li key={item.slug} className="list-group-item list-group-item-action p-0">
-              <Link
-                to={`/plugins/${item.slug}`}
-                className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none"
-              >
-                <span className="flex-shrink-0 text-center" style={{ width: '1.5rem' }}>
-                  <RankLabel rank={item.rank} />
+      <ul className="list-group list-group-flush sm:d-none">
+        {items.map((item) => (
+          <li key={item.slug} className="list-group-item list-group-item-action p-0">
+            <Link
+              to={`/plugins/${item.slug}`}
+              className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none"
+            >
+              <span className="flex-shrink-0 text-center" style={{ width: '1.5rem' }}>
+                <RankLabel rank={item.rank} />
+              </span>
+              <span className="min-w-0 flex-grow-1">
+                <span className="d-block text-truncate fw-medium">{item.name}</span>
+                <span className="d-block text-truncate fs-xs fg-secondary">
+                  {item.owner}/{item.repo}
                 </span>
-                <span className="min-w-0 flex-grow-1">
-                  <span className="d-block text-truncate fw-medium">{item.name}</span>
-                  <span className="d-block text-truncate fs-xs fg-secondary">
-                    {item.owner}/{item.repo}
-                  </span>
-                  <span className="mt-1 d-flex align-items-center gap-2 fs-xs">
-                    <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
-                    <ExtraCell item={item} board={board} />
-                  </span>
+                <span className="mt-1 d-flex align-items-center gap-2 fs-xs">
+                  <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                  <ExtraCell item={item} board={board} />
                 </span>
-                <span className="num fg-body flex-shrink-0 fs-sm">{formatNumber(item.stars)}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+              </span>
+              <span className="num fg-body flex-shrink-0 fs-sm">{formatNumber(item.stars)}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
-      <div className="card d-none sm:d-block overflow-hidden">
-        <div className="table-responsive">
-          <table className="table table-hover align-middle mb-0 table-fixed">
-            <thead className="fs-xs text-uppercase fg-secondary">
-              <tr>
-                <th className="px-4 py-3 text-center" style={{ width: '3.5rem' }}>
-                  #
-                </th>
-                <th className="px-2 py-3 fw-medium">插件</th>
-                <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
-                  Star
-                </th>
-                <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
-                  今日
-                </th>
-                <th className="px-4 py-3 text-end fw-medium" style={{ width: '6rem' }}>
-                  {extraLabel(board)}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.slug}>
-                  <td className="px-4 py-3 text-center">
-                    <RankLabel rank={item.rank} />
-                  </td>
-                  <td className="px-2 py-3">
-                    <Link to={`/plugins/${item.slug}`} className="d-block min-w-0 text-decoration-none">
-                      <span className="d-flex align-items-baseline gap-2">
-                        <span className="text-truncate fw-medium">{item.name}</span>
-                        <span className="flex-shrink-0 text-truncate fs-xs fg-secondary">
-                          {item.owner}/{item.repo}
-                        </span>
+      <div className="table-responsive d-none sm:d-block">
+        <table className="table table-hover align-middle mb-0 table-fixed">
+          <thead className="fs-xs text-uppercase fg-secondary">
+            <tr>
+              <th className="px-4 py-3 text-center" style={{ width: '3.5rem' }}>
+                #
+              </th>
+              <th className="px-2 py-3 fw-medium">插件</th>
+              <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
+                Star
+              </th>
+              <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                今日
+              </th>
+              <th className="px-4 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                {extraLabel(board)}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.slug}>
+                <td className="px-4 py-3 text-center">
+                  <RankLabel rank={item.rank} />
+                </td>
+                <td className="px-2 py-3">
+                  <Link to={`/plugins/${item.slug}`} className="d-block min-w-0 text-decoration-none">
+                    <span className="d-flex align-items-baseline gap-2">
+                      <span className="text-truncate fw-medium">{item.name}</span>
+                      <span className="flex-shrink-0 text-truncate fs-xs fg-secondary">
+                        {item.owner}/{item.repo}
                       </span>
-                      {item.description ? (
-                        <span className="mt-1 d-block text-truncate fs-xs fg-secondary">
-                          {item.description}
-                        </span>
-                      ) : null}
-                    </Link>
-                  </td>
-                  <td className="num px-2 py-3 text-end">{formatNumber(item.stars)}</td>
-                  <td className="px-2 py-3 text-end">
-                    <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
-                  </td>
-                  <td className="px-4 py-3 text-end">
-                    <ExtraCell item={item} board={board} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                    </span>
+                    {item.description ? (
+                      <span className="mt-1 d-block text-truncate fs-xs fg-secondary">
+                        {item.description}
+                      </span>
+                    ) : null}
+                  </Link>
+                </td>
+                <td className="num px-2 py-3 text-end">{formatNumber(item.stars)}</td>
+                <td className="px-2 py-3 text-end">
+                  <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                </td>
+                <td className="px-4 py-3 text-end">
+                  <ExtraCell item={item} board={board} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );

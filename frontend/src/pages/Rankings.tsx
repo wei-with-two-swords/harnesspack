@@ -87,24 +87,33 @@ export default function Rankings() {
         </div>
       </div>
 
-      <BoardTabs active={board} />
-
-      <div className="mt-4">
-        {error ? <ErrorState error={error} /> : null}
-        {loading ? <Loading /> : null}
+      <div className="card overflow-hidden">
+        <BoardTabs active={board} />
+        {error ? (
+          <div className="p-3">
+            <ErrorState error={error} />
+          </div>
+        ) : null}
+        {loading ? (
+          <div className="p-3">
+            <Loading />
+          </div>
+        ) : null}
         {!loading && !error && data ? (
           data.items.length > 0 ? (
             <>
               <RankTable items={data.items} board={board} />
-              <Pager
-                page={page}
-                pageSize={PAGE_SIZE}
-                total={data.total ?? data.items.length}
-                onChange={setPage}
-              />
+              <div className="px-4 pb-3">
+                <Pager
+                  page={page}
+                  pageSize={PAGE_SIZE}
+                  total={data.total ?? data.items.length}
+                  onChange={setPage}
+                />
+              </div>
             </>
           ) : (
-            <EmptyState title={`${title}暂无数据`}>
+            <EmptyState bare title={`${title}暂无数据`}>
               {emptyReason(data.reason)}
             </EmptyState>
           )

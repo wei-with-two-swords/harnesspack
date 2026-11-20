@@ -52,15 +52,17 @@ export default function CategoryBoard() {
       {loading ? <Loading /> : null}
       {!loading && !error && data ? (
         data.items.length > 0 ? (
-          <>
+          <div className="card overflow-hidden">
             <RankTable items={data.items} board="total" />
-            <Pager
-              page={page}
-              pageSize={PAGE_SIZE}
-              total={data.total ?? data.items.length}
-              onChange={setPage}
-            />
-          </>
+            <div className="px-4 pb-3">
+              <Pager
+                page={page}
+                pageSize={PAGE_SIZE}
+                total={data.total ?? data.items.length}
+                onChange={setPage}
+              />
+            </div>
+          </div>
         ) : (
           <EmptyState title={`${label}榜暂无数据`}>该分类下还没有已入库的插件。</EmptyState>
         )
