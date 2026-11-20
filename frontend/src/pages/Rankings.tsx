@@ -10,6 +10,15 @@ import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 
 const BOARD_IDS = new Set<string>(BOARD_TABS.map((tab) => tab.id));
+function emptyReason(reason: string | null | undefined) {
+  if (!reason) return '首次快照已入库，等下一次快照后榜单开始生长。';
+  const missing = reason.match(/missing snapshot for (\d{4}-\d{2}-\d{2})/);
+  if (missing) {
+    return `需要 ${missing[1]} 的基准快照；本站从 2026-11-19 起记录，等窗口滚动到有基准日时榜单会自动出现。`;
+  }
+  return reason;
+}
+
 const PAGE_SIZE = 100;
 
 const BOARD_TEXT: Record<string, string> = {
@@ -96,7 +105,7 @@ export default function Rankings() {
             </>
           ) : (
             <EmptyState title={`${title}暂无数据`}>
-              {data.reason ?? '首次快照已入库，等下一次快照后榜单开始生长。'}
+              {emptyReason(data.reason)}
             </EmptyState>
           )
         ) : null}
