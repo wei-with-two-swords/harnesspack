@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="d-flex flex-column min-vh-100">
       <header className="sticky-top">
-        <nav className="navbar md:navbar-expand bg-body-tertiary border-bottom">
+        <nav className="navbar md:navbar-expand hp-navbar">
           <div className="container">
             <Link to="/" className="navbar-brand d-flex align-items-center gap-2 fw-semibold">
               <Logo />
@@ -100,7 +100,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <main className="container flex-grow-1 py-4 lg:py-5">{children}</main>
 
-      <footer className="border-top py-4 mt-auto bg-body-tertiary">
+      <footer className="hp-footer py-4 mt-auto">
         <div className="container d-flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between gap-2 fs-xs fg-secondary">
           <p className="mb-0">
             HarnessPack 的名单来自 awesome-dsh-plugin 清单，star 数据来自 GitHub 公开 API。

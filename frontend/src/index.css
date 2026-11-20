@@ -4,10 +4,69 @@
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   --bs-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --bs-heading-font-family: var(--bs-body-font-family);
+
+  /* Layered surface palette: page background, white content surface, hover wash. */
+  --hp-bg: #eef1f6;
+  --hp-surface: #ffffff;
+  --hp-surface-2: #f6f8fb;
+  --hp-hover: #f3f6fb;
+  --hp-hairline: rgba(15, 23, 42, 0.07);
+  --hp-text: #0f172a;
+  --hp-muted: #5c6b82;
+  --hp-accent: #0b9fd6;
+  --hp-link: #0369a1;
+
+  --hp-radius-card: 12px;
+  --hp-radius-row: 10px;
+  --hp-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 14px 34px -18px rgba(16, 24, 40, 0.18);
+  --hp-shadow-hover: 0 2px 4px rgba(16, 24, 40, 0.05), 0 24px 44px -22px rgba(16, 24, 40, 0.26);
+
+  --bs-body-bg: var(--hp-bg);
+  --bs-bg-body: var(--hp-bg);
+  --bs-card-bg: var(--hp-surface);
+  --bs-card-border-width: 0;
+  --bs-card-border-color: transparent;
+  --bs-card-border-radius: var(--hp-radius-card);
+  --bs-card-inner-border-radius: calc(var(--hp-radius-card) - 1px);
+  --bs-border-color: var(--hp-hairline);
+  --bs-table-border-color: var(--hp-hairline);
+  --bs-table-hover-bg: var(--hp-hover);
+}
+
+[data-bs-theme='dark'] {
+  --hp-bg: #080b10;
+  --hp-surface: #10141b;
+  --hp-surface-2: #151a22;
+  --hp-hover: #1a2029;
+  --hp-hairline: rgba(255, 255, 255, 0.07);
+  --hp-text: #e7eef8;
+  --hp-muted: #93a3ba;
+  --hp-accent: #38bdf8;
+  --hp-link: #38bdf8;
+  --hp-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 18px 40px -22px rgba(0, 0, 0, 0.65);
+  --hp-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 26px 50px -24px rgba(0, 0, 0, 0.75);
+}
+
+/* Bootstrap 6 follows the OS scheme when data-bs-theme is absent; mirror it explicitly. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-bs-theme='light']) {
+    --hp-bg: #080b10;
+    --hp-surface: #10141b;
+    --hp-surface-2: #151a22;
+    --hp-hover: #1a2029;
+    --hp-hairline: rgba(255, 255, 255, 0.07);
+    --hp-text: #e7eef8;
+    --hp-muted: #93a3ba;
+    --hp-accent: #38bdf8;
+    --hp-link: #38bdf8;
+    --hp-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 18px 40px -22px rgba(0, 0, 0, 0.65);
+    --hp-shadow-hover: 0 2px 6px rgba(0, 0, 0, 0.4), 0 26px 50px -24px rgba(0, 0, 0, 0.75);
+  }
 }
 
 body {
   min-height: 100vh;
+  background: var(--hp-bg);
 }
 
 .num {
@@ -29,6 +88,59 @@ body {
   display: none;
 }
 
+/* Cards float on the page; no outlines, only a soft shadow that deepens on hover. */
+.card {
+  --bs-card-bg: var(--hp-surface);
+  --bs-card-border-width: 0;
+  --bs-card-border-color: transparent;
+  border: 0;
+  background: var(--hp-surface);
+  box-shadow: var(--hp-shadow);
+  transition: box-shadow 0.16s ease;
+}
+
+.hp-hover:hover {
+  box-shadow: var(--hp-shadow-hover);
+}
+
+.hp-navbar {
+  background: color-mix(in srgb, var(--hp-bg) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+}
+
+.hp-footer {
+  background: transparent;
+}
+
+/* Rows behave like a soft hover target inside a card. */
+.hp-row {
+  border-radius: var(--hp-radius-row);
+  padding-inline: 0.5rem;
+  margin-inline: -0.5rem;
+  transition: background-color 0.14s ease;
+}
+
+.hp-row:hover {
+  background: var(--hp-hover);
+}
+
+.hp-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      720px circle at 92% -12%,
+      color-mix(in srgb, var(--hp-accent) 14%, transparent),
+      transparent 68%
+    ),
+    var(--hp-surface);
+}
+
+.hp-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Theme switcher trigger: blends with the navbar in both light and dark themes. */
 .theme-trigger {
   display: inline-flex;
@@ -45,9 +157,67 @@ body {
 .theme-trigger:hover,
 .theme-trigger:focus-visible {
   color: inherit;
-  background: var(--bs-theme-bg-muted, rgba(127, 127, 127, 0.12));
+  background: var(--hp-hover);
 }
 
 .theme-trigger .menu-caret {
   opacity: 0.7;
+}
+
+/* Tabs sit on top of the list card: one hairline, no boxed borders. */
+.nav-tabs {
+  border-bottom-color: var(--hp-hairline);
+}
+
+.nav-tabs .nav-link {
+  color: var(--hp-muted);
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--hp-text);
+  background: var(--hp-hover);
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--hp-text);
+  background: var(--hp-surface);
+  border-color: var(--hp-hairline);
+  border-bottom-color: transparent;
+}
+
+/* Tables paint on the card surface, never on the page background. */
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-striped-bg: transparent;
+  --bs-table-hover-bg: var(--hp-hover);
+}
+
+.table > :not(caption) > * > * {
+  border-color: var(--hp-hairline);
+}
+
+/* A card header that only anchors tabs: transparent, no divider of its own. */
+.card-header {
+  --bs-card-cap-bg: transparent;
+  background: transparent;
+  border-bottom: 0;
+}
+
+.list-group-flush > .list-group-item {
+  border-color: var(--hp-hairline);
+  background: transparent;
+}
+
+.list-group-item-action:hover,
+.list-group-item-action:focus {
+  background: var(--hp-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .hp-row {
+    transition: none;
+  }
 }

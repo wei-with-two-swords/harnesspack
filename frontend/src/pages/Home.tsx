@@ -16,7 +16,7 @@ function MiniList({ items, empty }: { items: RankingItem[]; empty: string }) {
   return (
     <ol className="list-unstyled mb-0">
       {items.map((item, index) => (
-        <li key={item.slug} className="border-bottom">
+        <li key={item.slug} className="hp-row">
           <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 py-2 text-decoration-none">
             <span className="num flex-shrink-0 text-center fs-sm fg-secondary" style={{ width: '1.5rem' }}>
               {index + 1}
@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="card bg-body-tertiary mb-4 lg:mb-5">
+      <section className="card hp-hero mb-4 lg:mb-5">
         <div className="card-body p-4 p-lg-5">
           <span className="badge theme-secondary badge-subtle mb-3 align-self-start">DSH PLUGINS · DAILY SNAPSHOT</span>
           <h1 className="fs-4xl fw-semibold text-balance" style={{ maxWidth: '42rem' }}>
@@ -148,7 +148,7 @@ export default function Home() {
                 <div key={item.category} className="col-12 sm:col-6 lg:col-4">
                   <Link
                     to={`/rankings/category/${encodeURIComponent(item.category)}`}
-                    className="card h-100 text-decoration-none"
+                    className="card h-100 text-decoration-none hp-hover"
                   >
                     <div className="card-body py-3">
                       <div className="d-flex align-items-baseline justify-content-between">
@@ -165,7 +165,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="card border-warning bg-subtle-warning mt-4">
+          <section className="card bg-subtle-warning mt-4 border-0">
             <div className="card-body d-flex flex-column sm:flex-row sm:align-items-center justify-content-between gap-3">
               <div>
                 <div className="fs-sm fw-medium fg-emphasis-warning">本周编辑精选 · 招商中</div>

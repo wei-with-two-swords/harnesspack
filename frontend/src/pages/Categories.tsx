@@ -28,7 +28,7 @@ export default function Categories() {
             <div key={item.category} className="col-12 sm:col-6 lg:col-4">
               <Link
                 to={`/rankings/category/${encodeURIComponent(item.category)}`}
-                className="card h-100 text-decoration-none"
+                className="card h-100 text-decoration-none hp-hover"
               >
                 <div className="card-body">
                   <div className="d-flex align-items-baseline justify-content-between">
