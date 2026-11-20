@@ -36,9 +36,9 @@ export default function Compare() {
     return (
       <EmptyState title="选择 2-5 个插件再对比">
         从插件库勾选，或在插件详情页点「加入对比」。也可以直接在地址栏写{' '}
-        <code className="text-body">/compare?slugs=a,b</code>。
+        <code className="fg-body">/compare?slugs=a,b</code>。
         <div className="mt-4">
-          <Link to="/plugins" className="btn">
+          <Link to="/plugins" className="btn btn-solid theme-secondary">
             去插件库挑选
           </Link>
         </div>
@@ -52,59 +52,69 @@ export default function Compare() {
   const plugins = data.plugins;
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <h1 className="text-2xl font-semibold text-white">插件对比</h1>
-        <p className="mt-1 text-sm text-muted">
+        <h1 className="fs-3xl fw-semibold mb-1">插件对比</h1>
+        <p className="fs-sm fg-secondary mb-0">
           {plugins.length} 个插件 · 近 {data.days} 天 · 截至 {data.as_of ?? '—'}。缺失的快照日留空，不插值。
         </p>
       </div>
 
-      <section className="card card-pad">
-        <h2 className="section-title mb-3">Star 曲线</h2>
-        <CompareChart plugins={plugins} />
+      <section className="card">
+        <div className="card-body">
+          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-3">Star 曲线</h2>
+          <CompareChart plugins={plugins} />
+        </div>
       </section>
 
       <section className="card overflow-hidden">
-        <table className="w-full table-fixed text-sm">
-          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-            <tr>
-              <th className="px-4 py-3 font-medium">插件</th>
-              <th className="w-28 px-2 py-3 text-right font-medium">当前 Star</th>
-              <th className="w-24 px-2 py-3 text-right font-medium">最新增量</th>
-              <th className="w-24 px-2 py-3 text-right font-medium">区间涨幅</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-line/60">
-            {plugins.map((plugin) => {
-              const last = plugin.series[plugin.series.length - 1];
-              const gain = growth(plugin);
-              return (
-                <tr key={plugin.slug} className="hover:bg-raise/40">
-                  <td className="px-4 py-3">
-                    <Link to={`/plugins/${plugin.slug}`} className="font-medium text-white hover:text-teal">
-                      {plugin.name}
-                    </Link>
-                    <div className="truncate text-xs text-muted">{plugin.slug}</div>
-                  </td>
-                  <td className="num px-2 py-3 text-right text-body">{formatNumber(last?.stars ?? null)}</td>
-                  <td className="num px-2 py-3 text-right">
-                    <span className={(last?.delta ?? 0) > 0 ? 'text-rise' : 'text-muted'}>
-                      {formatDelta(last?.delta ?? null)}
-                    </span>
-                  </td>
-                  <td className="num px-2 py-3 text-right text-body">
-                    {gain === null ? '—' : `${(gain * 100).toFixed(1)}%`}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className="table-responsive">
+          <table className="table table-hover align-middle mb-0">
+            <thead className="fs-xs text-uppercase fg-secondary">
+              <tr>
+                <th className="px-4 py-3 fw-medium">插件</th>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
+                  当前 Star
+                </th>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                  最新增量
+                </th>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                  区间涨幅
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {plugins.map((plugin) => {
+                const last = plugin.series[plugin.series.length - 1];
+                const gain = growth(plugin);
+                return (
+                  <tr key={plugin.slug}>
+                    <td className="px-4 py-3">
+                      <Link to={`/plugins/${plugin.slug}`} className="fw-medium text-decoration-none">
+                        {plugin.name}
+                      </Link>
+                      <div className="text-truncate fs-xs fg-secondary">{plugin.slug}</div>
+                    </td>
+                    <td className="num px-2 py-3 text-end">{formatNumber(last?.stars ?? null)}</td>
+                    <td className="num px-2 py-3 text-end">
+                      <span className={(last?.delta ?? 0) > 0 ? 'fg-success' : 'fg-secondary'}>
+                        {formatDelta(last?.delta ?? null)}
+                      </span>
+                    </td>
+                    <td className="num px-2 py-3 text-end">
+                      {gain === null ? '—' : `${(gain * 100).toFixed(1)}%`}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </section>
 
-      <p className="text-xs text-muted">
-        想加入更多曲线？去 <Link to="/plugins" className="text-teal hover:underline">插件库</Link>{' '}
+      <p className="fs-xs fg-secondary mb-0">
+        想加入更多曲线？去 <Link to="/plugins" className="text-decoration-none">插件库</Link>{' '}
         或在插件详情页点「加入对比」。
       </p>
     </div>

@@ -10,10 +10,12 @@ export function StatCard({
   hint?: ReactNode;
 }) {
   return (
-    <div className="card card-pad">
-      <div className="text-xs uppercase tracking-widest text-muted">{label}</div>
-      <div className="num mt-2 text-2xl font-semibold text-white sm:text-3xl">{value}</div>
-      {hint ? <div className="mt-1 text-xs text-muted">{hint}</div> : null}
+    <div className="card h-100">
+      <div className="card-body">
+        <div className="fs-xs text-uppercase fg-secondary fw-semibold">{label}</div>
+        <div className="num mt-2 fs-3xl fw-semibold">{value}</div>
+        {hint ? <div className="mt-1 fs-sm fg-secondary">{hint}</div> : null}
+      </div>
     </div>
   );
 }

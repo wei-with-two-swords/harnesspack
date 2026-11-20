@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react';
 import uPlot from 'uplot';
 import 'uplot/dist/uPlot.min.css';
 import type { ComparePlugin } from '../types';
-
-const COLORS = ['#4cc9f0', '#f5b544', '#4ade80', '#f87171', '#a78bfa'];
+import { chartColors, useThemeVersion } from '../lib/theme';
 
 /**
  * Multi-series star chart for the compare page. Missing days are gaps, not
@@ -12,6 +11,7 @@ const COLORS = ['#4cc9f0', '#f5b544', '#4ade80', '#f87171', '#a78bfa'];
 export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin[]; height?: number }) {
   const host = useRef<HTMLDivElement | null>(null);
   const chart = useRef<uPlot | null>(null);
+  const themeVersion = useThemeVersion();
 
   useEffect(() => {
     const el = host.current;
@@ -29,6 +29,7 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
         return dates.map((d) => byDate.get(d) ?? null);
       }),
     ];
+    const colors = chartColors();
 
     const opts: uPlot.Options = {
       width: el.clientWidth,
@@ -39,14 +40,14 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
       scales: { x: { time: true } },
       axes: [
         {
-          stroke: '#8b9bb4',
-          grid: { stroke: '#1e2a3a', width: 1 },
-          ticks: { stroke: '#1e2a3a' },
+          stroke: colors.axis,
+          grid: { stroke: colors.grid, width: 1 },
+          ticks: { stroke: colors.grid },
         },
         {
-          stroke: '#8b9bb4',
-          grid: { stroke: '#1e2a3a', width: 1 },
-          ticks: { stroke: '#1e2a3a' },
+          stroke: colors.axis,
+          grid: { stroke: colors.grid, width: 1 },
+          ticks: { stroke: colors.grid },
           size: 60,
         },
       ],
@@ -54,7 +55,7 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
         {},
         ...plugins.map((plugin, i) => ({
           label: plugin.name,
-          stroke: COLORS[i % COLORS.length],
+          stroke: colors.series[i % colors.series.length],
           width: 2,
         })),
       ],
@@ -73,12 +74,12 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
       chart.current?.destroy();
       chart.current = null;
     };
-  }, [plugins, height]);
+  }, [plugins, height, themeVersion]);
 
   if (plugins.every((p) => p.series.length < 2)) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border border-dashed border-line bg-surface/40 px-4 text-center text-sm text-muted"
+        className="d-flex align-items-center justify-content-center border rounded-3 px-3 text-center fs-sm fg-secondary"
         style={{ height }}
       >
         数据积累中：每日快照累计 2 天后显示对比曲线
@@ -86,5 +87,5 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
     );
   }
 
-  return <div ref={host} className="w-full" />;
+  return <div ref={host} className="w-100" />;
 }

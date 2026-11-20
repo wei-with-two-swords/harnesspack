@@ -11,16 +11,12 @@ export const BOARD_TABS = [
 
 export function BoardTabs({ active }: { active: string }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-xl border border-line bg-surface/60 p-1">
+    <div className="nav nav-pills gap-1 p-1 border rounded-3 overflow-x-auto nav-scroll flex-nowrap">
       {BOARD_TABS.map((tab) => (
         <Link
           key={tab.id}
           to={`/rankings/${tab.id}`}
-          className={`rounded-lg px-3 py-2 text-sm transition ${
-            active === tab.id
-              ? 'bg-raise text-white shadow-sm'
-              : 'text-muted hover:bg-raise/60 hover:text-body'
-          }`}
+          className={`nav-link${active === tab.id ? ' active' : ''}`}
           title={tab.hint}
         >
           {tab.label}

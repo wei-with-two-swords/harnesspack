@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { ThemeSwitcher } from './ThemeSwitcher';
 
 function Logo() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="flex-shrink-0">
       <rect x="3" y="13" width="3.5" height="8" rx="1" fill="#4cc9f0" />
       <rect x="10.25" y="9" width="3.5" height="12" rx="1" fill="#f5b544" />
       <rect x="17.5" y="4" width="3.5" height="17" rx="1" fill="#4cc9f0" />
@@ -17,9 +18,7 @@ function NavItem({ to, children, end }: { to: string; children: ReactNode; end?:
       to={to}
       end={end}
       className={({ isActive }) =>
-        `shrink-0 whitespace-nowrap rounded-lg px-2.5 py-1.5 transition hover:text-white ${
-          isActive ? 'bg-raise text-white' : 'text-muted'
-        }`
+        `nav-link flex-shrink-0 text-nowrap${isActive ? ' active' : ''}`
       }
     >
       {children}
@@ -29,15 +28,23 @@ function NavItem({ to, children, end }: { to: string; children: ReactNode; end?:
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-20 border-b border-line/80 bg-ink/85 backdrop-blur">
-        <div className="shell flex h-14 items-center gap-4 sm:gap-6">
-          <Link to="/" className="flex items-center gap-2">
+    <div className="d-flex flex-column min-vh-100">
+      <header className="sticky-top border-bottom bg-body">
+        <div className="container py-2 d-flex flex-wrap align-items-center gap-2">
+          <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none fg-body">
             <Logo />
-            <span className="text-base font-semibold tracking-tight text-white">HarnessPack</span>
-            <span className="pill hidden sm:inline-flex">beta</span>
+            <span className="fs-lg fw-semibold">HarnessPack</span>
+            <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex">beta</span>
           </Link>
-          <nav className="flex min-w-0 items-center gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+          <div className="ms-auto d-flex align-items-center gap-3 order-2 md:order-3">
+            <div className="d-none lg:d-inline fs-sm fg-secondary">
+              每日 00:10 UTC 快照 · 只做真实增速
+            </div>
+            <ThemeSwitcher />
+          </div>
+
+          <nav className="header-nav w-100 order-3 md:order-2 nav nav-pills gap-1 overflow-x-auto nav-scroll fs-sm flex-nowrap">
             <NavItem to="/rankings/velocity">榜单</NavItem>
             <NavItem to="/categories">分类榜</NavItem>
             <NavItem to="/plugins">插件库</NavItem>
@@ -49,42 +56,35 @@ export default function Layout({ children }: { children: ReactNode }) {
               提交插件
             </NavItem>
           </nav>
-          <div className="ml-auto hidden text-xs text-muted md:block">
-            每日 00:10 UTC 快照 · 只做真实增速
-          </div>
         </div>
       </header>
 
-      <main className="shell flex-1 py-6 sm:py-10">{children}</main>
+      <main className="container flex-grow-1 py-4 lg:py-5">{children}</main>
 
-      <footer className="border-t border-line/70 py-6">
-        <div className="shell flex flex-col gap-2 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>
+      <footer className="border-top py-4 mt-auto">
+        <div className="container d-flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between gap-2 fs-xs fg-secondary">
+          <p className="mb-0">
             HarnessPack 的名单来自 awesome-dsh-plugin 清单，star 数据来自 GitHub 公开 API。
           </p>
-          <p>
+          <p className="mb-0">
             非官方项目 ·{' '}
-            <Link to="/about" className="text-teal hover:underline">
+            <Link to="/about" className="text-decoration-none">
               数据口径
             </Link>{' '}
             ·{' '}
-            <Link to="/about/api" className="text-teal hover:underline">
+            <Link to="/about/api" className="text-decoration-none">
               API
             </Link>{' '}
             ·{' '}
-            <Link to="/status" className="text-teal hover:underline">
+            <Link to="/status" className="text-decoration-none">
               数据状态
             </Link>{' '}
             ·{' '}
-            <Link to="/about/terms" className="text-teal hover:underline">
+            <Link to="/about/terms" className="text-decoration-none">
               使用条款
             </Link>{' '}
             ·{' '}
-            <Link to="/about/terms" className="text-teal hover:underline">
-              使用条款
-            </Link>{' '}
-            ·{' '}
-            <Link to="/sponsors" className="text-teal hover:underline">
+            <Link to="/sponsors" className="text-decoration-none">
               推荐位说明
             </Link>
           </p>

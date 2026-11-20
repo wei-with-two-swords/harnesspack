@@ -27,22 +27,22 @@ export default function CategoryBoard() {
 
   return (
     <section>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-4 d-flex flex-column sm:flex-row sm:align-items-end justify-content-between gap-3">
         <div>
-          <div className="text-xs text-muted">
-            <Link to="/categories" className="text-teal hover:underline">
+          <div className="fs-xs fg-secondary">
+            <Link to="/categories" className="text-decoration-none">
               分类榜
             </Link>{' '}
             / {label}
           </div>
-          <h1 className="mt-1 text-2xl font-semibold text-white">{label}榜</h1>
-          <p className="mt-1 max-w-2xl text-sm text-muted">
+          <h1 className="mt-1 fs-3xl fw-semibold mb-1">{label}榜</h1>
+          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
             分类内按当前 star 总量排序，并列时按名称升序。
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
           </p>
         </div>
-        <div className="rounded-lg border border-line bg-surface px-3 py-2 text-xs text-muted">
-          该分类共 <span className="num text-body">{data?.total ?? '—'}</span> 个在册插件
+        <div className="border rounded-3 px-3 py-2 fs-sm fg-secondary flex-shrink-0">
+          该分类共 <span className="num">{data?.total ?? '—'}</span> 个在册插件
         </div>
       </div>
 
@@ -64,8 +64,8 @@ export default function CategoryBoard() {
         )
       ) : null}
 
-      <div className="mt-6 text-sm">
-        <Link to="/rankings/total" className="text-teal hover:underline">
+      <div className="mt-4 fs-sm">
+        <Link to="/rankings/total" className="text-decoration-none">
           ← 返回总榜
         </Link>
       </div>

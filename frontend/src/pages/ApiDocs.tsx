@@ -14,72 +14,78 @@ const ENDPOINTS: { method: string; path: string; note: string }[] = [
   { method: 'GET', path: '/api/v1/sponsors', note: '推荐位：独立区块，disclosure=sponsored' },
 ];
 
+const LINK = 'text-decoration-none';
+
 export default function ApiDocs() {
   useTitle('API 说明');
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <h1 className="text-2xl font-semibold text-white">API 说明</h1>
-        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted">
-          只读 JSON API，版本前缀 <code className="text-body">/api/v1</code>。所有列表返回{' '}
-          <code className="text-body">{'{ items, total, as_of }'}</code>；日期一律 UTC（YYYY-MM-DD）。
-          默认每 IP 每分钟 120 次（<code className="text-body">/og/</code> 图片 20 次），超限返回{' '}
-          <code className="text-body">429</code> 与 <code className="text-body">Retry-After</code>；
+        <h1 className="fs-3xl fw-semibold mb-1">API 说明</h1>
+        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '48rem' }}>
+          只读 JSON API，版本前缀 <code>/api/v1</code>。所有列表返回{' '}
+          <code>{'{ items, total, as_of }'}</code>；日期一律 UTC（YYYY-MM-DD）。
+          默认每 IP 每分钟 120 次（<code>/og/</code> 图片 20 次），超限返回{' '}
+          <code>429</code> 与 <code>Retry-After</code>；
           需要批量数据建议直接读取公开仓库里的
-          <code className="text-body"> data/snapshots/</code> 快照文件，条款见{' '}
-          <Link to="/about/terms" className="text-teal hover:underline">
+          <code> data/snapshots/</code> 快照文件，条款见{' '}
+          <Link to="/about/terms" className={LINK}>
             使用条款
           </Link>
           。
         </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          <a href="/api/v1/docs" target="_blank" rel="noreferrer noopener" className="btn">
+        <div className="mt-3 d-flex flex-wrap gap-2">
+          <a href="/api/v1/docs" target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary">
             打开 Swagger UI
           </a>
-          <a href="/api/v1/openapi.json" target="_blank" rel="noreferrer noopener" className="btn">
+          <a href="/api/v1/openapi.json" target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary">
             OpenAPI JSON
           </a>
-          <Link to="/about/rules" className="btn">
+          <Link to="/about/rules" className="btn btn-outline theme-secondary">
             收录规则
           </Link>
         </div>
       </div>
 
       <section className="card overflow-hidden">
-        <table className="w-full table-fixed text-sm">
-          <thead className="border-b border-line text-left text-xs uppercase tracking-wide text-muted">
-            <tr>
-              <th className="w-16 px-4 py-3 font-medium">方法</th>
-              <th className="w-1/2 px-2 py-3 font-medium">路径</th>
-              <th className="px-2 py-3 font-medium">说明</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-line/60">
-            {ENDPOINTS.map((row) => (
-              <tr key={row.path} className="hover:bg-raise/40">
-                <td className="px-4 py-3">
-                  <span className="pill border-rise/40 text-rise">{row.method}</span>
-                </td>
-                <td className="px-2 py-3">
-                  <code className="break-all text-body">{row.path}</code>
-                </td>
-                <td className="px-2 py-3 text-muted">{row.note}</td>
+        <div className="table-responsive">
+          <table className="table table-hover align-middle mb-0">
+            <thead className="fs-xs text-uppercase fg-secondary">
+              <tr>
+                <th className="px-4 py-3 fw-medium" style={{ width: '5rem' }}>方法</th>
+                <th className="px-2 py-3 fw-medium" style={{ width: '50%' }}>路径</th>
+                <th className="px-2 py-3 fw-medium">说明</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {ENDPOINTS.map((row) => (
+                <tr key={row.path}>
+                  <td className="px-4 py-3">
+                    <span className="badge theme-success badge-subtle">{row.method}</span>
+                  </td>
+                  <td className="px-2 py-3">
+                    <code className="text-break">{row.path}</code>
+                  </td>
+                  <td className="px-2 py-3 fg-secondary">{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
-      <section className="card card-pad">
-        <h2 className="section-title mb-2">示例</h2>
-        <pre className="overflow-x-auto rounded-lg bg-ink p-3 text-xs leading-relaxed text-body">
+      <section className="card">
+        <div className="card-body">
+          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-2">示例</h2>
+          <pre className="overflow-auto rounded-3 bg-subtle-secondary p-3 fs-xs mb-0">
 {`curl -s https://harnesspack.dev/api/v1/rankings/velocity?limit=5
 curl -s "https://harnesspack.dev/api/v1/plugins?query=dsh-pet&sort=stars"
 curl -s "https://harnesspack.dev/api/v1/compare?slugs=dsh-market-dsh-market,dsh-web-zhu1090093659-dsh-web"`}
-        </pre>
-        <p className="mt-2 text-xs text-muted">
-          字段含义见 <Link to="/about" className="text-teal hover:underline">数据口径</Link>。
-        </p>
+          </pre>
+          <p className="mt-2 mb-0 fs-xs fg-secondary">
+            字段含义见 <Link to="/about" className={LINK}>数据口径</Link>。
+          </p>
+        </div>
       </section>
     </div>
   );

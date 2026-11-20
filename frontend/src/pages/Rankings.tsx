@@ -45,29 +45,29 @@ export default function Rankings() {
   );
 
   const label = BOARD_TABS.find((tab) => tab.id === board)?.label ?? board;
-  useTitle(`${label}榜`, `${label}榜：${BOARD_TEXT[board] ?? ''}`.trim());
+  const title = label.endsWith('榜') ? label : `${label}榜`;
+  useTitle(title, `${title}：${BOARD_TEXT[board] ?? ''}`.trim());
   const windowed = board === 'growth' || board === 'darkhorse' || board === 'quality';
 
   return (
     <section>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-4 d-flex flex-column sm:flex-row sm:align-items-end justify-content-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-white">{label}榜</h1>
-          <p className="mt-1 max-w-2xl text-sm text-muted">
+          <h1 className="fs-3xl fw-semibold mb-1">{title}</h1>
+          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
             {BOARD_TEXT[board] ?? '未知榜单'}
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
           </p>
         </div>
         {windowed ? (
-          <div className="flex items-center gap-1 rounded-lg border border-line bg-surface p-1 text-xs">
+          <div className="btn-group btn-group-sm flex-shrink-0" role="group" aria-label="统计窗口">
             {[7, 30].map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setWindow(option)}
-                className={`rounded-md px-3 py-1.5 transition ${
-                  window === option ? 'bg-raise text-white' : 'text-muted hover:text-body'
-                }`}
+                aria-pressed={window === option}
+                className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
               >
                 近 {option} 天
               </button>
@@ -93,7 +93,7 @@ export default function Rankings() {
               />
             </>
           ) : (
-            <EmptyState title={`${label}榜暂无数据`}>
+            <EmptyState title={`${title}暂无数据`}>
               {data.reason ?? '首次快照已入库，等下一次快照后榜单开始生长。'}
             </EmptyState>
           )

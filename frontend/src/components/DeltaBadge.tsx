@@ -12,17 +12,20 @@ export function DeltaBadge({
   const text = suffix ? `${formatDelta(value)}${suffix}` : formatDelta(value);
   const tone =
     value === null
-      ? 'text-muted'
+      ? 'fg-secondary'
       : value > 0
-        ? 'text-rise'
+        ? 'fg-success'
         : value < 0
-          ? 'text-fall'
-          : 'text-muted';
+          ? 'fg-danger'
+          : 'fg-secondary';
   return (
-    <span className={`num inline-flex items-center gap-1 ${tone}`}>
+    <span className={`num d-inline-flex align-items-center gap-1 ${tone}`}>
       {text}
       {anomaly ? (
-        <span className="pill border-gold/40 text-gold" title="单日涨幅异常，已标记但仍保留数据">
+        <span
+          className="badge theme-warning badge-subtle"
+          title="单日涨幅异常，已标记但仍保留数据"
+        >
           异常
         </span>
       ) : null}

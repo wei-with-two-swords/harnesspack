@@ -11,31 +11,34 @@ export function Pager({ page, pageSize, total, onChange }: PagerProps) {
   const from = page * pageSize + 1;
   const to = Math.min(total, (page + 1) * pageSize);
   return (
-    <div className="mt-4 flex flex-col items-center justify-between gap-3 text-xs text-muted sm:flex-row">
+    <div className="mt-4 d-flex flex-column sm:flex-row align-items-center justify-content-between gap-2 fs-sm fg-secondary">
       <span className="num">
         {from}–{to} / {total}
       </span>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          disabled={page === 0}
-          onClick={() => onChange(page - 1)}
-          className="rounded-md border border-line px-3 py-1.5 transition enabled:hover:border-teal enabled:hover:text-white disabled:opacity-40"
-        >
-          上一页
-        </button>
-        <span className="num px-1">
-          {page + 1} / {pages}
-        </span>
-        <button
-          type="button"
-          disabled={page >= pages - 1}
-          onClick={() => onChange(page + 1)}
-          className="rounded-md border border-line px-3 py-1.5 transition enabled:hover:border-teal enabled:hover:text-white disabled:opacity-40"
-        >
-          下一页
-        </button>
-      </div>
+      <nav aria-label="分页">
+        <ul className="pagination pagination-sm mb-0">
+          <li className={`page-item${page === 0 ? ' disabled' : ''}`}>
+            <button type="button" className="page-link" disabled={page === 0} onClick={() => onChange(page - 1)}>
+              上一页
+            </button>
+          </li>
+          <li className="page-item disabled">
+            <span className="page-link num">
+              {page + 1} / {pages}
+            </span>
+          </li>
+          <li className={`page-item${page >= pages - 1 ? ' disabled' : ''}`}>
+            <button
+              type="button"
+              className="page-link"
+              disabled={page >= pages - 1}
+              onClick={() => onChange(page + 1)}
+            >
+              下一页
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   );
 }

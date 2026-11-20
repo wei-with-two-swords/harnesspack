@@ -12,9 +12,9 @@ export default function Categories() {
 
   return (
     <section>
-      <div className="mb-5">
-        <h1 className="text-2xl font-semibold text-white">分类榜</h1>
-        <p className="mt-1 max-w-2xl text-sm text-muted">
+      <div className="mb-4">
+        <h1 className="fs-3xl fw-semibold mb-1">分类榜</h1>
+        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
           分类沿用 awesome-dsh-plugin 清单的 23 个分类，每个分类单独按 star 排名，只统计在册的 DSH 插件。
         </p>
       </div>
@@ -23,32 +23,34 @@ export default function Categories() {
       {loading ? <Loading rows={3} /> : null}
 
       {data && data.items.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="row g-4">
           {data.items.map((item) => (
-            <Link
-              key={item.category}
-              to={`/rankings/category/${encodeURIComponent(item.category)}`}
-              className="card card-pad group transition hover:border-teal/40"
-            >
-              <div className="flex items-baseline justify-between">
-                <h2 className="text-base font-semibold text-white group-hover:text-teal">
-                  {categoryLabel(item.category)}榜
-                </h2>
-                <span className="num text-xs text-muted">{item.count} 个插件</span>
-              </div>
-              <div className="mt-1 num text-sm text-body">
-                {formatNumber(item.total_stars)} star
-              </div>
-              <ol className="mt-3 space-y-1.5 border-t border-line/60 pt-3 text-xs">
-                {item.top.map((entry) => (
-                  <li key={entry.slug} className="flex items-center justify-between gap-2">
-                    <span className="truncate text-muted">{entry.name}</span>
-                    <span className="num shrink-0 text-body">{formatCompact(entry.stars)}</span>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-3 text-xs text-teal">查看 {categoryLabel(item.category)}榜 →</div>
-            </Link>
+            <div key={item.category} className="col-12 sm:col-6 lg:col-4">
+              <Link
+                to={`/rankings/category/${encodeURIComponent(item.category)}`}
+                className="card h-100 text-decoration-none"
+              >
+                <div className="card-body">
+                  <div className="d-flex align-items-baseline justify-content-between">
+                    <h2 className="fs-lg fw-semibold mb-0">{categoryLabel(item.category)}榜</h2>
+                    <span className="num fs-xs fg-secondary">{item.count} 个插件</span>
+                  </div>
+                  <div className="num fs-sm mt-1">{formatNumber(item.total_stars)} star</div>
+                  <ol className="list-unstyled mt-3 pt-3 border-top mb-0">
+                    {item.top.map((entry) => (
+                      <li
+                        key={entry.slug}
+                        className="d-flex align-items-center justify-content-between gap-2 fs-sm mt-1"
+                      >
+                        <span className="text-truncate fg-secondary">{entry.name}</span>
+                        <span className="num flex-shrink-0">{formatCompact(entry.stars)}</span>
+                      </li>
+                    ))}
+                  </ol>
+                  <div className="mt-3 fs-sm fg-info">查看 {categoryLabel(item.category)}榜 →</div>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       ) : null}

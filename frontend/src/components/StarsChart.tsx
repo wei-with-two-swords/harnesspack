@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import uPlot from 'uplot';
 import 'uplot/dist/uPlot.min.css';
 import type { SeriesPoint } from '../types';
+import { chartColors, useThemeVersion } from '../lib/theme';
 
 /**
  * Star history chart. Renders a placeholder until there are at least two
@@ -10,6 +11,7 @@ import type { SeriesPoint } from '../types';
 export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; height?: number }) {
   const host = useRef<HTMLDivElement | null>(null);
   const chart = useRef<uPlot | null>(null);
+  const themeVersion = useThemeVersion();
 
   useEffect(() => {
     const el = host.current;
@@ -18,6 +20,7 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
     const xs = points.map((p) => Math.round(Date.parse(`${p.date}T00:00:00Z`) / 1000));
     const ys = points.map((p) => p.stars);
     const data: uPlot.AlignedData = [xs, ys];
+    const colors = chartColors();
 
     const opts: uPlot.Options = {
       width: el.clientWidth,
@@ -28,14 +31,14 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
       scales: { x: { time: true } },
       axes: [
         {
-          stroke: '#8b9bb4',
-          grid: { stroke: '#1e2a3a', width: 1 },
-          ticks: { stroke: '#1e2a3a' },
+          stroke: colors.axis,
+          grid: { stroke: colors.grid, width: 1 },
+          ticks: { stroke: colors.grid },
         },
         {
-          stroke: '#8b9bb4',
-          grid: { stroke: '#1e2a3a', width: 1 },
-          ticks: { stroke: '#1e2a3a' },
+          stroke: colors.axis,
+          grid: { stroke: colors.grid, width: 1 },
+          ticks: { stroke: colors.grid },
           size: 60,
         },
       ],
@@ -43,9 +46,9 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
         {},
         {
           label: 'Star',
-          stroke: '#4cc9f0',
+          stroke: colors.line,
           width: 2,
-          fill: 'rgba(76,201,240,0.10)',
+          fill: colors.fill,
         },
       ],
     };
@@ -63,12 +66,12 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
       chart.current?.destroy();
       chart.current = null;
     };
-  }, [points, height]);
+  }, [points, height, themeVersion]);
 
   if (points.length < 2) {
     return (
       <div
-        className="flex items-center justify-center rounded-lg border border-dashed border-line bg-surface/40 px-4 text-center text-sm text-muted"
+        className="d-flex align-items-center justify-content-center border rounded-3 px-3 text-center fs-sm fg-secondary"
         style={{ height }}
       >
         数据积累中：每日快照累计 2 天后显示曲线
@@ -76,5 +79,5 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
     );
   }
 
-  return <div ref={host} className="w-full" />;
+  return <div ref={host} className="w-100" />;
 }

@@ -1,51 +1,38 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  html {
-    color-scheme: dark;
-  }
-
-  body {
-    @apply bg-ink font-sans text-body antialiased;
-    background-image:
-      radial-gradient(60rem 40rem at 15% -10%, rgba(76, 201, 240, 0.08), transparent 60%),
-      radial-gradient(50rem 30rem at 85% -10%, rgba(245, 181, 68, 0.06), transparent 60%);
-    background-repeat: no-repeat;
-  }
-
-  a {
-    @apply text-inherit no-underline;
-  }
+/* Bootstrap 6 is loaded from the CDN. Only brand tokens and a few helpers live here. */
+:root {
+  --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  --bs-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --bs-heading-font-family: var(--bs-body-font-family);
 }
 
-@layer components {
-  .shell {
-    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
-  }
+body {
+  min-height: 100vh;
+}
 
-  .card {
-    @apply rounded-xl border border-line bg-surface/80 shadow-lg shadow-black/20 backdrop-blur;
-  }
+.num {
+  font-variant-numeric: tabular-nums;
+}
 
-  .card-pad {
-    @apply p-4 sm:p-5;
-  }
+/* Tables with long, truncating cells need a fixed layout to keep column widths stable. */
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
 
-  .pill {
-    @apply inline-flex items-center rounded-full border border-line bg-raise px-2.5 py-0.5 text-xs text-muted;
-  }
+/* Keep the horizontal nav scrollable without showing a scrollbar. */
+.nav-scroll {
+  scrollbar-width: none;
+}
 
-  .btn {
-    @apply inline-flex items-center gap-1.5 rounded-lg border border-line bg-raise px-3 py-1.5 text-sm text-body transition hover:border-teal/60 hover:text-white;
-  }
+.nav-scroll::-webkit-scrollbar {
+  display: none;
+}
 
-  .section-title {
-    @apply text-sm font-semibold uppercase tracking-widest text-muted;
-  }
-
-  .num {
-    @apply font-mono tabular-nums;
+/* The header nav takes its own row on small screens and flows inline from md up. */
+@media (min-width: 768px) {
+  .header-nav {
+    width: auto;
+    flex: 1 1 auto;
   }
 }
