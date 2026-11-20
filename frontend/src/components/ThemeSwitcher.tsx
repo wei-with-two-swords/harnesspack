@@ -98,16 +98,22 @@ export function ThemeSwitcher() {
     <div className="position-relative" ref={rootRef}>
       <button
         type="button"
-        className="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2"
+        className="theme-trigger"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={`主题：${current.label}`}
-        title="切换主题"
+        aria-label={`切换主题，当前：${current.label}`}
+        title={`切换主题（当前：${current.label}）`}
         onClick={() => setOpen((value) => !value)}
       >
         <CurrentIcon />
-        <span className="d-none md:d-inline">{current.label}</span>
-        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <svg
+          className="menu-caret"
+          width="10"
+          height="10"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <path d="M8 11 3 6h10l-5 5Z" />
         </svg>
       </button>
