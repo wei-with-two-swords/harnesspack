@@ -106,17 +106,21 @@ body {
 .hp-navbar {
   background: var(--hp-surface);
   border: 0;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 10px 30px -22px rgba(16, 24, 40, 0.35);
 }
 
-[data-bs-theme='dark'] .hp-navbar {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 30px -20px rgba(0, 0, 0, 0.8);
+/* Plain navbar links: no pill background, ring or shadow around the text. */
+.hp-navbar .nav-link {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-bs-theme='light']) .hp-navbar {
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 30px -20px rgba(0, 0, 0, 0.8);
-  }
+.hp-navbar .nav-link:hover,
+.hp-navbar .nav-link:focus,
+.hp-navbar .nav-link.active {
+  background: transparent;
+  box-shadow: none;
 }
 
 /* Drawers and menus are elevated surfaces: white, soft shadow, no outline. */
@@ -177,7 +181,7 @@ body {
 .theme-trigger:hover,
 .theme-trigger:focus-visible {
   color: inherit;
-  background: var(--hp-hover);
+  background: transparent;
 }
 
 .theme-trigger .menu-caret {
