@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # Full history so a re-run of an older commit can still work on main.
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -28,12 +31,15 @@ jobs:
 
       - name: Fetch snapshot
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SNAPSHOT_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          # Manual re-runs on the same UTC day must not fail: merge instead of overwrite.
+          # Always work on top of the current main, even when this job is a
+          # re-run of an older commit (re-running uses the original SHA).
+          git fetch origin main
+          git checkout -B work origin/main
           TODAY=$(date -u +%F)
-          if [ -f "data/snapshots/$TODAY.json" ]; then
-            echo "::notice::snapshot for $TODAY already exists; filling any missing repos"
+          if git cat-file -e "HEAD:data/snapshots/$TODAY.json" 2>/dev/null; then
+            echo "::notice::origin/main already has $TODAY snapshot; filling any missing repos"
             python scripts/snapshot.py --missing-only
           else
             python scripts/snapshot.py
@@ -52,4 +58,9 @@ jobs:
             exit 0
           fi
           git commit -m "data: snapshot $(date -u +%F)"
-          git push
+          # Another run may have pushed meanwhile; rebase once and retry.
+          git push origin HEAD:main || {
+            git fetch origin main
+            git rebase origin/main
+            git push origin HEAD:main
+          }
