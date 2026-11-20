@@ -23,8 +23,14 @@ export default function ApiDocs() {
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted">
           只读 JSON API，版本前缀 <code className="text-body">/api/v1</code>。所有列表返回{' '}
           <code className="text-body">{'{ items, total, as_of }'}</code>；日期一律 UTC（YYYY-MM-DD）。
-          未认证限流较宽松，请勿高频轮询；需要批量数据建议直接读取公开仓库里的
-          <code className="text-body"> data/snapshots/</code> 快照文件。
+          默认每 IP 每分钟 120 次（<code className="text-body">/og/</code> 图片 20 次），超限返回{' '}
+          <code className="text-body">429</code> 与 <code className="text-body">Retry-After</code>；
+          需要批量数据建议直接读取公开仓库里的
+          <code className="text-body"> data/snapshots/</code> 快照文件，条款见{' '}
+          <Link to="/about/terms" className="text-teal hover:underline">
+            使用条款
+          </Link>
+          。
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           <a href="/api/v1/docs" target="_blank" rel="noreferrer noopener" className="btn">

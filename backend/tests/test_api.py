@@ -99,7 +99,8 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/about/rules" in body
     assert "http://testserver/rankings/category/workflow" in body
     assert "http://testserver/status" in body
-    assert body.count("<url>") == 22
+    assert "http://testserver/about/terms" in body
+    assert body.count("<url>") == 23
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -171,3 +172,28 @@ def test_status_exposes_snapshot_and_database_health(client):
     assert payload["database"]["active"] == 4
     assert payload["database"]["stars_rows"] == 48
     assert payload["snapshots"]["coverage"] is None or 0 <= payload["snapshots"]["coverage"] <= 1
+
+
+def test_rate_limit_returns_429(tmp_path, data_dir):
+    from fastapi.testclient import TestClient
+
+    from backend.app.config import Settings
+    from backend.app.main import create_app
+
+    seed, snaps = data_dir
+    settings = Settings(
+        db_path=tmp_path / "rl.db",
+        snapshot_dir=snaps,
+        seed_path=seed,
+        frontend_dist=tmp_path / "dist",
+        rate_limit_per_minute=2,
+        og_rate_limit_per_minute=1,
+    )
+    with TestClient(create_app(settings)) as client:
+        assert client.get("/api/v1/health").status_code == 200
+        assert client.get("/api/v1/dashboard").status_code == 200
+        assert client.get("/api/v1/dashboard").status_code == 200
+        blocked = client.get("/api/v1/dashboard")
+        assert blocked.status_code == 429
+        assert blocked.headers["Retry-After"].isdigit()
+        assert blocked.json()["detail"] == "rate limit exceeded"

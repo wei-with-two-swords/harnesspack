@@ -15,6 +15,7 @@ import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
 import Submit from './pages/Submit';
 import Status from './pages/Status';
+import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
 
 function ScrollToTop() {
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="/about/rules" element={<Rules />} />
         <Route path="/about/changelog" element={<Changelog />} />
         <Route path="/about/api" element={<ApiDocs />} />
+        <Route path="/about/terms" element={<Terms />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="/submit" element={<Submit />} />
         <Route path="/status" element={<Status />} />

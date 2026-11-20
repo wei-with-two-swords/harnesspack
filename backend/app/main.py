@@ -20,6 +20,7 @@ from .api.site import router as site_router
 from .api.v1 import router as v1_router
 from .config import Settings, get_settings
 from .db import connect, init_db
+from .rate_limit import install_rate_limit
 from .services import ranking
 from .services.ingest import ingest
 
@@ -83,6 +84,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         openapi_url="/api/v1/openapi.json",
     )
     app.state.settings = settings
+    if settings.rate_limit_enabled:
+        install_rate_limit(
+            app,
+            general_per_minute=settings.rate_limit_per_minute,
+            og_per_minute=settings.og_rate_limit_per_minute,
+        )
     app.include_router(v1_router, prefix="/api/v1")
     app.include_router(meta_router)
     app.include_router(site_router)

@@ -76,6 +76,14 @@ export default function Layout({ children }: { children: ReactNode }) {
               数据状态
             </Link>{' '}
             ·{' '}
+            <Link to="/about/terms" className="text-teal hover:underline">
+              使用条款
+            </Link>{' '}
+            ·{' '}
+            <Link to="/about/terms" className="text-teal hover:underline">
+              使用条款
+            </Link>{' '}
+            ·{' '}
             <Link to="/sponsors" className="text-teal hover:underline">
               推荐位说明
             </Link>

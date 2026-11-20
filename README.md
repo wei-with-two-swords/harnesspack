@@ -100,3 +100,12 @@ GET /api/v1/sponsors
 - 增速榜要求基准日 star ≥ 50，避免小数分母失真。
 - 缺失快照不补、不猜：榜单为空并给出原因。
 
+## 许可与使用条款
+
+- 代码：MIT，见 `LICENSE`。
+- 每日快照（`data/snapshots/`）：CC BY 4.0，转载需署名并链接 `https://harnesspack.dev`，详见 `DATA-LICENSE.md`。
+- 站点文案、图表与模板：CC BY-NC 4.0，禁止整体复制成竞争站点。
+- API 默认每 IP 每分钟 120 次（`/og/` 20 次），超限返回 `429` + `Retry-After`；批量数据请直接读仓库里的快照文件。
+- 完整条款：https://harnesspack.dev/about/terms
+
+
