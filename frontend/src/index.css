@@ -1,4 +1,4 @@
-/* Bootstrap 6 is loaded from the CDN. Only brand tokens and a few helpers live here. */
+/* Bootstrap 6 is vendored under /vendor; brand tokens and a few helpers live here. */
 :root {
   --bs-body-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'PingFang SC',
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
@@ -30,6 +30,10 @@ body {
 }
 
 /* The header nav takes its own row on small screens and flows inline from md up. */
+.header-nav {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .header-nav {
     width: auto;

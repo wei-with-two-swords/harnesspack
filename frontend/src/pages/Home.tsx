@@ -45,21 +45,23 @@ export default function Home() {
 
   return (
     <>
-      <section className="mb-4 lg:mb-5">
-        <div className="badge theme-secondary badge-subtle mb-3">DSH PLUGINS · DAILY SNAPSHOT</div>
-        <h1 className="fs-4xl fw-semibold text-balance" style={{ maxWidth: '42rem' }}>
-          {data ? formatNumber(data.kpis.tracked) : '上万'} 个 DSH 插件，
-          <span className="fg-info">真实 star 增速</span>的竞速场
-        </h1>
-        <p className="mt-3 fs-sm fg-secondary" style={{ maxWidth: '42rem' }}>
-          名单与分类来自 awesome-dsh-plugin 精选清单，只收录可安装进 DeepSeek Harness（DSH）的插件。
-          每天 00:10 UTC 抓取一次 GitHub star，只展示可核对的数字：不回填、不美化、异常单独标注。
-        </p>
-        {data?.as_of ? (
-          <div className="mt-3 fs-xs fg-secondary">
-            数据截至 <span>{formatDate(data.as_of)}</span>
-          </div>
-        ) : null}
+      <section className="card bg-body-tertiary mb-4 lg:mb-5">
+        <div className="card-body p-4 p-lg-5">
+          <span className="badge theme-secondary badge-subtle mb-3 align-self-start">DSH PLUGINS · DAILY SNAPSHOT</span>
+          <h1 className="fs-4xl fw-semibold text-balance" style={{ maxWidth: '42rem' }}>
+            {data ? formatNumber(data.kpis.tracked) : '上万'} 个 DSH 插件，
+            <span className="fg-info">真实 star 增速</span>的竞速场
+          </h1>
+          <p className="mt-3 fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+            名单与分类来自 awesome-dsh-plugin 精选清单，只收录可安装进 DeepSeek Harness（DSH）的插件。
+            每天 00:10 UTC 抓取一次 GitHub star，只展示可核对的数字：不回填、不美化、异常单独标注。
+          </p>
+          {data?.as_of ? (
+            <div className="mt-3 fs-xs fg-secondary">
+              数据截至 <span>{formatDate(data.as_of)}</span>
+            </div>
+          ) : null}
+        </div>
       </section>
 
       {error ? <ErrorState error={error} /> : null}

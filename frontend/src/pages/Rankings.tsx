@@ -51,29 +51,31 @@ export default function Rankings() {
 
   return (
     <section>
-      <div className="mb-4 d-flex flex-column sm:flex-row sm:align-items-end justify-content-between gap-3">
-        <div>
-          <h1 className="fs-3xl fw-semibold mb-1">{title}</h1>
-          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
-            {BOARD_TEXT[board] ?? '未知榜单'}
-            {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
-          </p>
-        </div>
-        {windowed ? (
-          <div className="btn-group btn-group-sm flex-shrink-0" role="group" aria-label="统计窗口">
-            {[7, 30].map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setWindow(option)}
-                aria-pressed={window === option}
-                className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
-              >
-                近 {option} 天
-              </button>
-            ))}
+      <div className="card mb-3">
+        <div className="card-body d-flex flex-column sm:flex-row sm:align-items-end justify-content-between gap-3">
+          <div>
+            <h1 className="fs-3xl fw-semibold mb-1">{title}</h1>
+            <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+              {BOARD_TEXT[board] ?? '未知榜单'}
+              {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
+            </p>
           </div>
-        ) : null}
+          {windowed ? (
+            <div className="btn-group btn-group-sm flex-shrink-0" role="group" aria-label="统计窗口">
+              {[7, 30].map((option) => (
+                <button
+                  key={option}
+                  type="button"
+                  onClick={() => setWindow(option)}
+                  aria-pressed={window === option}
+                  className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
+                >
+                  近 {option} 天
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       <BoardTabs active={board} />

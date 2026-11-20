@@ -11,17 +11,21 @@ export const BOARD_TABS = [
 
 export function BoardTabs({ active }: { active: string }) {
   return (
-    <div className="nav nav-pills gap-1 p-1 border rounded-3 overflow-x-auto nav-scroll flex-nowrap">
-      {BOARD_TABS.map((tab) => (
-        <Link
-          key={tab.id}
-          to={`/rankings/${tab.id}`}
-          className={`nav-link${active === tab.id ? ' active' : ''}`}
-          title={tab.hint}
-        >
-          {tab.label}
-        </Link>
-      ))}
+    <div className="card mb-3">
+      <div className="card-body py-2">
+        <div className="nav nav-pills gap-1 overflow-x-auto nav-scroll flex-nowrap">
+          {BOARD_TABS.map((tab) => (
+            <Link
+              key={tab.id}
+              to={`/rankings/${tab.id}`}
+              className={`nav-link text-nowrap${active === tab.id ? ' active' : ''}`}
+              title={tab.hint}
+            >
+              {tab.label}
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

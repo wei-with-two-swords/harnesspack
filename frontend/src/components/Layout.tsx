@@ -2,6 +2,15 @@ import type { ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
+const NAV = [
+  { to: '/rankings/velocity', label: '榜单' },
+  { to: '/categories', label: '分类榜' },
+  { to: '/plugins', label: '插件库' },
+  { to: '/about', label: '收录规则', end: true },
+  { to: '/sponsors', label: '推荐位' },
+  { to: '/submit', label: '提交插件', end: true },
+];
+
 function Logo() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="flex-shrink-0">
@@ -12,56 +21,43 @@ function Logo() {
   );
 }
 
-function NavItem({ to, children, end }: { to: string; children: ReactNode; end?: boolean }) {
-  return (
-    <NavLink
-      to={to}
-      end={end}
-      className={({ isActive }) =>
-        `nav-link flex-shrink-0 text-nowrap${isActive ? ' active' : ''}`
-      }
-    >
-      {children}
-    </NavLink>
-  );
-}
-
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="d-flex flex-column min-vh-100">
-      <header className="sticky-top border-bottom bg-body">
-        <div className="container py-2 d-flex flex-wrap align-items-center gap-2">
-          <Link to="/" className="d-flex align-items-center gap-2 text-decoration-none fg-body">
-            <Logo />
-            <span className="fs-lg fw-semibold">HarnessPack</span>
-            <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex">beta</span>
-          </Link>
+      <header className="sticky-top">
+        <nav className="navbar navbar-expand bg-body-tertiary border-bottom">
+          <div className="container flex-wrap gap-2">
+            <Link to="/" className="navbar-brand d-flex align-items-center gap-2 me-0 mb-0 fw-semibold order-1">
+              <Logo />
+              <span>HarnessPack</span>
+              <span className="badge theme-secondary badge-subtle d-none sm:d-inline-flex align-self-center">beta</span>
+            </Link>
 
-          <div className="ms-auto d-flex align-items-center gap-3 order-2 md:order-3">
-            <div className="d-none lg:d-inline fs-sm fg-secondary">
-              每日 00:10 UTC 快照 · 只做真实增速
+            <ul className="navbar-nav header-nav flex-row flex-nowrap gap-1 order-3 overflow-x-auto nav-scroll min-w-0 md:order-2 md:ms-2 md:me-auto">
+              {NAV.map((item) => (
+                <li key={item.to} className="nav-item">
+                  <NavLink
+                    to={item.to}
+                    end={item.end}
+                    className={({ isActive }) => `nav-link text-nowrap${isActive ? ' active' : ''}`}
+                  >
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+
+            <div className="ms-auto d-flex align-items-center gap-3 order-2 md:order-3">
+              <span className="navbar-text d-none xl:d-block fs-sm">每日 00:10 UTC 快照 · 只做真实增速</span>
+              <ThemeSwitcher />
             </div>
-            <ThemeSwitcher />
           </div>
-
-          <nav className="header-nav w-100 order-3 md:order-2 nav nav-pills gap-1 overflow-x-auto nav-scroll fs-sm flex-nowrap">
-            <NavItem to="/rankings/velocity">榜单</NavItem>
-            <NavItem to="/categories">分类榜</NavItem>
-            <NavItem to="/plugins">插件库</NavItem>
-            <NavItem to="/about" end>
-              收录规则
-            </NavItem>
-            <NavItem to="/sponsors">推荐位</NavItem>
-            <NavItem to="/submit" end>
-              提交插件
-            </NavItem>
-          </nav>
-        </div>
+        </nav>
       </header>
 
       <main className="container flex-grow-1 py-4 lg:py-5">{children}</main>
 
-      <footer className="border-top py-4 mt-auto">
+      <footer className="border-top py-4 mt-auto bg-body-tertiary">
         <div className="container d-flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between gap-2 fs-xs fg-secondary">
           <p className="mb-0">
             HarnessPack 的名单来自 awesome-dsh-plugin 清单，star 数据来自 GitHub 公开 API。
