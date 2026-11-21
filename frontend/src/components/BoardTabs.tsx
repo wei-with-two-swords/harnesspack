@@ -11,20 +11,18 @@ export const BOARD_TABS = [
 
 export function BoardTabs({ active }: { active: string }) {
   return (
-    <div className="card-header px-3 pt-2 pb-0">
-      <ul className="nav nav-tabs card-header-tabs flex-nowrap overflow-x-auto nav-scroll">
-        {BOARD_TABS.map((tab) => (
-          <li key={tab.id} className="nav-item">
-            <Link
-              to={`/rankings/${tab.id}`}
-              className={`nav-link text-nowrap${active === tab.id ? ' active' : ''}`}
-              title={tab.hint}
-            >
-              {tab.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul className="nav nav-tabs flex-nowrap overflow-x-auto nav-scroll mb-3" aria-label="榜单切换">
+      {BOARD_TABS.map((tab) => (
+        <li key={tab.id} className="nav-item">
+          <Link
+            to={`/rankings/${tab.id}`}
+            className={`nav-link text-nowrap${active === tab.id ? ' active' : ''}`}
+            title={tab.hint}
+          >
+            {tab.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
