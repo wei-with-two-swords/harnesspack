@@ -71,7 +71,18 @@ python scripts/validate.py            # 校验
 ```
 
 - 未认证只有 60 次/小时，跑不满上万仓库；GraphQL 批量抓取必须提供 token（PAT 5000 点/小时足够）。
-- 每天 00:10 UTC 由 `.github/workflows/snapshot.yml` 自动执行；漏跑可手动 `workflow_dispatch`。
+- 每天 00:10 UTC 由 `.github/workflows/snapshot.yml` 自动执行；漏跑可在 Actions 页面 `Run workflow`，`date` 填要补的 UTC 日期（留空 = 今天）。
+
+### 限流与续抓
+
+全量快照是约 120 次 GraphQL 批请求。GitHub 除了每小时的额度，还有「短时间打太多」的次要限流（官方建议批请求之间留间隔），所以 `scripts/snapshot_graphql.py` 不再一口气打满：
+
+- 每批之间默认停 1 秒（`--delay`），避免触发次要限流；
+- 每 10 批（`--flush-every`）把已抓记录落盘；遇到 429 / `rate limit` 时按 `retry-after` 或 `x-ratelimit-reset` 等待后继续，等待超过 `--max-wait` 就先保存再以退出码 3 结束；
+- 退出码 3 不丢数据：workflow 仍会提交已经抓到的部分快照，之后同一天重跑时 `--missing-only` 只补缺失的仓库，已完成的不会重抓；
+- 快照未完成或校验失败时 run 仍然会失败（`::error::snapshot fetch or validation did not finish`），避免把残缺数据当成完整快照。
+
+token 额度：workflow 优先用 `secrets.SNAPSHOT_TOKEN`（个人 PAT，GraphQL 5,000 点/小时）；没配置时回退到 `GITHUB_TOKEN`，而它只有 1,000 点/小时，全量抓取更容易触顶，建议配置 `SNAPSHOT_TOKEN`。
 
 ### 快照监控
 

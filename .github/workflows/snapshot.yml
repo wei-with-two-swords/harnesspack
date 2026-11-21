@@ -5,6 +5,11 @@ on:
     # 00:10 UTC every day, after GitHub's daily star recalculation settles
     - cron: "10 0 * * *"
   workflow_dispatch:
+    inputs:
+      date:
+        description: "UTC date to snapshot (YYYY-MM-DD, default: today)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -23,6 +28,21 @@ jobs:
         with:
           # Full history so a re-run of an older commit can still work on main.
           fetch-depth: 0
+
+      - name: Track the latest main
+        run: |
+          # Do this before the data steps: they rewrite tracked files
+          # (catalog, aliases, seed), and switching commits afterwards fails
+          # with "local changes would be overwritten" whenever main moved
+          # while this job was queued.
+          git fetch origin main
+          git checkout -B work origin/main
+
+      - name: Resolve target date
+        id: target
+        run: |
+          day="${{ inputs.date }}"
+          echo "day=${day:-$(date -u +%F)}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -43,25 +63,42 @@ jobs:
         run: python scripts/build_seed.py
 
       - name: Fetch snapshot
+        id: fetch
+        # A rate-limited run persists the records it already fetched; the job
+        # still commits them below so the next attempt resumes instead of
+        # restarting from zero.
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.SNAPSHOT_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          # Always work on top of the current main, even when this job is a
-          # re-run of an older commit (re-running uses the original SHA).
-          git fetch origin main
-          git checkout -B work origin/main
-          TODAY=$(date -u +%F)
-          if git cat-file -e "HEAD:data/snapshots/$TODAY.json" 2>/dev/null; then
-            echo "::notice::origin/main already has $TODAY snapshot; filling any missing repos"
-            python scripts/snapshot_graphql.py --missing-only
-          else
-            python scripts/snapshot_graphql.py
+          set +e
+          DAY="${{ steps.target.outputs.day }}"
+          # --missing-only also works when that day's file does not exist yet;
+          # it then behaves like a full fetch. When a previous attempt left a
+          # partial file, this fills only the missing repositories.
+          python scripts/snapshot_graphql.py --date "$DAY" --missing-only
+          status=$?
+          if [ "$status" -eq 3 ]; then
+            # Secondary limits usually clear within a minute or two; a primary
+            # limit resets at the hour, which the script waits for internally.
+            echo "::warning::GitHub GraphQL rate limit hit; retrying in 120s"
+            sleep 120
+            python scripts/snapshot_graphql.py --date "$DAY" --missing-only
+            status=$?
           fi
+          exit "$status"
 
       - name: Validate snapshots
+        id: validate
+        if: always()
+        # Report the result but still commit whatever was fetched: the server's
+        # sync refuses to ingest an invalid file anyway, and the partial data is
+        # what a re-run resumes from.
+        continue-on-error: true
         run: python scripts/validate.py
 
       - name: Commit and push
+        if: always()
         run: |
           git config user.name "harnesspack-bot"
           git config user.email "harnesspack-bot@users.noreply.github.com"
@@ -70,10 +107,16 @@ jobs:
             echo "no data changes"
             exit 0
           fi
-          git commit -m "data: snapshot $(date -u +%F)"
+          git commit -m "data: snapshot ${{ steps.target.outputs.day }}"
           # Another run may have pushed meanwhile; rebase once and retry.
           git push origin HEAD:main || {
             git fetch origin main
             git rebase origin/main
             git push origin HEAD:main
           }
+
+      - name: Fail when the snapshot is incomplete or invalid
+        if: steps.fetch.outcome == 'failure' || steps.validate.outcome == 'failure'
+        run: |
+          echo "::error::snapshot fetch or validation did not finish; partial data was committed and a re-run for this date resumes with --missing-only"
+          exit 1
