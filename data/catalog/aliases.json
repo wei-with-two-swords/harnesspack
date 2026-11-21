@@ -1,6 +1,46 @@
 {
- "updated_at": "2026-11-20T07:07:25Z",
+ "updated_at": "2026-11-21T13:58:31Z",
  "aliases": {
+  "1250589385/dsh-quick-send": {
+   "owner": "Raysnows",
+   "repo": "dsh-quick-send",
+   "url": "https://github.com/Raysnows/dsh-quick-send",
+   "slug": "raysnows-dsh-quick-send",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
+  "1250589385/dsh-rescue-guard": {
+   "owner": "Raysnows",
+   "repo": "dsh-rescue-guard",
+   "url": "https://github.com/Raysnows/dsh-rescue-guard",
+   "slug": "raysnows-dsh-rescue-guard",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
+  "1250589385/dsh-stall-guard": {
+   "owner": "Raysnows",
+   "repo": "dsh-stall-guard",
+   "url": "https://github.com/Raysnows/dsh-stall-guard",
+   "slug": "raysnows-dsh-stall-guard",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
+  "1250589385/dsh-test-autofix": {
+   "owner": "Raysnows",
+   "repo": "dsh-test-autofix",
+   "url": "https://github.com/Raysnows/dsh-test-autofix",
+   "slug": "raysnows-dsh-test-autofix",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
+  "1250589385/dsh-vendor-quick-switch": {
+   "owner": "Raysnows",
+   "repo": "dsh-vendor-quick-switch",
+   "url": "https://github.com/Raysnows/dsh-vendor-quick-switch",
+   "slug": "raysnows-dsh-vendor-quick-switch",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
   "1834395550/dsh-session-tabs": {
    "owner": "P-PPJ",
    "repo": "dsh-session-tabs",
@@ -16,6 +56,22 @@
    "slug": "ccgo26-dsh-app-updater",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:52Z"
+  },
+  "2090003781/bridge": {
+   "owner": "Charliewhale",
+   "repo": "bridge",
+   "url": "https://github.com/Charliewhale/bridge",
+   "slug": "charliewhale-bridge",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:14Z"
+  },
+  "2869949486/dsh-opencode-routing": {
+   "owner": "doushabao2026",
+   "repo": "dsh-opencode-routing",
+   "url": "https://github.com/doushabao2026/dsh-opencode-routing",
+   "slug": "doushabao2026-dsh-opencode-routing",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:15Z"
   },
   "3341284397-max/dsh-question-bubbles": {
    "owner": "Aurophyllis",
@@ -193,6 +249,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:26Z"
   },
+  "fisfzy/dsh-ego-browser": {
+   "owner": "omdsh-dev",
+   "repo": "dsh-ego-browser",
+   "url": "https://github.com/omdsh-dev/dsh-ego-browser",
+   "slug": "omdsh-dev-dsh-ego-browser",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:19Z"
+  },
   "fitbbc/dsh-plugin-tokenmarket": {
    "owner": "Duqiyan2",
    "repo": "dsh-plugin-tokenmarket",
@@ -312,6 +376,14 @@
    "slug": "kingcharleslzy-ai-dsh-spicy",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:52Z"
+  },
+  "kirkchinese/claude2dsh": {
+   "owner": "kirkchinese",
+   "repo": "harness-forge",
+   "url": "https://github.com/kirkchinese/harness-forge",
+   "slug": "kirkchinese-harness-forge",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:21Z"
   },
   "klrsl/dsh-biomemory": {
    "owner": "K-W7",
@@ -487,7 +559,7 @@
    "url": "https://github.com/oscarka/pocketagents",
    "slug": "oscarka-pocketagents",
    "source": "snapshot-html-url",
-   "detected_at": "2026-11-20T07:07:19Z"
+   "detected_at": "2026-11-21T13:58:24Z"
   },
   "qcwygm/dsh-config-sync": {
    "owner": "QcWyGm",
@@ -513,6 +585,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:15Z"
   },
+  "sayzwx/dsh-xingkong-theme": {
+   "owner": "sayzwx",
+   "repo": "dsh-custom-model",
+   "url": "https://github.com/sayzwx/dsh-custom-model",
+   "slug": "sayzwx-dsh-custom-model",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:25Z"
+  },
   "sev7een7/sieve": {
    "owner": "Sev7eEn7",
    "repo": "dsh-sieve",
@@ -536,6 +616,14 @@
    "slug": "songoao25-dsh-chatgpt-sub",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:18Z"
+  },
+  "ssamurias/dsh-fish": {
+   "owner": "mochi-fish",
+   "repo": "dsh-fish",
+   "url": "https://github.com/mochi-fish/dsh-fish",
+   "slug": "mochi-fish-dsh-fish",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:25Z"
   },
   "tkaiz0406/dsh-subagent-route-pin": {
    "owner": "tkaiz0406",
@@ -577,6 +665,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:28Z"
   },
+  "wlc114514/dsh-upload-origin": {
+   "owner": "firnspiegel",
+   "repo": "dsh-upload-origin",
+   "url": "https://github.com/firnspiegel/dsh-upload-origin",
+   "slug": "firnspiegel-dsh-upload-origin",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:27Z"
+  },
   "wojiao42/dsh-memory-file": {
    "owner": "wojiao42",
    "repo": "dsh-long-term-memory",
@@ -600,6 +696,14 @@
    "slug": "wyr-233-dsh-memory-markdown",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:34Z"
+  },
+  "xantares330/dsh-codex-consult": {
+   "owner": "X1A0ME111",
+   "repo": "dsh-codex-consult",
+   "url": "https://github.com/X1A0ME111/dsh-codex-consult",
+   "slug": "x1a0me111-dsh-codex-consult",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:27Z"
   },
   "xdtrees/dsh-workbuddy-xdpool": {
    "owner": "XDTrees",
@@ -672,6 +776,14 @@
    "slug": "yinxe-dshp",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:49Z"
+  },
+  "yuanyuanzhang0815/dsh-quick-prompts": {
+   "owner": "yuanyuanzhang0815",
+   "repo": "dsh-prompt-book",
+   "url": "https://github.com/yuanyuanzhang0815/dsh-prompt-book",
+   "slug": "yuanyuanzhang0815-dsh-prompt-book",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-21T13:58:29Z"
   },
   "yuhe248118/dsh-aiyting-image-video": {
    "owner": "liangyu112212",
