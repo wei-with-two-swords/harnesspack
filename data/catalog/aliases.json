@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-21T13:58:31Z",
+ "updated_at": "2026-11-22T06:40:26Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -480,6 +480,14 @@
    "slug": "lihongxu0221-dsh-workspace-ui",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:54Z"
+  },
+  "liuecreater/dsh-appearance": {
+   "owner": "LiueCreater",
+   "repo": "dsh-lifiwallpaper",
+   "url": "https://github.com/LiueCreater/dsh-lifiwallpaper",
+   "slug": "liuecreater-dsh-lifiwallpaper",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-22T06:40:17Z"
   },
   "liushqaq/dsh-anywhere": {
    "owner": "liushQAQ",
