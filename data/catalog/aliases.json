@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-23T03:52:33Z",
+ "updated_at": "2026-11-23T04:20:42Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -72,6 +72,14 @@
    "slug": "doushabao2026-dsh-opencode-routing",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-21T13:58:15Z"
+  },
+  "329604421/dsh-tiny-aquarium": {
+   "owner": "329604421",
+   "repo": "dsh-tiny-fish",
+   "url": "https://github.com/329604421/dsh-tiny-fish",
+   "slug": "329604421-dsh-tiny-fish",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T04:20:15Z"
   },
   "3341284397-max/dsh-question-bubbles": {
    "owner": "Aurophyllis",
@@ -481,6 +489,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:54Z"
   },
+  "lighghteeloo/dsh-next-actions": {
+   "owner": "miorin-chan",
+   "repo": "dsh-next-actions",
+   "url": "https://github.com/miorin-chan/dsh-next-actions",
+   "slug": "miorin-chan-dsh-next-actions",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T04:20:25Z"
+  },
   "lihongxu0221/dsh-workspace-browser": {
    "owner": "lihongxu0221",
    "repo": "dsh-workspace-ui",
@@ -561,6 +577,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:13Z"
   },
+  "nullcolorcat/dsh-agent-team-fix": {
+   "owner": "NULLCOLORcat",
+   "repo": "dsh-Smarter-Subagent-level",
+   "url": "https://github.com/NULLCOLORcat/dsh-Smarter-Subagent-level",
+   "slug": "nullcolorcat-dsh-smarter-subagent-level",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T04:20:30Z"
+  },
   "oscarka/deepseekharness-remotecontrol": {
    "owner": "oscarka",
    "repo": "pocketagent",
@@ -600,6 +624,14 @@
    "slug": "qiu-kkkk-deepseek-harness-bt",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:15Z"
+  },
+  "regrevia/dsh-pianochart": {
+   "owner": "regrevia",
+   "repo": "everything2chart",
+   "url": "https://github.com/regrevia/everything2chart",
+   "slug": "regrevia-everything2chart",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T04:20:31Z"
   },
   "sayzwx/dsh-xingkong-theme": {
    "owner": "sayzwx",
@@ -776,6 +808,14 @@
    "slug": "yaanlaan-dsh-colorful",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:41Z"
+  },
+  "yakumioto/dsh-workspace-model": {
+   "owner": "yakumioto",
+   "repo": "dsh-workspace-settings",
+   "url": "https://github.com/yakumioto/dsh-workspace-settings",
+   "slug": "yakumioto-dsh-workspace-settings",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T04:20:39Z"
   },
   "yeweiliang7063/dsh-tcm": {
    "owner": "yeweiliang7063",

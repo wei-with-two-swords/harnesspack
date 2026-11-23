@@ -2806,12 +2806,12 @@
   },
   {
    "owner": "329604421",
-   "repo": "dsh-tiny-aquarium",
-   "slug": "329604421-dsh-tiny-aquarium",
+   "repo": "dsh-tiny-fish",
+   "slug": "329604421-dsh-tiny-fish",
    "name": "dsh-tiny-aquarium",
    "category": "fun",
    "harness": "dsh",
-   "url": "https://github.com/329604421/dsh-tiny-aquarium",
+   "url": "https://github.com/329604421/dsh-tiny-fish",
    "note": ""
   },
   {
@@ -56526,16 +56526,6 @@
   },
   {
    "owner": "LighghtEeloo",
-   "repo": "dsh-next-actions",
-   "slug": "lighghteeloo-dsh-next-actions",
-   "name": "dsh-next-actions",
-   "category": "ui",
-   "harness": "dsh",
-   "url": "https://github.com/LighghtEeloo/dsh-next-actions",
-   "note": ""
-  },
-  {
-   "owner": "LighghtEeloo",
    "repo": "dsh-vcs-panel",
    "slug": "lighghteeloo-dsh-vcs-panel",
    "name": "dsh-vcs-panel",
@@ -67445,6 +67435,16 @@
    "note": ""
   },
   {
+   "owner": "miorin-chan",
+   "repo": "dsh-next-actions",
+   "slug": "miorin-chan-dsh-next-actions",
+   "name": "dsh-next-actions",
+   "category": "ui",
+   "harness": "dsh",
+   "url": "https://github.com/miorin-chan/dsh-next-actions",
+   "note": ""
+  },
+  {
    "owner": "miqian-nomad",
    "repo": "dsh-browser-playwright-codex",
    "slug": "miqian-nomad-dsh-browser-playwright-codex",
@@ -73196,12 +73196,12 @@
   },
   {
    "owner": "NULLCOLORcat",
-   "repo": "dsh-Agent-team-fix",
-   "slug": "nullcolorcat-dsh-agent-team-fix",
+   "repo": "dsh-Smarter-Subagent-level",
+   "slug": "nullcolorcat-dsh-smarter-subagent-level",
    "name": "dsh-Agent-team-fix",
    "category": "model",
    "harness": "dsh",
-   "url": "https://github.com/NULLCOLORcat/dsh-Agent-team-fix",
+   "url": "https://github.com/NULLCOLORcat/dsh-Smarter-Subagent-level",
    "note": ""
   },
   {
@@ -83046,16 +83046,6 @@
   },
   {
    "owner": "regrevia",
-   "repo": "dsh-pianochart",
-   "slug": "regrevia-dsh-pianochart",
-   "name": "dsh-pianochart",
-   "category": "tools",
-   "harness": "dsh",
-   "url": "https://github.com/regrevia/dsh-pianochart",
-   "note": ""
-  },
-  {
-   "owner": "regrevia",
    "repo": "dsh-unlag",
    "slug": "regrevia-dsh-unlag",
    "name": "dsh-unlag",
@@ -83082,6 +83072,16 @@
    "category": "browser",
    "harness": "dsh",
    "url": "https://github.com/regrevia/Envoy",
+   "note": ""
+  },
+  {
+   "owner": "regrevia",
+   "repo": "everything2chart",
+   "slug": "regrevia-everything2chart",
+   "name": "dsh-pianochart",
+   "category": "tools",
+   "harness": "dsh",
+   "url": "https://github.com/regrevia/everything2chart",
    "note": ""
   },
   {
@@ -111236,12 +111236,12 @@
   },
   {
    "owner": "yakumioto",
-   "repo": "dsh-workspace-model",
-   "slug": "yakumioto-dsh-workspace-model",
+   "repo": "dsh-workspace-settings",
+   "slug": "yakumioto-dsh-workspace-settings",
    "name": "dsh-workspace-model",
    "category": "model",
    "harness": "dsh",
-   "url": "https://github.com/yakumioto/dsh-workspace-model",
+   "url": "https://github.com/yakumioto/dsh-workspace-settings",
    "note": ""
   },
   {
