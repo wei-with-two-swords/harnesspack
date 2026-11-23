@@ -123,14 +123,14 @@ body {
   box-shadow: none;
 }
 
-/* Drawers and menus sit on the surface color, without an outline. */
+/* Drawers and menus sit on the surface color, without an outline or shadow. */
 .drawer,
 .menu {
   --bs-drawer-bg: var(--hp-surface);
+  --bs-menu-box-shadow: none;
   border: 0;
   background: var(--hp-surface);
-  /* 这里不要shadow */
-  /* box-shadow: var(--hp-shadow-hover); */
+  box-shadow: none;
 }
 
 .hp-footer {
