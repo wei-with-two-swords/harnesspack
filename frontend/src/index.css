@@ -123,13 +123,14 @@ body {
   box-shadow: none;
 }
 
-/* Drawers and menus are elevated surfaces: white, soft shadow, no outline. */
+/* Drawers and menus sit on the surface color, without an outline. */
 .drawer,
 .menu {
   --bs-drawer-bg: var(--hp-surface);
   border: 0;
   background: var(--hp-surface);
-  box-shadow: var(--hp-shadow-hover);
+  /* 这里不要shadow */
+  /* box-shadow: var(--hp-shadow-hover); */
 }
 
 .hp-footer {
@@ -152,15 +153,13 @@ body {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(
-      720px circle at 92% -12%,
+    radial-gradient(720px circle at 92% -12%,
       color-mix(in srgb, var(--hp-accent) 14%, transparent),
-      transparent 68%
-    ),
+      transparent 68%),
     var(--hp-surface);
 }
 
-.hp-hero > * {
+.hp-hero>* {
   position: relative;
   z-index: 1;
 }
@@ -218,7 +217,7 @@ body {
   --bs-table-hover-bg: var(--hp-hover);
 }
 
-.table > :not(caption) > * > * {
+.table> :not(caption)>*>* {
   border-color: var(--hp-hairline);
 }
 
@@ -229,16 +228,16 @@ body {
   border-bottom: 0;
 }
 
-.list-group-flush > .list-group-item {
+.list-group-flush>.list-group-item {
   border-color: var(--hp-hairline);
   background: transparent;
 }
 
-.list-group-flush > .list-group-item + .list-group-item {
+.list-group-flush>.list-group-item+.list-group-item {
   border-top: 1px solid var(--hp-hairline);
 }
 
-.list-group-flush > .list-group-item:hover {
+.list-group-flush>.list-group-item:hover {
   background: var(--hp-hover);
 }
 
@@ -248,6 +247,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .card,
   .hp-row {
     transition: none;
