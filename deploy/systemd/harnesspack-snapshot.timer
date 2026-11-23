@@ -1,12 +1,12 @@
 [Unit]
-Description=HarnessPack snapshot sync timer (hourly, catches delayed Actions runs)
+Description=HarnessPack snapshot sync timer (every 15 minutes)
 
 [Timer]
-# GitHub Actions 的 schedule 会延迟，快照提交时间可能比 00:10 UTC 晚几个小时。
-# 每小时拉一次，sync.sh 在没有新提交时会立刻退出，所以空跑成本很低。
-OnCalendar=*-*-* *:20:00
+# 既然后台抓取已改到服务器执行（harnesspack-capture.timer），这里只负责把
+# 新提交的快照同步进数据库；每 15 分钟拉一次，无新提交时立即退出。
+OnCalendar=*:0/15
 Persistent=true
-RandomizedDelaySec=120
+RandomizedDelaySec=30
 
 [Install]
 WantedBy=timers.target

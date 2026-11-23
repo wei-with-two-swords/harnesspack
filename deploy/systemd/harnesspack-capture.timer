@@ -1,0 +1,14 @@
+[Unit]
+Description=HarnessPack capture timer (00:10, 01:40 and 03:10 UTC, with retries)
+
+[Timer]
+# Actions scheduled runs routinely start hours late; capture on the server at
+# the intended time and retry twice in case of a transient GitHub failure.
+OnCalendar=*-*-* 00:10:00 UTC
+OnCalendar=*-*-* 01:40:00 UTC
+OnCalendar=*-*-* 03:10:00 UTC
+Persistent=true
+RandomizedDelaySec=60
+
+[Install]
+WantedBy=timers.target

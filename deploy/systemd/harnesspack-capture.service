@@ -1,0 +1,15 @@
+[Unit]
+Description=HarnessPack server-side snapshot capture
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=APP_ROOT=/opt/harnesspack
+EnvironmentFile=/etc/harnesspack.env
+ExecStart=/usr/bin/bash /opt/harnesspack/deploy/scripts/capture.sh
+TimeoutStartSec=1800
+Nice=10
