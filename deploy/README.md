@@ -131,17 +131,24 @@ sudo -u harnesspack .venv/bin/python -m backend.app.cli stats
 sudo cp deploy/systemd/harnesspack-*.service deploy/systemd/harnesspack-*.timer /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now harnesspack-api.service
-sudo systemctl enable --now harnesspack-snapshot.timer harnesspack-backup.timer
+sudo systemctl enable --now harnesspack-capture.timer harnesspack-snapshot.timer harnesspack-backup.timer
 systemctl status harnesspack-api --no-pager
 curl -s http://127.0.0.1:8000/api/v1/health
 ```
 
-首次手动跑一次同步与备份：
+抓取任务需要 GitHub token，放在 `/etc/harnesspack.env`（600 权限、root 所有）：
 
 ```bash
+echo 'GITHUB_TOKEN=github_pat_xxx' | sudo install -m 600 /dev/stdin /etc/harnesspack.env
+```
+
+首次手动跑一次抓取、同步与备份：
+
+```bash
+sudo systemctl start harnesspack-capture.service     # 抓取 + 提交 + 入库，约 1–8 分钟
 sudo systemctl start harnesspack-snapshot.service
 sudo systemctl start harnesspack-backup.service
-journalctl -u harnesspack-snapshot -n 50 --no-pager
+journalctl -u harnesspack-capture -n 50 --no-pager
 ```
 
 ## 6. Nginx 与 TLS
@@ -166,12 +173,30 @@ sudo install -m 755 deploy/scripts/certbot-deploy.sh /etc/letsencrypt/renewal-ho
 sudo certbot renew --dry-run
 ```
 
-## 7. GitHub 仓库与 Actions
+## 7. 抓取调度：服务器直抓 + Actions 兜底
 
-- 仓库设为 **Public**，默认分支 `main`。
-- Actions 用内置 `GITHUB_TOKEN`（`permissions: contents: write`）即可，无需额外 secret。
-- 每天 UTC 00:10 由 `.github/workflows/snapshot.yml` 抓取并提交 `data/snapshots/YYYY-MM-DD.json`；服务器 00:20 同步。
-- 漏跑：在 Actions 页面 `Run workflow` 手动补跑；服务器下次 `git pull` 自动接上，缺失日期不伪造。
+GitHub Actions 的 `schedule` 经常延迟数小时（00:10 UTC 的任务可能 06:40 才启动），所以主抓取放在服务器上，Actions 只作为兜底。
+
+**服务器（主）**
+
+- `harnesspack-capture.timer`：每天 UTC **00:10 / 01:40 / 03:10** 触发；
+- `deploy/scripts/capture.sh`：拉目录 → `heal_seed` → `build_seed` → `snapshot_graphql --missing-only` → `validate` → 提交快照 → `cli ingest`；
+- 提交使用 **Deploy key**（仓库 → Settings → Deploy keys，勾选 Allow write access），
+  私钥放在 `/var/lib/harnesspack/.ssh/harnesspack_deploy`（即 harnesspack 用户的 home 下，**不在仓库目录内**）；
+- token 放在 `/etc/harnesspack.env`，由 systemd `EnvironmentFile` 注入；
+- 配额占用：12k 仓库约 123 个 GraphQL 请求 ≈ 123 points/次，PAT 每小时 5,000 points，三次重试约占 7%。
+
+**GitHub Actions（兜底）**
+
+- `.github/workflows/snapshot.yml` 仍是每天 00:10 UTC；当天快照已存在时走 `--missing-only`，只补缺失仓库；
+- 若服务器抓取失败，Actions 晚些时候仍能把当天快照补上；两边提交都幂等，冲突时 rebase 重试。
+
+**手工补抓**
+
+```bash
+sudo systemctl start harnesspack-capture.service
+journalctl -u harnesspack-capture -n 80 --no-pager
+```
 
 ## 8. 上线验收
 
@@ -189,9 +214,9 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 ## 9. 日常运维
 
 - **更新代码**：服务器 `git pull --ff-only` 后 `sudo systemctl restart harnesspack-api`。前端有改动时先按第 3 步 rsync。
-- **补数据**：本机 `GITHUB_TOKEN=... python scripts/snapshot.py --missing-only`，提交快照后服务器同步。
+- **补数据**：`sudo systemctl start harnesspack-capture.service`（会抓取、提交并入库）；也可在 Actions 页面 `Run workflow`。
 - **恢复备份**：`systemctl stop harnesspack-api` → 用 `backups/harnesspack-<date>.db` 覆盖 `data/harnesspack.db`（同时删 `-wal/-shm`）→ 重启。更彻底的做法是 `cli rebuild` 从快照重放。
-- **日志**：`journalctl -u harnesspack-api -f`、`-u harnesspack-snapshot`。
+- **日志**：`journalctl -u harnesspack-api -f`、`-u harnesspack-capture`、`-u harnesspack-snapshot`。
 - **监控**：`/health` 返回 200；Nginx access log 观察 5xx；内存超 400MB 时先查 stats/连接数。
 
 ## 10. Cloudflare（当前已启用）
