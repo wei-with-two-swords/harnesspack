@@ -38,9 +38,15 @@ export default function About() {
         </nav>
       </header>
 
-      <RulesSection />
-      <SponsorsSection />
-      <SubmitSection />
+      <div className="row">
+        <div className="col-12 lg:col-8">
+          <RulesSection />
+        </div>
+        <div className="col-12 lg:col-4">
+          <SponsorsSection />
+          <SubmitSection />
+        </div>
+      </div>
     </article>
   );
 }
