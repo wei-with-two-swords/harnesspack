@@ -25,6 +25,59 @@
 
 等 `dig +short harnesspack.dev` 返回服务器 IP 再做证书。
 
+## 0.1 SSH 密钥（服务器与 GitHub）
+
+生产机与 GitHub 都只走密钥，不使用密码：
+
+```bash
+# 本机生成专用密钥（无口令，便于自动化）
+ssh-keygen -t ed25519 -a 100 -C "harnesspack-deploy" -f ~/.ssh/harnesspack_ed25519 -N ""
+cat ~/.ssh/harnesspack_ed25519.pub
+```
+
+把公钥分别加到：
+
+1. **阿里云密钥对**（控制台 → 密钥对 → 导入/创建 → 绑定实例后重启）。阿里云会把公钥写入默认用户（通常 root）的 `~/.ssh/authorized_keys`。
+2. **GitHub**：<https://github.com/settings/ssh/new> → `Authentication key`，粘贴公钥。
+
+本机 `~/.ssh/config` 建议：
+
+```sshconfig
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/harnesspack_ed25519
+  IdentitiesOnly yes
+
+Host harnesspack
+  HostName <服务器 IP>
+  User root
+  IdentityFile ~/.ssh/harnesspack_ed25519
+  IdentitiesOnly yes
+```
+
+验证与切换：
+
+```bash
+ssh -T git@github.com                       # Hi <user>! You've successfully authenticated
+ssh harnesspack "hostname"                  # 密钥登录成功
+git remote set-url origin git@github.com:<owner>/harnesspack.git
+git fetch origin                            # 走 SSH，无需密码
+```
+
+服务器端应保持：
+
+```bash
+sudo sshd -T | grep -Ei 'passwordauthentication|pubkeyauthentication|permitrootlogin'
+# passwordauthentication no / pubkeyauthentication yes / permitrootlogin yes（按需调整）
+```
+
+部署脚本 `data/_cache/rsh.py` 支持 `SRV_KEY`（私钥路径），不再需要 `SRV_PW`：
+
+```bash
+SRV_HOST=<ip> SRV_KEY=~/.ssh/harnesspack_ed25519 python data/_cache/rsh.py run "hostname"
+```
+
 ## 1. 系统用户与目录
 
 ```bash
