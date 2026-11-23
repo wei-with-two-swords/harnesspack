@@ -46,9 +46,10 @@ git add data/catalog data/plugins.seed.json data/snapshots
 if git diff --cached --quiet; then
   log "no snapshot changes to commit"
 else
-  git commit -m "data: snapshot $DATE" || log "warn: commit failed"
+  git -c user.name="HarnessPack Capture" -c user.email="harnesspack@local" \
+    commit -m "data: snapshot $DATE" || log "warn: commit failed"
   if ! git push origin HEAD:main; then
-    git fetch origin main && git rebase origin/main || log "warn: rebase failed"
+    git pull --rebase --autostash origin main || log "warn: rebase failed"
     git push origin HEAD:main || log "warn: push failed (deploy key missing?)"
   fi
 fi
