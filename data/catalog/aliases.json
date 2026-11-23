@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-22T06:40:26Z",
+ "updated_at": "2026-11-23T03:52:33Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -360,6 +360,14 @@
    "slug": "jidekaixin2dian-dsh-toolgate",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:43Z"
+  },
+  "jminn0/dsh-go-plugin-adb": {
+   "owner": "JMINN0",
+   "repo": "android-adb-direct",
+   "url": "https://github.com/JMINN0/android-adb-direct",
+   "slug": "jminn0-android-adb-direct",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T03:52:15Z"
   },
   "kadima-code/dsh-subagent-fold": {
    "owner": "Kadima-code",
@@ -744,6 +752,14 @@
    "slug": "xiaoshihou514-archived-dsh-vision",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:35Z"
+  },
+  "xiaoxiaolelang-ai/dsh-next-steps": {
+   "owner": "xiaoxiaolelang-ai",
+   "repo": "dsh-next-move",
+   "url": "https://github.com/xiaoxiaolelang-ai/dsh-next-move",
+   "slug": "xiaoxiaolelang-ai-dsh-next-move",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-23T03:52:27Z"
   },
   "xuzihao66/dsh-token-frugal": {
    "owner": "Dreverie",
