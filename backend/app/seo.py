@@ -58,7 +58,8 @@ CATEGORY_LABELS: dict[str, str] = {
 }
 
 PAGES: dict[str, tuple[str, str]] = {
-    "about": ("数据口径", "名单来源、榜单公式、快照时间与异常标记是怎么算的。"),
+    "about": ("关于", "收录规则、推荐位与插件提交说明。"),
+    "about/data": ("数据口径", "名单来源、榜单公式、快照时间与异常标记是怎么算的。"),
     "about/rules": ("收录规则", "名单来自 awesome-dsh-plugin 精选清单，每日同步并保留退出机制。"),
     "about/changelog": ("名单变更", "上游清单每次同步的新增、移除与变更记录。"),
     "about/terms": ("使用条款与数据许可", "快照 CC BY 4.0、站点内容 CC BY-NC 4.0、代码 MIT 与 API 限流说明。"),

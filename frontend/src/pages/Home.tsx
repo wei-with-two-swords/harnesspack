@@ -173,7 +173,7 @@ export default function Home() {
                   推荐位独立成块、明确标注「赞助」，不参与任何榜单排名，也不影响收录资格。
                 </p>
               </div>
-              <Link className="btn btn-solid theme-warning flex-shrink-0" to="/sponsors">
+              <Link className="btn btn-solid theme-warning flex-shrink-0" to="/about#sponsors">
                 了解推荐位
               </Link>
             </div>

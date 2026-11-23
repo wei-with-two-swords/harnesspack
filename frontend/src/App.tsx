@@ -5,15 +5,13 @@ import Home from './pages/Home';
 import Rankings from './pages/Rankings';
 import PluginDetail from './pages/PluginDetail';
 import About from './pages/About';
-import Sponsors from './pages/Sponsors';
+import DataMethods from './pages/DataMethods';
 import Categories from './pages/Categories';
 import CategoryBoard from './pages/CategoryBoard';
 import Plugins from './pages/Plugins';
-import Rules from './pages/Rules';
 import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
-import Submit from './pages/Submit';
 import Status from './pages/Status';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
@@ -39,14 +37,15 @@ export default function App() {
         <Route path="/plugins" element={<Plugins />} />
         <Route path="/plugins/:slug" element={<PluginDetail />} />
         <Route path="/about" element={<About />} />
-        <Route path="/about/rules" element={<Rules />} />
+        <Route path="/about/data" element={<DataMethods />} />
+        <Route path="/about/rules" element={<Navigate to="/about#rules" replace />} />
         <Route path="/about/changelog" element={<Changelog />} />
         <Route path="/about/api" element={<ApiDocs />} />
         <Route path="/about/terms" element={<Terms />} />
         <Route path="/compare" element={<Compare />} />
-        <Route path="/submit" element={<Submit />} />
+        <Route path="/submit" element={<Navigate to="/about#submit" replace />} />
         <Route path="/status" element={<Status />} />
-        <Route path="/sponsors" element={<Sponsors />} />
+        <Route path="/sponsors" element={<Navigate to="/about#sponsors" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Layout>

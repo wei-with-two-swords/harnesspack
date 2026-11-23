@@ -57,7 +57,7 @@ export default function Changelog() {
         <h1 className="fs-3xl fw-semibold mb-1">名单变更</h1>
         <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
           每次同步上游清单后记录新增、移除与变更的仓库。完整规则见{' '}
-          <Link to="/about/rules" className={LINK}>
+          <Link to="/about#rules" className={LINK}>
             收录规则
           </Link>
           ，名单源文件与变更日志都在公开仓库里可审计。

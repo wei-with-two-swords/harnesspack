@@ -268,7 +268,7 @@ export default function PluginDetail() {
                 </a>
               </div>
               <p className="mt-2 mb-0 fs-xs fg-secondary">
-                收录标准见 <Link to="/about/rules" className="text-decoration-none">收录规则</Link>
+                收录标准见 <Link to="/about#rules" className="text-decoration-none">收录规则</Link>
                 ，接口说明见 <Link to="/about/api" className="text-decoration-none">API</Link>。
               </p>
             </div>

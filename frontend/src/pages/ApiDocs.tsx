@@ -41,7 +41,7 @@ export default function ApiDocs() {
           <a href="/api/v1/openapi.json" target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary">
             OpenAPI JSON
           </a>
-          <Link to="/about/rules" className="btn btn-outline theme-secondary">
+          <Link to="/about#rules" className="btn btn-outline theme-secondary">
             收录规则
           </Link>
         </div>

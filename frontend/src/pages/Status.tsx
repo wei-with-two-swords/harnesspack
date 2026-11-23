@@ -159,7 +159,7 @@ export default function Status() {
 
           <p className="fs-xs fg-secondary mb-0">
             口径说明见 <Link className={LINK} to="/about">数据口径</Link>；
-            发现异常可在 <Link className={LINK} to="/submit">提交插件</Link> 页发起申诉。
+            发现异常可在 <Link className={LINK} to="/about#submit">提交插件</Link> 页发起申诉。
             {data.snapshots.as_of ? ` 数据截至 ${formatDate(data.snapshots.as_of)}。` : ''}
           </p>
         </>

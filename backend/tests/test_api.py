@@ -96,13 +96,13 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/plugins/alpha-one" in body
     assert "http://testserver/categories" in body
     assert "http://testserver/plugins" in body
-    assert "http://testserver/about/rules" in body
+    assert "http://testserver/about/data" in body
     assert "http://testserver/rankings/category/workflow" in body
     assert "http://testserver/status" in body
     assert "http://testserver/about/terms" in body
     assert "http://testserver/about/api" in body
     assert "http://testserver/rankings/quality" in body
-    assert body.count("<url>") == 25
+    assert body.count("<url>") == 23
 
 
 def test_spa_missing_dist_returns_404(client):

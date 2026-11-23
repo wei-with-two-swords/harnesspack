@@ -252,3 +252,8 @@ body {
     transition: none;
   }
 }
+
+/* Keep in-page anchor targets clear of the sticky navbar. */
+.hp-anchor {
+  scroll-margin-top: 5.5rem;
+}

@@ -107,7 +107,7 @@ export default function Terms() {
               GitHub Issues
             </a>
             ；一般 7 天内回复。另见{' '}
-            <Link className={LINK} to="/about/rules">
+            <Link className={LINK} to="/about#rules">
               收录规则
             </Link>{' '}
             与{' '}

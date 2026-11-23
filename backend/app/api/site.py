@@ -68,13 +68,11 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
     urls += [_url_entry(f"{base}/plugins/{row['slug']}", lastmod) for row in rows]
     urls += [
         _url_entry(f"{base}/about", lastmod),
-        _url_entry(f"{base}/about/rules", lastmod),
+        _url_entry(f"{base}/about/data", lastmod),
         _url_entry(f"{base}/about/changelog", lastmod),
         _url_entry(f"{base}/about/terms", lastmod),
         _url_entry(f"{base}/about/api", lastmod),
-        _url_entry(f"{base}/sponsors", lastmod),
-        _url_entry(f"{base}/submit", lastmod),
-        _url_entry(f"{base}/status", lastmod),
+                _url_entry(f"{base}/status", lastmod),
     ]
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
