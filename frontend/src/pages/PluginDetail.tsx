@@ -143,13 +143,13 @@ export default function PluginDetail() {
               <RankChip label="总榜" value={data.rank_total} />
             </div>
             <div className="col-6 sm:col-3">
-              <RankChip label="竞速" value={data.rank_velocity} />
+              <RankChip label="24H" value={data.rank_velocity} />
             </div>
             <div className="col-6 sm:col-3">
-              <RankChip label="7 日增速" value={data.rank_growth7} />
+              <RankChip label="7 日区间增速" value={data.rank_growth7} />
             </div>
             <div className="col-6 sm:col-3">
-              <RankChip label="7 日黑马" value={data.rank_darkhorse7} />
+              <RankChip label="7 日名次跃升" value={data.rank_darkhorse7} />
             </div>
           </div>
         </div>

@@ -58,7 +58,7 @@ export default function SubmitSection() {
         <ul className="list-unstyled fs-sm fg-secondary mb-0">
           <li className="mb-1">· 上游合并后，我们下一次每日同步会自动收录（通常一天内）。</li>
           <li className="mb-1">· 新插件首日只有基线，第二天开始有「今日增量」和曲线。</li>
-          <li className="mb-1">· 满 30 天且 star ≥ 10 才会进入新秀榜。</li>
+          <li className="mb-1">· 满 30 天且 star ≥ 10 才会进入最新发布榜。</li>
           <li>· 被上游移除时保留历史曲线，但退出所有榜单。</li>
         </ul>
 

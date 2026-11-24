@@ -1,190 +1,200 @@
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
-import { useTitle } from '../lib/useTitle';
-import type { CategoriesResponse, Dashboard, RankingItem } from '../types';
-import { StatCard } from '../components/StatCard';
-import { DeltaBadge } from '../components/DeltaBadge';
+import { useI18n, categoryLabel } from '../lib/i18n';
+import { formatNumber } from '../lib/format';
+import { CatalogSidebar, viewToUrl, type View } from '../components/CatalogSidebar';
+import { GlobalSearch } from '../components/GlobalSearch';
+import { RankTable } from '../components/RankTable';
+import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
-import { categoryLabel, formatCompact, formatDate, formatDelta, formatNumber } from '../lib/format';
+import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem } from '../types';
 
-const SECTION_TITLE = 'fs-sm text-uppercase fg-secondary fw-semibold mb-0';
-const LINK = 'text-decoration-none';
+const PAGE_SIZE = 20;
+const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
 
-function MiniList({ items, empty }: { items: RankingItem[]; empty: string }) {
-  if (items.length === 0) return <EmptyState title={empty} />;
-  return (
-    <ol className="list-unstyled mb-0">
-      {items.map((item, index) => (
-        <li key={item.slug} className="hp-row">
-          <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 py-2 text-decoration-none">
-            <span className="num flex-shrink-0 text-center fs-sm fg-secondary" style={{ width: '1.5rem' }}>
-              {index + 1}
-            </span>
-            <span className="min-w-0 flex-grow-1">
-              <span className="d-block text-truncate fs-sm fw-medium">{item.name}</span>
-              <span className="d-block text-truncate fs-xs fg-secondary">
-                {item.owner}/{item.repo}
-              </span>
-            </span>
-            <span className="num fg-body flex-shrink-0 fs-sm">{formatNumber(item.stars)}</span>
-            <span className="d-none sm:d-block flex-shrink-0 text-end fs-xs" style={{ width: '6rem' }}>
-              <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ol>
-  );
+function parseView(params: URLSearchParams): View {
+  const board = params.get('board');
+  const range = params.get('range');
+  const category = params.get('category');
+  const sort = params.get('sort');
+  if (board === 'npm') {
+    return { kind: 'npm', range: ['1y', 'ytd', '24h', '7d', '30d'].includes(range ?? '') ? range! : '1y' };
+  }
+  if (board === 'category') {
+    return { kind: 'category', category: category ?? '' };
+  }
+  if (params.get('view') === 'directory') {
+    const s = sort === 'downloads' || sort === 'category' ? sort : 'stars';
+    return { kind: 'directory', sort: s };
+  }
+  const valid = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
+  return { kind: 'star', board: valid.includes(board ?? '') ? board! : 'total' };
+}
+
+function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    document.title = title;
+    const meta = document.querySelector<HTMLMetaElement>('meta[name="description"]');
+    if (meta) meta.content = description;
+  }, [title, description]);
 }
 
 export default function Home() {
-  useTitle(undefined, 'HarnessPack：DSH 插件 star 竞速榜，每天一次真实快照，不美化、不回填。');
-  const { data, error, loading } = useApi<Dashboard>(api.dashboard, []);
-  const { data: categories } = useApi<CategoriesResponse>(api.categories, []);
+  const { t, lang } = useI18n();
+  const [params] = useSearchParams();
+  const view = parseView(params);
+  const [window, setWindow] = useState(7);
+  const [page, setPage] = useState(0);
 
-  return (
-    <>
-      <section className="card hp-hero mb-4 lg:mb-5">
-        <div className="card-body p-4 p-lg-5">
-          <span className="badge theme-secondary badge-subtle mb-3 align-self-start">DSH PLUGINS · DAILY SNAPSHOT</span>
-          <h1 className="fs-4xl fw-semibold text-balance" style={{ maxWidth: '42rem' }}>
-            {data ? formatNumber(data.kpis.tracked) : '上万'} 个 DSH 插件，
-            <span className="fg-info">真实 star 增速</span>的竞速场
-          </h1>
-          <p className="mt-3 fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
-            名单与分类来自 awesome-dsh-plugin 精选清单，只收录可安装进 DeepSeek Harness（DSH）的插件。
-            每天 00:10 UTC 抓取一次 GitHub star，只展示可核对的数字：不回填、不美化、异常单独标注。
-          </p>
-          {data?.as_of ? (
-            <div className="mt-3 fs-xs fg-secondary">
-              数据截至 <span>{formatDate(data.as_of)}</span>
-            </div>
+  const cats = useApi<CategoriesResponse>(() => api.categories(), []);
+  const categories = (cats.data?.items ?? []).map((item) => item.category).sort();
+
+  useEffect(() => { setPage(0); }, [view.kind, window]);
+
+  const titleKey = view.kind === 'star' ? `board.${view.board}`
+    : view.kind === 'npm' ? `board.npm.${view.range}`
+    : view.kind === 'category' ? 'board.category'
+    : 'catalog.directory';
+  const descKey = view.kind === 'star' ? `desc.${view.board}`
+    : view.kind === 'npm' ? 'desc.npm'
+    : 'desc.category';
+  usePageMeta(`${t(titleKey)} · HarnessPack`, t(descKey));
+
+  const isBoard = view.kind === 'star' || view.kind === 'npm' || view.kind === 'category';
+  const boardName = view.kind === 'category' ? 'total' : view.kind === 'star' ? view.board : 'npm';
+  const range = view.kind === 'npm' ? view.range : undefined;
+  const boardWindow = view.kind === 'star' && WINDOW_BOARDS.has(view.board) ? window : undefined;
+  const catFilter = view.kind === 'category' ? view.category : undefined;
+
+  const boardState = useApi<BoardResponse>(
+    () => isBoard
+      ? api.board(boardName, boardWindow, catFilter, PAGE_SIZE, page * PAGE_SIZE, range)
+      : Promise.resolve({ board: '', as_of: null, window: null, items: [] } as BoardResponse),
+    [isBoard, boardName, boardWindow, range, catFilter, page],
+  );
+
+  const dirState = useApi<ListResponse<PluginListItem>>(
+    () => view.kind === 'directory' && view.sort !== 'category'
+      ? api.plugins({ sort: view.sort === 'downloads' ? 'downloads' : 'stars', limit: PAGE_SIZE, offset: page * PAGE_SIZE })
+      : Promise.resolve({ items: [], total: 0, as_of: null } as ListResponse<PluginListItem>),
+    [view.kind, view.kind === 'directory' ? view.sort : 'stars', page],
+  );
+
+  const period = view.kind === 'star' && WINDOW_BOARDS.has(view.board);
+
+  const header = (
+    <header className="mb-4">
+      <h1 className="fs-3xl fw-semibold mb-2">{t(titleKey)}</h1>
+      <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: '44rem' }}>{t(descKey)}</p>
+      <GlobalSearch />
+    </header>
+  );
+
+  const periodSwitch = period ? (
+    <div className="btn-group btn-group-sm mb-3" role="group" aria-label={t('table.period')}>
+      {[7, 30].map((option) => (
+        <button key={option} type="button" onClick={() => setWindow(option)}
+          aria-pressed={window === option}
+          className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}>
+          {t(option === 7 ? 'common.window7' : 'common.window30')}
+        </button>
+      ))}
+    </div>
+  ) : null;
+
+  const showCatChips = view.kind === 'category' || (view.kind === 'directory' && view.sort === 'category');
+  const categoryChips = showCatChips ? (
+    <div className="d-flex flex-wrap gap-2 mb-3">
+      <Link to={viewToUrl({ kind: 'category', category: '' })}
+        className={`btn btn-sm ${view.kind === 'category' && !view.category ? 'btn-solid theme-secondary' : 'btn-outline'}`}>
+        {t('catalog.all')}
+      </Link>
+      {categories.map((cat) => (
+        <Link key={cat} to={viewToUrl({ kind: 'category', category: cat })}
+          className={`btn btn-sm ${view.kind === 'category' && view.category === cat ? 'btn-solid theme-secondary' : 'btn-outline'}`}>
+          {categoryLabel(lang, cat)}
+        </Link>
+      ))}
+    </div>
+  ) : null;
+
+  const npmNotice = view.kind === 'npm' && boardState.data && !boardState.data.reason ? (
+    <div className="alert alert-secondary py-2 px-3 fs-xs mb-3" role="note">
+      {t('npm.notice')}
+      {boardState.data.last_active_day ? ` ${t('npm.lastActive')}: ${boardState.data.last_active_day}.` : ''}
+      {` ${t('npm.coverage')}: ${formatNumber(boardState.data.covered_packages ?? 0)}.`}
+    </div>
+  ) : null;
+
+  let content: React.ReactNode;
+  if (isBoard) {
+    const { data, error, loading } = boardState;
+    content = (
+      <>
+        {periodSwitch}
+        {categoryChips}
+        {npmNotice}
+        <div className="card overflow-hidden">
+          {error ? <div className="p-3"><ErrorState error={error} /></div> : null}
+          {loading ? <div className="p-3"><Loading /></div> : null}
+          {!loading && !error && data ? (
+            data.items.length ? (
+              <>
+                <RankTable items={data.items} board={boardName} />
+                <div className="px-4 pb-3">
+                  <Pager page={page} pageSize={PAGE_SIZE} total={data.total ?? data.items.length} onChange={setPage} />
+                </div>
+              </>
+            ) : <EmptyState bare title={t('common.noData')}>{data.reason ?? ''}</EmptyState>
           ) : null}
         </div>
-      </section>
-
-      {error ? <ErrorState error={error} /> : null}
-      {loading ? <Loading rows={2} /> : null}
-
-      {data ? (
-        <>
-          <section className="row g-3">
-            <div className="col-6 lg:col-3">
-              <StatCard label="收录插件" value={formatNumber(data.kpis.tracked)} hint="来自 awesome-dsh-plugin 清单" />
-            </div>
-            <div className="col-6 lg:col-3">
-              <StatCard
-                label="总 Star"
-                value={formatCompact(data.kpis.total_stars)}
-                hint={`今日净增 ${formatDelta(data.kpis.stars_delta)}`}
-              />
-            </div>
-            <div className="col-6 lg:col-3">
-              <StatCard label="快照天数" value={formatNumber(data.kpis.snapshots)} hint="自 2026-11-19 起" />
-            </div>
-            <div className="col-6 lg:col-3">
-              <StatCard label="今日入库" value={formatNumber(data.kpis.new_today)} hint="按首次观测计" />
-            </div>
-          </section>
-
-          <section className="row g-4 mt-1">
-            <div className="col-12 lg:col-6">
-              <div className="card h-100">
-                <div className="card-body">
-                  <div className="mb-1 d-flex align-items-center justify-content-between">
-                    <h2 className={SECTION_TITLE}>竞速榜</h2>
-                    <Link className={`${LINK} fs-xs`} to="/rankings/velocity">
-                      查看全部 →
+      </>
+    );
+  } else if (view.kind === 'directory' && view.sort === 'category') {
+    content = <>{categoryChips}<div className="card"><div className="card-body fs-sm fg-secondary">{t('desc.category')}</div></div></>;
+  } else {
+    const { data, error, loading } = dirState;
+    content = (
+      <div className="card overflow-hidden">
+        {error ? <div className="p-3"><ErrorState error={error} /></div> : null}
+        {loading ? <div className="p-3"><Loading /></div> : null}
+        {!loading && !error && data ? (
+          data.items.length ? (
+            <>
+              <ul className="list-group list-group-flush">
+                {data.items.map((item) => (
+                  <li key={item.slug} className="list-group-item list-group-item-action p-0">
+                    <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
+                      <span className="min-w-0 flex-grow-1">
+                        <span className="d-block text-truncate fw-medium">{item.name}</span>
+                        <span className="d-block text-truncate fs-xs fg-secondary">{item.owner}/{item.repo}</span>
+                      </span>
+                      <span className="num fs-sm fg-secondary flex-shrink-0">
+                        {view.sort === 'downloads'
+                          ? `${formatNumber(item.downloads ?? 0)} ↓`
+                          : `★ ${formatNumber(item.stars)}`}
+                      </span>
                     </Link>
-                  </div>
-                  <p className="mb-2 fs-xs fg-secondary">今日新增 star（相邻快照差）</p>
-                  <MiniList
-                    items={data.top_velocity}
-                    empty="数据积累中：首次快照已入库，明天开始计算单日增量"
-                  />
-                </div>
-              </div>
-            </div>
+                  </li>
+                ))}
+              </ul>
+              <div className="px-4 pb-3"><Pager page={page} pageSize={PAGE_SIZE} total={data.total} onChange={setPage} /></div>
+            </>
+          ) : <EmptyState bare title={t('common.noData')} />
+        ) : null}
+      </div>
+    );
+  }
 
-            <div className="col-12 lg:col-6">
-              <div className="card h-100">
-                <div className="card-body">
-                  <div className="mb-1 d-flex align-items-center justify-content-between">
-                    <h2 className={SECTION_TITLE}>总榜</h2>
-                    <Link className={`${LINK} fs-xs`} to="/rankings/total">
-                      查看全部 →
-                    </Link>
-                  </div>
-                  <p className="mb-2 fs-xs fg-secondary">当前 star 总量 · 并列按名称排序</p>
-                  <MiniList items={data.top_total} empty="暂无数据" />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="card mt-4">
-            <div className="card-body">
-              <div className="mb-1 d-flex align-items-center justify-content-between">
-                <h2 className={SECTION_TITLE}>新秀</h2>
-                <Link className={`${LINK} fs-xs`} to="/rankings/rookie">
-                  查看全部 →
-                </Link>
-              </div>
-              <p className="mb-2 fs-xs fg-secondary">仓库创建于 30 天内、已进入收录名单且 star ≥ 10</p>
-              <MiniList items={data.newest} empty="名单内暂无 30 天内新建的仓库" />
-            </div>
-          </section>
-
-          <section className="mt-4">
-            <div className="mb-2 d-flex align-items-center justify-content-between">
-              <h2 className={SECTION_TITLE}>分类榜</h2>
-              <Link className={`${LINK} fs-xs`} to="/categories">
-                全部分类 →
-              </Link>
-            </div>
-            <div className="row g-3">
-              {(categories?.items ?? []).slice(0, 6).map((item) => (
-                <div key={item.category} className="col-12 sm:col-6 lg:col-4">
-                  <Link
-                    to={`/rankings/category/${encodeURIComponent(item.category)}`}
-                    className="card h-100 text-decoration-none hp-hover"
-                  >
-                    <div className="card-body py-3">
-                      <div className="d-flex align-items-baseline justify-content-between">
-                        <span className="fs-sm fw-medium">{categoryLabel(item.category)}榜</span>
-                        <span className="num fs-xs fg-secondary">{item.count} 个</span>
-                      </div>
-                      <div className="mt-1 text-truncate fs-xs fg-secondary">
-                        {item.top.map((entry) => entry.name).join(' · ') || '暂无数据'}
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="card bg-subtle-warning mt-4 border-0">
-            <div className="card-body d-flex flex-column sm:flex-row sm:align-items-center justify-content-between gap-3">
-              <div>
-                <div className="fs-sm fw-medium fg-emphasis-warning">本周编辑精选 · 招商中</div>
-                <p className="mt-1 mb-0 fs-xs fg-secondary">
-                  推荐位独立成块、明确标注「赞助」，不参与任何榜单排名，也不影响收录资格。
-                </p>
-              </div>
-              <Link className="btn btn-solid theme-warning flex-shrink-0" to="/about#sponsors">
-                了解推荐位
-              </Link>
-            </div>
-          </section>
-
-          <p className="mt-4 mb-0 fs-xs fg-secondary">
-            数据口径：star 来自 GitHub 公开 API 的 stargazers_count；每日 UTC 00:10
-            快照一次，缺日不补。单日增量超过近 7 日均值 5 倍且缺乏合理解释的，标记为「异常」但不删除数据。
-          </p>
-        </>
-      ) : null}
-    </>
+  return (
+    <section>
+      {header}
+      <div className="workspace">
+        <CatalogSidebar view={view} />
+        <div className="min-w-0">{content}</div>
+      </div>
+    </section>
   );
 }

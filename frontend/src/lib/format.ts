@@ -5,19 +5,33 @@ export function formatNumber(value: number | null | undefined): string {
   return nf.format(value);
 }
 
-export function formatCompact(value: number | null | undefined): string {
+export function formatCompact(value: number | null | undefined, lang: 'en' | 'zh' = 'zh'): string {
   if (value === null || value === undefined) return '—';
-  if (Math.abs(value) >= 10000) {
-    const units = ['', '万', '亿'];
+  if (lang === 'zh') {
+    if (Math.abs(value) >= 10000) {
+      const units = ['', '万', '亿'];
+      let v = value;
+      let i = 0;
+      while (Math.abs(v) >= 10000 && i < units.length - 1) {
+        v /= 10000;
+        i += 1;
+      }
+      return `${v.toFixed(v >= 100 ? 0 : 1)}${units[i]}`;
+    }
+    return nf.format(value);
+  }
+  // English: K / M / B
+  if (Math.abs(value) >= 1000) {
+    const units = ['', 'K', 'M', 'B'];
     let v = value;
     let i = 0;
-    while (Math.abs(v) >= 10000 && i < units.length - 1) {
-      v /= 10000;
+    while (Math.abs(v) >= 1000 && i < units.length - 1) {
+      v /= 1000;
       i += 1;
     }
     return `${v.toFixed(v >= 100 ? 0 : 1)}${units[i]}`;
   }
-  return nf.format(value);
+  return new Intl.NumberFormat('en-US').format(value);
 }
 
 export function formatDelta(value: number | null | undefined): string {

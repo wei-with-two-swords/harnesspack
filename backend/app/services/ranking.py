@@ -17,6 +17,19 @@ BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie", "quality")
 NPM_BOARD = "npm"
 WINDOWS = (7, 30)
 NPM_WINDOWS = (7, 30)
+# npm board supports five windows; only 7d/30d carry a previous-window baseline.
+NPM_RANGES = ("24h", "7d", "30d", "1y", "ytd")
+NPM_RANGE_KEYS: dict[str, str] = {
+    "24h": "downloads_24h",
+    "7d": "downloads_7d",
+    "30d": "downloads_30d",
+    "1y": "downloads_1y",
+    "ytd": "downloads_ytd",
+}
+NPM_RANGE_PREV_KEYS: dict[str, str] = {
+    "7d": "downloads_prev_7d",
+    "30d": "downloads_prev_30d",
+}
 GROWTH_MIN_BASE = 50
 ROOKIE_DAYS = 30
 ROOKIE_MIN_STARS = 10
@@ -256,28 +269,36 @@ def npm_board(
     npm_dir: str | Path | None = None,
     window: int = 7,
     category: str | None = None,
+    range: str | None = None,
 ) -> dict[str, Any]:
     """Independent npm download board.
 
     Downloads come from the archived npm-registry summary (a separate namespace
     from stars). Each item carries stars only as a side-by-side reference; the
     two metrics are never combined into one score.
+
+    ``range`` selects one of the five npm windows (24h/7d/30d/1y/ytd). When
+    omitted, ``window`` (7 or 30) is used for backward compatibility. Only 7d
+    and 30d have a previous-window baseline; the other ranges report no rank
+    change.
     """
-    if window not in NPM_WINDOWS:
-        raise BoardError(f"window must be one of {NPM_WINDOWS}")
+    rng = range or f"{window}d"
+    if rng not in NPM_RANGES:
+        raise BoardError(f"range must be one of {NPM_RANGES}")
     summary = _load_npm_latest(npm_dir)
     if summary is None:
         return {
             "board": NPM_BOARD,
             "as_of": None,
-            "window": window,
+            "window": rng,
             "items": [],
             "reason": "npm 下载数据尚未采集。",
         }
 
     by_slug = summary.get("plugins") or {}
-    cur_key = f"downloads_{window}d"
-    prev_key = f"downloads_prev_{window}d"
+    cur_key = NPM_RANGE_KEYS[rng]
+    prev_key = NPM_RANGE_PREV_KEYS.get(rng)
+    has_prev = prev_key is not None
 
     rows = conn.execute(
         "SELECT slug, name, owner, repo, description, category, harness, url, "
@@ -293,14 +314,14 @@ def npm_board(
             continue
         if category and row["category"] != category:
             continue
-        prev = int(entry.get(prev_key) or 0)
+        prev = int(entry.get(prev_key) or 0) if prev_key else 0
         params[row["slug"]] = {**dict(row), "downloads": downloads, "prev": prev}
 
     prev_order = sorted(
         params.values(),
         key=lambda r: (-r["prev"], -r["downloads"], r["name"].lower(), r["slug"]),
     )
-    prev_rank = {r["slug"]: i + 1 for i, r in enumerate(prev_order) if r["prev"] > 0}
+    prev_rank = {r["slug"]: i + 1 for i, r in enumerate(prev_order) if r["prev"] > 0} if has_prev else {}
 
     ordered = sorted(
         params.values(),
@@ -309,7 +330,7 @@ def npm_board(
     items = []
     for i, row in enumerate(ordered):
         prev = row["prev"]
-        growth = (row["downloads"] - prev) / prev if prev > 0 else None
+        growth = (row["downloads"] - prev) / prev if has_prev and prev > 0 else None
         items.append(
             {
                 "slug": row["slug"],
@@ -326,17 +347,19 @@ def npm_board(
                 "repo_created_at": row["repo_created_at"],
                 "npm_package": row["npm_package"] or by_slug[row["slug"]].get("npm_package"),
                 "downloads": row["downloads"],
-                "downloads_prev": prev,
+                "downloads_prev": prev if has_prev else None,
                 "growth": round(growth, 6) if growth is not None else None,
                 "rank": i + 1,
-                "prev_rank": prev_rank.get(row["slug"]),
+                "prev_rank": prev_rank.get(row["slug"]) if has_prev else None,
+                "has_prev": has_prev,
             }
         )
     window_meta = summary.get("window") or {}
     return {
         "board": NPM_BOARD,
         "as_of": window_meta.get("end"),
-        "window": window,
+        "last_active_day": summary.get("last_active_day"),
+        "window": rng,
         "items": items,
         "source": summary.get("source"),
         "metric": summary.get("metric"),
@@ -354,9 +377,10 @@ def get_board(
     on: str | None = None,
     category: str | None = None,
     npm_dir: str | Path | None = None,
+    range: str | None = None,
 ) -> dict[str, Any]:
     if name == NPM_BOARD:
-        return npm_board(conn, npm_dir=npm_dir, window=window, category=category)
+        return npm_board(conn, npm_dir=npm_dir, window=window, category=category, range=range)
     if name == "rookie":
         return rookie_board(conn, on, category)
     return board(conn, name, window=window, on=on, category=category)
@@ -507,6 +531,7 @@ PLUGIN_SORTS = {
     "stars": "stars_latest DESC NULLS LAST, name COLLATE NOCASE, slug",
     "name": "name COLLATE NOCASE, slug",
     "recent": "repo_created_at DESC NULLS LAST, stars_latest DESC NULLS LAST, slug",
+    "downloads": "stars_latest DESC NULLS LAST, name COLLATE NOCASE, slug",  # replaced below when npm_dir given
 }
 
 
@@ -518,7 +543,52 @@ def list_plugins(
     limit: int = 50,
     offset: int = 0,
     sort: str = "stars",
+    npm_dir: str | Path | None = None,
 ) -> tuple[list[dict[str, Any]], int]:
+    """List plugins. ``sort='downloads'`` orders by npm 1-year downloads (desc);
+    plugins without npm data are omitted, consistent with the npm board."""
+    if sort == "downloads":
+        summary = _load_npm_latest(npm_dir)
+        downloads_by_slug: dict[str, int] = {}
+        if summary:
+            for slug, entry in (summary.get("plugins") or {}).items():
+                value = int(entry.get("downloads_1y") or 0)
+                if value > 0:
+                    downloads_by_slug[slug] = value
+        where = ["status = 'active'"]
+        params: list[Any] = []
+        if query:
+            where.append("(name LIKE ? OR owner LIKE ? OR repo LIKE ? OR slug LIKE ? OR description LIKE ?)")
+            like = f"%{query}%"
+            params.extend([like, like, like, like, like])
+        if harness:
+            where.append("harness = ?")
+            params.append(harness)
+        if category:
+            where.append("category = ?")
+            params.append(category)
+        clause = " AND ".join(where)
+        rows = conn.execute(
+            f"SELECT slug, name, owner, repo, description, category, harness, url, "
+            f"stars_latest, stars_at, repo_created_at, archived FROM plugins WHERE {clause}",
+            params,
+        ).fetchall()
+        matched = [r for r in rows if r["slug"] in downloads_by_slug]
+        matched.sort(key=lambda r: (-downloads_by_slug[r["slug"]], -(r["stars_latest"] or 0), r["name"].lower(), r["slug"]))
+        total = len(matched)
+        page = matched[offset : offset + limit]
+        items = [
+            {
+                "slug": r["slug"], "name": r["name"], "owner": r["owner"], "repo": r["repo"],
+                "description": r["description"], "category": r["category"], "harness": r["harness"],
+                "url": r["url"], "stars": r["stars_latest"], "stars_at": r["stars_at"],
+                "repo_created_at": r["repo_created_at"], "archived": bool(r["archived"]),
+                "downloads": downloads_by_slug[r["slug"]],
+            }
+            for r in page
+        ]
+        return items, total
+
     where = ["status = 'active'"]
     params: list[Any] = []
     if query:

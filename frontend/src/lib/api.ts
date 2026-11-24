@@ -42,9 +42,10 @@ async function get<T>(path: string): Promise<T> {
 
 export const api = {
   dashboard: () => get<Dashboard>('/api/v1/dashboard'),
-  board: (board: string, window?: number, category?: string, limit?: number, offset?: number) => {
+  board: (board: string, window?: number, category?: string, limit?: number, offset?: number, range?: string) => {
     const params = new URLSearchParams();
-    if (window) params.set('window', String(window));
+    if (range) params.set('range', range);
+    else if (window) params.set('window', String(window));
     if (category) params.set('category', category);
     if (limit) params.set('limit', String(limit));
     if (offset) params.set('offset', String(offset));
@@ -60,7 +61,7 @@ export const api = {
   plugins: (options: {
     query?: string;
     category?: string;
-    sort?: 'stars' | 'name' | 'recent';
+    sort?: 'stars' | 'downloads' | 'name' | 'recent';
     limit?: number;
     offset?: number;
   } = {}) => {

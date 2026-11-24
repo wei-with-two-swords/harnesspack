@@ -134,7 +134,7 @@ def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         draw.text((x, 252), value, font=_font(72), fill=WHITE)
         x += 340
 
-    draw.text((100, 380), "Ranks by real daily star velocity, not by ads.", font=_font(22), fill=GOLD)
+    draw.text((100, 380), "Ranks by real star growth, not by ads.", font=_font(22), fill=GOLD)
     draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
 
     buffer = io.BytesIO()
@@ -244,7 +244,7 @@ def feed(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Resp
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>'
         '<rss version="2.0"><channel>'
-        "<title>HarnessPack · DSH 插件竞速榜</title>"
+        "<title>HarnessPack · DSH 插件榜单</title>"
         f"<link>{xml_escape(base)}/</link>"
         "<description>每日一次 GitHub star 快照，按真实增量排名</description>"
         "<language>zh-CN</language>"

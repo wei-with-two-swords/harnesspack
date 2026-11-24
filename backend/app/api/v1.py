@@ -79,6 +79,7 @@ def rankings(
     board_name: str,
     request: Request,
     window: int = Query(7),
+    range: str | None = Query(None, max_length=8),
     category: str | None = Query(None, max_length=40),
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
@@ -87,7 +88,7 @@ def rankings(
     try:
         payload = ranking.get_board(
             conn, board_name, window=window, category=category,
-            npm_dir=request.app.state.settings.npm_downloads_dir,
+            npm_dir=request.app.state.settings.npm_downloads_dir, range=range,
         )
     except ranking.BoardError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -101,6 +102,7 @@ def rankings(
 
 @router.get("/plugins")
 def plugins(
+    request: Request,
     query: str | None = Query(None, max_length=80),
     harness: str | None = Query(None, max_length=20),
     category: str | None = Query(None, max_length=40),
@@ -119,6 +121,7 @@ def plugins(
         limit=limit,
         offset=offset,
         sort=sort,
+        npm_dir=request.app.state.settings.npm_downloads_dir,
     )
     return {"items": items, "total": total, "as_of": ranking.latest_date(conn)}
 

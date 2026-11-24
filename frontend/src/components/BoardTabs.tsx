@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 
 export const BOARD_TABS = [
-  { id: 'velocity', label: '竞速', hint: '今日新增 star' },
-  { id: 'growth', label: '增速', hint: '7 / 30 日涨幅' },
+  { id: 'velocity', label: '24H', hint: '最近 24 小时新增 star' },
+  { id: 'growth', label: '区间增速', hint: '7 / 30 日涨幅' },
   { id: 'total', label: '总榜', hint: 'star 总量' },
-  { id: 'darkhorse', label: '黑马', hint: '名次跃升' },
-  { id: 'rookie', label: '新秀', hint: '30 天内新建' },
-  { id: 'quality', label: '含金量', hint: '剔除异常日后的真实日均增速' },
+  { id: 'darkhorse', label: '名次跃升', hint: '区间内名次提升' },
+  { id: 'rookie', label: '最新发布', hint: '30 天内新建' },
+  { id: 'quality', label: '稳健增长', hint: '剔除异常日后的真实日均增速' },
   { id: 'npm', label: '下载', hint: 'npm 包下载量，star 仅作对照' },
 ] as const;
 

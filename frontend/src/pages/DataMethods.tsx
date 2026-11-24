@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom';
 import { useTitle } from '../lib/useTitle';
 
 const BOARDS = [
-  ['竞速', '当日新增 star：相邻两个快照的差值，越大越靠前。'],
-  ['增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
+  ['24H', '最近 24 小时新增 star：相邻两个快照的差值，越大越靠前。'],
+  ['区间增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
   ['总榜', '当前 star 总量；并列按名称升序。'],
-  ['黑马', '区间内总榜名次的跃升幅度。'],
-  ['新秀', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
-  ['含金量', '剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
+  ['名次跃升', '区间内总榜名次的跃升幅度。'],
+  ['最新发布', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
+  ['稳健增长', '剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
   ['下载', '按 npm registry 近 7 / 30 天的包下载量排序；star 仅作对照，不参与计算。'],
 ];
 
@@ -62,7 +62,7 @@ export default function DataMethods() {
           <p className="mt-3 mb-0 fs-xs fg-secondary">
             所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
             分类榜沿用上游清单的 23 个分类，只在同一分类内重新排名。
-            含金量榜先剔除被标为异常的单日涨幅，再按剩余天数的日均新增排序，至少 3 天样本才入榜；
+            稳健增长榜先剔除被标为异常的单日涨幅，再按剩余天数的日均新增排序，至少 3 天样本才入榜；
             覆盖率与失败清单见 <Link className={LINK} to="/status">数据状态</Link>。
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function DataMethods() {
             Star 数据归 GitHub 与各仓库作者所有。本项目非 GitHub 或任何 harness 官方项目。
           </p>
           <Link to="/rankings/velocity" className="btn btn-solid theme-secondary mt-2">
-            去看竞速榜 →
+            去看 24H 榜 →
           </Link>
         </div>
       </section>

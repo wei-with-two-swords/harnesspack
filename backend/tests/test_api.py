@@ -103,7 +103,9 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/about/api" in body
     assert "http://testserver/rankings/quality" in body
     assert "http://testserver/rankings/npm" in body
-    assert body.count("<url>") == 24
+    assert "http://testserver/api" in body
+    assert "http://testserver/community" in body
+    assert body.count("<url>") == 26
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -240,3 +242,11 @@ def test_rate_limit_returns_429(tmp_path, data_dir):
         assert blocked.status_code == 429
         assert blocked.headers["Retry-After"].isdigit()
         assert blocked.json()["detail"] == "rate limit exceeded"
+
+
+def test_new_static_pages_have_meta(client_with_dist):
+    for path in ("/api", "/community"):
+        response = client_with_dist.get(path)
+        assert response.status_code == 200
+        assert "<title>" in response.text
+        assert "noindex" not in response.text.lower()

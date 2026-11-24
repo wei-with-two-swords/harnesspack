@@ -19,13 +19,15 @@ export interface RankingItem {
   anomaly_days?: number;
   npm_package?: string | null;
   downloads?: number;
-  downloads_prev?: number;
+  downloads_prev?: number | null;
+  has_prev?: boolean;
 }
 
 export interface BoardResponse {
   board: string;
   as_of: string | null;
-  window: number | null;
+  window: number | string | null;
+  last_active_day?: string | null;
   items: RankingItem[];
   total?: number;
   reason?: string;
@@ -114,6 +116,7 @@ export interface PluginListItem {
   stars_at: string | null;
   repo_created_at: string | null;
   archived: boolean;
+  downloads?: number;
 }
 
 export interface ListResponse<T> {

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const SUFFIX = 'HarnessPack · DSH 插件竞速榜';
+const SUFFIX = 'HarnessPack · DSH 插件榜单';
 
 /** Set document.title (and the description meta) for the current page. */
 export function useTitle(title?: string, description?: string) {

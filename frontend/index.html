@@ -1,37 +1,35 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f8f9fa" />
+    <meta name="theme-color" content="#f7f8fa" />
     <meta
       name="description"
-      content="HarnessPack：DeepSeek Harness（DSH）插件排行榜，每日快照真实 star 增速，含竞速榜 / 增速榜 / 总榜 / 黑马榜 / 新秀榜。"
+      content="HarnessPack：DeepSeek Harness（DSH）插件排行榜，每日快照真实 star 增速，含 24H / 区间增速 / 总榜 / 名次跃升 / 最新发布 / npm 下载榜。"
     />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="HarnessPack" />
-    <meta property="og:title" content="HarnessPack · DSH 插件竞速榜" />
+    <meta property="og:title" content="HarnessPack · DSH 插件榜单" />
     <meta
       property="og:description"
       content="收录上万个 DeepSeek Harness 插件，按真实 star 增速排名，每天 UTC 00:10 抓取一次，不美化、不回填、异常单独标注。"
     />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="HarnessPack · DSH 插件竞速榜" />
+    <meta name="twitter:title" content="HarnessPack · DSH 插件榜单" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      // Apply the saved theme before first paint to avoid a flash of the wrong scheme.
+      // Apply saved preferences before first paint. Theme defaults to light; language to English.
       (function () {
         try {
-          var theme = localStorage.getItem('harnesspack-theme');
-          if (theme === 'light' || theme === 'dark') {
-            document.documentElement.setAttribute('data-bs-theme', theme);
-          }
+          var t = localStorage.getItem('harnesspack-theme');
+          document.documentElement.setAttribute('data-bs-theme', t === 'dark' ? 'dark' : 'light');
+          var lang = localStorage.getItem('harnesspack-lang');
+          document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
         } catch (e) {}
       })();
     </script>
-    <link rel="stylesheet" href="/vendor/bootstrap-6.0.0-alpha.1.min.css" />
-    <script type="module" src="/vendor/bootstrap-6.0.0-alpha.1.bundle.min.js"></script>
-    <title>HarnessPack · DSH 插件竞速榜</title>
+    <title>HarnessPack · DSH 插件榜单</title>
   </head>
   <body>
     <div id="root"></div>

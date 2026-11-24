@@ -1,1 +1,0 @@
-﻿Bootstrap v6.0.0-alpha.1 (https://getbootstrap.com) - MIT License - Copyright 2011-2026 The Bootstrap Authors

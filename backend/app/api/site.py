@@ -72,7 +72,9 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         _url_entry(f"{base}/about/changelog", lastmod),
         _url_entry(f"{base}/about/terms", lastmod),
         _url_entry(f"{base}/about/api", lastmod),
-                _url_entry(f"{base}/status", lastmod),
+        _url_entry(f"{base}/status", lastmod),
+        _url_entry(f"{base}/api", lastmod),
+        _url_entry(f"{base}/community", lastmod),
     ]
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'

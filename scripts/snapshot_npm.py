@@ -158,8 +158,28 @@ def _sum_prev_window(days: dict[str, int], window: int, end: dt.date | None = No
     )
 
 
+def _sum_ytd(days: dict[str, int], end: dt.date | None = None) -> int:
+    """Year to date: Jan 1 of the end year through end (inclusive)."""
+    end = end or TODAY
+    start = end.replace(month=1, day=1).isoformat()
+    return sum(count for day, count in days.items() if start <= day <= end.isoformat())
+
+
+def _last_active_day(archive: dict, end: dt.date) -> dt.date:
+    """Most recent day with any non-zero download (npm leaves newest days at 0)."""
+    active = {
+        day
+        for days in archive.values()
+        if isinstance(days, dict)
+        for day, count in days.items()
+        if count > 0 and day <= end.isoformat()
+    }
+    return dt.date.fromisoformat(max(active)) if active else end
+
+
 def _write_summary(archive: dict, package_to_slugs: dict, added: int, start: dt.date, end: dt.date) -> None:
     """Rebuild latest.json from the cumulative archive (used by both modes)."""
+    last_active = _last_active_day(archive, end)
     summary = {
         "source": "npm-registry",
         "metric": "downloads",
@@ -168,6 +188,7 @@ def _write_summary(archive: dict, package_to_slugs: dict, added: int, start: dt.
         "note": "Includes CI, mirrors, dependencies and repeated downloads; NOT user installs. Do not sum with stars.",
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "window": {"start": start.isoformat(), "end": end.isoformat()},
+        "last_active_day": last_active.isoformat(),
         "package_count": len(package_to_slugs),
         "covered_packages": sum(1 for p in package_to_slugs if archive.get(p)),
         "new_data_points": added,
@@ -177,8 +198,11 @@ def _write_summary(archive: dict, package_to_slugs: dict, added: int, start: dt.
         days = archive.get(package) or {}
         entry = {
             "npm_package": package,
+            "downloads_24h": _sum_window(days, 1, last_active),
             "downloads_7d": _sum_window(days, 7, end),
             "downloads_30d": _sum_window(days, 30, end),
+            "downloads_1y": _sum_window(days, 365, end),
+            "downloads_ytd": _sum_ytd(days, end),
             "downloads_prev_7d": _sum_prev_window(days, 7, end),
             "downloads_prev_30d": _sum_prev_window(days, 30, end),
             "days_in_archive": len(days),

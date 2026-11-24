@@ -12,6 +12,7 @@ import Plugins from './pages/Plugins';
 import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
+import Community from './pages/Community';
 import Status from './pages/Status';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
@@ -30,6 +31,8 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/api" element={<ApiDocs />} />
+        <Route path="/community" element={<Community />} />
         <Route path="/rankings" element={<Navigate to="/rankings/velocity" replace />} />
         <Route path="/rankings/category/:category" element={<CategoryBoard />} />
         <Route path="/rankings/:board" element={<Rankings />} />
