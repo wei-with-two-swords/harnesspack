@@ -43725,6 +43725,16 @@
    "note": ""
   },
   {
+   "owner": "idealismo10",
+   "repo": "traceless",
+   "slug": "idealismo10-traceless",
+   "name": "traceless",
+   "category": "session",
+   "harness": "dsh",
+   "url": "https://github.com/idealismo10/traceless",
+   "note": ""
+  },
+  {
    "owner": "IDKURLOVE",
    "repo": "dsh-reset-button",
    "slug": "idkurlove-dsh-reset-button",
@@ -46282,6 +46292,16 @@
    "category": "fun",
    "harness": "dsh",
    "url": "https://github.com/jasonz-ai-2026/dsh-scifi-story",
+   "note": ""
+  },
+  {
+   "owner": "Jasper-Alaric",
+   "repo": "dsh-hybrid-memory",
+   "slug": "jasper-alaric-dsh-hybrid-memory",
+   "name": "dsh-hybrid-memory",
+   "category": "memory",
+   "harness": "dsh",
+   "url": "https://github.com/Jasper-Alaric/dsh-hybrid-memory",
    "note": ""
   },
   {
@@ -56745,16 +56765,6 @@
    "note": ""
   },
   {
-   "owner": "Lhy220402",
-   "repo": "traceless",
-   "slug": "lhy220402-traceless",
-   "name": "traceless",
-   "category": "session",
-   "harness": "dsh",
-   "url": "https://github.com/Lhy220402/traceless",
-   "note": ""
-  },
-  {
    "owner": "Lhy723",
    "repo": "dsh-agent-canvas",
    "slug": "lhy723-dsh-agent-canvas",
@@ -57342,16 +57352,6 @@
    "category": "ui",
    "harness": "dsh",
    "url": "https://github.com/liggest/dsh-alt-enter-newline",
-   "note": ""
-  },
-  {
-   "owner": "LighghtEeloo",
-   "repo": "dsh-vcs-panel",
-   "slug": "lighghteeloo-dsh-vcs-panel",
-   "name": "dsh-vcs-panel",
-   "category": "git",
-   "harness": "dsh",
-   "url": "https://github.com/LighghtEeloo/dsh-vcs-panel",
    "note": ""
   },
   {
@@ -68475,6 +68475,16 @@
    "note": ""
   },
   {
+   "owner": "miorin-chan",
+   "repo": "dsh-vcs-panel",
+   "slug": "miorin-chan-dsh-vcs-panel",
+   "name": "dsh-vcs-panel",
+   "category": "git",
+   "harness": "dsh",
+   "url": "https://github.com/miorin-chan/dsh-vcs-panel",
+   "note": ""
+  },
+  {
    "owner": "miqian-nomad",
    "repo": "dsh-browser-playwright-codex",
    "slug": "miqian-nomad-dsh-browser-playwright-codex",
@@ -73782,16 +73792,6 @@
    "category": "ui",
    "harness": "dsh",
    "url": "https://github.com/NONEMIN/dsh-sidebar-panels",
-   "note": ""
-  },
-  {
-   "owner": "nonenameless",
-   "repo": "dsh-hybrid-memory",
-   "slug": "nonenameless-dsh-hybrid-memory",
-   "name": "dsh-hybrid-memory",
-   "category": "memory",
-   "harness": "dsh",
-   "url": "https://github.com/nonenameless/dsh-hybrid-memory",
    "note": ""
   },
   {
@@ -84136,6 +84136,16 @@
   },
   {
    "owner": "regrevia",
+   "repo": "adb-mobile-use",
+   "slug": "regrevia-adb-mobile-use",
+   "name": "dsh-mobile-use",
+   "category": "remote",
+   "harness": "dsh",
+   "url": "https://github.com/regrevia/adb-mobile-use",
+   "note": ""
+  },
+  {
+   "owner": "regrevia",
    "repo": "dsh-chat-link-actions",
    "slug": "regrevia-dsh-chat-link-actions",
    "name": "dsh-chat-link-actions",
@@ -84182,26 +84192,6 @@
    "category": "dev",
    "harness": "dsh",
    "url": "https://github.com/regrevia/dsh-lifeguard",
-   "note": ""
-  },
-  {
-   "owner": "regrevia",
-   "repo": "dsh-lite-memory",
-   "slug": "regrevia-dsh-lite-memory",
-   "name": "dsh-lite-memory",
-   "category": "memory",
-   "harness": "dsh",
-   "url": "https://github.com/regrevia/dsh-lite-memory",
-   "note": ""
-  },
-  {
-   "owner": "regrevia",
-   "repo": "dsh-mobile-use",
-   "slug": "regrevia-dsh-mobile-use",
-   "name": "dsh-mobile-use",
-   "category": "remote",
-   "harness": "dsh",
-   "url": "https://github.com/regrevia/dsh-mobile-use",
    "note": ""
   },
   {
@@ -84262,6 +84252,16 @@
    "category": "dev",
    "harness": "dsh",
    "url": "https://github.com/regrevia/github-overview",
+   "note": ""
+  },
+  {
+   "owner": "regrevia",
+   "repo": "lite-memory",
+   "slug": "regrevia-lite-memory",
+   "name": "dsh-lite-memory",
+   "category": "memory",
+   "harness": "dsh",
+   "url": "https://github.com/regrevia/lite-memory",
    "note": ""
   },
   {
@@ -99635,16 +99635,6 @@
    "note": ""
   },
   {
-   "owner": "tsurumi-yizhou",
-   "repo": "dsh-live-notify",
-   "slug": "tsurumi-yizhou-dsh-live-notify",
-   "name": "dsh-live-notify",
-   "category": "notify",
-   "harness": "dsh",
-   "url": "https://github.com/tsurumi-yizhou/dsh-live-notify",
-   "note": ""
-  },
-  {
    "owner": "Tsutsutsuu",
    "repo": "dsh-quote-selection",
    "slug": "tsutsutsuu-dsh-quote-selection",
@@ -114812,6 +114802,16 @@
    "category": "memory",
    "harness": "dsh",
    "url": "https://github.com/yihefeikong-rgb/dsh-cc-haha-memory",
+   "note": ""
+  },
+  {
+   "owner": "yihtseu",
+   "repo": "dsh-live-notify",
+   "slug": "yihtseu-dsh-live-notify",
+   "name": "dsh-live-notify",
+   "category": "notify",
+   "harness": "dsh",
+   "url": "https://github.com/yihtseu/dsh-live-notify",
    "note": ""
   },
   {

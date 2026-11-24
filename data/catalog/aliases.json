@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-24T01:20:38Z",
+ "updated_at": "2026-11-24T01:41:13Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -481,6 +481,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:54Z"
   },
+  "lhy220402/traceless": {
+   "owner": "idealismo10",
+   "repo": "traceless",
+   "url": "https://github.com/idealismo10/traceless",
+   "slug": "idealismo10-traceless",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:40:54Z"
+  },
   "lianzhimanye/dsh-bard-0.03": {
    "owner": "lianzhimanye",
    "repo": "dsh-bard-0.10",
@@ -496,6 +504,14 @@
    "slug": "miorin-chan-dsh-next-actions",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-23T04:20:25Z"
+  },
+  "lighghteeloo/dsh-vcs-panel": {
+   "owner": "miorin-chan",
+   "repo": "dsh-vcs-panel",
+   "url": "https://github.com/miorin-chan/dsh-vcs-panel",
+   "slug": "miorin-chan-dsh-vcs-panel",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:40:54Z"
   },
   "lihongxu0221/dsh-workspace-browser": {
    "owner": "lihongxu0221",
@@ -577,6 +593,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:13Z"
   },
+  "nonenameless/dsh-hybrid-memory": {
+   "owner": "Jasper-Alaric",
+   "repo": "dsh-hybrid-memory",
+   "url": "https://github.com/Jasper-Alaric/dsh-hybrid-memory",
+   "slug": "jasper-alaric-dsh-hybrid-memory",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:40:59Z"
+  },
   "nullcolorcat/dsh-agent-team-fix": {
    "owner": "NULLCOLORcat",
    "repo": "dsh-Smarter-Subagent-level",
@@ -624,6 +648,22 @@
    "slug": "qiu-kkkk-deepseek-harness-bt",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:15Z"
+  },
+  "regrevia/dsh-lite-memory": {
+   "owner": "regrevia",
+   "repo": "lite-memory",
+   "url": "https://github.com/regrevia/lite-memory",
+   "slug": "regrevia-lite-memory",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:41:00Z"
+  },
+  "regrevia/dsh-mobile-use": {
+   "owner": "regrevia",
+   "repo": "adb-mobile-use",
+   "url": "https://github.com/regrevia/adb-mobile-use",
+   "slug": "regrevia-adb-mobile-use",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:41:00Z"
   },
   "regrevia/dsh-pianochart": {
    "owner": "regrevia",
@@ -680,6 +720,14 @@
    "slug": "tkaiz0406-dsh-delegation-hub",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:22Z"
+  },
+  "tsurumi-yizhou/dsh-live-notify": {
+   "owner": "yihtseu",
+   "repo": "dsh-live-notify",
+   "url": "https://github.com/yihtseu/dsh-live-notify",
+   "slug": "yihtseu-dsh-live-notify",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-24T01:41:04Z"
   },
   "vast-ai-research/tripo3d-plugin-dsh": {
    "owner": "Tripo-Developer",
