@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
+import { useThemeVersion, isDarkMode } from '../lib/theme';
 import { formatNumber } from '../lib/format';
 import { type View } from '../components/CatalogSidebar';
 import { BoardSwitcher } from '../components/BoardSwitcher';
@@ -50,6 +51,7 @@ function usePageMeta(title: string, description: string) {
 
 export default function Home() {
   const { t } = useI18n();
+  useThemeVersion();
   const [params] = useSearchParams();
   const view = parseView(params);
   const currentWindow = view.kind === 'star' ? (view.window ?? 7) : 7;
@@ -166,14 +168,27 @@ export default function Home() {
     <section>
       <div className="hp-hero p-4 lg:p-5 mb-4">
         <div className="hero-grid">
-          <div>
-            <h1 className="hero-title">{heroTitle}</h1>
-            <p className="hero-lead">{t('hero.lead')}</p>
+          <div className="hero-copy">
+            <img
+              className="hero-logo"
+              src={isDarkMode() ? '/favicon-dark.svg' : '/favicon-light.svg'}
+              alt=""
+              aria-hidden="true"
+              width="88"
+              height="88"
+            />
+            <div className="min-w-0">
+              <h1 className="hero-title">{heroTitle}</h1>
+              <p className="hero-lead">{t('hero.lead')}</p>
+              <div className="hero-updated">
+                <span className="hero-updated-dot" aria-hidden="true" />
+                <span>{updated ? `${t('hero.asOf')} ${updated}` : '—'}</span>
+              </div>
+            </div>
           </div>
           <div className="hero-stat">
             <div className="hero-stat-label">{t('hero.tracked')}</div>
             <div className="hero-stat-value">{tracked ? formatNumber(tracked) : '—'}</div>
-            <div className="hero-stat-foot">{updated ? `${t('hero.updated')} ${updated}` : '—'}</div>
           </div>
         </div>
         <div className="mt-4"><GlobalSearch /></div>
