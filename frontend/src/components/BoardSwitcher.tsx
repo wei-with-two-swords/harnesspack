@@ -65,6 +65,14 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
       ? (view.board === 'growth' ? `growth${view.window === 30 ? '30' : '7'}` : view.board)
       : '';
   const showCategories = view.kind === 'category' || (view.kind === 'directory' && view.sort === 'category');
+  const inDirectoryCategory = view.kind === 'directory' && view.sort === 'category';
+  const dirCategory = inDirectoryCategory && view.kind === 'directory' ? (view.category ?? '') : '';
+  const categoryHref = (cat: string) => inDirectoryCategory
+    ? viewToUrl({ kind: 'directory', sort: 'category', category: cat })
+    : viewToUrl({ kind: 'category', category: cat });
+  const categoryActive = (cat: string) => inDirectoryCategory
+    ? dirCategory === cat
+    : view.kind === 'category' && view.category === cat;
 
   return (
     <div className="mb-4">
@@ -98,18 +106,18 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
       {showCategories ? (
         <div className="switch-chips mt-2">
           <Link
-            to={viewToUrl({ kind: 'category', category: '' })}
+            to={categoryHref('')}
             title={categoryDescription(lang, 'all')}
-            className={`switch-chip${view.kind === 'category' && !view.category ? ' active' : ''}`}
+            className={`switch-chip${categoryActive('') ? ' active' : ''}`}
           >
             {t('catalog.all')}
           </Link>
           {categories.map((cat) => (
             <Link
               key={cat}
-              to={viewToUrl({ kind: 'category', category: cat })}
+              to={categoryHref(cat)}
               title={categoryDescription(lang, cat)}
-              className={`switch-chip${view.kind === 'category' && view.category === cat ? ' active' : ''}`}
+              className={`switch-chip${categoryActive(cat) ? ' active' : ''}`}
             >
               {categoryLabel(lang, cat)}
             </Link>

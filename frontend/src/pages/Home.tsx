@@ -32,7 +32,7 @@ function parseView(params: URLSearchParams): View {
   }
   if (params.get('view') === 'directory') {
     const s = sort === 'downloads' || sort === 'category' ? sort : 'stars';
-    return { kind: 'directory', sort: s };
+    return { kind: 'directory', sort: s, category: s === 'category' ? (category ?? '') : undefined };
   }
   const valid = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
   const selected = valid.includes(board ?? '') ? board! : 'total';
@@ -61,7 +61,14 @@ export default function Home() {
   const tracked = status.data?.database.active ?? 0;
   const updated = status.data?.snapshots.as_of ?? null;
 
-  useEffect(() => { setPage(0); }, [view.kind, view.kind === 'star' ? view.board : '', currentWindow]);
+  useEffect(() => {
+    setPage(0);
+  }, [
+    view.kind,
+    view.kind === 'star' ? view.board : '',
+    view.kind === 'directory' ? `${view.sort}:${view.category ?? ''}` : '',
+    currentWindow,
+  ]);
 
   const titleKey = view.kind === 'star' && view.board === 'growth'
     ? (currentWindow === 30 ? 'board.window30' : 'board.window7')
@@ -87,11 +94,18 @@ export default function Home() {
     [isBoard, boardName, boardWindow, range, catFilter, page],
   );
 
+  const dirSort = view.kind === 'directory' && view.sort === 'downloads' ? 'downloads' : 'stars';
+  const dirCategory = view.kind === 'directory' && view.sort === 'category' ? (view.category || '') : '';
   const dirState = useApi<ListResponse<PluginListItem>>(
-    () => view.kind === 'directory' && view.sort !== 'category'
-      ? api.plugins({ sort: view.sort === 'downloads' ? 'downloads' : 'stars', limit: PAGE_SIZE, offset: page * PAGE_SIZE })
+    () => view.kind === 'directory'
+      ? api.plugins({
+        sort: dirSort,
+        category: dirCategory || undefined,
+        limit: PAGE_SIZE,
+        offset: page * PAGE_SIZE,
+      })
       : Promise.resolve({ items: [], total: 0, as_of: null } as ListResponse<PluginListItem>),
-    [view.kind, view.kind === 'directory' ? view.sort : 'stars', page],
+    [view.kind, dirSort, dirCategory, page],
   );
 
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
@@ -126,8 +140,6 @@ export default function Home() {
         </div>
       </>
     );
-  } else if (view.kind === 'directory' && view.sort === 'category') {
-    content = <div className="card"><div className="card-body fs-sm fg-secondary">{t('desc.category')}</div></div>;
   } else {
     const { data, error, loading } = dirState;
     content = (

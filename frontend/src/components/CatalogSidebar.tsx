@@ -6,7 +6,7 @@ export type View =
   | { kind: 'star'; board: string; window?: number }
   | { kind: 'npm'; range: string }
   | { kind: 'category'; category: string }
-  | { kind: 'directory'; sort: 'stars' | 'downloads' | 'category' };
+  | { kind: 'directory'; sort: 'stars' | 'downloads' | 'category'; category?: string };
 
 const STAR_BOARDS = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
 const NPM_RANGES = ['1y', 'ytd', '24h', '7d', '30d'];
@@ -16,7 +16,7 @@ export function viewToUrl(view: View): string {
     case 'star': return `/?board=${view.board}${view.window ? `&window=${view.window}` : ''}`;
     case 'npm': return `/?board=npm&range=${view.range}`;
     case 'category': return `/?board=category${view.category ? `&category=${view.category}` : ''}`;
-    case 'directory': return `/?view=directory&sort=${view.sort}`;
+    case 'directory': return `/?view=directory&sort=${view.sort}${view.sort === 'category' && view.category ? `&category=${encodeURIComponent(view.category)}` : ''}`;
   }
 }
 
