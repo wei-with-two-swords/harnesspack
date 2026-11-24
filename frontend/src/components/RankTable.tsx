@@ -10,12 +10,12 @@ function rankDelta(item: RankingItem): number | null {
   return item.prev_rank - item.rank;
 }
 
-function RankMedal({ rank }: { rank: number }) {
+export function RankMedal({ rank }: { rank: number }) {
   const tone = rank === 1 ? ' gold' : rank === 2 ? ' silver' : rank === 3 ? ' bronze' : '';
   return <span className={`rank-medal${tone}`}>{rank}</span>;
 }
 
-function Avatar({ owner }: { owner: string }) {
+export function Avatar({ owner }: { owner: string }) {
   const [failed, setFailed] = useState(false);
   if (failed || !owner) {
     return (

@@ -113,6 +113,7 @@ const en: Dict = {
   'table.view': 'View',
   'table.sort': 'Sort',
   'table.period': 'Period',
+  'plugin.created': 'Created',
   // npm notice
   'npm.notice': 'Downloads are npm tarball downloads (includes CI, mirrors and dependencies) — not user installs. Plugins without an npm package are excluded, not counted as zero.',
   'npm.lastActive': 'Latest complete day',
@@ -220,6 +221,7 @@ const zh: Dict = {
   'table.view': '查看',
   'table.sort': '排序',
   'table.period': '周期',
+  'plugin.created': '建于',
   'npm.notice': '下载量为 npm tarball 下载数（含 CI、镜像与依赖），并非真实安装量；无 npm 包的插件不在榜内，不计为 0。',
   'npm.lastActive': '最近完整数据日',
   'npm.coverage': '覆盖包数',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
@@ -8,6 +8,7 @@ import { type View } from '../components/CatalogSidebar';
 import { BoardSwitcher } from '../components/BoardSwitcher';
 import { GlobalSearch } from '../components/GlobalSearch';
 import { RankTable } from '../components/RankTable';
+import { PluginList } from '../components/PluginList';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, StatusResponse } from '../types';
@@ -136,23 +137,11 @@ export default function Home() {
         {!loading && !error && data ? (
           data.items.length ? (
             <>
-              <ul className="list-group list-group-flush">
-                {data.items.map((item) => (
-                  <li key={item.slug} className="list-group-item list-group-item-action p-0">
-                    <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
-                      <span className="min-w-0 flex-grow-1">
-                        <span className="d-block text-truncate fw-medium">{item.name}</span>
-                        <span className="d-block text-truncate text-xs fg-secondary">{item.owner}/{item.repo}</span>
-                      </span>
-                      <span className="num fs-sm fg-secondary flex-shrink-0">
-                        {view.sort === 'downloads'
-                          ? `${formatNumber(item.downloads ?? 0)} ↓`
-                          : `★ ${formatNumber(item.stars ?? 0)}`}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+              <PluginList
+                items={data.items}
+                sort={view.sort === 'downloads' ? 'downloads' : 'stars'}
+                offset={page * PAGE_SIZE}
+              />
               <div className="px-4 pb-3"><Pager page={page} pageSize={PAGE_SIZE} total={data.total} onChange={setPage} /></div>
             </>
           ) : <EmptyState bare title={t('common.noData')} />
