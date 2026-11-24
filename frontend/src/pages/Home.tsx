@@ -14,12 +14,15 @@ import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, S
 
 const PAGE_SIZE = 20;
 const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
+const PERIOD_BOARDS = new Set(['darkhorse', 'quality']);
 
 function parseView(params: URLSearchParams): View {
   const board = params.get('board');
   const range = params.get('range');
   const category = params.get('category');
   const sort = params.get('sort');
+  const rawWindow = params.get('window');
+  const window = rawWindow === '30' ? 30 : rawWindow === '7' ? 7 : undefined;
   if (board === 'npm') {
     return { kind: 'npm', range: ['1y', 'ytd', '24h', '7d', '30d'].includes(range ?? '') ? range! : '1y' };
   }
@@ -31,7 +34,7 @@ function parseView(params: URLSearchParams): View {
     return { kind: 'directory', sort: s };
   }
   const valid = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
-  return { kind: 'star', board: valid.includes(board ?? '') ? board! : 'total' };
+  return { kind: 'star', board: valid.includes(board ?? '') ? board! : 'total', window };
 }
 
 function usePageMeta(title: string, description: string) {
@@ -44,10 +47,17 @@ function usePageMeta(title: string, description: string) {
 
 export default function Home() {
   const { t } = useI18n();
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const view = parseView(params);
-  const [window, setWindow] = useState(7);
+  const currentWindow = view.kind === 'star' ? (view.window ?? 7) : 7;
   const [page, setPage] = useState(0);
+
+  const setWindow = (value: number) => {
+    const next = new URLSearchParams(params);
+    if (value === 7) next.delete('window');
+    else next.set('window', String(value));
+    setParams(next);
+  };
 
   const cats = useApi<CategoriesResponse>(() => api.categories(), []);
   const status = useApi<StatusResponse>(() => api.status(), []);
@@ -55,9 +65,11 @@ export default function Home() {
   const tracked = status.data?.database.active ?? 0;
   const updated = status.data?.snapshots.as_of ?? null;
 
-  useEffect(() => { setPage(0); }, [view.kind, window]);
+  useEffect(() => { setPage(0); }, [view.kind, view.kind === 'star' ? view.board : '', currentWindow]);
 
-  const titleKey = view.kind === 'star' ? `board.${view.board}`
+  const titleKey = view.kind === 'star' && view.board === 'growth'
+    ? (currentWindow === 30 ? 'board.window30' : 'board.window7')
+    : view.kind === 'star' ? `board.${view.board}`
     : view.kind === 'npm' ? `board.npm.${view.range}`
     : view.kind === 'category' ? 'board.category'
     : 'catalog.directory';
@@ -69,7 +81,7 @@ export default function Home() {
   const isBoard = view.kind === 'star' || view.kind === 'npm' || view.kind === 'category';
   const boardName = view.kind === 'category' ? 'total' : view.kind === 'star' ? view.board : 'npm';
   const range = view.kind === 'npm' ? view.range : undefined;
-  const boardWindow = view.kind === 'star' && WINDOW_BOARDS.has(view.board) ? window : undefined;
+  const boardWindow = view.kind === 'star' && WINDOW_BOARDS.has(view.board) ? currentWindow : undefined;
   const catFilter = view.kind === 'category' ? view.category : undefined;
 
   const boardState = useApi<BoardResponse>(
@@ -86,7 +98,7 @@ export default function Home() {
     [view.kind, view.kind === 'directory' ? view.sort : 'stars', page],
   );
 
-  const period = view.kind === 'star' && WINDOW_BOARDS.has(view.board);
+  const period = view.kind === 'star' && PERIOD_BOARDS.has(view.board);
 
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
 
@@ -94,8 +106,8 @@ export default function Home() {
     <div className="btn-group btn-group-sm mb-3" role="group" aria-label={t('table.period')}>
       {[7, 30].map((option) => (
         <button key={option} type="button" onClick={() => setWindow(option)}
-          aria-pressed={window === option}
-          className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}>
+          aria-pressed={currentWindow === option}
+          className={`btn ${currentWindow === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}>
           {t(option === 7 ? 'common.window7' : 'common.window30')}
         </button>
       ))}

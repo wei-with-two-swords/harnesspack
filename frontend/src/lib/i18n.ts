@@ -79,6 +79,8 @@ const en: Dict = {
   // boards
   'board.velocity': '24H',
   'board.growth': 'Growth',
+  'board.window7': '7D',
+  'board.window30': '30D',
   'board.total': 'All-Time',
   'board.darkhorse': 'Top Climbers',
   'board.rookie': 'New Releases',
@@ -186,6 +188,8 @@ const zh: Dict = {
   'catalog.all': '全部分类',
   'board.velocity': '24H',
   'board.growth': '区间增速',
+  'board.window7': '7D',
+  'board.window30': '30D',
   'board.total': '总榜',
   'board.darkhorse': '名次跃升',
   'board.rookie': '最新发布',

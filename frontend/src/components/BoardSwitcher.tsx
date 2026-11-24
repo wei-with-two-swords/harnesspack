@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import { useI18n, categoryLabel } from '../lib/i18n';
 import { viewToUrl, type View } from './CatalogSidebar';
 
-const STAR_BOARDS = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
+const STAR_7D = { board: 'growth' as const, window: 7 };
+const STAR_30D = { board: 'growth' as const, window: 30 };
 const NPM_RANGES = ['1y', 'ytd', '24h', '7d', '30d'];
 
 type Chip = { key: string; label: string; to: string };
@@ -16,7 +17,11 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
     {
       key: 'star',
       label: t('catalog.star'),
-      to: viewToUrl({ kind: 'star', board: view.kind === 'star' ? view.board : 'total' }),
+      to: viewToUrl({
+        kind: 'star',
+        board: view.kind === 'star' ? view.board : 'total',
+        window: view.kind === 'star' ? view.window : undefined,
+      }),
     },
     {
       key: 'npm',
@@ -31,11 +36,13 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
   ];
 
   const starChips: Chip[] = [
-    ...STAR_BOARDS.map((board) => ({
-      key: board,
-      label: t(`board.${board}`),
-      to: viewToUrl({ kind: 'star', board }),
-    })),
+    { key: 'total', label: t('board.total'), to: viewToUrl({ kind: 'star', board: 'total' }) },
+    { key: 'velocity', label: t('board.velocity'), to: viewToUrl({ kind: 'star', board: 'velocity' }) },
+    { key: 'growth7', label: t('board.window7'), to: viewToUrl({ kind: 'star', ...STAR_7D }) },
+    { key: 'growth30', label: t('board.window30'), to: viewToUrl({ kind: 'star', ...STAR_30D }) },
+    { key: 'darkhorse', label: t('board.darkhorse'), to: viewToUrl({ kind: 'star', board: 'darkhorse' }) },
+    { key: 'rookie', label: t('board.rookie'), to: viewToUrl({ kind: 'star', board: 'rookie' }) },
+    { key: 'quality', label: t('board.quality'), to: viewToUrl({ kind: 'star', board: 'quality' }) },
     { key: 'category', label: t('board.category'), to: viewToUrl({ kind: 'category', category: '' }) },
   ];
   const npmChips: Chip[] = NPM_RANGES.map((range) => ({
@@ -53,8 +60,9 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
   const activeChip = tab === 'npm' && view.kind === 'npm' ? view.range
     : tab === 'directory' && view.kind === 'directory' ? view.sort
     : view.kind === 'category' ? 'category'
-    : view.kind === 'star' ? view.board
-    : '';
+    : view.kind === 'star'
+      ? (view.board === 'growth' ? `growth${view.window === 30 ? '30' : '7'}` : view.board)
+      : '';
   const showCategories = view.kind === 'category' || (view.kind === 'directory' && view.sort === 'category');
 
   return (
