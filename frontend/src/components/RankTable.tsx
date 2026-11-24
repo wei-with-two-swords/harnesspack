@@ -1,19 +1,37 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { RankingItem } from '../types';
 import { DeltaBadge } from './DeltaBadge';
 import { formatCompact, formatNumber, formatPercent } from '../lib/format';
-import { useI18n } from '../lib/i18n';
+import { useI18n, categoryLabel } from '../lib/i18n';
 
 function rankDelta(item: RankingItem): number | null {
   if (item.prev_rank === null || item.prev_rank === undefined) return null;
   return item.prev_rank - item.rank;
 }
 
-function RankLabel({ rank }: { rank: number }) {
+function RankMedal({ rank }: { rank: number }) {
+  const tone = rank === 1 ? ' gold' : rank === 2 ? ' silver' : rank === 3 ? ' bronze' : '';
+  return <span className={`rank-medal${tone}`}>{rank}</span>;
+}
+
+function Avatar({ owner }: { owner: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed || !owner) {
+    return (
+      <span className="rank-avatar inline-flex items-center justify-center text-xs fw-semibold" aria-hidden="true">
+        {owner.charAt(0).toUpperCase()}
+      </span>
+    );
+  }
   return (
-    <span className={`num fs-sm ${rank === 1 ? 'fw-semibold fg-warning' : rank <= 3 ? 'fg-warning' : 'fg-secondary'}`}>
-      {rank}
-    </span>
+    <img
+      className="rank-avatar"
+      src={`https://github.com/${encodeURIComponent(owner)}.png?size=64`}
+      alt=""
+      loading="lazy"
+      onError={() => setFailed(true)}
+    />
   );
 }
 
@@ -35,7 +53,6 @@ function ExtraCell({ item, board, hasPrev }: { item: RankingItem; board: string;
       {jump > 0 ? `↑${jump}` : jump < 0 ? `↓${Math.abs(jump)}` : '—'}
     </span>;
   }
-  // npm or velocity: rank change; when no baseline, show NEW/—
   const delta = rankDelta(item);
   if (!hasPrev) return <span className="fg-secondary">—</span>;
   return (
@@ -46,14 +63,7 @@ function ExtraCell({ item, board, hasPrev }: { item: RankingItem; board: string;
   );
 }
 
-function extraLabel(board: string, hasPrev: boolean): string {
-  const { t } = useI18n();
-  if (board === 'growth') return t('table.delta');
-  if (board === 'darkhorse') return t('table.change');
-  if (board === 'quality') return t('table.delta');
-  return hasPrev ? t('table.change') : '—';
-}
-
+/** Single vertical ranking list shared by desktop and mobile. */
 export function RankTable({ items, board }: { items: RankingItem[]; board: string }) {
   const { t, lang } = useI18n();
   const compact = (v: number | null | undefined) => formatCompact(v, lang);
@@ -62,74 +72,35 @@ export function RankTable({ items, board }: { items: RankingItem[]; board: strin
   const showChange = !(isNpm && !hasPrev);
 
   return (
-    <>
-      <ul className="list-group list-group-flush sm:d-none">
-        {items.map((item) => (
-          <li key={item.slug} className="list-group-item list-group-item-action p-0">
-            <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
-              <span className="flex-shrink-0 text-center" style={{ width: '1.5rem' }}><RankLabel rank={item.rank} /></span>
-              <span className="min-w-0 flex-grow-1">
-                <span className="d-block text-truncate fw-medium">{item.name}</span>
-                <span className="d-block text-truncate fs-xs fg-secondary">{item.owner}/{item.repo}</span>
-                <span className="mt-1 d-flex align-items-center gap-2 fs-xs">
-                  {isNpm ? <span className="num fg-secondary" title="GitHub star">★ {compact(item.stars)}</span>
-                    : <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />}
-                  {showChange ? <ExtraCell item={item} board={board} hasPrev={hasPrev} /> : null}
-                </span>
+    <ul className="list-group list-group-flush">
+      {items.map((item) => (
+        <li key={item.slug} className="rank-row list-group-item p-0">
+          <Link to={`/plugins/${item.slug}`} className="rank-link">
+            <RankMedal rank={item.rank} />
+            <Avatar owner={item.owner} />
+            <span className="rank-main">
+              <span className="rank-name">
+                <strong className="truncate">{item.name}</strong>
+                <span className="rank-owner">{item.owner}/{item.repo}</span>
               </span>
-              <span className="num fg-body flex-shrink-0 fs-sm">
-                {isNpm ? compact(item.downloads) : formatNumber(item.stars)}
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <div className="table-responsive d-none sm:d-block">
-        <table className="table table-hover align-middle mb-0 table-fixed">
-          <thead className="fs-xs text-uppercase fg-secondary">
-            <tr>
-              <th className="px-4 py-3 text-center" style={{ width: '3.5rem' }}>#</th>
-              <th className="px-2 py-3 fw-medium">{t('table.plugin')}</th>
-              <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
-                {isNpm ? t('table.downloads') : t('table.stars')}
-              </th>
-              <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
-                {isNpm ? t('table.stars') : t('table.delta')}
-              </th>
-              {showChange ? (
-                <th className="px-4 py-3 text-end fw-medium" style={{ width: '6rem' }}>{extraLabel(board, hasPrev)}</th>
-              ) : null}
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.slug}>
-                <td className="px-4 py-3 text-center"><RankLabel rank={item.rank} /></td>
-                <td className="px-2 py-3">
-                  <Link to={`/plugins/${item.slug}`} className="d-block min-w-0 text-decoration-none">
-                    <span className="d-flex align-items-baseline gap-2">
-                      <span className="text-truncate fw-medium">{item.name}</span>
-                      <span className="flex-shrink-0 text-truncate fs-xs fg-secondary">{item.owner}/{item.repo}</span>
-                    </span>
-                    {item.description ? <span className="mt-1 d-block text-truncate fs-xs fg-secondary">{item.description}</span> : null}
-                  </Link>
-                </td>
-                <td className="num px-2 py-3 text-end">
-                  {isNpm ? compact(item.downloads) : formatNumber(item.stars)}
-                </td>
-                <td className="px-2 py-3 text-end">
-                  {isNpm ? <span className="num fg-secondary">{compact(item.stars)}</span>
-                    : <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />}
-                </td>
-                {showChange ? (
-                  <td className="px-4 py-3 text-end"><ExtraCell item={item} board={board} hasPrev={hasPrev} /></td>
+              {item.description ? <span className="rank-desc">{item.description}</span> : null}
+              <span className="rank-meta">
+                {item.category ? (
+                  <span className="badge">{categoryLabel(lang, item.category)}</span>
                 ) : null}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+                {isNpm
+                  ? <span className="num text-xs fg-secondary" title="GitHub star">★ {compact(item.stars)}</span>
+                  : <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />}
+                {showChange ? <ExtraCell item={item} board={board} hasPrev={hasPrev} /> : null}
+              </span>
+            </span>
+            <span className="rank-value">
+              {isNpm ? compact(item.downloads) : formatNumber(item.stars)}
+              <small>{isNpm ? t('table.downloads') : t('table.stars')}</small>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

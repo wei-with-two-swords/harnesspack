@@ -60,6 +60,11 @@ const en: Dict = {
   'footer.repo': 'Repository',
   'footer.sitemap': 'Sitemap',
   'footer.feed': 'XML feed',
+  // hero
+  'hero.title': 'Plugin Rankings',
+  'hero.lead': 'Track community DeepSeek Harness plugins by real GitHub stars and npm downloads. Daily snapshots, no embellishment.',
+  'hero.tracked': 'Plugins tracked',
+  'hero.updated': 'Updated',
   // catalog sidebar
   'catalog.title': 'Catalog',
   'catalog.star': 'STAR Rankings',
@@ -165,6 +170,10 @@ const zh: Dict = {
   'footer.repo': '仓库',
   'footer.sitemap': '站点地图',
   'footer.feed': 'XML 订阅',
+  'hero.title': '插件榜单',
+  'hero.lead': '收录社区 DeepSeek Harness 插件，按真实 GitHub star 与 npm 下载量排名。每日快照，不美化、不回填。',
+  'hero.tracked': '收录插件',
+  'hero.updated': '更新于',
   'catalog.title': '目录',
   'catalog.star': 'STAR 榜',
   'catalog.npm': 'NPM 下载榜',

@@ -8,9 +8,9 @@ import { useI18n } from '../lib/i18n';
 function Logo() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="flex-shrink-0">
-      <rect x="3" y="13" width="3.5" height="8" rx="1" fill="#38bdf8" />
-      <rect x="10.25" y="9" width="3.5" height="12" rx="1" fill="#f5b544" />
-      <rect x="17.5" y="4" width="3.5" height="17" rx="1" fill="#38bdf8" />
+      <rect x="3" y="13" width="3.5" height="8" rx="1" fill="#4f46e5" />
+      <rect x="10.25" y="9" width="3.5" height="12" rx="1" fill="#a5b4fc" />
+      <rect x="17.5" y="4" width="3.5" height="17" rx="1" fill="#4f46e5" />
     </svg>
   );
 }
@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="d-flex flex-column min-vh-100">
-      <header className="sticky-top">
+      <header>
         <nav className="navbar hp-navbar">
           <div className="container">
             <Link to="/" className="navbar-brand" onClick={closeNav}>

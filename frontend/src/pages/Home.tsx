@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
-import { useI18n, categoryLabel } from '../lib/i18n';
+import { useI18n } from '../lib/i18n';
 import { formatNumber } from '../lib/format';
-import { CatalogSidebar, viewToUrl, type View } from '../components/CatalogSidebar';
+import { type View } from '../components/CatalogSidebar';
+import { BoardSwitcher } from '../components/BoardSwitcher';
 import { GlobalSearch } from '../components/GlobalSearch';
 import { RankTable } from '../components/RankTable';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
-import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem } from '../types';
+import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, StatusResponse } from '../types';
 
 const PAGE_SIZE = 20;
 const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
@@ -42,14 +43,17 @@ function usePageMeta(title: string, description: string) {
 }
 
 export default function Home() {
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   const [params] = useSearchParams();
   const view = parseView(params);
   const [window, setWindow] = useState(7);
   const [page, setPage] = useState(0);
 
   const cats = useApi<CategoriesResponse>(() => api.categories(), []);
+  const status = useApi<StatusResponse>(() => api.status(), []);
   const categories = (cats.data?.items ?? []).map((item) => item.category).sort();
+  const tracked = status.data?.database.active ?? 0;
+  const updated = status.data?.snapshots.as_of ?? null;
 
   useEffect(() => { setPage(0); }, [view.kind, window]);
 
@@ -84,13 +88,7 @@ export default function Home() {
 
   const period = view.kind === 'star' && WINDOW_BOARDS.has(view.board);
 
-  const header = (
-    <header className="mb-4">
-      <h1 className="fs-3xl fw-semibold mb-2">{t(titleKey)}</h1>
-      <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: '44rem' }}>{t(descKey)}</p>
-      <GlobalSearch />
-    </header>
-  );
+  const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
 
   const periodSwitch = period ? (
     <div className="btn-group btn-group-sm mb-3" role="group" aria-label={t('table.period')}>
@@ -100,22 +98,6 @@ export default function Home() {
           className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}>
           {t(option === 7 ? 'common.window7' : 'common.window30')}
         </button>
-      ))}
-    </div>
-  ) : null;
-
-  const showCatChips = view.kind === 'category' || (view.kind === 'directory' && view.sort === 'category');
-  const categoryChips = showCatChips ? (
-    <div className="d-flex flex-wrap gap-2 mb-3">
-      <Link to={viewToUrl({ kind: 'category', category: '' })}
-        className={`btn btn-sm ${view.kind === 'category' && !view.category ? 'btn-solid theme-secondary' : 'btn-outline'}`}>
-        {t('catalog.all')}
-      </Link>
-      {categories.map((cat) => (
-        <Link key={cat} to={viewToUrl({ kind: 'category', category: cat })}
-          className={`btn btn-sm ${view.kind === 'category' && view.category === cat ? 'btn-solid theme-secondary' : 'btn-outline'}`}>
-          {categoryLabel(lang, cat)}
-        </Link>
       ))}
     </div>
   ) : null;
@@ -134,7 +116,6 @@ export default function Home() {
     content = (
       <>
         {periodSwitch}
-        {categoryChips}
         {npmNotice}
         <div className="card overflow-hidden">
           {error ? <div className="p-3"><ErrorState error={error} /></div> : null}
@@ -153,7 +134,7 @@ export default function Home() {
       </>
     );
   } else if (view.kind === 'directory' && view.sort === 'category') {
-    content = <>{categoryChips}<div className="card"><div className="card-body fs-sm fg-secondary">{t('desc.category')}</div></div></>;
+    content = <div className="card"><div className="card-body fs-sm fg-secondary">{t('desc.category')}</div></div>;
   } else {
     const { data, error, loading } = dirState;
     content = (
@@ -169,12 +150,12 @@ export default function Home() {
                     <Link to={`/plugins/${item.slug}`} className="d-flex align-items-center gap-3 px-4 py-3 text-decoration-none">
                       <span className="min-w-0 flex-grow-1">
                         <span className="d-block text-truncate fw-medium">{item.name}</span>
-                        <span className="d-block text-truncate fs-xs fg-secondary">{item.owner}/{item.repo}</span>
+                        <span className="d-block text-truncate text-xs fg-secondary">{item.owner}/{item.repo}</span>
                       </span>
                       <span className="num fs-sm fg-secondary flex-shrink-0">
                         {view.sort === 'downloads'
                           ? `${formatNumber(item.downloads ?? 0)} ↓`
-                          : `★ ${formatNumber(item.stars)}`}
+                          : `★ ${formatNumber(item.stars ?? 0)}`}
                       </span>
                     </Link>
                   </li>
@@ -190,11 +171,23 @@ export default function Home() {
 
   return (
     <section>
-      {header}
-      <div className="workspace">
-        <CatalogSidebar view={view} />
-        <div className="min-w-0">{content}</div>
+      <div className="hp-hero p-4 lg:p-5 mb-4">
+        <div className="hero-grid">
+          <div>
+            <h1 className="hero-title">{heroTitle}</h1>
+            <p className="hero-lead">{t('hero.lead')}</p>
+          </div>
+          <div className="hero-stat">
+            <div className="hero-stat-label">{t('hero.tracked')}</div>
+            <div className="hero-stat-value">{tracked ? formatNumber(tracked) : '—'}</div>
+            <div className="hero-stat-foot">{updated ? `${t('hero.updated')} ${updated}` : '—'}</div>
+          </div>
+        </div>
+        <div className="mt-4"><GlobalSearch /></div>
       </div>
+
+      <BoardSwitcher view={view} categories={categories} />
+      {content}
     </section>
   );
 }

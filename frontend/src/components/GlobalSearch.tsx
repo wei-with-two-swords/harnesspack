@@ -52,7 +52,12 @@ export function GlobalSearch() {
   return (
     <div className="global-search" ref={rootRef}>
       <div className="input-group">
-        <span className="input-group-text" aria-hidden="true">⌕</span>
+        <span className="input-group-text" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="7" cy="7" r="4.5" />
+            <path d="M10.5 10.5L14 14" strokeLinecap="round" />
+          </svg>
+        </span>
         <input
           className="form-control"
           type="search"
