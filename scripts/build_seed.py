@@ -20,6 +20,8 @@ INCLUSION_RULE = (
     "名单与分类来自 awesome-dsh-plugin 精选清单（CC0-1.0，https://github.com/awesome-dsh-plugin/awesome-dsh-plugin），"
     "按其 data/plugins 条目收录、按仓库去重（子目录条目归一到仓库）；分类沿用上游 23 类。"
     "移除规则：上游删除、仓库 404/archived、90 天无 commit/release 且 star 无净增长（先进观察区）即退出榜单，历史曲线保留。"
+    "另：GitHub topic 扫描发现的、上游尚未收录的仓库以 watch 观察条目并入（scripts/discover_topic.py），"
+    "上游收录后自动升级为正式条目。"
 )
 
 
@@ -56,6 +58,7 @@ def main() -> int:
                 "slug": slugify(owner, repo),
                 "name": shown[:120],
                 "category": str(item.get("category") or "other"),
+                "npm": str(item.get("npm") or ""),
                 "harness": "dsh",
                 "url": f"https://github.com/{owner}/{repo}",
                 "note": "",
@@ -63,6 +66,33 @@ def main() -> int:
                 "_original": original,
             }
         )
+
+    # Topic-discovered candidates the upstream catalog does not list yet.
+    # They enter the seed as watch entries (observation zone): never ranked,
+    # promoted automatically once the catalog lists them.
+    discovered_path = ROOT / "data" / "catalog" / "discovered.json"
+    if discovered_path.exists():
+        discovered = json.loads(discovered_path.read_text(encoding="utf-8")).get("repos") or {}
+        for key in sorted(discovered):
+            item = discovered[key]
+            owner = str(item.get("owner") or key.split("/", 1)[0])
+            repo = str(item.get("repo") or key.split("/", 1)[-1])
+            plugins.append(
+                {
+                    "owner": owner,
+                    "repo": repo,
+                    "slug": slugify(owner, repo),
+                    "name": str(item.get("name") or f"{owner}/{repo}")[:120],
+                    "category": "other",
+                    "npm": "",
+                    "harness": "dsh",
+                    "url": f"https://github.com/{owner}/{repo}",
+                    "note": "",
+                    "watch": True,
+                    "_canonical": False,
+                    "_original": key,
+                }
+            )
 
     # Renames can collide with an existing entry; keep the canonical name.
     by_repo = {}

@@ -35,6 +35,30 @@ def test_ingest_is_idempotent(tmp_path: Path, data_dir):
     conn.close()
 
 
+def test_seed_npm_package_propagates_and_survives_empty(tmp_path: Path):
+    seed = tmp_path / "seed.json"
+    seed.write_text(
+        json.dumps({"plugins": [
+            {"owner": "a", "repo": "b", "slug": "a-b", "npm": "pkg-a"},
+            {"owner": "c", "repo": "d", "slug": "c-d"},
+        ]}),
+        encoding="utf-8",
+    )
+    conn = connect(tmp_path / "npm.db")
+    init_db(conn)
+    ingest(conn, tmp_path / "empty-snaps", seed)
+    assert conn.execute("SELECT npm_package FROM plugins WHERE slug='a-b'").fetchone()[0] == "pkg-a"
+    assert conn.execute("SELECT npm_package FROM plugins WHERE slug='c-d'").fetchone()[0] is None
+
+    seed.write_text(
+        json.dumps({"plugins": [{"owner": "a", "repo": "b", "slug": "a-b"}]}),
+        encoding="utf-8",
+    )
+    ingest(conn, tmp_path / "empty-snaps", seed)
+    assert conn.execute("SELECT npm_package FROM plugins WHERE slug='a-b'").fetchone()[0] == "pkg-a"
+    conn.close()
+
+
 def test_delta_span_uses_real_gap(tmp_path: Path):
     seed = tmp_path / "seed.json"
     seed.write_text(

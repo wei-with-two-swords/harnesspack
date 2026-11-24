@@ -13,6 +13,8 @@ dist/
 # Local data & secrets
 data/_cache/
 data/cache/
+data/npm_downloads/raw/
+.workbuddy/
 .env
 .env.*
 !/.env.example

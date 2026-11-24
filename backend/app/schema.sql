@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS plugins (
     name            TEXT    NOT NULL,
     description     TEXT,
     category        TEXT,
+    npm_package     TEXT,
     harness         TEXT,
     url             TEXT    NOT NULL,
     status          TEXT    NOT NULL DEFAULT 'active'

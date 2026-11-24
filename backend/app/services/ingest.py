@@ -85,20 +85,22 @@ def _prepare_seed_record(p: dict) -> tuple:
         p.get("name") or repo,
         p.get("description") or None,
         p.get("category") or None,
+        p.get("npm") or None,
         p.get("harness") or None,
         p.get("url") or f"https://github.com/{owner}/{repo}",
     )
 
 
 UPSERT_SEED_SQL = """
-INSERT INTO plugins (slug, owner, repo, name, description, category, harness, url)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO plugins (slug, owner, repo, name, description, category, npm_package, harness, url)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(slug) DO UPDATE SET
     owner = excluded.owner,
     repo = excluded.repo,
     name = excluded.name,
     description = COALESCE(NULLIF(excluded.description, ''), plugins.description),
     category = COALESCE(NULLIF(excluded.category, ''), plugins.category),
+    npm_package = COALESCE(NULLIF(excluded.npm_package, ''), plugins.npm_package),
     harness = COALESCE(NULLIF(excluded.harness, ''), plugins.harness),
     url = excluded.url,
     status = 'active',
@@ -106,11 +108,27 @@ ON CONFLICT(slug) DO UPDATE SET
     exit_reason = NULL
 """
 
+UPSERT_SEED_WATCH_SQL = """
+INSERT INTO plugins (slug, owner, repo, name, description, category, npm_package, harness, url)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+ON CONFLICT(slug) DO UPDATE SET
+    owner = excluded.owner,
+    repo = excluded.repo,
+    name = excluded.name,
+    description = COALESCE(NULLIF(excluded.description, ''), plugins.description),
+    category = COALESCE(NULLIF(excluded.category, ''), plugins.category),
+    npm_package = COALESCE(NULLIF(excluded.npm_package, ''), plugins.npm_package),
+    harness = COALESCE(NULLIF(excluded.harness, ''), plugins.harness),
+    url = excluded.url,
+    status = 'watch'
+"""
+
 
 def upsert_seed(conn: sqlite3.Connection, seed_plugins: Iterable[dict]) -> int:
     count = 0
     for p in seed_plugins:
-        conn.execute(UPSERT_SEED_SQL, _prepare_seed_record(p))
+        sql = UPSERT_SEED_WATCH_SQL if p.get("watch") else UPSERT_SEED_SQL
+        conn.execute(sql, _prepare_seed_record(p))
         count += 1
     return count
 
@@ -216,15 +234,22 @@ def _mark_exited(conn: sqlite3.Connection, seed_slugs: set[str], files: list[Pat
         match = DATE_FILE_RE.match(files[-1].name)
         if match:
             day = match.group(1)
-    rows = conn.execute("SELECT slug FROM plugins WHERE status = 'active'").fetchall()
+    rows = conn.execute(
+        "SELECT slug, status FROM plugins WHERE status IN ('active', 'watch')"
+    ).fetchall()
     crossed = 0
     for row in rows:
         if row["slug"] in seed_slugs:
             continue
+        reason = (
+            "removed from awesome-dsh-plugin catalog"
+            if row["status"] == "active"
+            else "discovered repo no longer matches topic set"
+        )
         conn.execute(
             "UPDATE plugins SET status = 'exited', exited_at = ?, "
-            "exit_reason = 'removed from awesome-dsh-plugin catalog' WHERE slug = ?",
-            (day, row["slug"]),
+            "exit_reason = ? WHERE slug = ?",
+            (day, reason, row["slug"]),
         )
         crossed += 1
     return crossed
