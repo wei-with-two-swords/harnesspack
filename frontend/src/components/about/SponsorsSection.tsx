@@ -29,7 +29,7 @@ export default function SponsorsSection() {
 
         <h3 className="fs-md fw-semibold mt-4">为什么不做竞价排名</h3>
         <p className="mt-2 mb-0 fs-sm fg-secondary">
-          榜单的价值来自「数字可信」。一旦名次可以购买，所有 star 曲线都会失去解释力。
+          榜单的价值来自「数字可信」。一旦名次可以购买，所有 STAR 曲线都会失去解释力。
           推荐位与榜单分离，是这个小站的长期承诺。
         </p>
         <Link to="/rankings/velocity" className="btn btn-solid theme-secondary mt-3">

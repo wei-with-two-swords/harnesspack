@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import type { RankingItem } from '../types';
-import { DeltaBadge } from './DeltaBadge';
-import { formatCompact, formatNumber, formatPercent } from '../lib/format';
+import { formatCompact, formatDate, formatDelta, formatNumber, formatPercent } from '../lib/format';
 import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
+
+type Translate = (key: string) => string;
+type Focus = { value: ReactNode; label: string; tone?: 'success' | 'danger' };
 
 function rankDelta(item: RankingItem): number | null {
   if (item.prev_rank === null || item.prev_rank === undefined) return null;
@@ -37,72 +39,138 @@ export function Avatar({ owner, size = 32 }: { owner: string; size?: number }) {
   );
 }
 
-function ExtraCell({ item, board, hasPrev }: { item: RankingItem; board: string; hasPrev: boolean }) {
-  const { t } = useI18n();
-  if (board === 'growth') {
-    return <span className="num fg-info">{item.growth === null ? '—' : `+${formatPercent(item.growth)}`}</span>;
-  }
-  if (board === 'quality') {
-    return (
-      <span className="num fg-info" title={`${item.observed_days ?? 0}/${item.anomaly_days ?? 0}`}>
-        {item.growth === null || item.growth === undefined ? '—' : `+${formatNumber(Math.round(item.growth))}/d`}
-      </span>
-    );
-  }
-  if (board === 'darkhorse') {
-    const jump = item.growth ?? 0;
-    return <span className={`num ${jump > 0 ? 'fg-success' : jump < 0 ? 'fg-danger' : 'fg-secondary'}`}>
-      {jump > 0 ? `↑${jump}` : jump < 0 ? `↓${Math.abs(jump)}` : '—'}
-    </span>;
-  }
+/** Rank movement in the previous snapshot's ranking. */
+function RankChange({ item, t }: { item: RankingItem; t: Translate }) {
   const delta = rankDelta(item);
+  const title = item.prev_rank ? `${t('table.rank')} ${item.prev_rank}` : t('table.new');
+  const tone = delta === null ? 'fg-secondary' : delta > 0 ? 'fg-success' : delta < 0 ? 'fg-danger' : 'fg-secondary';
+  const text = delta === null
+    ? t('table.new')
+    : delta === 0
+      ? '—'
+      : delta > 0
+        ? `↑${delta}`
+        : `↓${Math.abs(delta)}`;
+  return <span className={`num ${tone}`} title={title}>{text}</span>;
+}
+
+/** Rank improvement used by the Movers board. */
+function RankJump({ value }: { value: number | null }) {
+  if (value === null || value === 0) return <span className="fg-secondary">—</span>;
+  const tone = value > 0 ? 'fg-success' : 'fg-danger';
+  return <span className={`num ${tone}`}>{value > 0 ? `↑${value}` : `↓${Math.abs(value)}`}</span>;
+}
+
+/** npm rows keep the historical compact rank-change meta. */
+function ExtraCell({ item, hasPrev, t }: { item: RankingItem; hasPrev: boolean; t: Translate }) {
   if (!hasPrev) return <span className="fg-secondary">—</span>;
-  return (
-    <span className={`num ${delta === null ? 'fg-secondary' : delta > 0 ? 'fg-success' : delta < 0 ? 'fg-danger' : 'fg-secondary'}`}
-      title={item.prev_rank ? `${item.prev_rank}` : t('table.new')}>
-      {delta === null ? t('table.new') : delta === 0 ? '—' : delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
-    </span>
-  );
+  return <RankChange item={item} t={t} />;
+}
+
+function primaryFocus(
+  item: RankingItem,
+  board: string,
+  window: number,
+  lang: 'en' | 'zh',
+  t: Translate,
+): Focus {
+  switch (board) {
+    case 'velocity': {
+      const value = item.delta;
+      return {
+        value: formatDelta(value),
+        label: t('table.delta'),
+        tone: value === null ? undefined : value > 0 ? 'success' : value < 0 ? 'danger' : undefined,
+      };
+    }
+    case 'growth': {
+      const value = item.growth;
+      return {
+        value: value === null || value === undefined ? '—' : `${value > 0 ? '+' : ''}${formatPercent(value)}`,
+        label: window === 30 ? t('common.window30') : t('common.window7'),
+        tone: value === null || value === undefined ? undefined : value > 0 ? 'success' : value < 0 ? 'danger' : undefined,
+      };
+    }
+    case 'darkhorse':
+      return { value: <RankJump value={item.growth ?? null} />, label: t('table.rankJump') };
+    case 'rookie':
+      return { value: formatDate(item.repo_created_at), label: t('plugin.created') };
+    case 'quality': {
+      const value = item.growth;
+      const rounded = value === null || value === undefined ? null : Math.round(value);
+      return {
+        value: rounded === null
+          ? '—'
+          : `${rounded > 0 ? '+' : ''}${formatNumber(rounded)}${lang === 'zh' ? '/天' : '/d'}`,
+        label: t('table.avgGrowth'),
+        tone: rounded === null ? undefined : rounded > 0 ? 'success' : rounded < 0 ? 'danger' : undefined,
+      };
+    }
+    case 'npm':
+      return { value: formatCompact(item.downloads, lang), label: t('table.downloads') };
+    default:
+      return { value: formatNumber(item.stars), label: t('table.stars') };
+  }
 }
 
 /** Single vertical ranking list shared by desktop and mobile. */
-export function RankTable({ items, board }: { items: RankingItem[]; board: string }) {
+export function RankTable({
+  items,
+  board,
+  window,
+}: {
+  items: RankingItem[];
+  board: string;
+  window?: number | string | null;
+}) {
   const { t, lang } = useI18n();
   const compact = (v: number | null | undefined) => formatCompact(v, lang);
   const isNpm = board === 'npm';
   const hasPrev = !isNpm || items.some((i) => i.has_prev === true);
   const showChange = !(isNpm && !hasPrev);
+  const activeWindow = window === 30 || window === '30' ? 30 : 7;
 
   return (
     <ul className="list-group list-group-flush">
-      {items.map((item) => (
-        <li key={item.slug} className="rank-row list-group-item p-0">
-          <Link to={`/plugins/${item.slug}`} className="rank-link">
-            <RankMedal rank={item.rank} />
-            <Avatar owner={item.owner} />
-            <span className="rank-main">
-              <span className="rank-name">
-                <strong className="truncate">{item.name}</strong>
-                <span className="rank-owner">{item.owner}/{item.repo}</span>
+      {items.map((item) => {
+        const categoryBadge = item.category ? (
+          <span className="badge" title={categoryDescription(lang, item.category)}>{categoryLabel(lang, item.category)}</span>
+        ) : null;
+        const starRef = (
+          <span className="num text-xs fg-secondary" title={t('table.stars')}>STAR {compact(item.stars)}</span>
+        );
+        const focus = primaryFocus(item, board, activeWindow, lang, t);
+        const secondary = isNpm ? (
+          <>
+            {starRef}
+            {showChange ? <ExtraCell item={item} hasPrev={hasPrev} t={t} /> : null}
+          </>
+        ) : board === 'darkhorse' || board === 'rookie' || board === 'quality'
+          ? starRef
+          : <RankChange item={item} t={t} />;
+
+        return (
+          <li key={item.slug} className="rank-row list-group-item p-0">
+            <Link to={`/plugins/${item.slug}`} className="rank-link">
+              <RankMedal rank={item.rank} />
+              <Avatar owner={item.owner} />
+              <span className="rank-main">
+                <span className="rank-name">
+                  <strong className="truncate">{item.name}</strong>
+                  <span className="rank-owner">{item.owner}/{item.repo}</span>
+                </span>
+                {item.description ? <span className="rank-desc">{item.description}</span> : null}
               </span>
-              {item.description ? <span className="rank-desc">{item.description}</span> : null}
-              <span className="rank-meta">
-                {item.category ? (
-                  <span className="badge" title={categoryDescription(lang, item.category)}>{categoryLabel(lang, item.category)}</span>
-                ) : null}
-                {isNpm
-                  ? <span className="num text-xs fg-secondary" title="GitHub star">★ {compact(item.stars)}</span>
-                  : <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />}
-                {showChange ? <ExtraCell item={item} board={board} hasPrev={hasPrev} /> : null}
+              <span className="rank-category">{categoryBadge}</span>
+              <span className="rank-secondary">{secondary}</span>
+              <span className="rank-value">
+                <span className={focus.tone ? `fg-${focus.tone}` : ''}>{focus.value}</span>
+                <small>{focus.label}</small>
               </span>
-            </span>
-            <span className="rank-value">
-              {isNpm ? compact(item.downloads) : formatNumber(item.stars)}
-              <small>{isNpm ? t('table.downloads') : t('table.stars')}</small>
-            </span>
-          </Link>
-        </li>
-      ))}
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 }

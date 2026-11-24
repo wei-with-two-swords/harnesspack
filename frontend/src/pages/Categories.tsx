@@ -16,7 +16,7 @@ export default function Categories() {
       <div className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-1">分类</h1>
         <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
-          分类沿用 awesome-dsh-plugin 清单的 23 个分类，每个分类单独按 star 排名，只统计在册的 DSH 插件。
+          分类沿用 awesome-dsh-plugin 清单的 23 个分类，每个分类单独按 STAR 排名，只统计在册的 DSH 插件。
         </p>
       </div>
 
@@ -37,7 +37,7 @@ export default function Categories() {
                     <h2 className="fs-lg fw-semibold mb-0">{categoryLabel(item.category)}</h2>
                     <span className="num fs-xs fg-secondary">{item.count} 个插件</span>
                   </div>
-                  <div className="num fs-sm mt-1">{formatNumber(item.total_stars)} star</div>
+                  <div className="num fs-sm mt-1">{formatNumber(item.total_stars)} STAR</div>
                   <ol className="list-unstyled mt-3 pt-3 border-top mb-0">
                     {item.top.map((entry) => (
                       <li

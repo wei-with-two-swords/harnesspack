@@ -40,8 +40,8 @@ export function PluginList({
                   <span className="fs-xs fg-secondary">{t('plugin.created')} {formatDate(item.repo_created_at)}</span>
                 ) : null}
                 {byDownloads ? (
-                  <span className="num text-xs fg-secondary" title="GitHub star">
-                    ★ {formatCompact(item.stars, lang)}
+                  <span className="num text-xs fg-secondary" title="STAR">
+                    STAR {formatCompact(item.stars, lang)}
                   </span>
                 ) : null}
               </span>

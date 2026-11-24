@@ -45,7 +45,7 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
       series: [
         {},
         {
-          label: 'Star',
+          label: 'STAR',
           stroke: colors.line,
           width: 2,
           fill: colors.fill,

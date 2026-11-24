@@ -11,7 +11,7 @@ import type { CategoriesResponse, ListResponse, PluginListItem } from '../types'
 
 const PAGE_SIZE = 50;
 const SORTS = [
-  { id: 'stars', label: 'Star 总量' },
+  { id: 'stars', label: 'STAR 总量' },
   { id: 'name', label: '名称' },
   { id: 'recent', label: '最新创建' },
 ] as const;
@@ -19,7 +19,7 @@ const SORTS = [
 type SortId = (typeof SORTS)[number]['id'];
 
 export default function Plugins() {
-  useTitle('插件库', '搜索 11,000+ 个可安装进 DeepSeek Harness 的插件，查看 star、分类与收录时间。');
+  useTitle('插件库', '搜索 11,000+ 个可安装进 DeepSeek Harness 的插件，查看 STAR、分类与收录时间。');
 
   const [input, setInput] = useState('');
   const [query, setQuery] = useState('');
@@ -55,7 +55,7 @@ export default function Plugins() {
         <h1 className="fs-3xl fw-semibold mb-1">插件库</h1>
         <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
           名单来自 awesome-dsh-plugin 清单，共 {data ? formatNumber(data.total) : '上万'} 个可安装进 DSH
-          的插件；按 star、名称或创建时间浏览。
+          的插件；按 STAR、名称或创建时间浏览。
         </p>
       </div>
 

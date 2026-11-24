@@ -99,7 +99,7 @@ export default function Status() {
               <Stat label="不可用" value={formatNumber(data.database.unavailable)} hint="最近快照 404" />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="Star 记录" value={formatNumber(data.database.stars_rows)} hint={`截至 ${data.database.as_of ?? '—'}`} />
+              <Stat label="STAR 记录" value={formatNumber(data.database.stars_rows)} hint={`截至 ${data.database.as_of ?? '—'}`} />
             </div>
           </div>
 

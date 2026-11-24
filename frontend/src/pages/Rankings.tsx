@@ -23,13 +23,13 @@ function emptyReason(reason: string | null | undefined) {
 const PAGE_SIZE = 20;
 
 const BOARD_TEXT: Record<string, string> = {
-  velocity: '按今日新增 star 排序。只有相邻两个快照都存在时才计算增量。',
-  growth: '按区间涨幅排序，基准日 star 需 ≥ 50。区间内缺任一快照则不参与计算。',
-  total: '按当前 star 总量排序。并列时按名称升序。',
+  velocity: '按今日新增 STAR 排序。只有相邻两个快照都存在时才计算增量。',
+  growth: '按区间涨幅排序，基准日 STAR 需 ≥ 50。区间内缺任一快照则不参与计算。',
+  total: '按当前 STAR 总量排序。并列时按名称升序。',
   darkhorse: '按区间内总榜名次跃升排序，正数为上升。',
   rookie: '收录名单内、仓库创建时间在最近 30 天的项目。',
   quality: '先剔除被标记为异常的单日涨幅，再按剩余天数的日均新增排序；至少 3 天数据才入榜。',
-  npm: '按 npm registry 近 7 / 30 天的包下载量排序，star 仅作对照；下载量含 CI 与依赖，不等于用户安装数。',
+  npm: '按 npm registry 近 7 / 30 天的包下载量排序，STAR 仅作对照；下载量含 CI 与依赖，不等于用户安装数。',
 };
 
 export default function Rankings() {
@@ -92,7 +92,7 @@ export default function Rankings() {
       {board === 'npm' && data && !data.reason ? (
         <div className="alert alert-secondary py-2 px-3 fs-xs mb-3" role="note">
           数据来自 npm registry 的 tarball 下载量（近 {data.window ?? 7} 天），
-          包含 CI、镜像与依赖拉取，<strong>不等于真实用户安装数</strong>，也不与 star 相加。
+          包含 CI、镜像与依赖拉取，<strong>不等于真实用户安装数</strong>，也不与 STAR 相加。
           覆盖 {formatNumber(data.covered_packages)} 个可映射包；无 npm 包的插件不在本榜。
           截至 {data.as_of}。
         </div>
@@ -112,7 +112,7 @@ export default function Rankings() {
         {!loading && !error && data ? (
           data.items.length > 0 ? (
             <>
-              <RankTable items={data.items} board={board} />
+              <RankTable items={data.items} board={board} window={data.window ?? window} />
               <div className="px-4 pb-3">
                 <Pager
                   page={page}

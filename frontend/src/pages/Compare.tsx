@@ -62,7 +62,7 @@ export default function Compare() {
 
       <section className="card">
         <div className="card-body">
-          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-3">Star 曲线</h2>
+          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-3">STAR 曲线</h2>
           <CompareChart plugins={plugins} />
         </div>
       </section>
@@ -74,7 +74,7 @@ export default function Compare() {
               <tr>
                 <th className="px-4 py-3 fw-medium">插件</th>
                 <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
-                  当前 Star
+                  当前 STAR
                 </th>
                 <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
                   最新增量

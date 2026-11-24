@@ -26,7 +26,7 @@ export default function About() {
       <header className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-2">关于 HarnessPack</h1>
         <p className="mb-3 fg-secondary">
-          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 star 变化如实记录下来，并让增速可比。
+          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 STAR 变化如实记录下来，并让增速可比。
           名单与分类来自上游精选清单，我们不重复做人工评审。
         </p>
         <nav className="d-flex flex-wrap gap-3">

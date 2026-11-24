@@ -15,7 +15,7 @@ const PAGE_SIZE = 20;
 export default function CategoryBoard() {
   const { category = 'other' } = useParams<{ category: string }>();
   const label = categoryLabel(category);
-  useTitle(label, '同一分类内按 star 总量排名。');
+  useTitle(label, '同一分类内按 STAR 总量排名。');
   const [page, setPage] = useState(0);
   useEffect(() => {
     setPage(0);
@@ -38,7 +38,7 @@ export default function CategoryBoard() {
           </div>
           <h1 className="mt-1 fs-3xl fw-semibold mb-1" title={categoryDescription('zh', category)}>{label}</h1>
           <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
-            分类内按当前 star 总量排序，并列时按名称升序。
+            分类内按当前 STAR 总量排序，并列时按名称升序。
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
           </p>
         </div>

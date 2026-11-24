@@ -20,7 +20,7 @@ export default function Terms() {
         <div className="card-body">
           <h2 className="fs-lg fw-semibold">1. 数据来源</h2>
           <p className="mt-2 mb-0 fg-secondary">
-            star 数来自 GitHub 公开 REST / GraphQL API；名单与分类来自{' '}
+            STAR 数来自 GitHub 公开 REST / GraphQL API；名单与分类来自{' '}
             <a className={LINK} href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noreferrer">
               awesome-dsh-plugin
             </a>{' '}
@@ -92,7 +92,7 @@ export default function Terms() {
         <div className="card-body">
           <h2 className="fs-lg fw-semibold">6. 免责声明</h2>
           <p className="mt-2 mb-0 fg-secondary">
-            数据按「现状」提供，不保证完整、实时或无误差；star 数可能被第三方操纵，我们只做异常标注、不改原始记录。
+            数据按「现状」提供，不保证完整、实时或无误差；STAR 数可能被第三方操纵，我们只做异常标注、不改原始记录。
             本站非 DeepSeek 官方项目，榜单不构成任何形式的推荐或投资建议。
           </p>
         </div>

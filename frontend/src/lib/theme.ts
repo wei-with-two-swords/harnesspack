@@ -21,6 +21,15 @@ function syncMetaThemeColor() {
   if (meta) meta.content = isDarkMode() ? '#0b0e13' : '#f7f8fa';
 }
 
+function syncFavicon(): void {
+  const suffix = isDarkMode() ? 'dark' : 'light';
+  document.querySelectorAll<HTMLLinkElement>('link[data-theme-icon]').forEach((link) => {
+    const base = link.getAttribute('data-theme-icon');
+    const ext = link.getAttribute('data-icon-ext') || 'png';
+    if (base) link.href = `${base}-${suffix}.${ext}`;
+  });
+}
+
 export function applyTheme(mode: ThemeMode, persist = true): void {
   const root = document.documentElement;
   root.setAttribute('data-bs-theme', mode);
@@ -34,6 +43,7 @@ export function applyTheme(mode: ThemeMode, persist = true): void {
   }
 
   syncMetaThemeColor();
+  syncFavicon();
   window.dispatchEvent(new CustomEvent<ThemeMode>(THEME_EVENT, { detail: mode }));
 }
 

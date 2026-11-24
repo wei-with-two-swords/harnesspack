@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
@@ -12,6 +12,8 @@ import { RankTable } from '../components/RankTable';
 import { PluginList } from '../components/PluginList';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
+import { FriendLinkModal } from '../components/FriendLinkModal';
+import { copyText } from '../lib/clipboard';
 import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, StatusResponse } from '../types';
 
 const PAGE_SIZE = 20;
@@ -49,6 +51,25 @@ function usePageMeta(title: string, description: string) {
   }, [title, description]);
 }
 
+function InstallCommand({ label, value }: { label: string; value: string }) {
+  const { t } = useI18n();
+  const [copied, setCopied] = useState(false);
+  const handleCopy = async () => {
+    if (!(await copyText(value))) return;
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1600);
+  };
+  return (
+    <div className="hero-install-row">
+      <span className="hero-install-label">{label}</span>
+      <code className="hero-install-code">{value}</code>
+      <button type="button" onClick={handleCopy} aria-label={`${t('common.copy')} ${label}`}>
+        {copied ? t('common.copied') : t('common.copy')}
+      </button>
+    </div>
+  );
+}
+
 export default function Home() {
   const { t } = useI18n();
   useThemeVersion();
@@ -62,6 +83,8 @@ export default function Home() {
   const categories = (cats.data?.items ?? []).map((item) => item.category).sort();
   const tracked = status.data?.database.active ?? 0;
   const updated = status.data?.snapshots.as_of ?? null;
+  const trackingDays = status.data?.snapshots.days ?? 0;
+  const [friendOpen, setFriendOpen] = useState(false);
 
   useEffect(() => {
     setPage(0);
@@ -132,7 +155,7 @@ export default function Home() {
           {!loading && !error && data ? (
             data.items.length ? (
               <>
-                <RankTable items={data.items} board={boardName} />
+                <RankTable items={data.items} board={boardName} window={boardWindow} />
                 <div className="px-4 pb-3">
                   <Pager page={page} pageSize={PAGE_SIZE} total={data.total ?? data.items.length} onChange={setPage} />
                 </div>
@@ -180,19 +203,46 @@ export default function Home() {
             <div className="min-w-0">
               <h1 className="hero-title">{heroTitle}</h1>
               <p className="hero-lead">{t('hero.lead')}</p>
-              <div className="hero-updated">
-                <span className="hero-updated-dot" aria-hidden="true" />
-                <span>{updated ? `${t('hero.asOf')} ${updated}` : '—'}</span>
-              </div>
             </div>
           </div>
           <div className="hero-stat">
             <div className="hero-stat-label">{t('hero.tracked')}</div>
             <div className="hero-stat-value">{tracked ? formatNumber(tracked) : '—'}</div>
+            <div className="hero-updated">
+              <span className="hero-updated-dot" aria-hidden="true" />
+              <span>{updated ? `${t('hero.asOf')} ${updated}` : '—'}</span>
+            </div>
+            <div className="hero-tracking">
+              {trackingDays ? `${t('hero.tracking')} ${trackingDays} ${t('hero.days')}` : '—'}
+            </div>
           </div>
         </div>
-        <div className="mt-4"><GlobalSearch /></div>
+        <div className="hero-install">
+          <div className="hero-install-title">{t('hero.install')} · dsh-market</div>
+          <InstallCommand
+            label={t('hero.installNpm')}
+            value="npm install -g dsh1024 && dsh1024 plugin --profile web add dsh1024@latest"
+          />
+        </div>
+        <div className="hero-links">
+          <a
+            href="https://github.com/wei-with-two-swords"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {t('hero.author')} ↗
+          </a>
+          <a href="https://dshmarket.com" target="_blank" rel="noreferrer noopener">
+            {t('hero.market')} ↗
+          </a>
+          <Link to="/about#submit">{t('hero.submit')}</Link>
+          <button type="button" onClick={() => setFriendOpen(true)}>{t('hero.friendLink')}</button>
+        </div>
       </div>
+
+      <FriendLinkModal open={friendOpen} onClose={() => setFriendOpen(false)} />
+
+      <div className="mb-4"><GlobalSearch /></div>
 
       <BoardSwitcher view={view} categories={categories} />
       {content}

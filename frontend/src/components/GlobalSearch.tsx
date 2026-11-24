@@ -51,26 +51,18 @@ export function GlobalSearch() {
 
   return (
     <div className="global-search" ref={rootRef}>
-      <div className="input-group">
-        <span className="input-group-text" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <circle cx="7" cy="7" r="4.5" />
-            <path d="M10.5 10.5L14 14" strokeLinecap="round" />
-          </svg>
-        </span>
-        <input
-          className="form-control"
-          type="search"
-          value={input}
-          placeholder={t('common.searchPlaceholder')}
-          aria-label={t('common.search')}
-          onChange={(event) => {
-            setInput(event.target.value);
-            setOpen(true);
-          }}
-          onFocus={() => setOpen(true)}
-        />
-      </div>
+      <input
+        className="form-control"
+        type="search"
+        value={input}
+        placeholder={t('common.searchPlaceholder')}
+        aria-label={t('common.search')}
+        onChange={(event) => {
+          setInput(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+      />
       {show ? (
         <div className="search-results card">
           {loading ? (
@@ -94,7 +86,7 @@ export function GlobalSearch() {
                       </span>
                     </span>
                     <span className="num fs-xs fg-secondary flex-shrink-0">
-                      ★ {item.stars === null ? '—' : formatNumber(item.stars)}
+                      STAR {item.stars === null ? '—' : formatNumber(item.stars)}
                     </span>
                   </Link>
                 </li>

@@ -4,14 +4,19 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { LangSwitcher } from './LangSwitcher';
 import { BackToTop } from './BackToTop';
 import { useI18n } from '../lib/i18n';
+import { useThemeVersion, isDarkMode } from '../lib/theme';
 
 function Logo() {
+  useThemeVersion();
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" className="flex-shrink-0">
-      <rect x="3" y="13" width="3.5" height="8" rx="1" fill="#4f46e5" />
-      <rect x="10.25" y="9" width="3.5" height="12" rx="1" fill="#a5b4fc" />
-      <rect x="17.5" y="4" width="3.5" height="17" rx="1" fill="#4f46e5" />
-    </svg>
+    <img
+      src={isDarkMode() ? '/favicon-dark.svg' : '/favicon-light.svg'}
+      alt=""
+      aria-hidden="true"
+      width="28"
+      height="28"
+      className="flex-shrink-0 hp-brand-logo"
+    />
   );
 }
 
@@ -23,6 +28,15 @@ const FOOTER = [
   { to: '/about/terms', key: 'footer.terms' },
   { to: '/about#sponsors', key: 'footer.sponsors' },
   { to: '/about', key: 'footer.about' },
+];
+
+const FRIEND_LINKS = [
+  { label: 'DeepSeek', href: 'https://www.deepseek.com/' },
+  { label: 'DeepSeek AI', href: 'https://github.com/deepseek-ai' },
+  { label: 'DSH Market', href: 'https://dshmarket.com' },
+  { label: 'DeepSeek1024', href: 'https://deepseek1024.com/' },
+  { label: 'awesome-dsh-plugin', href: 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin' },
+  { label: 'HarnessPack', href: 'https://github.com/wei-with-two-swords/harnesspack' },
 ];
 
 export default function Layout({ children }: { children: ReactNode }) {
@@ -105,6 +119,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             <a href="https://github.com/traffictoolbox/awesome-dsh-plugin" target="_blank" rel="noreferrer" className="text-decoration-none">
               {t('footer.repo')}
             </a>
+          </div>
+          <div className="footer-links fs-xs fg-secondary">
+            {FRIEND_LINKS.map((item) => (
+              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className="text-decoration-none">
+                {item.label}
+              </a>
+            ))}
           </div>
         </div>
       </footer>

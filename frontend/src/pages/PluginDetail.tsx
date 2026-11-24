@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
@@ -10,6 +10,7 @@ import { Avatar } from '../components/RankTable';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { formatDate, formatDateTime, formatNumber } from '../lib/format';
 import { categoryDescription } from '../lib/i18n';
+import { copyText } from '../lib/clipboard';
 
 function RankChip({ label, value }: { label: string; value: number | null }) {
   return (
@@ -26,6 +27,40 @@ const SECTION_TITLE = 'fs-sm text-uppercase fg-secondary fw-semibold mb-0';
 
 const ISSUE_URL =
   'https://github.com/wei-with-two-swords/harnesspack/issues/new?labels=data&title=';
+
+function CopyLine({ label, value, disabled = false }: { label: string; value: string; disabled?: boolean }) {
+  const [copied, setCopied] = useState(false);
+  const timer = useRef<number | null>(null);
+  useEffect(() => () => {
+    if (timer.current !== null) window.clearTimeout(timer.current);
+  }, []);
+
+  const handleCopy = async () => {
+    if (disabled) return;
+    if (!(await copyText(value))) return;
+    setCopied(true);
+    if (timer.current !== null) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setCopied(false), 1600);
+  };
+
+  return (
+    <div className="copy-line">
+      <span className="copy-line-label">{label}</span>
+      <code className="copy-line-code" title={disabled ? '该插件未映射 npm 包' : value}>
+        {disabled ? '未映射 npm 包' : value}
+      </code>
+      <button
+        type="button"
+        onClick={handleCopy}
+        disabled={disabled}
+        className="btn btn-outline theme-secondary btn-sm flex-shrink-0"
+        aria-label={`复制${label}`}
+      >
+        {copied ? '已复制' : '复制'}
+      </button>
+    </div>
+  );
+}
 
 export default function PluginDetail() {
   const { slug = '' } = useParams<{ slug: string }>();
@@ -66,6 +101,12 @@ export default function PluginDetail() {
   };
   const compareSlugs = [slug, ...selected];
   const compareHref = `/compare?slugs=${encodeURIComponent(compareSlugs.join(','))}`;
+  const repoHttps = (data.url || `https://github.com/${data.owner}/${data.repo}`).replace(/\.git$/, '');
+  const npmPackage = data.npm_package?.trim() ?? '';
+  const cloneCommand = `git clone ${repoHttps}.git`;
+  const npmCommand = `npm install ${npmPackage}`;
+  const pluginSpec = npmPackage || `github:${data.owner}/${data.repo}`;
+  const pluginCommand = `dsh plugin --profile web add ${pluginSpec}`;
 
   return (
     <div className="d-flex flex-column gap-4">
@@ -140,10 +181,15 @@ export default function PluginDetail() {
                     {data.description}
                   </p>
                 ) : null}
+                <div className="mt-3 d-flex flex-column gap-2" style={{ maxWidth: '42rem' }}>
+                  <CopyLine label="Git Clone" value={cloneCommand} />
+                  <CopyLine label="npm 安装" value={npmCommand} disabled={!npmPackage} />
+                  <CopyLine label="插件安装" value={pluginCommand} />
+                </div>
               </div>
             </div>
             <div className="flex-shrink-0 sm:text-end">
-              <div className="fs-xs text-uppercase fg-secondary">Star</div>
+              <div className="fs-xs text-uppercase fg-secondary">STAR</div>
               <div className="num fs-3xl fw-semibold">{formatNumber(data.stars)}</div>
               <div className="mt-1 fs-sm">
                 <DeltaBadge value={data.delta} anomaly={data.is_anomaly} />
@@ -168,7 +214,7 @@ export default function PluginDetail() {
       <section className="card">
         <div className="card-body">
           <div className="mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h2 className={SECTION_TITLE}>Star 曲线</h2>
+            <h2 className={SECTION_TITLE}>STAR 曲线</h2>
             <div className="d-flex align-items-center gap-2">
               <div className="btn-group btn-group-sm" role="group" aria-label="曲线区间">
                 {[30, 90].map((value) => (
@@ -302,7 +348,7 @@ export default function PluginDetail() {
                 </a>
               </div>
               <p className="mt-3 mb-0 fs-xs fg-secondary">
-                Star 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。
+                STAR 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。
                 收录标准见 <Link to="/about#rules" className="text-decoration-none">收录规则</Link>
                 ，接口说明见 <Link to="/about/api" className="text-decoration-none">API</Link>。
               </p>

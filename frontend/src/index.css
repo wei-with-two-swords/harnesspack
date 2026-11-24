@@ -409,8 +409,9 @@
   }
   .hp-hero > * { @apply relative z-10; }
   .hero-grid { @apply grid items-center; grid-template-columns: 1fr; gap: 1.5rem; }
-  .hero-copy { @apply flex items-start; gap: 1.5rem; }
+  .hero-copy { @apply flex flex-col items-start; gap: 1rem; }
   .hero-logo {
+    @apply self-center;
     width: 88px;
     height: 88px;
     flex-shrink: 0;
@@ -435,6 +436,53 @@
     box-shadow: 0 0 0 4px var(--accent-soft);
   }
   .hero-stat { text-align: left; }
+  .hero-stat .hero-updated { justify-content: flex-end; }
+  .hero-tracking { @apply mt-1; color: var(--faint); font-size: 0.75rem; }
+  .hero-links {
+    @apply mt-4 flex flex-wrap items-center justify-end;
+    gap: 0.35rem 1rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+  .hero-links a {
+    @apply inline-flex items-center no-underline;
+    color: var(--muted);
+  }
+  .hero-links a:hover { color: var(--accent); text-decoration: none; }
+  .hero-links button {
+    @apply inline-flex items-center no-underline border-0 bg-transparent;
+    padding: 0;
+    color: var(--accent);
+    font-size: inherit;
+    cursor: pointer;
+  }
+  .hero-links button:hover { text-decoration: underline; }
+  .hero-install { @apply mt-4 flex flex-col items-start; gap: 0.4rem; max-width: 34rem; }
+  .hero-install-title { @apply text-xs fw-semibold; color: var(--muted); }
+  .hero-install-row {
+    @apply flex items-center rounded-sm2;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .hero-install-label { @apply shrink-0 text-xs fw-semibold; min-width: 4.75rem; color: var(--muted); }
+  .hero-install-code {
+    @apply min-w-0 flex-1 text-xs;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+    font-family: var(--font-mono);
+    color: var(--text);
+  }
+  .hero-install-row button {
+    @apply shrink-0 rounded-xs border-0 text-xs;
+    padding: 0.15rem 0.5rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+  }
   .hero-stat-label { @apply text-xs; color: var(--muted); }
   .hero-stat-value {
     @apply mt-2;
@@ -527,8 +575,29 @@
   .rank-name { @apply flex items-baseline; gap: 0.5rem; }
   .rank-name strong { font-size: 0.9375rem; font-weight: 600; }
   .rank-owner { @apply truncate text-xs; color: var(--faint); }
-  .rank-desc { @apply mt-1 block truncate text-xs; color: var(--muted); }
+  .rank-desc {
+    @apply mt-1 text-xs;
+    color: var(--muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.35;
+  }
   .rank-meta { @apply mt-1 flex items-center flex-wrap; gap: 0.35rem; }
+  .rank-category {
+    @apply shrink-0;
+    width: 6.5rem;
+    text-align: center;
+  }
+  .rank-category .badge { max-width: 6.25rem; overflow: hidden; text-overflow: ellipsis; }
+  .rank-secondary {
+    @apply shrink-0 flex flex-col items-center;
+    gap: 0.2rem;
+    width: 4.25rem;
+    text-align: center;
+  }
   .rank-value {
     @apply shrink-0 text-right;
     color: var(--accent);
@@ -537,6 +606,24 @@
     font-weight: 700;
   }
   .rank-value small { display: block; color: var(--muted); font-size: 0.6875rem; font-weight: 400; }
+  .copy-line {
+    @apply flex items-center rounded-sm2;
+    gap: 0.5rem;
+    padding: 0.35rem 0.5rem;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+  }
+  .copy-line-label {
+    @apply shrink-0 text-xs fw-semibold;
+    min-width: 4.75rem;
+    color: var(--muted);
+  }
+  .copy-line-code {
+    @apply min-w-0 flex-1 truncate text-xs;
+    font-family: var(--font-mono);
+    color: var(--text);
+  }
+  .copy-line button:disabled { opacity: 0.5; cursor: not-allowed; }
   .hp-row { border-radius: var(--radius-sm); padding-inline: 0.5rem; margin-inline: -0.5rem; transition: background-color 0.14s ease; }
   .hp-row:hover { background: var(--hover); }
   .hp-anchor { scroll-margin-top: 5.5rem; }
@@ -576,6 +663,46 @@
   .footer-links { @apply flex flex-wrap items-center; gap: 0.25rem 0.75rem; }
   .footer-links > * { color: var(--muted); }
   .footer-links a:hover { color: var(--text); }
+
+  /* ---- Friend link dialog ---- */
+  .friend-overlay {
+    @apply fixed inset-0 flex items-center justify-center;
+    z-index: 1000;
+    padding: 1rem;
+    background: rgba(15, 15, 25, 0.45);
+  }
+  .friend-dialog {
+    @apply w-full rounded-sm2;
+    max-width: 34rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .friend-dialog-head { @apply relative; }
+  .friend-close { @apply absolute; top: 0; right: 0; color: var(--muted); }
+  .friend-site { @apply mt-3 flex items-center; gap: 0.75rem; }
+  .friend-site-icon { @apply rounded-sm2 shrink-0; }
+  .friend-info-rows { @apply mt-3 flex flex-col; gap: 0.4rem; }
+  .friend-copy-all-row { @apply mt-2 flex justify-end; }
+  .friend-apply {
+    @apply mt-4 flex flex-col;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .friend-apply input,
+  .friend-apply textarea {
+    @apply w-full rounded-xs;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--text);
+    font-size: 0.8125rem;
+    resize: vertical;
+  }
+  .friend-apply button { align-self: flex-start; }
 
   /* ---- Catalog sidebar ---- */
   .catalog-sidebar { @apply p-2 self-start; }
@@ -782,6 +909,18 @@
   @media (max-width: 575px) {
     .hero-copy { gap: 1rem; }
     .hero-logo { width: 60px; height: 60px; }
+    .rank-category { width: 4.5rem; }
+    .rank-category .badge { max-width: 4.5rem; font-size: 0.625rem; }
+    .rank-secondary { width: 3.25rem; }
+    .copy-line { flex-wrap: wrap; }
+    .copy-line-code {
+      flex-basis: 100%;
+      order: 3;
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+      word-break: break-all;
+    }
   }
   @media (max-width: 767px) {
     .desktop-nav { display: none !important; }

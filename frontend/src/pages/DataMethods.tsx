@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom';
 import { useTitle } from '../lib/useTitle';
 
 const BOARDS = [
-  ['近 24 小时', '最近 24 小时新增 star：相邻两个快照的差值，越大越靠前。'],
-  ['区间增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
-  ['总榜', '当前 star 总量；并列按名称升序。'],
+  ['近 24 小时', '最近 24 小时新增 STAR：相邻两个快照的差值，越大越靠前。'],
+  ['区间增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 STAR 需 ≥ 50。'],
+  ['总榜', '当前 STAR 总量；并列按名称升序。'],
   ['名次', '近 7 天总榜名次的跃升幅度。'],
-  ['最新', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
+  ['最新', '收录名单内、仓库创建时间在最近 30 天、且 STAR ≥ 10 的项目。'],
   ['稳健', '近 30 天剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
-  ['NPM', '按 npm registry 近 1 年 / 年至今 / 24 小时 / 7 天 / 30 天的包下载量排序；star 仅作对照，不参与计算。'],
+  ['NPM', '按 npm registry 近 1 年 / 年至今 / 24 小时 / 7 天 / 30 天的包下载量排序；STAR 仅作对照，不参与计算。'],
 ];
 
 const LINK = 'text-decoration-none';
@@ -20,7 +20,7 @@ export default function DataMethods() {
       <header className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-2">数据口径</h1>
         <p className="mb-0 fg-secondary">
-          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 star 变化如实记录下来，并让增速可比。
+          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 STAR 变化如实记录下来，并让增速可比。
         </p>
       </header>
 
@@ -72,7 +72,7 @@ export default function DataMethods() {
         <div className="card-body">
           <h2 className="fs-lg fw-semibold">NPM 榜的口径</h2>
           <p className="mt-2 fg-secondary">
-            NPM 榜是<strong>独立副榜</strong>，数据与 star 完全分开：包名来自仓库内的 package.json 与 npm registry 交叉校验，
+            NPM 榜是<strong>独立副榜</strong>，数据与 STAR 完全分开：包名来自仓库内的 package.json 与 npm registry 交叉校验，
             下载量来自 npm 官方 <code>api.npmjs.org/downloads</code>，每天抓取并保留逐日归档，不做回填。
           </p>
           <p className="mt-3 fg-secondary">
@@ -81,7 +81,7 @@ export default function DataMethods() {
             没有 npm 包的插件不进入本榜，也不按 0 下载处理。
           </p>
           <p className="mt-3 mb-0 fs-xs fg-secondary">
-            下载量与 star 衡量的是不同维度，页面并列展示仅为对照，从不相加或混算成综合分。
+            下载量与 STAR 衡量的是不同维度，页面并列展示仅为对照，从不相加或混算成综合分。
           </p>
         </div>
       </section>
@@ -94,8 +94,8 @@ export default function DataMethods() {
             按仓库去重（同一仓库的多个子包只计一次），不重复做人工评审。
           </p>
           <ul className="mt-3 mb-0 ps-4 fg-secondary">
-            <li className="mb-1">收录：上游合并即进入名单，次日快照开始计 star；分类沿用上游的 23 个分类。</li>
-            <li className="mb-1">退出：上游删除、仓库 404 / 归档、90 天无 push 且 star 无净增长，标记退出并保留历史曲线，不 404。</li>
+            <li className="mb-1">收录：上游合并即进入名单，次日快照开始计 STAR；分类沿用上游的 23 个分类。</li>
+            <li className="mb-1">退出：上游删除、仓库 404 / 归档、90 天无 push 且 STAR 无净增长，标记退出并保留历史曲线，不 404。</li>
             <li className="mb-1">变更：每次同步写入仓库 changelog，可审计；退出后重新被收录会自动恢复。</li>
             <li>
               提交收录请去{' '}
@@ -126,7 +126,7 @@ export default function DataMethods() {
           <h2 className="fs-lg fw-semibold">更新、容错与免责</h2>
           <p className="mt-2 fg-secondary">
             抓取失败会记录在快照的 failures 里并告警；缺日不补、绝不伪造。站点只做只读展示，
-            Star 数据归 GitHub 与各仓库作者所有。本项目非 GitHub 或任何 harness 官方项目。
+            STAR 数据归 GitHub 与各仓库作者所有。本项目非 GitHub 或任何 harness 官方项目。
           </p>
           <Link to="/rankings/velocity" className="btn btn-solid theme-secondary mt-2">
             去看近 24 小时榜 →
