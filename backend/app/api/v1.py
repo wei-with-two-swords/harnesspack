@@ -136,8 +136,14 @@ def changelog(
 
 
 @router.get("/plugins/{slug}")
-def plugin_detail(slug: str, conn: sqlite3.Connection = Depends(get_conn)) -> dict:
-    detail = ranking.plugin_detail(conn, slug)
+def plugin_detail(slug: str, request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> dict:
+    settings = request.app.state.settings
+    detail = ranking.plugin_detail(
+        conn,
+        slug,
+        snapshot_dir=settings.snapshot_dir,
+        npm_dir=settings.npm_downloads_dir,
+    )
     if detail is None:
         raise HTTPException(status_code=404, detail="plugin not found")
     return detail

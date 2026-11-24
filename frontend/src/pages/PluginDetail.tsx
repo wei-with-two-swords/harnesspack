@@ -6,8 +6,9 @@ import { useTitle } from '../lib/useTitle';
 import type { PluginDetail as Detail, SeriesResponse } from '../types';
 import { StarsChart } from '../components/StarsChart';
 import { DeltaBadge } from '../components/DeltaBadge';
+import { Avatar } from '../components/RankTable';
 import { EmptyState, ErrorState, Loading } from '../components/States';
-import { formatDate, formatDelta, formatNumber } from '../lib/format';
+import { formatCompact, formatDate, formatDateTime, formatDelta, formatNumber } from '../lib/format';
 import { categoryDescription } from '../lib/i18n';
 
 function RankChip({ label, value }: { label: string; value: number | null }) {
@@ -100,58 +101,70 @@ export default function PluginDetail() {
       <section className="card">
         <div className="card-body">
           <div className="d-flex flex-column sm:flex-row sm:align-items-start justify-content-between gap-4">
-            <div className="min-w-0">
-              <h1 className="fs-3xl fw-semibold mb-0">{data.name}</h1>
-              <div className="mt-1 d-flex flex-wrap align-items-center gap-2 fs-sm fg-secondary">
-                <a
-                  href={data.url}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="text-decoration-none"
-                >
-                  {data.owner}/{data.repo}
-                </a>
-                {data.category ? (
-                  <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
-                ) : null}
-                {data.harness ? (
-                  <span className="badge theme-secondary badge-subtle">{data.harness}</span>
-                ) : null}
-                {data.archived ? (
-                  <span className="badge theme-danger badge-subtle">已归档</span>
-                ) : null}
-                {data.status !== 'active' ? (
-                  <span className="badge theme-secondary badge-subtle">{data.status}</span>
+            <div className="min-w-0 d-flex gap-3">
+              <Avatar owner={data.owner} size={64} />
+              <div className="min-w-0">
+                <h1 className="fs-3xl fw-semibold mb-0">{data.name}</h1>
+                <div className="mt-1 d-flex flex-wrap align-items-center gap-2 fs-sm fg-secondary">
+                  <a
+                    href={data.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-decoration-none"
+                  >
+                    {data.owner}/{data.repo}
+                  </a>
+                  {data.category ? (
+                    <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
+                  ) : null}
+                  {data.harness ? (
+                    <span className="badge theme-secondary badge-subtle">{data.harness}</span>
+                  ) : null}
+                  {data.archived ? (
+                    <span className="badge theme-danger badge-subtle">已归档</span>
+                  ) : null}
+                  {data.status !== 'active' ? (
+                    <span className="badge theme-secondary badge-subtle">{data.status}</span>
+                  ) : null}
+                </div>
+                {data.description ? (
+                  <p className="mt-3 mb-0 fs-sm fg-secondary" style={{ maxWidth: '42rem' }}>
+                    {data.description}
+                  </p>
                 ) : null}
               </div>
-              {data.description ? (
-                <p className="mt-3 mb-0 fs-sm fg-secondary" style={{ maxWidth: '42rem' }}>
-                  {data.description}
-                </p>
-              ) : null}
             </div>
-            <div className="flex-shrink-0 text-end">
+            <div className="flex-shrink-0 sm:text-end">
               <div className="fs-xs text-uppercase fg-secondary">Star</div>
               <div className="num fs-3xl fw-semibold">{formatNumber(data.stars)}</div>
               <div className="mt-1 fs-sm">
                 <DeltaBadge value={data.delta} anomaly={data.is_anomaly} />
               </div>
+              <div className="mt-3 fs-xs fg-secondary">Forks</div>
+              <div className="num fs-lg">{formatNumber(data.forks)}</div>
+              <div className="mt-2 fs-xs fg-secondary">NPM 下载 · 近 1 年</div>
+              <div className="num fs-lg">{data.npm_package ? formatCompact(data.downloads_1y) : '—'}</div>
             </div>
           </div>
 
           <div className="row g-2 mt-4">
-            <div className="col-6 sm:col-3">
-              <RankChip label="总榜" value={data.rank_total} />
-            </div>
-            <div className="col-6 sm:col-3">
-              <RankChip label="24H" value={data.rank_velocity} />
-            </div>
-            <div className="col-6 sm:col-3">
-              <RankChip label="7 日区间增速" value={data.rank_growth7} />
-            </div>
-            <div className="col-6 sm:col-3">
-              <RankChip label="7 日名次跃升" value={data.rank_darkhorse7} />
-            </div>
+            {[
+              ['STAR 总榜', data.rank_total],
+              ['STAR 分类', data.rank_category],
+              ['24H 增速', data.rank_velocity],
+              ['7D 区间增速', data.rank_growth7],
+              ['名次跃升', data.rank_darkhorse7],
+              ['稳健增长', data.rank_quality30],
+              ['NPM 总榜', data.rank_npm_total],
+              ['NPM 24H', data.rank_npm_24h],
+              ['NPM 7D', data.rank_npm_7d],
+              ['NPM 30D', data.rank_npm_30d],
+              ['NPM 年至今', data.rank_npm_ytd],
+            ].map(([label, value]) => (
+              <div key={label as string} className="col-6 sm:col-4 lg:col-3">
+                <RankChip label={label as string} value={value as number | null} />
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -230,35 +243,81 @@ export default function PluginDetail() {
         <div className="col-12 sm:col-6">
           <div className="card h-100">
             <div className="card-body">
-              <h2 className={`${SECTION_TITLE} mb-2`}>收录信息</h2>
+              <h2 className={`${SECTION_TITLE} mb-2`}>仓库信息</h2>
               <dl className="mb-0 fs-sm">
                 {[
-                  ['收录日期', formatDate(data.added_at)],
+                  ['作者', data.owner],
                   ['仓库创建', formatDate(data.repo_created_at)],
-                  ['最新日增量', formatDelta(data.delta)],
-                  ['最新快照', formatDate(data.stars_at)],
+                  ['最近推送', formatDateTime(data.pushed_at)],
+                  ['默认分支', data.default_branch ?? '—'],
+                  ['Fork 数', formatNumber(data.forks)],
+                  ['许可证', data.license || '—'],
+                  ['Topics', data.topics?.length ? data.topics.join('、') : '—'],
                 ].map(([label, value]) => (
                   <div key={label} className="d-flex justify-content-between gap-4 mb-2">
                     <dt className="fw-normal fg-secondary">{label}</dt>
-                    <dd className="num mb-0">{value}</dd>
+                    <dd className={`num mb-0 text-end${label === 'Topics' ? '' : ' text-truncate'}`}>{value}</dd>
                   </div>
                 ))}
               </dl>
+              {data.github_description && data.github_description !== data.description ? (
+                <p className="mt-3 mb-0 fs-xs fg-secondary">
+                  GitHub 描述：{data.github_description}
+                </p>
+              ) : null}
+              <div className="mt-3 d-flex flex-wrap gap-2">
+                <a href={data.url} target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary btn-sm">
+                  打开 GitHub 仓库
+                </a>
+                <a
+                  href={`https://github.com/${encodeURIComponent(data.owner)}`}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="btn btn-outline theme-secondary btn-sm"
+                >
+                  作者主页
+                </a>
+              </div>
             </div>
           </div>
         </div>
         <div className="col-12 sm:col-6">
           <div className="card h-100">
             <div className="card-body">
-              <h2 className={`${SECTION_TITLE} mb-2`}>数据口径</h2>
-              <p className="fs-xs fg-secondary">
-                Star 数取自 GitHub 公开 API；本站自 2026-11-19 起每日 UTC 00:10
-                快照一次，不回溯历史。标「异常」的单日涨幅仍有记录，但会在增速统计中单独说明。
-              </p>
+              <h2 className={`${SECTION_TITLE} mb-2`}>收录与数据</h2>
+              <dl className="mb-0 fs-sm">
+                {[
+                  ['收录日期', formatDate(data.added_at)],
+                  ['最新快照', formatDate(data.stars_at)],
+                  ['统计基准日', formatDate(data.as_of)],
+                  ['最新日增量', formatDelta(data.delta)],
+                  ['状态', data.status ?? '—'],
+                  ['NPM 包名', data.npm_package ?? '—'],
+                  ['NPM 下载 · 30D', data.npm_package ? formatCompact(data.downloads_30d) : '—'],
+                  ['NPM 下载 · 7D', data.npm_package ? formatCompact(data.downloads_7d) : '—'],
+                  ['NPM 下载 · 24H', data.npm_package ? formatCompact(data.downloads_24h) : '—'],
+                  ['NPM 下载 · 年至今', data.npm_package ? formatCompact(data.downloads_ytd) : '—'],
+                  ['NPM 归档', data.npm_first_day
+                    ? `${data.npm_first_day} ~ ${data.npm_last_day ?? ''}（${data.npm_days_in_archive ?? '—'} 天）`
+                    : '—'],
+                ].map(([label, value]) => (
+                  <div key={label} className="d-flex justify-content-between gap-4 mb-2">
+                    <dt className="fw-normal fg-secondary">{label}</dt>
+                    <dd className="num mb-0 text-end">{value}</dd>
+                  </div>
+                ))}
+              </dl>
               <div className="mt-3 d-flex flex-wrap gap-2">
-                <a href={data.url} target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary btn-sm">
-                  打开 GitHub 仓库
-                </a>
+                {data.npm_package ? (
+                  <a
+                    href={`https://www.npmjs.com/package/${data.npm_package}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="btn btn-outline theme-secondary btn-sm"
+                  >
+                    打开 npm 包
+                  </a>
+                ) : null}
                 <a
                   href={`${ISSUE_URL}${encodeURIComponent(`[数据] ${data.owner}/${data.repo}`)}`}
                   target="_blank"
@@ -268,7 +327,8 @@ export default function PluginDetail() {
                   数据有误 / 申诉
                 </a>
               </div>
-              <p className="mt-2 mb-0 fs-xs fg-secondary">
+              <p className="mt-3 mb-0 fs-xs fg-secondary">
+                Star 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。
                 收录标准见 <Link to="/about#rules" className="text-decoration-none">收录规则</Link>
                 ，接口说明见 <Link to="/about/api" className="text-decoration-none">API</Link>。
               </p>

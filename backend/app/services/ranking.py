@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from datetime import date as Date, timedelta
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
@@ -264,6 +265,90 @@ def _load_npm_latest(npm_dir: str | Path | None) -> dict[str, Any] | None:
     return payload if isinstance(payload, dict) else None
 
 
+@lru_cache(maxsize=2)
+def _snapshot_index(path: str, mtime_ns: int) -> dict[str, dict[str, Any]]:
+    """Parse one daily snapshot into a slug-keyed index (cached per file)."""
+    try:
+        payload = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    records = payload.get("plugins") if isinstance(payload, dict) else None
+    if not isinstance(records, list):
+        return {}
+    return {
+        rec["slug"]: rec
+        for rec in records
+        if isinstance(rec, dict) and rec.get("slug")
+    }
+
+
+def _snapshot_meta(snapshot_dir: str | Path | None, day: str | None, slug: str) -> dict[str, Any]:
+    if not snapshot_dir or not day:
+        return {}
+    path = Path(snapshot_dir) / f"{day}.json"
+    try:
+        mtime_ns = path.stat().st_mtime_ns
+    except OSError:
+        return {}
+    return _snapshot_index(str(path), mtime_ns).get(slug, {})
+
+
+def _npm_detail(conn: sqlite3.Connection, npm_dir: str | Path | None, slug: str) -> dict[str, Any]:
+    """npm package info and ranks across all five download windows."""
+    result: dict[str, Any] = {
+        "npm_package": None,
+        "downloads_24h": None,
+        "downloads_7d": None,
+        "downloads_30d": None,
+        "downloads_1y": None,
+        "downloads_ytd": None,
+        "npm_days_in_archive": None,
+        "npm_first_day": None,
+        "npm_last_day": None,
+        "rank_npm_24h": None,
+        "rank_npm_7d": None,
+        "rank_npm_30d": None,
+        "rank_npm_total": None,
+        "rank_npm_ytd": None,
+    }
+    summary = _load_npm_latest(npm_dir)
+    if summary is None:
+        return result
+    by_slug = summary.get("plugins") or {}
+    entry = by_slug.get(slug)
+    if not isinstance(entry, dict):
+        return result
+
+    result["npm_package"] = entry.get("npm_package")
+    for key in NPM_RANGE_KEYS.values():
+        result[key] = int(entry.get(key) or 0)
+    result["npm_days_in_archive"] = entry.get("days_in_archive")
+    result["npm_first_day"] = entry.get("first_day")
+    result["npm_last_day"] = entry.get("last_day")
+
+    rows = conn.execute(
+        "SELECT slug, name, stars_latest FROM plugins WHERE status = 'active'"
+    ).fetchall()
+    for rng, key in NPM_RANGE_KEYS.items():
+        candidates = []
+        for row in rows:
+            candidate = by_slug.get(row["slug"])
+            if not candidate:
+                continue
+            downloads = int(candidate.get(key) or 0)
+            if downloads <= 0:
+                continue
+            candidates.append(
+                (downloads, row["stars_latest"] or 0, (row["name"] or "").lower(), row["slug"])
+            )
+        candidates.sort(key=lambda r: (-r[0], -r[1], r[2], r[3]))
+        for rank, candidate in enumerate(candidates, start=1):
+            if candidate[3] == slug:
+                result[f"rank_npm_{'total' if rng == '1y' else rng}"] = rank
+                break
+    return result
+
+
 def npm_board(
     conn: sqlite3.Connection,
     npm_dir: str | Path | None = None,
@@ -413,7 +498,13 @@ def categories(conn: sqlite3.Connection, on: str | None = None) -> dict[str, Any
     return {"as_of": day, "items": items}
 
 
-def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) -> dict[str, Any] | None:
+def plugin_detail(
+    conn: sqlite3.Connection,
+    slug: str,
+    on: str | None = None,
+    snapshot_dir: str | Path | None = None,
+    npm_dir: str | Path | None = None,
+) -> dict[str, Any] | None:
     row = conn.execute("SELECT * FROM plugins WHERE slug = ?", (slug,)).fetchone()
     if row is None:
         return None
@@ -446,9 +537,27 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
         "rank_growth7": None,
         "rank_darkhorse7": None,
         "rank_quality7": None,
+        "rank_quality30": None,
+        "rank_category": None,
+        "forks": None,
+        "pushed_at": None,
+        "license": None,
+        "topics": [],
+        "default_branch": None,
+        "github_description": None,
     }
+    detail.update(_npm_detail(conn, npm_dir, slug))
     if day is None:
         return detail
+
+    meta = _snapshot_meta(snapshot_dir, day, slug)
+    if meta:
+        detail["forks"] = meta.get("forks_count")
+        detail["pushed_at"] = meta.get("pushed_at")
+        detail["license"] = meta.get("license")
+        detail["topics"] = meta.get("topics") or []
+        detail["default_branch"] = meta.get("default_branch")
+        detail["github_description"] = meta.get("description")
 
     latest = conn.execute(
         "SELECT count, delta, is_anomaly FROM stars WHERE plugin_id = ? AND date = ?",
@@ -470,6 +579,7 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
     detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
     detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
     detail["rank_quality7"] = _rank(board(conn, "quality", window=7, on=day))
+    detail["rank_quality30"] = _rank(board(conn, "quality", window=30, on=day))
 
     if plugin["category"]:
         same = _rows_on(conn, day, plugin["category"])
@@ -477,6 +587,7 @@ def plugin_detail(conn: sqlite3.Connection, slug: str, on: str | None = None) ->
         peers = []
         for i, row in enumerate(ordered):
             if row["slug"] == slug:
+                detail["rank_category"] = i + 1
                 continue
             peers.append(
                 {

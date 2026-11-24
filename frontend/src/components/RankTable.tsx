@@ -15,11 +15,12 @@ export function RankMedal({ rank }: { rank: number }) {
   return <span className={`rank-medal${tone}`}>{rank}</span>;
 }
 
-export function Avatar({ owner }: { owner: string }) {
+export function Avatar({ owner, size = 32 }: { owner: string; size?: number }) {
   const [failed, setFailed] = useState(false);
+  const style = { width: size, height: size };
   if (failed || !owner) {
     return (
-      <span className="rank-avatar inline-flex items-center justify-center text-xs fw-semibold" aria-hidden="true">
+      <span className="rank-avatar inline-flex items-center justify-center text-xs fw-semibold" style={style} aria-hidden="true">
         {owner.charAt(0).toUpperCase()}
       </span>
     );
@@ -27,7 +28,8 @@ export function Avatar({ owner }: { owner: string }) {
   return (
     <img
       className="rank-avatar"
-      src={`https://github.com/${encodeURIComponent(owner)}.png?size=64`}
+      style={style}
+      src={`https://github.com/${encodeURIComponent(owner)}.png?size=${Math.max(64, size * 2)}`}
       alt=""
       loading="lazy"
       onError={() => setFailed(true)}

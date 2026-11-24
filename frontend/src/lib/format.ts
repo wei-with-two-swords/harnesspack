@@ -93,6 +93,21 @@ export function formatDate(iso: string | null | undefined): string {
   }).format(d);
 }
 
+export function formatDateTime(iso: string | null | undefined): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'UTC',
+  }).format(d);
+}
+
 export function daysSince(iso: string | null | undefined, today: string | null | undefined): string {
   if (!iso || !today) return '';
   const start = new Date(`${iso.slice(0, 10)}T00:00:00Z`).getTime();

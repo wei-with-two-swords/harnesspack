@@ -71,6 +71,29 @@ export interface PluginDetail {
   rank_velocity: number | null;
   rank_growth7: number | null;
   rank_darkhorse7: number | null;
+  rank_quality7: number | null;
+  rank_quality30: number | null;
+  rank_category: number | null;
+  rank_npm_24h: number | null;
+  rank_npm_7d: number | null;
+  rank_npm_30d: number | null;
+  rank_npm_total: number | null;
+  rank_npm_ytd: number | null;
+  forks: number | null;
+  pushed_at: string | null;
+  license: string | null;
+  topics: string[];
+  default_branch: string | null;
+  github_description: string | null;
+  npm_package: string | null;
+  downloads_24h: number | null;
+  downloads_7d: number | null;
+  downloads_30d: number | null;
+  downloads_1y: number | null;
+  downloads_ytd: number | null;
+  npm_days_in_archive: number | null;
+  npm_first_day: string | null;
+  npm_last_day: string | null;
   peers: PeerItem[];
 }
 
