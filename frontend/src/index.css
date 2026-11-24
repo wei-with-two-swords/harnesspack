@@ -775,8 +775,14 @@
   }
 }
 
-@keyframes hp-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+/* Rank chips: three equal columns on desktop, two on narrow screens.
+   Defined outside @layer so Tailwind does not purge these custom classes. */
+.rank-chips > * { flex: 0 0 33.3333%; max-width: 33.3333%; }
+@media (max-width: 575px) {
+  .rank-chips > * { flex: 0 0 50%; max-width: 50%; }
+}
 
+@keyframes hp-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

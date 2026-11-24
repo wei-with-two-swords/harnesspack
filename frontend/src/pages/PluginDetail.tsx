@@ -8,7 +8,7 @@ import { StarsChart } from '../components/StarsChart';
 import { DeltaBadge } from '../components/DeltaBadge';
 import { Avatar } from '../components/RankTable';
 import { EmptyState, ErrorState, Loading } from '../components/States';
-import { formatCompact, formatDate, formatDateTime, formatDelta, formatNumber } from '../lib/format';
+import { formatDate, formatDateTime, formatNumber } from '../lib/format';
 import { categoryDescription } from '../lib/i18n';
 
 function RankChip({ label, value }: { label: string; value: number | null }) {
@@ -114,6 +114,14 @@ export default function PluginDetail() {
                   >
                     {data.owner}/{data.repo}
                   </a>
+                  <a
+                    href={`https://github.com/${encodeURIComponent(data.owner)}`}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="text-decoration-none"
+                  >
+                    作者主页 ↗
+                  </a>
                   {data.category ? (
                     <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
                   ) : null}
@@ -140,28 +148,16 @@ export default function PluginDetail() {
               <div className="mt-1 fs-sm">
                 <DeltaBadge value={data.delta} anomaly={data.is_anomaly} />
               </div>
-              <div className="mt-3 fs-xs fg-secondary">Forks</div>
-              <div className="num fs-lg">{formatNumber(data.forks)}</div>
-              <div className="mt-2 fs-xs fg-secondary">NPM 下载 · 近 1 年</div>
-              <div className="num fs-lg">{data.npm_package ? formatCompact(data.downloads_1y) : '—'}</div>
             </div>
           </div>
 
-          <div className="row g-2 mt-4">
+          <div className="row g-2 mt-4 rank-chips">
             {[
               ['STAR 总榜', data.rank_total],
-              ['STAR 分类', data.rank_category],
-              ['近 24 小时增速', data.rank_velocity],
-              ['近 7 天区间增速', data.rank_growth7],
-              ['名次', data.rank_darkhorse7],
-              ['稳健', data.rank_quality30],
-              ['NPM 总榜', data.rank_npm_total],
-              ['NPM 近 24 小时', data.rank_npm_24h],
-              ['NPM 近 7 天', data.rank_npm_7d],
-              ['NPM 近 30 天', data.rank_npm_30d],
-              ['NPM 年至今', data.rank_npm_ytd],
+              ['今日新增', data.rank_velocity],
+              ['NPM 近 1 年下载榜', data.rank_npm_total],
             ].map(([label, value]) => (
-              <div key={label as string} className="col-6 sm:col-4 lg:col-3">
+              <div key={label as string} className="col-6">
                 <RankChip label={label as string} value={value as number | null} />
               </div>
             ))}
@@ -253,10 +249,22 @@ export default function PluginDetail() {
                   ['Fork 数', formatNumber(data.forks)],
                   ['许可证', data.license || '—'],
                   ['Topics', data.topics?.length ? data.topics.join('、') : '—'],
+                  ['NPM 包名', data.npm_package ?? '—'],
+                  ['NPM 网址', data.npm_package ? (
+                    <a
+                      href={`https://www.npmjs.com/package/${data.npm_package}`}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="text-decoration-none text-truncate"
+                      title={data.npm_package}
+                    >
+                      npmjs.com/package/{data.npm_package}
+                    </a>
+                  ) : '—'],
                 ].map(([label, value]) => (
-                  <div key={label} className="d-flex justify-content-between gap-4 mb-2">
-                    <dt className="fw-normal fg-secondary">{label}</dt>
-                    <dd className={`num mb-0 text-end${label === 'Topics' ? '' : ' text-truncate'}`}>{value}</dd>
+                  <div key={label as string} className="d-flex justify-content-between gap-4 mb-2">
+                    <dt className="fw-normal fg-secondary flex-shrink-0">{label}</dt>
+                    <dd className={`num mb-0 text-end${label === 'Topics' || label === 'NPM 网址' ? '' : ' text-truncate'}`}>{value}</dd>
                   </div>
                 ))}
               </dl>
@@ -265,59 +273,25 @@ export default function PluginDetail() {
                   GitHub 描述：{data.github_description}
                 </p>
               ) : null}
-              <div className="mt-3 d-flex flex-wrap gap-2">
-                <a href={data.url} target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary btn-sm">
-                  打开 GitHub 仓库
-                </a>
-                <a
-                  href={`https://github.com/${encodeURIComponent(data.owner)}`}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="btn btn-outline theme-secondary btn-sm"
-                >
-                  作者主页
-                </a>
-              </div>
             </div>
           </div>
         </div>
         <div className="col-12 sm:col-6">
           <div className="card h-100">
             <div className="card-body">
-              <h2 className={`${SECTION_TITLE} mb-2`}>收录与数据</h2>
+              <h2 className={`${SECTION_TITLE} mb-2`}>收录信息</h2>
               <dl className="mb-0 fs-sm">
                 {[
                   ['收录日期', formatDate(data.added_at)],
-                  ['最新快照', formatDate(data.stars_at)],
-                  ['统计基准日', formatDate(data.as_of)],
-                  ['最新日增量', formatDelta(data.delta)],
-                  ['状态', data.status ?? '—'],
-                  ['NPM 包名', data.npm_package ?? '—'],
-                  ['NPM 下载 · 近 30 天', data.npm_package ? formatCompact(data.downloads_30d) : '—'],
-                  ['NPM 下载 · 近 7 天', data.npm_package ? formatCompact(data.downloads_7d) : '—'],
-                  ['NPM 下载 · 近 24 小时', data.npm_package ? formatCompact(data.downloads_24h) : '—'],
-                  ['NPM 下载 · 年至今', data.npm_package ? formatCompact(data.downloads_ytd) : '—'],
-                  ['NPM 归档', data.npm_first_day
-                    ? `${data.npm_first_day} ~ ${data.npm_last_day ?? ''}（${data.npm_days_in_archive ?? '—'} 天）`
-                    : '—'],
+                  ['数据日期', formatDate(data.as_of)],
                 ].map(([label, value]) => (
-                  <div key={label} className="d-flex justify-content-between gap-4 mb-2">
+                  <div key={label as string} className="d-flex justify-content-between gap-4 mb-2">
                     <dt className="fw-normal fg-secondary">{label}</dt>
                     <dd className="num mb-0 text-end">{value}</dd>
                   </div>
                 ))}
               </dl>
               <div className="mt-3 d-flex flex-wrap gap-2">
-                {data.npm_package ? (
-                  <a
-                    href={`https://www.npmjs.com/package/${data.npm_package}`}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="btn btn-outline theme-secondary btn-sm"
-                  >
-                    打开 npm 包
-                  </a>
-                ) : null}
                 <a
                   href={`${ISSUE_URL}${encodeURIComponent(`[数据] ${data.owner}/${data.repo}`)}`}
                   target="_blank"
