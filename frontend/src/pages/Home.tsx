@@ -14,7 +14,7 @@ import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, S
 
 const PAGE_SIZE = 20;
 const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
-const PERIOD_BOARDS = new Set(['darkhorse', 'quality']);
+const FIXED_BOARD_WINDOW: Record<string, number> = { darkhorse: 7, quality: 30 };
 
 function parseView(params: URLSearchParams): View {
   const board = params.get('board');
@@ -22,7 +22,7 @@ function parseView(params: URLSearchParams): View {
   const category = params.get('category');
   const sort = params.get('sort');
   const rawWindow = params.get('window');
-  const window = rawWindow === '30' ? 30 : rawWindow === '7' ? 7 : undefined;
+  const requestedWindow = rawWindow === '30' ? 30 : 7;
   if (board === 'npm') {
     return { kind: 'npm', range: ['1y', 'ytd', '24h', '7d', '30d'].includes(range ?? '') ? range! : '1y' };
   }
@@ -34,7 +34,9 @@ function parseView(params: URLSearchParams): View {
     return { kind: 'directory', sort: s };
   }
   const valid = ['velocity', 'growth', 'total', 'darkhorse', 'rookie', 'quality'];
-  return { kind: 'star', board: valid.includes(board ?? '') ? board! : 'total', window };
+  const selected = valid.includes(board ?? '') ? board! : 'total';
+  const window = FIXED_BOARD_WINDOW[selected] ?? (selected === 'growth' ? requestedWindow : undefined);
+  return { kind: 'star', board: selected, window };
 }
 
 function usePageMeta(title: string, description: string) {
@@ -47,17 +49,10 @@ function usePageMeta(title: string, description: string) {
 
 export default function Home() {
   const { t } = useI18n();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const view = parseView(params);
   const currentWindow = view.kind === 'star' ? (view.window ?? 7) : 7;
   const [page, setPage] = useState(0);
-
-  const setWindow = (value: number) => {
-    const next = new URLSearchParams(params);
-    if (value === 7) next.delete('window');
-    else next.set('window', String(value));
-    setParams(next);
-  };
 
   const cats = useApi<CategoriesResponse>(() => api.categories(), []);
   const status = useApi<StatusResponse>(() => api.status(), []);
@@ -98,21 +93,7 @@ export default function Home() {
     [view.kind, view.kind === 'directory' ? view.sort : 'stars', page],
   );
 
-  const period = view.kind === 'star' && PERIOD_BOARDS.has(view.board);
-
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
-
-  const periodSwitch = period ? (
-    <div className="btn-group btn-group-sm mb-3" role="group" aria-label={t('table.period')}>
-      {[7, 30].map((option) => (
-        <button key={option} type="button" onClick={() => setWindow(option)}
-          aria-pressed={currentWindow === option}
-          className={`btn ${currentWindow === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}>
-          {t(option === 7 ? 'common.window7' : 'common.window30')}
-        </button>
-      ))}
-    </div>
-  ) : null;
 
   const npmNotice = view.kind === 'npm' && boardState.data && !boardState.data.reason ? (
     <div className="alert alert-secondary py-2 px-3 fs-xs mb-3" role="note">
@@ -127,7 +108,6 @@ export default function Home() {
     const { data, error, loading } = boardState;
     content = (
       <>
-        {periodSwitch}
         {npmNotice}
         <div className="card overflow-hidden">
           {error ? <div className="p-3"><ErrorState error={error} /></div> : null}

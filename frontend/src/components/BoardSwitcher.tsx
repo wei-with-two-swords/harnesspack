@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useI18n, categoryLabel } from '../lib/i18n';
+import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
 import { viewToUrl, type View } from './CatalogSidebar';
 
 const STAR_7D = { board: 'growth' as const, window: 7 };
 const STAR_30D = { board: 'growth' as const, window: 30 };
 const NPM_RANGES = ['1y', 'ytd', '24h', '7d', '30d'];
 
-type Chip = { key: string; label: string; to: string };
+type Chip = { key: string; label: string; to: string; hint?: string };
 
 /** Two-level switcher: tabs for STAR / NPM / directory, chips for each board. */
 export function BoardSwitcher({ view, categories }: { view: View; categories: string[] }) {
@@ -36,19 +36,20 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
   ];
 
   const starChips: Chip[] = [
-    { key: 'total', label: t('board.total'), to: viewToUrl({ kind: 'star', board: 'total' }) },
-    { key: 'velocity', label: t('board.velocity'), to: viewToUrl({ kind: 'star', board: 'velocity' }) },
-    { key: 'growth7', label: t('board.window7'), to: viewToUrl({ kind: 'star', ...STAR_7D }) },
-    { key: 'growth30', label: t('board.window30'), to: viewToUrl({ kind: 'star', ...STAR_30D }) },
-    { key: 'darkhorse', label: t('board.darkhorse'), to: viewToUrl({ kind: 'star', board: 'darkhorse' }) },
-    { key: 'rookie', label: t('board.rookie'), to: viewToUrl({ kind: 'star', board: 'rookie' }) },
-    { key: 'quality', label: t('board.quality'), to: viewToUrl({ kind: 'star', board: 'quality' }) },
-    { key: 'category', label: t('board.category'), to: viewToUrl({ kind: 'category', category: '' }) },
+    { key: 'total', label: t('board.total'), to: viewToUrl({ kind: 'star', board: 'total' }), hint: t('desc.total') },
+    { key: 'velocity', label: t('board.velocity'), to: viewToUrl({ kind: 'star', board: 'velocity' }), hint: t('desc.velocity') },
+    { key: 'growth7', label: t('board.window7'), to: viewToUrl({ kind: 'star', ...STAR_7D }), hint: t('desc.growth') },
+    { key: 'growth30', label: t('board.window30'), to: viewToUrl({ kind: 'star', ...STAR_30D }), hint: t('desc.growth') },
+    { key: 'darkhorse', label: t('board.darkhorse'), to: viewToUrl({ kind: 'star', board: 'darkhorse' }), hint: t('desc.darkhorse') },
+    { key: 'rookie', label: t('board.rookie'), to: viewToUrl({ kind: 'star', board: 'rookie' }), hint: t('desc.rookie') },
+    { key: 'quality', label: t('board.quality'), to: viewToUrl({ kind: 'star', board: 'quality' }), hint: t('desc.quality') },
+    { key: 'category', label: t('board.category'), to: viewToUrl({ kind: 'category', category: '' }), hint: t('desc.category') },
   ];
   const npmChips: Chip[] = NPM_RANGES.map((range) => ({
     key: range,
     label: t(`board.npm.${range}`),
     to: viewToUrl({ kind: 'npm', range }),
+    hint: t('desc.npm'),
   }));
   const dirChips: Chip[] = [
     { key: 'stars', label: `${t('catalog.sortStars')} ↓`, to: viewToUrl({ kind: 'directory', sort: 'stars' }) },
@@ -86,6 +87,7 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
           <Link
             key={chip.key}
             to={chip.to}
+            title={chip.hint}
             className={`switch-chip${chip.key === activeChip ? ' active' : ''}`}
           >
             {chip.label}
@@ -97,6 +99,7 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
         <div className="switch-chips mt-2">
           <Link
             to={viewToUrl({ kind: 'category', category: '' })}
+            title={categoryDescription(lang, 'all')}
             className={`switch-chip${view.kind === 'category' && !view.category ? ' active' : ''}`}
           >
             {t('catalog.all')}
@@ -105,6 +108,7 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
             <Link
               key={cat}
               to={viewToUrl({ kind: 'category', category: cat })}
+              title={categoryDescription(lang, cat)}
               className={`switch-chip${view.kind === 'category' && view.category === cat ? ' active' : ''}`}
             >
               {categoryLabel(lang, cat)}

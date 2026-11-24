@@ -8,18 +8,19 @@ import { RankTable } from '../components/RankTable';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { categoryLabel } from '../lib/format';
+import { categoryDescription } from '../lib/i18n';
 
 const PAGE_SIZE = 20;
 
 export default function CategoryBoard() {
   const { category = 'other' } = useParams<{ category: string }>();
-  useTitle(`${categoryLabel(category)}榜`, '同一分类内按 star 总量排名。');
+  const label = categoryLabel(category);
+  useTitle(label, '同一分类内按 star 总量排名。');
   const [page, setPage] = useState(0);
   useEffect(() => {
     setPage(0);
   }, [category]);
 
-  const label = categoryLabel(category);
   const { data, error, loading } = useApi<BoardResponse>(
     () => api.board('total', undefined, category, PAGE_SIZE, page * PAGE_SIZE),
     [category, page],
@@ -31,11 +32,11 @@ export default function CategoryBoard() {
         <div>
           <div className="fs-xs fg-secondary">
             <Link to="/categories" className="text-decoration-none">
-              分类榜
+              分类
             </Link>{' '}
             / {label}
           </div>
-          <h1 className="mt-1 fs-3xl fw-semibold mb-1">{label}榜</h1>
+          <h1 className="mt-1 fs-3xl fw-semibold mb-1" title={categoryDescription('zh', category)}>{label}</h1>
           <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
             分类内按当前 star 总量排序，并列时按名称升序。
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}

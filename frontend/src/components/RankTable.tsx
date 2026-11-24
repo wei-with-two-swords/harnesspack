@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { RankingItem } from '../types';
 import { DeltaBadge } from './DeltaBadge';
 import { formatCompact, formatNumber, formatPercent } from '../lib/format';
-import { useI18n, categoryLabel } from '../lib/i18n';
+import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
 
 function rankDelta(item: RankingItem): number | null {
   if (item.prev_rank === null || item.prev_rank === undefined) return null;
@@ -86,7 +86,7 @@ export function RankTable({ items, board }: { items: RankingItem[]; board: strin
               {item.description ? <span className="rank-desc">{item.description}</span> : null}
               <span className="rank-meta">
                 {item.category ? (
-                  <span className="badge">{categoryLabel(lang, item.category)}</span>
+                  <span className="badge" title={categoryDescription(lang, item.category)}>{categoryLabel(lang, item.category)}</span>
                 ) : null}
                 {isNpm
                   ? <span className="num text-xs fg-secondary" title="GitHub star">★ {compact(item.stars)}</span>

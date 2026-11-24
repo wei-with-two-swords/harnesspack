@@ -4,6 +4,7 @@ import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
 import { categoryLabel, formatDate, formatNumber } from '../lib/format';
+import { categoryDescription } from '../lib/i18n';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import type { CategoriesResponse, ListResponse, PluginListItem } from '../types';
@@ -79,7 +80,7 @@ export default function Plugins() {
             >
               <option value="">全部分类</option>
               {(cats.data?.items ?? []).map((item) => (
-                <option key={item.category} value={item.category}>
+                <option key={item.category} value={item.category} title={categoryDescription('zh', item.category)}>
                   {categoryLabel(item.category)}（{item.count}）
                 </option>
               ))}
@@ -116,7 +117,8 @@ export default function Plugins() {
                       <div className="d-flex align-items-center gap-2">
                         <span className="text-truncate fw-medium">{item.name}</span>
                         {item.category ? (
-                          <span className="badge theme-secondary badge-subtle flex-shrink-0 d-none sm:d-inline-flex">
+                          <span className="badge theme-secondary badge-subtle flex-shrink-0 d-none sm:d-inline-flex"
+                            title={item.category ? categoryDescription('zh', item.category) : undefined}>
                             {categoryLabel(item.category)}
                           </span>
                         ) : null}

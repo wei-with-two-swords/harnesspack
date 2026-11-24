@@ -8,6 +8,7 @@ import { StarsChart } from '../components/StarsChart';
 import { DeltaBadge } from '../components/DeltaBadge';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { formatDate, formatDelta, formatNumber } from '../lib/format';
+import { categoryDescription } from '../lib/i18n';
 
 function RankChip({ label, value }: { label: string; value: number | null }) {
   return (
@@ -111,7 +112,7 @@ export default function PluginDetail() {
                   {data.owner}/{data.repo}
                 </a>
                 {data.category ? (
-                  <span className="badge theme-secondary badge-subtle">{data.category}</span>
+                  <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
                 ) : null}
                 {data.harness ? (
                   <span className="badge theme-secondary badge-subtle">{data.harness}</span>

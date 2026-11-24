@@ -5,10 +5,10 @@ const BOARDS = [
   ['24H', '最近 24 小时新增 star：相邻两个快照的差值，越大越靠前。'],
   ['区间增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
   ['总榜', '当前 star 总量；并列按名称升序。'],
-  ['名次跃升', '区间内总榜名次的跃升幅度。'],
-  ['最新发布', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
-  ['稳健增长', '剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
-  ['下载', '按 npm registry 近 7 / 30 天的包下载量排序；star 仅作对照，不参与计算。'],
+  ['名次', '近 7 天总榜名次的跃升幅度。'],
+  ['最新', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
+  ['稳健', '近 30 天剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
+  ['NPM', '按 npm registry 近 1 年 / 年至今 / 24 小时 / 7 天 / 30 天的包下载量排序；star 仅作对照，不参与计算。'],
 ];
 
 const LINK = 'text-decoration-none';
@@ -61,8 +61,8 @@ export default function DataMethods() {
           </dl>
           <p className="mt-3 mb-0 fs-xs fg-secondary">
             所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
-            分类榜沿用上游清单的 23 个分类，只在同一分类内重新排名。
-            稳健增长榜先剔除被标为异常的单日涨幅，再按剩余天数的日均新增排序，至少 3 天样本才入榜；
+            分类沿用上游清单的 23 个分类，只在同一分类内重新排名。
+            稳健先剔除被标为异常的单日涨幅，再按剩余 30 天的日均新增排序，至少 3 天样本才入榜；
             覆盖率与失败清单见 <Link className={LINK} to="/status">数据状态</Link>。
           </p>
         </div>
@@ -70,9 +70,9 @@ export default function DataMethods() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">下载榜的口径</h2>
+          <h2 className="fs-lg fw-semibold">NPM 榜的口径</h2>
           <p className="mt-2 fg-secondary">
-            下载榜是<strong>独立副榜</strong>，数据与 star 完全分开：包名来自仓库内的 package.json 与 npm registry 交叉校验，
+            NPM 榜是<strong>独立副榜</strong>，数据与 star 完全分开：包名来自仓库内的 package.json 与 npm registry 交叉校验，
             下载量来自 npm 官方 <code>api.npmjs.org/downloads</code>，每天抓取并保留逐日归档，不做回填。
           </p>
           <p className="mt-3 fg-secondary">
