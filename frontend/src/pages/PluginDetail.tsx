@@ -151,14 +151,14 @@ export default function PluginDetail() {
             {[
               ['STAR 总榜', data.rank_total],
               ['STAR 分类', data.rank_category],
-              ['24H 增速', data.rank_velocity],
-              ['7D 区间增速', data.rank_growth7],
-              ['名次跃升', data.rank_darkhorse7],
-              ['稳健增长', data.rank_quality30],
+              ['近 24 小时增速', data.rank_velocity],
+              ['近 7 天区间增速', data.rank_growth7],
+              ['名次', data.rank_darkhorse7],
+              ['稳健', data.rank_quality30],
               ['NPM 总榜', data.rank_npm_total],
-              ['NPM 24H', data.rank_npm_24h],
-              ['NPM 7D', data.rank_npm_7d],
-              ['NPM 30D', data.rank_npm_30d],
+              ['NPM 近 24 小时', data.rank_npm_24h],
+              ['NPM 近 7 天', data.rank_npm_7d],
+              ['NPM 近 30 天', data.rank_npm_30d],
               ['NPM 年至今', data.rank_npm_ytd],
             ].map(([label, value]) => (
               <div key={label as string} className="col-6 sm:col-4 lg:col-3">
@@ -293,9 +293,9 @@ export default function PluginDetail() {
                   ['最新日增量', formatDelta(data.delta)],
                   ['状态', data.status ?? '—'],
                   ['NPM 包名', data.npm_package ?? '—'],
-                  ['NPM 下载 · 30D', data.npm_package ? formatCompact(data.downloads_30d) : '—'],
-                  ['NPM 下载 · 7D', data.npm_package ? formatCompact(data.downloads_7d) : '—'],
-                  ['NPM 下载 · 24H', data.npm_package ? formatCompact(data.downloads_24h) : '—'],
+                  ['NPM 下载 · 近 30 天', data.npm_package ? formatCompact(data.downloads_30d) : '—'],
+                  ['NPM 下载 · 近 7 天', data.npm_package ? formatCompact(data.downloads_7d) : '—'],
+                  ['NPM 下载 · 近 24 小时', data.npm_package ? formatCompact(data.downloads_24h) : '—'],
                   ['NPM 下载 · 年至今', data.npm_package ? formatCompact(data.downloads_ytd) : '—'],
                   ['NPM 归档', data.npm_first_day
                     ? `${data.npm_first_day} ~ ${data.npm_last_day ?? ''}（${data.npm_days_in_archive ?? '—'} 天）`

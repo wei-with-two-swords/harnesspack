@@ -33,7 +33,7 @@ export default function SponsorsSection() {
           推荐位与榜单分离，是这个小站的长期承诺。
         </p>
         <Link to="/rankings/velocity" className="btn btn-solid theme-secondary mt-3">
-          返回 24H 榜 →
+          返回近 24 小时榜 →
         </Link>
       </div>
     </section>

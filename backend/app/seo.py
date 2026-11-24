@@ -19,17 +19,17 @@ SITE_NAME = "HarnessPack"
 SITE_TITLE = "HarnessPack · DSH 插件 star 榜单"
 SITE_DESCRIPTION = (
     "HarnessPack 每天抓取一次 DeepSeek Harness（DSH）插件的 GitHub star，"
-    "按真实增量排 24H、区间增速、总榜、名次、最新、稳健与 NPM 榜，覆盖 11,700+ 个可安装插件。"
+    "按真实增量排近 24 小时、区间增速、总榜、名次、最新、稳健与 NPM 榜，覆盖 11,700+ 个可安装插件。"
 )
 
 BOARDS: dict[str, tuple[str, str]] = {
-    "velocity": ("24H 榜", "按最近 24 小时新增 star 排序：相邻两次快照的差值，谁涨得最快。"),
-    "growth": ("区间增速榜", "按近 7 天或 30 天涨幅排序：只统计基准日 star 不低于 50 的插件。"),
+    "velocity": ("近 24 小时榜", "按最近 24 小时新增 star 排序：相邻两次快照的差值，谁涨得最快。"),
+    "growth": ("区间增速榜", "按近 7 天或近 30 天涨幅排序：只统计基准日 star 不低于 50 的插件。"),
     "total": ("总榜", "按当前 star 总量排序，并列时按名称升序。"),
     "darkhorse": ("名次榜", "按近 7 天总榜名次跃升幅度排序，谁在悄悄爬升。"),
     "rookie": ("最新榜", "最近 30 天新建、且 star 不低于 10 的在册插件。"),
     "quality": ("稳健榜", "按近 30 天剔除异常单日涨幅后的日均新增排序。"),
-    "npm": ("NPM 榜", "按 npm registry 近 1 年、年至今、24 小时、7 天或 30 天的包下载量排序，star 仅作对照，两种数据不合并。"),
+    "npm": ("NPM 榜", "按 npm registry 近 1 年、年至今、近 24 小时、近 7 天或近 30 天的包下载量排序，star 仅作对照，两种数据不合并。"),
 }
 
 CATEGORY_LABELS: dict[str, str] = {

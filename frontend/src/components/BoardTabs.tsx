@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export const BOARD_TABS = [
-  { id: 'velocity', label: '24H', hint: '最近 24 小时新增 star' },
+  { id: 'velocity', label: '近 24 小时', hint: '最近 24 小时新增 star' },
   { id: 'growth', label: '区间增速', hint: '7 / 30 日涨幅' },
   { id: 'total', label: '总榜', hint: 'star 总量' },
   { id: 'darkhorse', label: '名次', hint: '近 7 天总榜名次提升' },

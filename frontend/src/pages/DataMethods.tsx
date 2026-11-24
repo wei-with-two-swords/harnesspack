@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTitle } from '../lib/useTitle';
 
 const BOARDS = [
-  ['24H', '最近 24 小时新增 star：相邻两个快照的差值，越大越靠前。'],
+  ['近 24 小时', '最近 24 小时新增 star：相邻两个快照的差值，越大越靠前。'],
   ['区间增速', '近 7 / 30 天涨幅：(当前 - 基准) / 基准，基准日 star 需 ≥ 50。'],
   ['总榜', '当前 star 总量；并列按名称升序。'],
   ['名次', '近 7 天总榜名次的跃升幅度。'],
@@ -129,7 +129,7 @@ export default function DataMethods() {
             Star 数据归 GitHub 与各仓库作者所有。本项目非 GitHub 或任何 harness 官方项目。
           </p>
           <Link to="/rankings/velocity" className="btn btn-solid theme-secondary mt-2">
-            去看 24H 榜 →
+            去看近 24 小时榜 →
           </Link>
         </div>
       </section>
