@@ -102,7 +102,7 @@ def _day_range(conn) -> tuple[str | None, str | None]:
     return row["first"], row["last"]
 
 
-def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
+def _route_meta(conn, path: str, base: str, npm_dir: Path | None = None) -> dict[str, Any]:
     image = f"{base}/og/site.png"
     first_day, last_day = _day_range(conn)
 
@@ -186,7 +186,7 @@ def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
             return _not_found(base, "榜单未找到 · HarnessPack", "这个榜单不存在。")
         label, description = board
         canonical = f"{base}/rankings/{name}"
-        items = ranking.get_board(conn, name)["items"][:10]
+        items = ranking.get_board(conn, name, npm_dir=npm_dir)["items"][:10]
         return _meta(
             title=f"{label} · HarnessPack",
             description=description,
@@ -272,7 +272,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             path = full_path.strip("/")
             conn = connect(settings.db_path)
             try:
-                meta = _route_meta(conn, path, base)
+                meta = _route_meta(conn, path, base, settings.npm_downloads_dir)
             finally:
                 conn.close()
             html = _render_shell(

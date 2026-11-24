@@ -102,7 +102,8 @@ def test_robots_and_sitemap(client):
     assert "http://testserver/about/terms" in body
     assert "http://testserver/about/api" in body
     assert "http://testserver/rankings/quality" in body
-    assert body.count("<url>") == 23
+    assert "http://testserver/rankings/npm" in body
+    assert body.count("<url>") == 24
 
 
 def test_spa_missing_dist_returns_404(client):

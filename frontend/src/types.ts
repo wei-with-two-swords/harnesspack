@@ -17,6 +17,9 @@ export interface RankingItem {
   real_delta?: number;
   observed_days?: number;
   anomaly_days?: number;
+  npm_package?: string | null;
+  downloads?: number;
+  downloads_prev?: number;
 }
 
 export interface BoardResponse {
@@ -26,6 +29,12 @@ export interface BoardResponse {
   items: RankingItem[];
   total?: number;
   reason?: string;
+  source?: string;
+  metric?: string;
+  unit?: string;
+  is_approximate?: boolean;
+  note?: string;
+  covered_packages?: number;
 }
 
 export interface PeerItem {

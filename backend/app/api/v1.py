@@ -77,6 +77,7 @@ def categories(conn: sqlite3.Connection = Depends(get_conn)) -> dict:
 @router.get("/rankings/{board_name}")
 def rankings(
     board_name: str,
+    request: Request,
     window: int = Query(7),
     category: str | None = Query(None, max_length=40),
     limit: int = Query(50, ge=1, le=200),
@@ -84,7 +85,10 @@ def rankings(
     conn: sqlite3.Connection = Depends(get_conn),
 ) -> dict:
     try:
-        payload = ranking.get_board(conn, board_name, window=window, category=category)
+        payload = ranking.get_board(
+            conn, board_name, window=window, category=category,
+            npm_dir=request.app.state.settings.npm_downloads_dir,
+        )
     except ranking.BoardError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     items = payload["items"]

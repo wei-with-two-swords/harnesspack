@@ -19,6 +19,7 @@ class Settings:
     db_path: Path = REPO_ROOT / "data" / "harnesspack.db"
     snapshot_dir: Path = REPO_ROOT / "data" / "snapshots"
     seed_path: Path = REPO_ROOT / "data" / "plugins.seed.json"
+    npm_downloads_dir: Path = REPO_ROOT / "data" / "npm_downloads"
     frontend_dist: Path = REPO_ROOT / "frontend" / "dist"
     env: str = "dev"
     ingest_on_startup: bool = True
@@ -37,6 +38,9 @@ def get_settings() -> Settings:
         db_path=_env_path("HARNESSPACK_DB", REPO_ROOT / "data" / "harnesspack.db"),
         snapshot_dir=_env_path("HARNESSPACK_SNAPSHOTS", REPO_ROOT / "data" / "snapshots"),
         seed_path=_env_path("HARNESSPACK_SEED", REPO_ROOT / "data" / "plugins.seed.json"),
+        npm_downloads_dir=_env_path(
+            "HARNESSPACK_NPM_DOWNLOADS", REPO_ROOT / "data" / "npm_downloads"
+        ),
         frontend_dist=_env_path("HARNESSPACK_FRONTEND", REPO_ROOT / "frontend" / "dist"),
         env=os.environ.get("HARNESSPACK_ENV", "dev"),
         ingest_on_startup=os.environ.get("HARNESSPACK_INGEST", "1") != "0",

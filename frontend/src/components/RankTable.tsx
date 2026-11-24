@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import type { RankingItem } from '../types';
 import { DeltaBadge } from './DeltaBadge';
-import { formatNumber, formatPercent } from '../lib/format';
+import { formatCompact, formatNumber, formatPercent } from '../lib/format';
 
 function rankDelta(item: RankingItem): number | null {
-  if (item.prev_rank === null) return null;
+  if (item.prev_rank === null || item.prev_rank === undefined) return null;
   return item.prev_rank - item.rank;
 }
 
@@ -52,7 +52,7 @@ function ExtraCell({ item, board }: { item: RankingItem; board: string }) {
   return (
     <span
       className={`num ${delta === null ? 'fg-secondary' : delta > 0 ? 'fg-success' : delta < 0 ? 'fg-danger' : 'fg-secondary'}`}
-      title={item.prev_rank ? `上次第 ${item.prev_rank} 名` : '暂无上次排名'}
+      title={item.prev_rank ? `上次第 ${item.prev_rank} 名` : '上一窗口无下载'}
     >
       {delta === null ? 'NEW' : delta === 0 ? '—' : delta > 0 ? `↑${delta}` : `↓${Math.abs(delta)}`}
     </span>
@@ -70,6 +70,7 @@ function extraLabel(board: string): string {
 }
 
 export function RankTable({ items, board }: { items: RankingItem[]; board: string }) {
+  const isNpm = board === 'npm';
   return (
     <>
       <ul className="list-group list-group-flush sm:d-none">
@@ -88,11 +89,19 @@ export function RankTable({ items, board }: { items: RankingItem[]; board: strin
                   {item.owner}/{item.repo}
                 </span>
                 <span className="mt-1 d-flex align-items-center gap-2 fs-xs">
-                  <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                  {isNpm ? (
+                    <span className="num fg-secondary" title="对照：GitHub star">
+                      ★ {formatCompact(item.stars)}
+                    </span>
+                  ) : (
+                    <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                  )}
                   <ExtraCell item={item} board={board} />
                 </span>
               </span>
-              <span className="num fg-body flex-shrink-0 fs-sm">{formatNumber(item.stars)}</span>
+              <span className="num fg-body flex-shrink-0 fs-sm">
+                {isNpm ? formatCompact(item.downloads) : formatNumber(item.stars)}
+              </span>
             </Link>
           </li>
         ))}
@@ -107,10 +116,10 @@ export function RankTable({ items, board }: { items: RankingItem[]; board: strin
               </th>
               <th className="px-2 py-3 fw-medium">插件</th>
               <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
-                Star
+                {isNpm ? '下载量' : 'Star'}
               </th>
               <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
-                今日
+                {isNpm ? '对照 Star' : '今日'}
               </th>
               <th className="px-4 py-3 text-end fw-medium" style={{ width: '6rem' }}>
                 {extraLabel(board)}
@@ -138,9 +147,17 @@ export function RankTable({ items, board }: { items: RankingItem[]; board: strin
                     ) : null}
                   </Link>
                 </td>
-                <td className="num px-2 py-3 text-end">{formatNumber(item.stars)}</td>
+                <td className="num px-2 py-3 text-end">
+                  {isNpm ? formatCompact(item.downloads) : formatNumber(item.stars)}
+                </td>
                 <td className="px-2 py-3 text-end">
-                  <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                  {isNpm ? (
+                    <span className="num fg-secondary" title="GitHub star，仅作对照">
+                      {formatCompact(item.stars)}
+                    </span>
+                  ) : (
+                    <DeltaBadge value={item.delta} anomaly={item.is_anomaly} />
+                  )}
                 </td>
                 <td className="px-4 py-3 text-end">
                   <ExtraCell item={item} board={board} />

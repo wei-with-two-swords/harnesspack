@@ -29,6 +29,7 @@ BOARDS: dict[str, tuple[str, str]] = {
     "darkhorse": ("黑马榜", "按区间内总榜名次跃升幅度排序，谁在悄悄爬升。"),
     "rookie": ("新秀榜", "最近 30 天新建、且 star 不低于 10 的在册插件。"),
     "quality": ("含金量榜", "剔除异常单日涨幅后，按剩余天数的日均新增排序。"),
+    "npm": ("下载榜", "按 npm registry 近 7 天或 30 天的包下载量排序，star 仅作对照，两种数据不合并。"),
 }
 
 CATEGORY_LABELS: dict[str, str] = {

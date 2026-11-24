@@ -7,12 +7,16 @@ layer slices it for pagination.
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from datetime import date as Date, timedelta
+from pathlib import Path
 from typing import Any
 
 BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie", "quality")
+NPM_BOARD = "npm"
 WINDOWS = (7, 30)
+NPM_WINDOWS = (7, 30)
 GROWTH_MIN_BASE = 50
 ROOKIE_DAYS = 30
 ROOKIE_MIN_STARS = 10
@@ -235,13 +239,124 @@ def rookie_board(
     }
 
 
+def _load_npm_latest(npm_dir: str | Path | None) -> dict[str, Any] | None:
+    """Load the npm download summary; return None when unavailable."""
+    if not npm_dir:
+        return None
+    path = Path(npm_dir) / "latest.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return payload if isinstance(payload, dict) else None
+
+
+def npm_board(
+    conn: sqlite3.Connection,
+    npm_dir: str | Path | None = None,
+    window: int = 7,
+    category: str | None = None,
+) -> dict[str, Any]:
+    """Independent npm download board.
+
+    Downloads come from the archived npm-registry summary (a separate namespace
+    from stars). Each item carries stars only as a side-by-side reference; the
+    two metrics are never combined into one score.
+    """
+    if window not in NPM_WINDOWS:
+        raise BoardError(f"window must be one of {NPM_WINDOWS}")
+    summary = _load_npm_latest(npm_dir)
+    if summary is None:
+        return {
+            "board": NPM_BOARD,
+            "as_of": None,
+            "window": window,
+            "items": [],
+            "reason": "npm 下载数据尚未采集。",
+        }
+
+    by_slug = summary.get("plugins") or {}
+    cur_key = f"downloads_{window}d"
+    prev_key = f"downloads_prev_{window}d"
+
+    rows = conn.execute(
+        "SELECT slug, name, owner, repo, description, category, harness, url, "
+        "stars_latest, repo_created_at, npm_package FROM plugins WHERE status = 'active'"
+    ).fetchall()
+    params: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        entry = by_slug.get(row["slug"])
+        if not entry:
+            continue
+        downloads = int(entry.get(cur_key) or 0)
+        if downloads <= 0:
+            continue
+        if category and row["category"] != category:
+            continue
+        prev = int(entry.get(prev_key) or 0)
+        params[row["slug"]] = {**dict(row), "downloads": downloads, "prev": prev}
+
+    prev_order = sorted(
+        params.values(),
+        key=lambda r: (-r["prev"], -r["downloads"], r["name"].lower(), r["slug"]),
+    )
+    prev_rank = {r["slug"]: i + 1 for i, r in enumerate(prev_order) if r["prev"] > 0}
+
+    ordered = sorted(
+        params.values(),
+        key=lambda r: (-r["downloads"], -(r["stars_latest"] or 0), r["name"].lower(), r["slug"]),
+    )
+    items = []
+    for i, row in enumerate(ordered):
+        prev = row["prev"]
+        growth = (row["downloads"] - prev) / prev if prev > 0 else None
+        items.append(
+            {
+                "slug": row["slug"],
+                "name": row["name"],
+                "owner": row["owner"],
+                "repo": row["repo"],
+                "description": row["description"],
+                "category": row["category"],
+                "harness": row["harness"],
+                "url": row["url"],
+                "stars": row["stars_latest"],
+                "delta": None,
+                "is_anomaly": False,
+                "repo_created_at": row["repo_created_at"],
+                "npm_package": row["npm_package"] or by_slug[row["slug"]].get("npm_package"),
+                "downloads": row["downloads"],
+                "downloads_prev": prev,
+                "growth": round(growth, 6) if growth is not None else None,
+                "rank": i + 1,
+                "prev_rank": prev_rank.get(row["slug"]),
+            }
+        )
+    window_meta = summary.get("window") or {}
+    return {
+        "board": NPM_BOARD,
+        "as_of": window_meta.get("end"),
+        "window": window,
+        "items": items,
+        "source": summary.get("source"),
+        "metric": summary.get("metric"),
+        "unit": summary.get("unit"),
+        "is_approximate": summary.get("is_approximate", True),
+        "note": summary.get("note"),
+        "covered_packages": summary.get("covered_packages"),
+    }
+
+
 def get_board(
     conn: sqlite3.Connection,
     name: str,
     window: int = 7,
     on: str | None = None,
     category: str | None = None,
+    npm_dir: str | Path | None = None,
 ) -> dict[str, Any]:
+    if name == NPM_BOARD:
+        return npm_board(conn, npm_dir=npm_dir, window=window, category=category)
     if name == "rookie":
         return rookie_board(conn, on, category)
     return board(conn, name, window=window, on=on, category=category)

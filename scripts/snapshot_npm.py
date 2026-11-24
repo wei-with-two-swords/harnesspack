@@ -142,9 +142,20 @@ def _merge_into_archive(archive: dict, fetched: dict[str, dict]) -> int:
     return added
 
 
-def _sum_window(days: dict[str, int], window: int) -> int:
-    cutoff = (TODAY - dt.timedelta(days=window - 1)).isoformat()
-    return sum(count for day, count in days.items() if day >= cutoff)
+def _sum_window(days: dict[str, int], window: int, end: dt.date | None = None) -> int:
+    end = end or TODAY
+    cutoff = (end - dt.timedelta(days=window - 1)).isoformat()
+    return sum(count for day, count in days.items() if cutoff <= day <= end.isoformat())
+
+
+def _sum_prev_window(days: dict[str, int], window: int, end: dt.date | None = None) -> int:
+    """The equally long window immediately before the current one."""
+    end = end or TODAY
+    prev_end = end - dt.timedelta(days=window)
+    prev_start = prev_end - dt.timedelta(days=window - 1)
+    return sum(
+        count for day, count in days.items() if prev_start.isoformat() <= day <= prev_end.isoformat()
+    )
 
 
 def _write_summary(archive: dict, package_to_slugs: dict, added: int, start: dt.date, end: dt.date) -> None:
@@ -166,8 +177,10 @@ def _write_summary(archive: dict, package_to_slugs: dict, added: int, start: dt.
         days = archive.get(package) or {}
         entry = {
             "npm_package": package,
-            "downloads_7d": _sum_window(days, 7),
-            "downloads_30d": _sum_window(days, 30),
+            "downloads_7d": _sum_window(days, 7, end),
+            "downloads_30d": _sum_window(days, 30, end),
+            "downloads_prev_7d": _sum_prev_window(days, 7, end),
+            "downloads_prev_30d": _sum_prev_window(days, 30, end),
             "days_in_archive": len(days),
             "first_day": min(days) if days else None,
             "last_day": max(days) if days else None,

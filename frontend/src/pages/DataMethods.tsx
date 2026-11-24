@@ -8,6 +8,7 @@ const BOARDS = [
   ['黑马', '区间内总榜名次的跃升幅度。'],
   ['新秀', '收录名单内、仓库创建时间在最近 30 天、且 star ≥ 10 的项目。'],
   ['含金量', '剔除异常单日涨幅后，按剩余天数的日均新增排序；至少 3 天样本。'],
+  ['下载', '按 npm registry 近 7 / 30 天的包下载量排序；star 仅作对照，不参与计算。'],
 ];
 
 const LINK = 'text-decoration-none';
@@ -63,6 +64,24 @@ export default function DataMethods() {
             分类榜沿用上游清单的 23 个分类，只在同一分类内重新排名。
             含金量榜先剔除被标为异常的单日涨幅，再按剩余天数的日均新增排序，至少 3 天样本才入榜；
             覆盖率与失败清单见 <Link className={LINK} to="/status">数据状态</Link>。
+          </p>
+        </div>
+      </section>
+
+      <section className="card mb-4">
+        <div className="card-body">
+          <h2 className="fs-lg fw-semibold">下载榜的口径</h2>
+          <p className="mt-2 fg-secondary">
+            下载榜是<strong>独立副榜</strong>，数据与 star 完全分开：包名来自仓库内的 package.json 与 npm registry 交叉校验，
+            下载量来自 npm 官方 <code>api.npmjs.org/downloads</code>，每天抓取并保留逐日归档，不做回填。
+          </p>
+          <p className="mt-3 fg-secondary">
+            这是 <code>tarball</code> 下载数，包含 CI、镜像、依赖传递与重复下载，
+            <strong>不是用户安装数</strong>。只统计能映射出 npm 包的在册插件，约 6,900 个；
+            没有 npm 包的插件不进入本榜，也不按 0 下载处理。
+          </p>
+          <p className="mt-3 mb-0 fs-xs fg-secondary">
+            下载量与 star 衡量的是不同维度，页面并列展示仅为对照，从不相加或混算成综合分。
           </p>
         </div>
       </section>

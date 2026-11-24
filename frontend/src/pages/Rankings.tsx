@@ -8,6 +8,7 @@ import { BoardTabs, BOARD_TABS } from '../components/BoardTabs';
 import { RankTable } from '../components/RankTable';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
+import { formatNumber } from '../lib/format';
 
 const BOARD_IDS = new Set<string>(BOARD_TABS.map((tab) => tab.id));
 function emptyReason(reason: string | null | undefined) {
@@ -28,6 +29,7 @@ const BOARD_TEXT: Record<string, string> = {
   darkhorse: '按区间内总榜名次跃升排序，正数为上升。',
   rookie: '收录名单内、仓库创建时间在最近 30 天的项目。',
   quality: '先剔除被标记为异常的单日涨幅，再按剩余天数的日均新增排序；至少 3 天数据才入榜。',
+  npm: '按 npm registry 近 7 / 30 天的包下载量排序，star 仅作对照；下载量含 CI 与依赖，不等于用户安装数。',
 };
 
 export default function Rankings() {
@@ -56,7 +58,7 @@ export default function Rankings() {
   const label = BOARD_TABS.find((tab) => tab.id === board)?.label ?? board;
   const title = label.endsWith('榜') ? label : `${label}榜`;
   useTitle(title, `${title}：${BOARD_TEXT[board] ?? ''}`.trim());
-  const windowed = board === 'growth' || board === 'darkhorse' || board === 'quality';
+  const windowed = board === 'growth' || board === 'darkhorse' || board === 'quality' || board === 'npm';
 
   return (
     <section>
@@ -78,7 +80,7 @@ export default function Rankings() {
                 aria-pressed={window === option}
                 className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
               >
-                近 {option} 天
+                近 {option} 天{board === 'npm' ? '下载' : ''}
               </button>
             ))}
           </div>
@@ -86,6 +88,15 @@ export default function Rankings() {
       </header>
 
       <BoardTabs active={board} />
+
+      {board === 'npm' && data && !data.reason ? (
+        <div className="alert alert-secondary py-2 px-3 fs-xs mb-3" role="note">
+          数据来自 npm registry 的 tarball 下载量（近 {data.window ?? 7} 天），
+          包含 CI、镜像与依赖拉取，<strong>不等于真实用户安装数</strong>，也不与 star 相加。
+          覆盖 {formatNumber(data.covered_packages)} 个可映射包；无 npm 包的插件不在本榜。
+          截至 {data.as_of}。
+        </div>
+      ) : null}
 
       <div className="card overflow-hidden">
         {error ? (
