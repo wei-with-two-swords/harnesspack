@@ -13,7 +13,7 @@ export function CommunityAuth({ user, oauthEnabled, signOut }: AuthState) {
     return (
       <div className="d-flex align-items-center gap-2 flex-wrap mb-3">
         {user.avatar_url ? (
-          <img src={user.avatar_url} alt="" width="24" height="24" style={{ borderRadius: '50%' }} />
+          <img src={user.avatar_url} alt="" width="24" height="24" style={{ borderRadius: 'var(--radius-round)' }} />
         ) : null}
         <span className="fs-sm fg-secondary" title={`${t('auth.signedInAs')}: ${user.login}`}>
           @{user.login}

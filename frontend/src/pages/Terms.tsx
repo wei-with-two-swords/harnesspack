@@ -8,7 +8,7 @@ export default function Terms() {
   useTitle('使用条款与数据许可', 'HarnessPack 的数据来源、许可范围、API 限流与使用边界。');
 
   return (
-    <article className="fs-sm" style={{ maxWidth: '48rem' }}>
+    <article className="fs-sm" style={{ maxWidth: 'var(--measure-wide)' }}>
       <header className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-2">使用条款与数据许可</h1>
         <p className="mb-0 fg-secondary">

@@ -15,7 +15,7 @@ export default function Categories() {
     <section>
       <div className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-1">分类</h1>
-        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
           分类沿用 awesome-dsh-plugin 清单的 23 个分类，每个分类单独按 STAR 排名，只统计在册的 DSH 插件。
         </p>
       </div>

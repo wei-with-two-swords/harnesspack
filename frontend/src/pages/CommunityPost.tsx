@@ -44,7 +44,7 @@ export default function CommunityPost() {
   }, [load, postId, t]);
 
   return (
-    <section style={{ maxWidth: '46rem' }}>
+    <section style={{ maxWidth: 'var(--measure-mid)' }}>
       <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
         ← {t('community.backToFeed')}
       </Link>

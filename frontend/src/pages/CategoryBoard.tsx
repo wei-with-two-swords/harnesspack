@@ -37,7 +37,7 @@ export default function CategoryBoard() {
             / {label}
           </div>
           <h1 className="mt-1 fs-3xl fw-semibold mb-1" title={categoryDescription('zh', category)}>{label}</h1>
-          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
             分类内按当前 STAR 总量排序，并列时按名称升序。
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
           </p>

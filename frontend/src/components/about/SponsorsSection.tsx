@@ -20,7 +20,7 @@ export default function SponsorsSection() {
         <h3 className="fs-md fw-semibold mt-4">本周编辑精选</h3>
         <div className="mt-2 rounded-3 bg-subtle-secondary px-4 py-5 text-center">
           <div className="fs-sm">招商中</div>
-          <p className="mx-auto mt-2 mb-0 fs-xs fg-secondary" style={{ maxWidth: '28rem' }}>
+          <p className="mx-auto mt-2 mb-0 fs-xs fg-secondary" style={{ maxWidth: 'var(--measure-narrow)' }}>
             首期只开放 3 个席位，按周计价。当前阶段优先邀请名单内的作者与工具类项目，
             先跑通展示与标注，再谈价格。
           </p>

@@ -46,7 +46,7 @@ export default function Community() {
   };
 
   return (
-    <section style={{ maxWidth: '46rem' }}>
+    <section style={{ maxWidth: 'var(--measure-mid)' }}>
       <div className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-1">{t('community.discussion')}</h1>
         <p className="fs-sm fg-secondary mb-0">{t('community.subtitle')}</p>

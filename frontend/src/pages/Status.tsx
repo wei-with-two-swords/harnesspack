@@ -30,7 +30,7 @@ export default function Status() {
     <section className="d-flex flex-column gap-4">
       <header>
         <h1 className="fs-3xl fw-semibold mb-1">数据状态</h1>
-        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
           抓取覆盖率、失败清单与数据库计数全部公开；快照文件本身在
           <a
             className={`mx-1 ${LINK}`}

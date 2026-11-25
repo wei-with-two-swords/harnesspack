@@ -89,7 +89,7 @@ export function Comments({ postId, user, onChanged }: Props) {
                     alt=""
                     width="20"
                     height="20"
-                    style={{ borderRadius: '50%' }}
+                    style={{ borderRadius: 'var(--radius-round)' }}
                   />
                 ) : null}
                 <Link

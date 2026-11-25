@@ -177,11 +177,11 @@ export default function PluginDetail() {
                   ) : null}
                 </div>
                 {data.description ? (
-                  <p className="mt-3 mb-0 fs-sm fg-secondary" style={{ maxWidth: '42rem' }}>
+                  <p className="mt-3 mb-0 fs-sm fg-secondary" style={{ maxWidth: 'var(--measure)' }}>
                     {data.description}
                   </p>
                 ) : null}
-                <div className="mt-3 d-flex flex-column gap-2" style={{ maxWidth: '42rem' }}>
+                <div className="mt-3 d-flex flex-column gap-2" style={{ maxWidth: 'var(--measure)' }}>
                   <CopyLine label="Git Clone" value={cloneCommand} />
                   <CopyLine label="npm 安装" value={npmCommand} disabled={!npmPackage} />
                   <CopyLine label="插件安装" value={pluginCommand} />
@@ -260,7 +260,7 @@ export default function PluginDetail() {
                       className="check"
                       aria-label={`对比 ${peer.name}`}
                     />
-                    <span className="num flex-shrink-0 fs-xs fg-secondary" style={{ width: '2.5rem' }}>
+                    <span className="num flex-shrink-0 fs-xs fg-secondary" style={{ width: 'var(--s-5)' }}>
                       #{peer.rank}
                     </span>
                     <Link

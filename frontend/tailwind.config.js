@@ -7,6 +7,20 @@ export default {
   darkMode: ['selector', '[data-bs-theme="dark"]'],
   theme: {
     extend: {
+      // Same 8px scale as index.css. Overriding the numeric steps keeps
+      // @apply and JSX utilities from producing two different rhythms.
+      spacing: {
+        0: '0',
+        1: 'var(--s-1)',
+        2: 'var(--s-2)',
+        3: 'var(--s-3)',
+        4: 'var(--s-4)',
+        5: 'var(--s-5)',
+        6: 'var(--s-6)',
+        7: 'var(--s-7)',
+        8: 'var(--s-8)',
+        px: 'var(--hairline)',
+      },
       colors: {
         bg: 'var(--bg)',
         surface: {
@@ -40,12 +54,14 @@ export default {
       },
       borderRadius: {
         card: 'var(--radius)',
-        sm2: 'var(--radius-sm)',
-        xs: 'var(--radius-xs)',
+        sm2: 'var(--radius)',
+        xs: 'var(--radius)',
+        round: 'var(--radius-round)',
+        none: 'var(--radius-none)',
       },
       boxShadow: {
-        card: 'var(--shadow)',
-        pop: 'var(--shadow-lg)',
+        overlay: 'var(--shadow-overlay)',
+        pop: 'var(--shadow-overlay)',
       },
       maxWidth: {
         container: 'var(--container)',

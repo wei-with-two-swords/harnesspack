@@ -69,7 +69,7 @@ export function PostCard({ post, user, onDelete, detail = false }: Props) {
               alt=""
               width="24"
               height="24"
-              style={{ borderRadius: '50%' }}
+              style={{ borderRadius: 'var(--radius-round)' }}
             />
           ) : null}
           <Link

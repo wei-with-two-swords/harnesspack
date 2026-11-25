@@ -16,9 +16,15 @@ export function readTheme(): ThemeMode {
   return 'light';
 }
 
+/** Read a design token from the active theme so JS and CSS never diverge. */
+function token(name: string, fallback: string): string {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value || fallback;
+}
+
 function syncMetaThemeColor() {
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-  if (meta) meta.content = isDarkMode() ? '#0b0e13' : '#f7f8fa';
+  if (meta) meta.content = token('--bg', isDarkMode() ? '#101018' : '#ffffff');
 }
 
 export function applyTheme(mode: ThemeMode, persist = true): void {
@@ -41,18 +47,22 @@ export function isDarkMode(): boolean {
   return document.documentElement.getAttribute('data-bs-theme') === 'dark';
 }
 
-/** Canvas-based widgets (uPlot) cannot use CSS variables, so mirror the theme in JS. */
+/** Canvas widgets need concrete colors; resolve them from the same tokens CSS uses. */
 export function chartColors() {
   const dark = isDarkMode();
   return {
     dark,
-    axis: dark ? '#9aa8ba' : '#5c6b7a',
-    grid: dark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(15, 23, 42, 0.10)',
-    line: dark ? '#38bdf8' : '#0e7490',
-    fill: dark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(14, 116, 144, 0.08)',
-    series: dark
-      ? ['#38bdf8', '#f5b544', '#4ade80', '#f87171', '#a78bfa']
-      : ['#0e7490', '#b45309', '#15803d', '#b91c1c', '#6d28d9'],
+    axis: token('--muted', dark ? '#c0c0ca' : '#52525b'),
+    grid: token('--line', dark ? 'rgba(232,232,238,0.1)' : 'rgba(24,24,27,0.09)'),
+    line: token('--blue', dark ? '#60a5fa' : '#2563eb'),
+    fill: token('--blue-soft', dark ? 'rgba(96,165,250,0.14)' : 'rgba(37,99,235,0.09)'),
+    series: [
+      token('--blue', dark ? '#60a5fa' : '#2563eb'),
+      token('--amber', dark ? '#fbbf24' : '#b45309'),
+      token('--green', dark ? '#34d399' : '#047857'),
+      token('--red', dark ? '#f87171' : '#dc2626'),
+      token('--violet', dark ? '#a78bfa' : '#7c3aed'),
+    ],
   };
 }
 

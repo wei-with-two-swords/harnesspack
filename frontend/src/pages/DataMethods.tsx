@@ -16,7 +16,7 @@ const LINK = 'text-decoration-none';
 export default function DataMethods() {
   useTitle('数据口径', 'HarnessPack 的数据来源、更新时间、榜单算法与免责声明。');
   return (
-    <article className="fs-sm" style={{ maxWidth: '48rem' }}>
+    <article className="fs-sm" style={{ maxWidth: 'var(--measure-wide)' }}>
       <header className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-2">数据口径</h1>
         <p className="mb-0 fg-secondary">
@@ -52,7 +52,7 @@ export default function DataMethods() {
           <dl className="mt-3 mb-0">
             {BOARDS.map(([name, desc]) => (
               <div key={name} className="d-flex gap-4 py-2 border-bottom">
-                <dt className="flex-shrink-0 fw-medium fg-warning" style={{ width: '3.5rem' }}>
+                <dt className="flex-shrink-0 fw-medium fg-warning" style={{ width: 'var(--s-7)' }}>
                   {name}
                 </dt>
                 <dd className="mb-0 fg-secondary">{desc}</dd>

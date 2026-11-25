@@ -73,13 +73,13 @@ export default function Compare() {
             <thead className="fs-xs text-uppercase fg-secondary">
               <tr>
                 <th className="px-4 py-3 fw-medium">插件</th>
-                <th className="px-2 py-3 text-end fw-medium" style={{ width: '7rem' }}>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) * 2 - var(--s-2))' }}>
                   当前 STAR
                 </th>
-                <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) + var(--s-4))' }}>
                   最新增量
                 </th>
-                <th className="px-2 py-3 text-end fw-medium" style={{ width: '6rem' }}>
+                <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) + var(--s-4))' }}>
                   区间涨幅
                 </th>
               </tr>

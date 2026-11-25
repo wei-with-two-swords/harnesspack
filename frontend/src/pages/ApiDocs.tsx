@@ -21,7 +21,7 @@ export default function ApiDocs() {
     <div className="d-flex flex-column gap-4">
       <div>
         <h1 className="fs-3xl fw-semibold mb-2">{t('api.title')}</h1>
-        <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: '48rem' }}>
+        <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: 'var(--measure-wide)' }}>
           {t('api.intro')} <code>https://harnesspack.dev</code>.
         </p>
         <div className="d-flex flex-wrap gap-2">
@@ -51,7 +51,7 @@ export default function ApiDocs() {
           <table className="table table-hover align-middle mb-0">
             <thead className="fs-xs text-uppercase fg-secondary">
               <tr>
-                <th className="px-4 py-3 fw-medium" style={{ width: '5rem' }}>{t('api.method')}</th>
+                <th className="px-4 py-3 fw-medium" style={{ width: 'calc(var(--s-8) + var(--s-2))' }}>{t('api.method')}</th>
                 <th className="px-2 py-3 fw-medium" style={{ width: '50%' }}>{t('api.path')}</th>
                 <th className="px-2 py-3 fw-medium">{t('api.description')}</th>
               </tr>

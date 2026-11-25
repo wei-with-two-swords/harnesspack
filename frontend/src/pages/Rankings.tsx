@@ -65,7 +65,7 @@ export default function Rankings() {
       <header className="mb-3 d-flex flex-column sm:flex-row sm:align-items-end justify-content-between gap-3">
         <div>
           <h1 className="fs-3xl fw-semibold mb-1">{title}</h1>
-          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+          <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
             {BOARD_TEXT[board] ?? '未知榜单'}
             {data?.as_of ? ` 截至 ${data.as_of}。` : ''}
           </p>

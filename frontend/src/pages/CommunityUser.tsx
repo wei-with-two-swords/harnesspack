@@ -50,7 +50,7 @@ export default function CommunityUser() {
   const refresh = () => void load(0);
 
   return (
-    <section style={{ maxWidth: '46rem' }}>
+    <section style={{ maxWidth: 'var(--measure-mid)' }}>
       <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
         ← {t('community.backToFeed')}
       </Link>
@@ -71,7 +71,7 @@ export default function CommunityUser() {
                   alt=""
                   width="48"
                   height="48"
-                  style={{ borderRadius: '50%' }}
+                  style={{ borderRadius: 'var(--radius-round)' }}
                 />
               ) : null}
               <div>

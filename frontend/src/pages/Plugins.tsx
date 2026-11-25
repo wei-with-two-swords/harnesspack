@@ -53,7 +53,7 @@ export default function Plugins() {
     <section>
       <div className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-1">插件库</h1>
-        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: '42rem' }}>
+        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
           名单来自 awesome-dsh-plugin 清单，共 {data ? formatNumber(data.total) : '上万'} 个可安装进 DSH
           的插件；按 STAR、名称或创建时间浏览。
         </p>
