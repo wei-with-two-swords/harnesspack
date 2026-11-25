@@ -59,6 +59,10 @@ def main(argv: list[str] | None = None) -> int:
         errors.append("seed list is empty")
     slugs: set[str] = set()
     by_slug: dict[str, dict] = {}
+    # Repo -> slug lookup: the snapshot loop used to scan every seed entry for
+    # each record (O(N^2) over ~11k rows). Keep first-wins to match the old
+    # linear scan, which also stopped at the first matching seed entry.
+    by_repo: dict[tuple[str, str], str] = {}
     for p in plugins:
         for field in ("owner", "repo", "slug", "category", "harness"):
             if not p.get(field):
@@ -68,6 +72,7 @@ def main(argv: list[str] | None = None) -> int:
             errors.append(f"duplicate slug: {p['slug']}")
         slugs.add(p.get("slug"))
         by_slug[p.get("slug")] = p
+        by_repo.setdefault(key, p["slug"])
     report["seed_count"] = len(plugins)
     report["unique_slugs"] = len(slugs)
 
@@ -109,11 +114,8 @@ def main(argv: list[str] | None = None) -> int:
         local_slugs: set[str] = set()
         current: dict[str, int] = {}
         for rec in records:
-            slug = None
-            for p in plugins:
-                if p["owner"].lower() == str(rec.get("owner", "")).lower() and p["repo"].lower() == str(rec.get("repo", "")).lower():
-                    slug = p["slug"]
-                    break
+            repo_key = (str(rec.get("owner", "")).lower(), str(rec.get("repo", "")).lower())
+            slug = by_repo.get(repo_key)
             if slug is None:
                 # Historical snapshots may predate the current seed (removed or
                 # renamed plugins keep their curves). Warn, do not fail.

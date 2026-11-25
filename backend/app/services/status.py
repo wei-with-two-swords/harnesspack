@@ -8,15 +8,25 @@ from __future__ import annotations
 
 import json
 import sqlite3
+from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
 from .ranking import latest_date
 
+# A snapshot is ~5.8 MB (12k plugins), but the status page only needs a handful
+# of top-level fields. Parsing every file on every /status call was a major
+# memory/CPU sink on the 384 MB single-worker box. Cache the compact summaries
+# keyed by each file's (path, mtime, size); a new or refreshed snapshot changes
+# the key and is reparsed automatically, so no explicit invalidation is needed.
+FileSignature = tuple[str, int, int]
 
-def snapshot_status(snapshot_dir: Path, seed_count: int | None = None) -> dict[str, Any]:
+
+@lru_cache(maxsize=4)
+def _load_entries(signatures: tuple[FileSignature, ...]) -> tuple[dict[str, Any], ...]:
     entries: list[dict[str, Any]] = []
-    for path in sorted(snapshot_dir.glob("*.json")):
+    for path_str, _mtime_ns, _size in signatures:
+        path = Path(path_str)
         try:
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
@@ -34,6 +44,18 @@ def snapshot_status(snapshot_dir: Path, seed_count: int | None = None) -> dict[s
                 "failures": payload.get("failures") or [],
             }
         )
+    return tuple(entries)
+
+
+def snapshot_status(snapshot_dir: Path, seed_count: int | None = None) -> dict[str, Any]:
+    signatures: list[FileSignature] = []
+    for path in sorted(snapshot_dir.glob("*.json")):
+        try:
+            stat = path.stat()
+        except OSError:
+            continue
+        signatures.append((str(path), stat.st_mtime_ns, stat.st_size))
+    entries: list[dict[str, Any]] = list(_load_entries(tuple(signatures)))
     latest = entries[-1] if entries else None
     latest_ok_rate = None
     coverage = None

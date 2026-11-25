@@ -8,6 +8,7 @@ layer slices it for pagination.
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from datetime import date as Date, timedelta
 from functools import lru_cache
@@ -53,7 +54,53 @@ def _previous_date(conn: sqlite3.Connection, day: str) -> str | None:
     return row["d"] if row and row["d"] else None
 
 
-def _rows_on(conn: sqlite3.Connection, day: str, category: str | None = None) -> list[dict[str, Any]]:
+def _db_signature(conn: sqlite3.Connection) -> tuple[str, int, int] | None:
+    """Content signature for a file-backed DB, or None for in-memory DBs.
+
+    ``plugin_detail`` builds six boards in one request, and each board queried
+    the same ~12k rows twice. Caching the row set by DB signature lets those six
+    calls share a single query. WAL writes land in the -wal file, so its mtime
+    is folded in too; when the DB or WAL changes the key changes and rows are
+    re-read. In-memory/URI DBs have no stable file and skip the cache.
+    """
+    try:
+        row = conn.execute("PRAGMA database_list").fetchone()
+    except sqlite3.Error:
+        return None
+    path = row[2] if row else None
+    if not path or path == "":
+        return None
+    try:
+        main = os.stat(path)
+        mtime = main.st_mtime_ns
+        size = main.st_size
+        wal = f"{path}-wal"
+        if os.path.exists(wal):
+            w = os.stat(wal)
+            mtime += w.st_mtime_ns
+            size += w.st_size
+        return (str(path), mtime, size)
+    except OSError:
+        return None
+
+
+@lru_cache(maxsize=16)
+def _rows_cached(
+    signature: tuple[str, int, int], day: str, category: str | None
+) -> tuple[dict[str, Any], ...]:
+    # The signature identifies the DB file; open a short read-only connection
+    # so the cache is independent of the caller's connection lifetime.
+    conn = sqlite3.connect(f"file:{signature[0]}?mode=ro", uri=True)
+    conn.row_factory = sqlite3.Row
+    try:
+        return _query_rows(conn, day, category)
+    finally:
+        conn.close()
+
+
+def _query_rows(
+    conn: sqlite3.Connection, day: str, category: str | None
+) -> tuple[dict[str, Any], ...]:
     sql = """
         SELECT p.id, p.slug, p.owner, p.repo, p.name, p.description, p.category,
                p.harness, p.url, p.repo_created_at, p.stars_latest,
@@ -66,8 +113,14 @@ def _rows_on(conn: sqlite3.Connection, day: str, category: str | None = None) ->
     if category:
         sql += " AND p.category = ?"
         params.append(category)
-    rows = conn.execute(sql, params).fetchall()
-    return [dict(r) for r in rows]
+    return tuple(dict(r) for r in conn.execute(sql, params).fetchall())
+
+
+def _rows_on(conn: sqlite3.Connection, day: str, category: str | None = None) -> list[dict[str, Any]]:
+    signature = _db_signature(conn)
+    if signature is not None:
+        return list(_rows_cached(signature, day, category))
+    return list(_query_rows(conn, day, category))
 
 
 def _rank_map(rows: list[dict[str, Any]]) -> dict[str, int]:
