@@ -74,17 +74,24 @@ export default function Community() {
         </div>
 
         <div>
-          <div className="card">
+          <div className="card mb-3">
             <div className="card-body">
               <CommunityAuth {...auth} />
-              <div className="fw-semibold mb-2">{t('community.rulesTitle')}</div>
-              <ul className="fs-sm fg-secondary mb-0 ps-3">
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <div className="fw-semibold mb-3">{t('community.rulesTitle')}</div>
+              <ol className="list-unstyled mb-0">
                 {[1, 2, 3, 4, 5, 6].map((n) => (
-                  <li key={n} className="mb-1">
-                    {t(`community.rule${n}`)}
+                  <li key={n} className={`d-flex gap-3 py-2 fs-sm fg-secondary${n < 6 ? ' border-bottom' : ''}`}>
+                    <span className="flex-shrink-0 fw-semibold" style={{ color: 'var(--accent)' }}>
+                      {String(n).padStart(2, '0')}
+                    </span>
+                    <span>{t(`community.rule${n}`)}</span>
                   </li>
                 ))}
-              </ul>
+              </ol>
             </div>
           </div>
         </div>

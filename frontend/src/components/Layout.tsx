@@ -20,9 +20,9 @@ function Logo({ size = 28 }: { size?: number }) {
 }
 
 const FOOTER = [
+  { to: '/about', key: 'footer.about' },
   { to: '/changelog', key: 'footer.changelog' },
   { to: '/compare', key: 'footer.compare' },
-  { to: '/about', key: 'footer.about' },
 ];
 
 const FRIEND_LINKS = [
