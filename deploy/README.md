@@ -219,6 +219,28 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 - **日志**：`journalctl -u harnesspack-api -f`、`-u harnesspack-capture`、`-u harnesspack-snapshot`。
 - **监控**：`/health` 返回 200；Nginx access log 观察 5xx；内存超 400MB 时先查 stats/连接数。
 
+## 9.1 GitHub 登录与 API 限流
+
+站点用 GitHub OAuth 区分 API 配额（无用户表，会话是 HMAC 签名的 Cookie）：
+
+1. 在 GitHub → Settings → Developer settings → OAuth Apps 新建应用：
+   - Homepage URL：`https://harnesspack.dev`
+   - Authorization callback URL：`https://harnesspack.dev/api/auth/github/callback`
+2. 把凭据写入 `/etc/harnesspack-api.env`（`root:harnesspack`，`640`）：
+
+   ```bash
+   HARNESSPACK_SESSION_SECRET=<random-token>
+   GITHUB_CLIENT_ID=<oauth-client-id>
+   GITHUB_CLIENT_SECRET=<oauth-client-secret>
+   ```
+
+   会话密钥可用 `python3 -c 'import secrets; print(secrets.token_urlsafe(48))'` 生成。
+   三个值任一为空则登录入口自动隐藏，所有人按未登录配额计算。
+3. `systemctl restart harnesspack-api`，`curl -s https://harnesspack.dev/api/auth/config` 应返回 `{"enabled":true}`。
+
+配额：`/api/*` 未登录 10 次/分钟、50 次/天（按 IP）；已登录 50 次/分钟、500 次/天（按账号）。
+普通页面、`/assets/` 和 `/og/` 使用原有宽松桶，不占 API 配额。超限返回 429 与 `Retry-After`。
+
 ## 10. Cloudflare（当前已启用）
 
 `harnesspack.dev` 的 DNS 托管在 Cloudflare 并开启了代理（橙云），SSL 模式为 **Full**：

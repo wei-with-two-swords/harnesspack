@@ -15,6 +15,7 @@ Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
 Environment=HARNESSPACK_SNAPSHOTS=/opt/harnesspack/data/snapshots
 Environment=HARNESSPACK_FRONTEND=/opt/harnesspack/frontend/dist
 Environment=HARNESSPACK_INGEST=0
+EnvironmentFile=/etc/harnesspack-api.env
 ExecStart=/opt/harnesspack/.venv/bin/uvicorn backend.app.main:app \
     --host 127.0.0.1 --port 8000 --workers 1 \
     --proxy-headers --forwarded-allow-ips=127.0.0.1
