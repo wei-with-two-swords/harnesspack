@@ -84,6 +84,10 @@ export default function Home() {
   const tracked = status.data?.database.active ?? 0;
   const updated = status.data?.snapshots.as_of ?? null;
   const trackingDays = status.data?.snapshots.days ?? 0;
+  const addedToday = status.data?.database.added_today ?? 0;
+  const exitedToday = status.data?.database.exited_today ?? 0;
+  const netToday = addedToday - exitedToday;
+  const changeDetail = `${t('hero.addedToday')} ${addedToday} · ${t('hero.exitedToday')} ${exitedToday}`;
   const [friendOpen, setFriendOpen] = useState(false);
 
   useEffect(() => {
@@ -215,6 +219,14 @@ export default function Home() {
             <div className="hero-tracking">
               {trackingDays ? `${t('hero.tracking')} ${trackingDays} ${t('hero.days')}` : '—'}
             </div>
+            {status.data ? (
+              <div
+                className={`hero-change ${netToday > 0 ? 'fg-success' : netToday < 0 ? 'fg-danger' : 'fg-secondary'}`}
+                title={changeDetail}
+              >
+                {t('hero.changeToday')} {netToday > 0 ? '+' : ''}{netToday}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="hero-install">

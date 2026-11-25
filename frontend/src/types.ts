@@ -192,6 +192,8 @@ export interface StatusResponse {
     plugins: number;
     active: number;
     exited: number;
+    added_today: number;
+    exited_today: number;
     unavailable: number;
     stars_rows: number;
     anomalies: number;

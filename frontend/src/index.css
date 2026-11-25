@@ -506,6 +506,11 @@
     letter-spacing: -0.02em;
     color: var(--accent);
   }
+  .hero-change {
+    margin-top: var(--s-1);
+    font-size: var(--fs-1);
+    font-variant-numeric: tabular-nums;
+  }
 
   /* ---- Two-level board switcher ---- */
   .switch-tabs {

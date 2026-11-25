@@ -58,11 +58,14 @@ def database_status(conn: sqlite3.Connection) -> dict[str, Any]:
         row = conn.execute(sql, params).fetchone()
         return int(row[0]) if row and row[0] is not None else 0
 
+    day = latest_date(conn)
     return {
-        "as_of": latest_date(conn),
+        "as_of": day,
         "plugins": scalar("SELECT COUNT(*) FROM plugins"),
         "active": scalar("SELECT COUNT(*) FROM plugins WHERE status = 'active'"),
         "exited": scalar("SELECT COUNT(*) FROM plugins WHERE status = 'exited'"),
+        "added_today": scalar("SELECT COUNT(*) FROM plugins WHERE added_at = ?", (day,)) if day else 0,
+        "exited_today": scalar("SELECT COUNT(*) FROM plugins WHERE exited_at = ?", (day,)) if day else 0,
         "unavailable": scalar(
             "SELECT COUNT(*) FROM plugins WHERE status = 'active' AND stars_latest IS NULL"
         ),

@@ -216,7 +216,25 @@ def test_status_exposes_snapshot_and_database_health(client):
     assert payload["database"]["plugins"] == 4
     assert payload["database"]["active"] == 4
     assert payload["database"]["stars_rows"] == 48
+    assert payload["database"]["added_today"] == 0
+    assert payload["database"]["exited_today"] == 0
     assert payload["snapshots"]["coverage"] is None or 0 <= payload["snapshots"]["coverage"] <= 1
+
+
+def test_status_counts_today_added_and_exited(client):
+    from backend.app.db import connect
+
+    day = client.app.state.settings.db_path
+    conn = connect(day)
+    conn.execute("UPDATE plugins SET added_at = '2026-11-12' WHERE slug = 'alpha-one'")
+    conn.execute("UPDATE plugins SET exited_at = '2026-11-12', status = 'exited' WHERE slug = 'beta-two'")
+    conn.commit()
+    conn.close()
+
+    payload = client.get("/api/v1/status").json()
+    assert payload["database"]["as_of"] == "2026-11-12"
+    assert payload["database"]["added_today"] == 1
+    assert payload["database"]["exited_today"] == 1
 
 
 def test_rate_limit_returns_429(tmp_path, data_dir):
