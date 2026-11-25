@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { CommunityAuth } from '../components/CommunityAuth';
 import { Composer } from '../components/Composer';
 import { PostCard } from '../components/PostCard';
 import { EmptyState, Loading } from '../components/States';
@@ -13,7 +14,8 @@ const PAGE_SIZE = 20;
 export default function Community() {
   const { t } = useI18n();
   useTitle(t('community.discussion'), t('community.subtitle'));
-  const { user, oauthEnabled } = useAuth();
+  const auth = useAuth();
+  const { user } = auth;
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -50,6 +52,8 @@ export default function Community() {
         <p className="fs-sm fg-secondary mb-0">{t('community.subtitle')}</p>
       </div>
 
+      <CommunityAuth {...auth} />
+
       <div className="card mb-4">
         <div className="card-body">
           <div className="fw-semibold mb-2">{t('community.rulesTitle')}</div>
@@ -65,11 +69,9 @@ export default function Community() {
 
       <Composer
         user={user}
-        oauthEnabled={oauthEnabled}
         onSubmit={publish}
         placeholder={t('community.postPlaceholder')}
         buttonLabel={t('community.publish')}
-        signInLabel={t('auth.signIn')}
       />
 
       {error ? <div className="fs-sm mb-3 fg-danger">{error}</div> : null}

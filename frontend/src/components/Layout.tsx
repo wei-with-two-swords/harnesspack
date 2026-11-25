@@ -4,7 +4,6 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { LangSwitcher } from './LangSwitcher';
 import { BackToTop } from './BackToTop';
 import { useI18n } from '../lib/i18n';
-import { useAuth } from '../lib/useAuth';
 
 function Logo() {
   return (
@@ -40,7 +39,6 @@ const FRIEND_LINKS = [
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { t } = useI18n();
-  const { user, oauthEnabled, signOut } = useAuth();
   const [navOpen, setNavOpen] = useState(false);
 
   const NAV = [
@@ -75,24 +73,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="d-flex align-items-center gap-2" style={{ marginLeft: 'auto' }}>
               <LangSwitcher />
               <ThemeSwitcher />
-              {user ? (
-                <div className="d-flex align-items-center gap-2" title={`${t('auth.signedInAs')}: ${user.login}`}>
-                  {user.avatar_url ? (
-                    <img src={user.avatar_url} alt={user.login} width="24" height="24"
-                      style={{ borderRadius: '50%' }} />
-                  ) : null}
-                  <button type="button" className="btn-icon" onClick={() => void signOut()}
-                    aria-label={t('auth.signOut')} title={t('auth.signOut')}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                      strokeWidth="1.5" aria-hidden="true">
-                      <path d="M6 2H3v12h3M10 11l3-3-3-3M6.5 8H13" />
-                    </svg>
-                  </button>
-                </div>
-              ) : oauthEnabled ? (
-                <a href="/api/auth/github" className="btn btn-sm btn-outline theme-secondary"
-                  title={t('nav.signin')}>{t('auth.signIn')}</a>
-              ) : null}
               <button
                 type="button"
                 className="btn-icon mobile-menu-btn"
@@ -116,14 +96,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                     {t(item.key)}
                   </NavLink>
                 ))}
-                {user ? (
-                  <button type="button" className="nav-link text-start"
-                    onClick={() => { void signOut(); closeNav(); }}>
-                    {t('auth.signOut')} ({user.login})
-                  </button>
-                ) : oauthEnabled ? (
-                  <a className="nav-link" href="/api/auth/github" onClick={closeNav}>{t('nav.signin')}</a>
-                ) : null}
               </div>
             </div>
           ) : null}

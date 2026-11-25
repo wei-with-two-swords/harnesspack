@@ -14,11 +14,10 @@ const PAGE_SIZE = 50;
 type Props = {
   postId: number;
   user: AuthUser | null;
-  oauthEnabled: boolean;
   onChanged: () => void;
 };
 
-export function Comments({ postId, user, oauthEnabled, onChanged }: Props) {
+export function Comments({ postId, user, onChanged }: Props) {
   const { t } = useI18n();
   const [items, setItems] = useState<CommunityComment[]>([]);
   const [total, setTotal] = useState(0);
@@ -70,11 +69,9 @@ export function Comments({ postId, user, oauthEnabled, onChanged }: Props) {
       </h2>
       <Composer
         user={user}
-        oauthEnabled={oauthEnabled}
         onSubmit={add}
         placeholder={t('community.commentPlaceholder')}
         buttonLabel={t('community.reply')}
-        signInLabel={t('auth.signIn')}
         maxLength={1000}
         rows={2}
       />

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { CommunityAuth } from '../components/CommunityAuth';
 import { PostCard } from '../components/PostCard';
 import { EmptyState, Loading } from '../components/States';
 import { api, ApiError } from '../lib/api';
 import { formatDate } from '../lib/format';
 import { useI18n } from '../lib/i18n';
 import { useAuth } from '../lib/useAuth';
+
 import { useTitle } from '../lib/useTitle';
 import type { CommunityProfile } from '../types';
 
@@ -14,7 +16,8 @@ const PAGE_SIZE = 20;
 export default function CommunityUser() {
   const { login = '' } = useParams();
   const { t } = useI18n();
-  const { user } = useAuth();
+  const auth = useAuth();
+  const { user } = auth;
   const [profile, setProfile] = useState<CommunityProfile | null>(null);
   const [posts, setPosts] = useState<CommunityProfile['items']>([]);
   const [total, setTotal] = useState(0);
@@ -51,6 +54,7 @@ export default function CommunityUser() {
       <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
         ← {t('community.backToFeed')}
       </Link>
+      <CommunityAuth {...auth} />
       {error ? (
         <div className="card">
           <div className="card-body fs-sm fg-danger">{t('community.userNotFound')}</div>

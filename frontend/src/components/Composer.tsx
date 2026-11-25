@@ -3,11 +3,9 @@ import type { AuthUser } from '../lib/useAuth';
 
 type Props = {
   user: AuthUser | null;
-  oauthEnabled: boolean;
   onSubmit: (body: string) => Promise<void>;
   placeholder: string;
   buttonLabel: string;
-  signInLabel: string;
   note?: string;
   maxLength?: number;
   rows?: number;
@@ -17,11 +15,9 @@ type Props = {
 /** Shared text-only composer for posts and comments. */
 export function Composer({
   user,
-  oauthEnabled,
   onSubmit,
   placeholder,
   buttonLabel,
-  signInLabel,
   note,
   maxLength = 5000,
   rows = 3,
@@ -34,13 +30,8 @@ export function Composer({
   if (!user) {
     return (
       <div className="card mb-3">
-        <div className="card-body d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div className="card-body">
           <span className="fs-sm fg-secondary">{note ?? placeholder}</span>
-          {oauthEnabled ? (
-            <a href="/api/auth/github" className="btn btn-sm btn-outline theme-secondary">
-              {signInLabel}
-            </a>
-          ) : null}
         </div>
       </div>
     );
