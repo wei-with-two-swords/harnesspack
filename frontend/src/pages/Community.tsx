@@ -53,8 +53,8 @@ export default function Community() {
         <p className="fs-sm fg-secondary mb-0">{t('community.subtitle')}</p>
       </div>
 
-      <div className="row g-3 align-items-start">
-        <div className="col-12 lg:col-8">
+      <div className="community-grid">
+        <div>
           <Composer
             user={user}
             onSubmit={publish}
@@ -73,7 +73,7 @@ export default function Community() {
           <Pager page={page} pageSize={PAGE_SIZE} total={total} onChange={setPage} />
         </div>
 
-        <div className="col-12 lg:col-4">
+        <div>
           <div className="card">
             <div className="card-body">
               <CommunityAuth {...auth} />

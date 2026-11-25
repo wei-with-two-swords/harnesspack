@@ -1116,6 +1116,19 @@
   }
 }
 
+/* Community two-column layout.
+   Defined outside @layer so Tailwind never purges it — the legacy lg:col-*
+   helpers inside @layer are only emitted when the content scan matches them. */
+.community-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-3);
+  align-items: start;
+}
+@media (min-width: 992px) {
+  .community-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+}
+
 /* Rank chips: three equal columns on desktop, two on narrow screens.
    Defined outside @layer so Tailwind does not purge these custom classes. */
 .rank-chips > * { flex: 0 0 33.3333%; max-width: 33.3333%; }
