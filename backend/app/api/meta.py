@@ -2,14 +2,13 @@
 
 Everything here is derived from the same snapshot data as the API; nothing is
 stored separately, so a board change is reflected on the next request. OG images
-are cached on disk per snapshot date (there are ~11k plugins, so on-demand
-generation with a small cache is enough).
+are cached on disk with a content hash and bounded, serialized generation (see
+:mod:`backend.app.og_cache`) so a crawler sweep cannot exhaust worker memory.
 """
 
 from __future__ import annotations
 
 import io
-import re
 import sqlite3
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -19,6 +18,7 @@ from xml.sax.saxutils import escape as xml_escape
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import Response
 
+from .. import og_cache
 from ..db import connect
 from ..services import changelog as changelog_service
 from ..services import ranking
@@ -110,37 +110,42 @@ def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
     days = conn.execute("SELECT COUNT(DISTINCT date) AS days FROM stars").fetchone()["days"]
     cache_dir = Path(request.app.state.settings.db_path).parent / "cache" / "og"
     cache_dir.mkdir(parents=True, exist_ok=True)
-    cached = cache_dir / f"site-{re.sub(r'[^0-9a-zA-Z_-]', '-', day)}.png"
+    digest = og_cache.content_key("site", day, row["plugins"], row["stars"], days)
+    cached = og_cache.cache_path(cache_dir, "site", day, digest)
     headers = {"Cache-Control": "public, max-age=3600"}
-    if cached.exists():
-        return Response(content=cached.read_bytes(), media_type="image/png", headers=headers)
+    hit = og_cache.read_cached(cached)
+    if hit is not None:
+        return Response(content=hit, media_type="image/png", headers=headers)
 
-    width, height = 1200, 630
-    image = Image.new("RGB", (width, height), INK)
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([0, 0, width, 6], fill=BLUE)
-    draw.text((100, 70), "HarnessPack", font=_font(40), fill=BLUE)
-    draw.text((100, 124), "DSH plugin star race / daily snapshot", font=_font(20), fill=MUTED)
-    draw.rounded_rectangle([60, 180, 1140, 470], radius=24, fill=SURFACE, outline=LINE, width=2)
+    def render() -> bytes:
+        width, height = 1200, 630
+        image = Image.new("RGB", (width, height), INK)
+        draw = ImageDraw.Draw(image)
+        draw.rectangle([0, 0, width, 6], fill=BLUE)
+        draw.text((100, 70), "HarnessPack", font=_font(40), fill=BLUE)
+        draw.text((100, 124), "DSH plugin star race / daily snapshot", font=_font(20), fill=MUTED)
+        draw.rounded_rectangle([60, 180, 1140, 470], radius=24, fill=SURFACE, outline=LINE, width=2)
 
-    stats = [
-        ("PLUGINS TRACKED", f"{row['plugins']:,}"),
-        ("TOTAL STARS", f"{row['stars']:,}"),
-        ("SNAPSHOT DAYS", str(days)),
-    ]
-    x = 100
-    for label, value in stats:
-        draw.text((x, 220), label, font=_font(18), fill=MUTED)
-        draw.text((x, 252), value, font=_font(72), fill=WHITE)
-        x += 340
+        stats = [
+            ("PLUGINS TRACKED", f"{row['plugins']:,}"),
+            ("TOTAL STARS", f"{row['stars']:,}"),
+            ("SNAPSHOT DAYS", str(days)),
+        ]
+        x = 100
+        for label, value in stats:
+            draw.text((x, 220), label, font=_font(18), fill=MUTED)
+            draw.text((x, 252), value, font=_font(72), fill=WHITE)
+            x += 340
 
-    draw.text((100, 380), "Ranks by real star growth, not by ads.", font=_font(22), fill=GOLD)
-    draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
+        draw.text((100, 380), "Ranks by real star growth, not by ads.", font=_font(22), fill=GOLD)
+        draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
 
-    buffer = io.BytesIO()
-    image.save(buffer, format="PNG", optimize=True)
-    payload = buffer.getvalue()
-    cached.write_bytes(payload)
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG", optimize=True)
+        return buffer.getvalue()
+
+    payload = og_cache.render_once(cached, render)
+    og_cache.prune(cache_dir)
     return Response(content=payload, media_type="image/png", headers=headers)
 
 
@@ -154,48 +159,63 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
     day = detail.get("as_of") or "unknown"
     cache_dir = Path(request.app.state.settings.db_path).parent / "cache" / "og"
     cache_dir.mkdir(parents=True, exist_ok=True)
-    cached = cache_dir / f"{re.sub(r'[^a-zA-Z0-9_-]', '-', slug)}-{day}.png"
+    digest = og_cache.content_key(
+        slug,
+        detail.get("name"),
+        detail.get("owner"),
+        detail.get("repo"),
+        detail.get("stars"),
+        detail.get("delta"),
+        detail.get("rank_total"),
+        detail.get("category"),
+        day,
+    )
+    cached = og_cache.cache_path(cache_dir, slug, day, digest)
     headers = {"Cache-Control": "public, max-age=3600"}
-    if cached.exists():
-        return Response(content=cached.read_bytes(), media_type="image/png", headers=headers)
+    hit = og_cache.read_cached(cached)
+    if hit is not None:
+        return Response(content=hit, media_type="image/png", headers=headers)
 
-    width, height = 1200, 630
-    image = Image.new("RGB", (width, height), INK)
-    draw = ImageDraw.Draw(image)
-    draw.rectangle([0, 0, width, 6], fill=BLUE)
-    draw.rounded_rectangle([60, 140, 1140, 520], radius=24, fill=SURFACE, outline=LINE, width=2)
+    def render() -> bytes:
+        width, height = 1200, 630
+        image = Image.new("RGB", (width, height), INK)
+        draw = ImageDraw.Draw(image)
+        draw.rectangle([0, 0, width, 6], fill=BLUE)
+        draw.rounded_rectangle([60, 140, 1140, 520], radius=24, fill=SURFACE, outline=LINE, width=2)
 
-    title = _ascii(detail["name"], 26) or f"{detail['owner']}/{detail['repo']}"
-    repo = _ascii(f"{detail['owner']}/{detail['repo']}", 40)
-    draw.text((100, 70), "HarnessPack", font=_font(34), fill=BLUE)
-    draw.text((100, 112), "DSH plugin star race / daily snapshot", font=_font(18), fill=MUTED)
-    draw.text((100, 180), title, font=_font(64), fill=WHITE)
-    draw.text((100, 280), repo, font=_font(26), fill=MUTED)
+        title = _ascii(detail["name"], 26) or f"{detail['owner']}/{detail['repo']}"
+        repo = _ascii(f"{detail['owner']}/{detail['repo']}", 40)
+        draw.text((100, 70), "HarnessPack", font=_font(34), fill=BLUE)
+        draw.text((100, 112), "DSH plugin star race / daily snapshot", font=_font(18), fill=MUTED)
+        draw.text((100, 180), title, font=_font(64), fill=WHITE)
+        draw.text((100, 280), repo, font=_font(26), fill=MUTED)
 
-    stars = detail.get("stars")
-    draw.text((100, 360), "STARS" if stars is not None else "STARS (unavailable)", font=_font(20), fill=MUTED)
-    draw.text((100, 392), f"{stars:,}" if stars is not None else "—", font=_font(88), fill=WHITE)
+        stars = detail.get("stars")
+        draw.text((100, 360), "STARS" if stars is not None else "STARS (unavailable)", font=_font(20), fill=MUTED)
+        draw.text((100, 392), f"{stars:,}" if stars is not None else "—", font=_font(88), fill=WHITE)
 
-    stats: list[tuple[str, str, str]] = []
-    if detail.get("rank_total"):
-        stats.append(("TOTAL RANK", f"#{detail['rank_total']}", GOLD))
-    delta = detail.get("delta")
-    if delta is not None:
-        stats.append(("TODAY", f"{delta:+d}", RISE if delta > 0 else FALL))
-    if detail.get("category"):
-        stats.append(("CATEGORY", _ascii(detail["category"], 14), BLUE))
-    x = 100
-    for label, value, color in stats[:3]:
-        draw.text((x, 570 - 60), label, font=_font(18), fill=MUTED)
-        draw.text((x, 570 - 36), value, font=_font(34), fill=color)
-        x += 300
+        stats: list[tuple[str, str, str]] = []
+        if detail.get("rank_total"):
+            stats.append(("TOTAL RANK", f"#{detail['rank_total']}", GOLD))
+        delta = detail.get("delta")
+        if delta is not None:
+            stats.append(("TODAY", f"{delta:+d}", RISE if delta > 0 else FALL))
+        if detail.get("category"):
+            stats.append(("CATEGORY", _ascii(detail["category"], 14), BLUE))
+        x = 100
+        for label, value, color in stats[:3]:
+            draw.text((x, 570 - 60), label, font=_font(18), fill=MUTED)
+            draw.text((x, 570 - 36), value, font=_font(34), fill=color)
+            x += 300
 
-    draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
+        draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
 
-    buffer = io.BytesIO()
-    image.save(buffer, format="PNG", optimize=True)
-    payload = buffer.getvalue()
-    cached.write_bytes(payload)
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG", optimize=True)
+        return buffer.getvalue()
+
+    payload = og_cache.render_once(cached, render)
+    og_cache.prune(cache_dir)
     return Response(content=payload, media_type="image/png", headers=headers)
 
 
