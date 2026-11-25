@@ -29,15 +29,19 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
   if (pages <= 1) return null;
 
   const clamp = (next: number) => Math.min(Math.max(next, 0), pages - 1);
+  // The caller may pass a page beyond the last one (e.g. total shrank or a
+  // stale offset in the URL). Clamp every display value so the range never
+  // shows from > to or an out-of-bounds active page.
+  const current = clamp(page);
   const go = (next: number) => {
     const target = clamp(next);
-    if (target === page) return;
+    if (target === current) return;
     onChange(target);
     if (scrollOnChange && typeof window !== 'undefined') window.scrollTo({ top: 0 });
   };
 
-  const from = page * pageSize + 1;
-  const to = Math.min(total, (page + 1) * pageSize);
+  const from = current * pageSize + 1;
+  const to = Math.min(total, (current + 1) * pageSize);
 
   return (
     <div className="mt-4 d-flex flex-column sm:flex-row align-items-center justify-content-between gap-2 fs-sm fg-secondary">
@@ -46,38 +50,38 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
       </span>
       <nav aria-label={t('pager.nav')}>
         <ul className="pagination pagination-sm mb-0 flex-wrap">
-          <li className={`page-item${page === 0 ? ' disabled' : ''}`}>
+          <li className={`page-item${current === 0 ? ' disabled' : ''}`}>
             <button
               type="button"
               className="page-link"
-              disabled={page === 0}
+              disabled={current === 0}
               onClick={() => go(0)}
               aria-label={t('pager.first')}
             >
               <ChevronsLeft aria-hidden="true" />
             </button>
           </li>
-          <li className={`page-item${page === 0 ? ' disabled' : ''}`}>
+          <li className={`page-item${current === 0 ? ' disabled' : ''}`}>
             <button
               type="button"
               className="page-link"
-              disabled={page === 0}
-              onClick={() => go(page - 1)}
+              disabled={current === 0}
+              onClick={() => go(current - 1)}
             >
               {t('pager.prev')}
             </button>
           </li>
-          {pageItems(page, pages).map((item, index) =>
+          {pageItems(current, pages).map((item, index) =>
             item === null ? (
               <li key={`gap-${index}`} className="page-item disabled">
                 <span className="page-link">…</span>
               </li>
             ) : (
-              <li key={item} className={`page-item${item === page ? ' active' : ''}`}>
+              <li key={item} className={`page-item${item === current ? ' active' : ''}`}>
                 <button
                   type="button"
                   className="page-link num"
-                  aria-current={item === page ? 'page' : undefined}
+                  aria-current={item === current ? 'page' : undefined}
                   onClick={() => go(item)}
                 >
                   {item + 1}
@@ -85,21 +89,21 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
               </li>
             ),
           )}
-          <li className={`page-item${page >= pages - 1 ? ' disabled' : ''}`}>
+          <li className={`page-item${current >= pages - 1 ? ' disabled' : ''}`}>
             <button
               type="button"
               className="page-link"
-              disabled={page >= pages - 1}
-              onClick={() => go(page + 1)}
+              disabled={current >= pages - 1}
+              onClick={() => go(current + 1)}
             >
               {t('pager.next')}
             </button>
           </li>
-          <li className={`page-item${page >= pages - 1 ? ' disabled' : ''}`}>
+          <li className={`page-item${current >= pages - 1 ? ' disabled' : ''}`}>
             <button
               type="button"
               className="page-link"
-              disabled={page >= pages - 1}
+              disabled={current >= pages - 1}
               onClick={() => go(pages - 1)}
               aria-label={t('pager.last')}
             >

@@ -23,7 +23,9 @@ def get_conn(request: Request):
 
 
 def _base_url(request: Request) -> str:
-    return str(request.base_url).rstrip("/")
+    # Use the configured root, not the request Host header, so a forged Host
+    # cannot poison sitemap.xml or robots.txt URLs served to crawlers.
+    return request.app.state.settings.base_url.rstrip("/")
 
 
 def _url_entry(loc: str, lastmod: str | None) -> str:

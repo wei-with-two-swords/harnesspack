@@ -296,6 +296,7 @@ const en: Dict = {
   'detail.branch': 'Default branch',
   'detail.forks': 'Forks',
   'detail.license': 'License',
+  'detail.topics': 'Topics',
   'detail.npmPackage': 'NPM package',
   'detail.npmUrl': 'NPM URL',
   'detail.githubDesc': 'GitHub description: ',
@@ -303,7 +304,10 @@ const en: Dict = {
   'detail.addedAt': 'Added',
   'detail.dataDate': 'Data date',
   'detail.appeal': 'Report bad data / appeal',
-  'detail.footnote': 'STAR and forks come from daily GitHub API snapshots; downloads are npm tarball counts (including CI and dependencies), not user installs. See ',
+  'detail.footnote': 'STAR and forks come from daily GitHub API snapshots; downloads are npm tarball counts (including CI and dependencies), not user installs.',
+  'detail.footnoteRules': ' See ',
+  'detail.footnoteApi': ' and ',
+  'detail.footnoteEnd': '.',
   'detail.apiDocs': 'API docs',
 };
 
@@ -554,6 +558,7 @@ const zh: Dict = {
   'detail.branch': '默认分支',
   'detail.forks': 'Fork 数',
   'detail.license': '许可证',
+  'detail.topics': 'Topics',
   'detail.npmPackage': 'NPM 包名',
   'detail.npmUrl': 'NPM 网址',
   'detail.githubDesc': 'GitHub 描述：',
@@ -561,7 +566,10 @@ const zh: Dict = {
   'detail.addedAt': '收录日期',
   'detail.dataDate': '数据日期',
   'detail.appeal': '数据有误 / 申诉',
-  'detail.footnote': 'STAR 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。收录标准见 ',
+  'detail.footnote': 'STAR 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。',
+  'detail.footnoteRules': '收录标准见 ',
+  'detail.footnoteApi': '，接口说明见 ',
+  'detail.footnoteEnd': '。',
   'detail.apiDocs': 'API',
 };
 

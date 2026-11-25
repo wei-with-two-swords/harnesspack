@@ -24,14 +24,20 @@ export function GlobalSearch() {
       return;
     }
     setLoading(true);
+    // Ignore responses from superseded queries (and after unmount): clearing
+    // the debounce timer alone cannot cancel a request already in flight.
+    let active = true;
     const timer = setTimeout(() => {
       api
         .plugins({ query, sort: 'stars', limit: 8 })
-        .then((data) => setItems(data.items))
-        .catch(() => setItems([]))
-        .finally(() => setLoading(false));
+        .then((data) => { if (active) setItems(data.items); })
+        .catch(() => { if (active) setItems([]); })
+        .finally(() => { if (active) setLoading(false); });
     }, 250);
-    return () => clearTimeout(timer);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [input]);
 
   useEffect(() => {

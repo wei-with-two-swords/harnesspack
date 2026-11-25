@@ -242,7 +242,7 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
    `HARNESSPACK_BASE_URL` 不写在这里，已在 `harnesspack-api.service` 中设为站点根地址；回调地址由它拼出，必须与 GitHub 后台登记的 Redirect URI 完全一致（含 `https`、域名、末尾 `/callback`，不带查询参数）。
 3. `systemctl restart harnesspack-api`，`curl -s https://harnesspack.dev/api/auth/config` 应返回 `{"enabled":true}`。
 
-配额：`/api/*` 未登录 10 次/分钟、50 次/天（按 IP）；已登录 50 次/分钟、500 次/天（按账号）。
+配额：`/api/*` 未登录 20 次/分钟、100 次/天（按 IP）；已登录 50 次/分钟、500 次/天（按账号）。
 普通页面、`/assets/` 和 `/og/` 使用原有宽松桶，不占 API 配额。超限返回 429 与 `Retry-After`。
 社区读取另走独立宽松桶；发帖 5 次/分、50 次/天，评论 10 次/分、100 次/天，点赞 30 次/分、300 次/天；删除自己内容不占写额度。
 

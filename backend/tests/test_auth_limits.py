@@ -65,6 +65,37 @@ def test_oauth_login_disabled_without_credentials(tmp_path, data_dir):
         assert client.get("/api/auth/github").status_code == 503
 
 
+def test_oauth_callback_clears_state_on_success(tmp_path, data_dir, monkeypatch):
+    """State is single-use: a successful callback must not leave it reusable."""
+    settings_app = _app(
+        tmp_path,
+        data_dir,
+        github_client_id="client-id",
+        github_client_secret="client-secret",
+    )
+    monkeypatch.setattr(
+        auth,
+        "exchange_code",
+        lambda _settings, _code: auth.User(login="octocat", name="The Cat"),
+    )
+    with TestClient(settings_app) as client:
+        client.cookies.set(auth.STATE_COOKIE, "expected-state")
+        response = client.get(
+            "/api/auth/github/callback",
+            params={"code": "valid-code", "state": "expected-state"},
+            follow_redirects=False,
+        )
+        assert response.status_code == 302
+        assert "/community?auth=ok" in response.headers["location"]
+        # The response expires the state cookie, just like the failure path.
+        cookies = response.headers.get_list("set-cookie")
+        state_cookies = [c for c in cookies if c.startswith(f"{auth.STATE_COOKIE}=")]
+        assert state_cookies
+        assert "Max-Age=0" in state_cookies[0]
+        # A signed-in session was established in the same response.
+        assert any(c.startswith(f"{auth.SESSION_COOKIE}=") for c in cookies)
+
+
 def test_logout_clears_session(tmp_path, data_dir):
     token = auth.make_session("test-secret", auth.User(login="octocat"))
     with TestClient(_app(tmp_path, data_dir)) as client:

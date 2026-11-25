@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-import { api } from '../lib/api';
+import { api, ApiError } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
 import type { PluginDetail as Detail, SeriesResponse } from '../types';
@@ -81,7 +81,7 @@ export default function PluginDetail() {
         <Link to={backTo} className="fs-sm text-decoration-none">
           <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('detail.back')}</>
         </Link>
-        {err.message.includes('404') ? (
+        {err instanceof ApiError && err.status === 404 ? (
           <EmptyState title={t('detail.notFound')}>{t('detail.notFoundHint')}</EmptyState>
         ) : (
           <ErrorState error={err} />
@@ -290,38 +290,43 @@ export default function PluginDetail() {
         <div className="col-12 sm:col-6">
           <div className="card h-100">
             <div className="card-body">
-              <h2 className={`${SECTION_TITLE} mb-2`}>仓库信息</h2>
+              <h2 className={`${SECTION_TITLE} mb-2`}>{t('detail.repoInfo')}</h2>
               <dl className="mb-0 fs-sm">
                 {[
-                  ['作者', data.owner],
-                  ['仓库创建', formatDate(data.repo_created_at)],
-                  ['最近推送', formatDateTime(data.pushed_at)],
-                  ['默认分支', data.default_branch ?? '—'],
-                  ['Fork 数', formatNumber(data.forks)],
-                  ['许可证', data.license || '—'],
-                  ['Topics', data.topics?.length ? data.topics.join('、') : '—'],
-                  ['NPM 包名', data.npm_package ?? '—'],
-                  ['NPM 网址', data.npm_package ? (
-                    <a
-                      href={`https://www.npmjs.com/package/${data.npm_package}`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="text-decoration-none text-truncate"
-                      title={data.npm_package}
-                    >
-                      npmjs.com/package/{data.npm_package}<ExternalLink className="icon-trailing" aria-hidden="true" />
-                    </a>
-                  ) : '—'],
-                ].map(([label, value]) => (
-                  <div key={label as string} className="d-flex justify-content-between gap-4 mb-2">
-                    <dt className="fw-normal fg-secondary flex-shrink-0">{label}</dt>
-                    <dd className={`num mb-0 text-end${label === 'Topics' || label === 'NPM 网址' ? '' : ' text-truncate'}`}>{value}</dd>
+                  { key: 'owner', label: t('detail.owner'), value: <>{data.owner}</>, truncate: true },
+                  { key: 'created', label: t('detail.created'), value: <>{formatDate(data.repo_created_at)}</>, truncate: true },
+                  { key: 'pushed', label: t('detail.pushed'), value: <>{formatDateTime(data.pushed_at)}</>, truncate: true },
+                  { key: 'branch', label: t('detail.branch'), value: <>{data.default_branch ?? '—'}</>, truncate: true },
+                  { key: 'forks', label: t('detail.forks'), value: <>{formatNumber(data.forks)}</>, truncate: true },
+                  { key: 'license', label: t('detail.license'), value: <>{data.license || '—'}</>, truncate: true },
+                  { key: 'topics', label: t('detail.topics'), value: <>{data.topics?.length ? data.topics.join('、') : '—'}</>, truncate: false },
+                  { key: 'npmPackage', label: t('detail.npmPackage'), value: <>{data.npm_package ?? '—'}</>, truncate: true },
+                  {
+                    key: 'npmUrl',
+                    label: t('detail.npmUrl'),
+                    value: data.npm_package ? (
+                      <a
+                        href={`https://www.npmjs.com/package/${data.npm_package}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-decoration-none text-truncate"
+                        title={data.npm_package}
+                      >
+                        npmjs.com/package/{data.npm_package}<ExternalLink className="icon-trailing" aria-hidden="true" />
+                      </a>
+                    ) : <>—</>,
+                    truncate: false,
+                  },
+                ].map((row) => (
+                  <div key={row.key} className="d-flex justify-content-between gap-4 mb-2">
+                    <dt className="fw-normal fg-secondary flex-shrink-0">{row.label}</dt>
+                    <dd className={`num mb-0 text-end${row.truncate ? ' text-truncate' : ''}`}>{row.value}</dd>
                   </div>
                 ))}
               </dl>
               {data.github_description && data.github_description !== data.description ? (
                 <p className="mt-3 mb-0 fs-xs fg-secondary">
-                  GitHub 描述：{data.github_description}
+                  {t('detail.githubDesc')}{data.github_description}
                 </p>
               ) : null}
             </div>
@@ -330,15 +335,15 @@ export default function PluginDetail() {
         <div className="col-12 sm:col-6">
           <div className="card h-100">
             <div className="card-body">
-              <h2 className={`${SECTION_TITLE} mb-2`}>收录信息</h2>
+              <h2 className={`${SECTION_TITLE} mb-2`}>{t('detail.inclusion')}</h2>
               <dl className="mb-0 fs-sm">
                 {[
-                  ['收录日期', formatDate(data.added_at)],
-                  ['数据日期', formatDate(data.as_of)],
-                ].map(([label, value]) => (
-                  <div key={label as string} className="d-flex justify-content-between gap-4 mb-2">
-                    <dt className="fw-normal fg-secondary">{label}</dt>
-                    <dd className="num mb-0 text-end">{value}</dd>
+                  { key: 'addedAt', label: t('detail.addedAt'), value: formatDate(data.added_at) },
+                  { key: 'dataDate', label: t('detail.dataDate'), value: formatDate(data.as_of) },
+                ].map((row) => (
+                  <div key={row.key} className="d-flex justify-content-between gap-4 mb-2">
+                    <dt className="fw-normal fg-secondary">{row.label}</dt>
+                    <dd className="num mb-0 text-end">{row.value}</dd>
                   </div>
                 ))}
               </dl>
@@ -349,13 +354,13 @@ export default function PluginDetail() {
                   rel="noreferrer noopener"
                   className="btn btn-outline btn-sm"
                 >
-                  数据有误 / 申诉<ExternalLink className="icon-trailing" aria-hidden="true" />
+                  {t('detail.appeal')}<ExternalLink className="icon-trailing" aria-hidden="true" />
                 </a>
               </div>
               <p className="mt-3 mb-0 fs-xs fg-secondary">
-                STAR 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。
-                收录标准见 <Link to="/about#rules" className="text-decoration-none">收录规则</Link>
-                ，接口说明见 <Link to="/api" className="text-decoration-none">API</Link>。
+                {t('detail.footnote')}
+                {t('detail.footnoteRules')}<Link to="/about#rules" className="text-decoration-none">{t('link.inclusionRules')}</Link>
+                {t('detail.footnoteApi')}<Link to="/api" className="text-decoration-none">{t('detail.apiDocs')}</Link>{t('detail.footnoteEnd')}
               </p>
             </div>
           </div>

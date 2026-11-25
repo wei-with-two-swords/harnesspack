@@ -47,14 +47,21 @@ export function ComparePicker({
       return;
     }
     setLoading(true);
+    // A slower response for an older query must not overwrite the latest
+    // results; dropping it when the effect is superseded or unmounted keeps
+    // the dropdown consistent with the current input.
+    let active = true;
     const timer = setTimeout(() => {
       api
         .plugins({ query: q, sort: 'stars', limit: 15 })
-        .then((data) => setItems(data.items))
-        .catch(() => setItems([]))
-        .finally(() => setLoading(false));
+        .then((data) => { if (active) setItems(data.items); })
+        .catch(() => { if (active) setItems([]); })
+        .finally(() => { if (active) setLoading(false); });
     }, 250);
-    return () => clearTimeout(timer);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
   }, [query]);
 
   if (!open) return null;

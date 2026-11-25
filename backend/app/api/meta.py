@@ -230,7 +230,7 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
 
 @router.get("/feed.xml")
 def feed(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
-    base = str(request.base_url).rstrip("/")
+    base = request.app.state.settings.base_url.rstrip("/")
     day = ranking.latest_date(conn)
     items: list[str] = []
 

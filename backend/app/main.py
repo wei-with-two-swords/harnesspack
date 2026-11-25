@@ -252,7 +252,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             if not index_file.is_file():
                 raise HTTPException(status_code=404, detail="not found")
             html = index_file.read_text(encoding="utf-8")
-            base = str(request.base_url).rstrip("/")
+            # Derive canonical/social URLs from the configured site root, never
+            # from the request Host header (host-header injection would let a
+            # forged request poison cached canonical/og:url tags).
+            base = settings.base_url.rstrip("/")
             path = full_path.strip("/")
             conn = connect(settings.db_path)
             try:

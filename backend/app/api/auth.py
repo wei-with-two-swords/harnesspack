@@ -51,6 +51,9 @@ def github_callback(
         auth.make_session(settings.session_secret, user),
         max_age=auth.SESSION_TTL,
     )
+    # State is single-use. Clear it on success too, not just on failure, so a
+    # captured callback cannot be replayed within the state cookie's TTL.
+    auth.clear_cookie(response, auth.STATE_COOKIE, settings)
     return response
 
 

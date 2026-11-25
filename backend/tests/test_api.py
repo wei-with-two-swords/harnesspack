@@ -220,6 +220,24 @@ def test_compare_page_is_noindex(client_with_dist):
     assert 'rel="canonical" href="http://testserver/compare"' in response.text
 
 
+def test_canonical_ignores_forged_host_header(client_with_dist):
+    # canonical and og:url must come from the configured site root, not from a
+    # caller-controlled Host header (host-header injection / cache poisoning).
+    response = client_with_dist.get("/", headers={"Host": "evil.example"})
+    html = response.text
+    assert 'rel="canonical" href="http://testserver/"' in html
+    assert "evil.example" not in html
+
+
+def test_sitemap_and_feed_ignore_forged_host_header(client):
+    sitemap = client.get("/sitemap.xml", headers={"Host": "evil.example"}).text
+    assert "<loc>http://testserver/</loc>" in sitemap
+    assert "evil.example" not in sitemap
+    feed = client.get("/feed.xml", headers={"Host": "evil.example"}).text
+    assert "evil.example" not in feed
+    assert "http://testserver/" in feed
+
+
 def test_status_exposes_snapshot_and_database_health(client):
     response = client.get("/api/v1/status")
     assert response.status_code == 200

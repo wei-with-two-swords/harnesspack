@@ -10,7 +10,29 @@ from __future__ import annotations
 import json
 import sqlite3
 
+from backend.app.db import connect, init_db
 from backend.app.services import ranking, status
+
+
+def test_connect_sets_busy_timeout_without_wal_switch(tmp_path):
+    # Read connections must not flip journal mode (that needs a write lock);
+    # WAL is enabled once by init_db, and busy_timeout is always installed.
+    conn = connect(tmp_path / "fresh.db")
+    try:
+        assert conn.execute("PRAGMA busy_timeout").fetchone()[0] == 5000
+        assert conn.execute("PRAGMA foreign_keys").fetchone()[0] == 1
+        assert conn.execute("PRAGMA journal_mode").fetchone()[0] == "delete"
+    finally:
+        conn.close()
+
+
+def test_init_db_enables_wal_once(tmp_path):
+    conn = connect(tmp_path / "initialized.db")
+    try:
+        init_db(conn)
+        assert conn.execute("PRAGMA journal_mode").fetchone()[0] == "wal"
+    finally:
+        conn.close()
 
 
 def _make_db(path):
