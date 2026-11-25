@@ -28,8 +28,8 @@ class Settings:
     rate_limit_per_minute: int = 120
     og_rate_limit_per_minute: int = 20
     # /api/* gets a tighter, two-tier quota than ordinary page browsing.
-    api_anon_per_minute: int = 10
-    api_anon_per_day: int = 50
+    api_anon_per_minute: int = 20
+    api_anon_per_day: int = 100
     api_auth_per_minute: int = 50
     api_auth_per_day: int = 500
     # Community browsing is cheap; writing is not. Keep separate buckets so
@@ -66,8 +66,8 @@ def get_settings() -> Settings:
         rate_limit_enabled=os.environ.get("HARNESSPACK_RATE_LIMIT", "1") != "0",
         rate_limit_per_minute=int(os.environ.get("HARNESSPACK_RATE_LIMIT_PER_MIN", "120")),
         og_rate_limit_per_minute=int(os.environ.get("HARNESSPACK_OG_LIMIT_PER_MIN", "20")),
-        api_anon_per_minute=int(os.environ.get("HARNESSPACK_API_ANON_PER_MIN", "10")),
-        api_anon_per_day=int(os.environ.get("HARNESSPACK_API_ANON_PER_DAY", "50")),
+        api_anon_per_minute=int(os.environ.get("HARNESSPACK_API_ANON_PER_MIN", "20")),
+        api_anon_per_day=int(os.environ.get("HARNESSPACK_API_ANON_PER_DAY", "100")),
         api_auth_per_minute=int(os.environ.get("HARNESSPACK_API_AUTH_PER_MIN", "50")),
         api_auth_per_day=int(os.environ.get("HARNESSPACK_API_AUTH_PER_DAY", "500")),
         community_read_per_minute=int(
