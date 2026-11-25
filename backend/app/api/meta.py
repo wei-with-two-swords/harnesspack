@@ -11,6 +11,7 @@ from __future__ import annotations
 import io
 import sqlite3
 from datetime import datetime, timezone
+from functools import lru_cache
 from email.utils import format_datetime
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
@@ -43,7 +44,13 @@ _FONTS = [
 ]
 
 
+@lru_cache(maxsize=32)
 def _font(size: int):
+    """Font objects are immutable and safe to share across render threads.
+
+    Without this cache every draw call re-reads a TTF file; a burst of OG
+    renders loaded the same font hundreds of times and spiked worker memory.
+    """
     from PIL import ImageFont
 
     for candidate in _FONTS:
