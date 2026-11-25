@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { useAuth } from '../lib/useAuth';
 
@@ -41,7 +42,7 @@ export default function ApiDocs() {
           <div className="fs-xs fg-secondary">{t('auth.anonQuota')}</div>
           <div className="fs-xs fg-secondary">{t('auth.authQuota')}</div>
           <div className="fs-xs fg-secondary mt-1">
-            {t('auth.quotaNote')} {oauthEnabled ? <a href="/api/auth/github">GitHub</a> : null}
+            {t('auth.quotaNote')} {oauthEnabled ? <a href="/api/auth/github">GitHub<ExternalLink className="icon-trailing" aria-hidden="true" /></a> : null}
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 
 const UPSTREAM = 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin';
 const LINK = 'text-decoration-none';
@@ -11,7 +12,7 @@ export default function RulesSection() {
         <p className="fs-sm fg-secondary">
           我们不自己评审“谁是好插件”，名单与分类直接来自{' '}
           <a className={LINK} href={UPSTREAM} target="_blank" rel="noreferrer">
-            awesome-dsh-plugin
+            awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>{' '}
           精选清单（CC0-1.0），我们只负责仓库级去重、每日 STAR 快照与退出。
         </p>

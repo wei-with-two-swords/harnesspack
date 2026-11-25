@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
@@ -62,12 +62,14 @@ function InstallCommand({ label, value }: { label: string; value: string }) {
     window.setTimeout(() => setCopied(false), 1600);
   };
   return (
-    <div className="hero-install-row">
+    <div className="hero-install-item">
       <span className="hero-install-label">{label}</span>
-      <code className="hero-install-code">{value}</code>
-      <button type="button" onClick={handleCopy} aria-label={`${t('common.copy')} ${label}`}>
-        {copied ? t('common.copied') : t('common.copy')}
-      </button>
+      <div className="hero-install-row">
+        <code className="hero-install-code">{value}</code>
+        <button type="button" onClick={handleCopy} aria-label={`${t('common.copy')} ${label}`}>
+          {copied ? t('common.copied') : t('common.copy')}
+        </button>
+      </div>
     </div>
   );
 }
@@ -243,10 +245,10 @@ export default function Home() {
             target="_blank"
             rel="noreferrer noopener"
           >
-            {t('hero.author')}<ArrowRight className="icon-trailing" aria-hidden="true" />
+            {t('hero.author')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <a href="https://dshmarket.com" target="_blank" rel="noreferrer noopener">
-            {t('hero.market')}<ArrowRight className="icon-trailing" aria-hidden="true" />
+            {t('hero.market')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <button type="button" onClick={() => setSubmitOpen(true)}>{t('hero.submit')}</button>
           <button type="button" onClick={() => setFriendOpen(true)}>{t('hero.friendLink')}</button>

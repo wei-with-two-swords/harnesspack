@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
@@ -38,7 +39,7 @@ export default function Status() {
             target="_blank"
             rel="noreferrer"
           >
-            仓库 data/snapshots
+            仓库 data/snapshots<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           里，可直接下载核对。
         </p>

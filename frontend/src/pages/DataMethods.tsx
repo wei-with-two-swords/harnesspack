@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import { useTitle } from '../lib/useTitle';
 
 const BOARDS = [
@@ -30,7 +31,7 @@ export default function DataMethods() {
           <p className="mt-2 fg-secondary">
             名单与分类来自{' '}
             <a className={LINK} href="https://awesome-dsh-plugin.com" target="_blank" rel="noreferrer">
-              awesome-dsh-plugin
+              awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>{' '}
             精选清单（CC0-1.0，约 1.1 万个仓库）：
             上游要求仓库必须能通过 <code>dsh plugin add</code> 安装（package.json 含 <code>dsh.bundle</code>），
@@ -100,7 +101,7 @@ export default function DataMethods() {
             <li>
               提交收录请去{' '}
               <a className={LINK} href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noreferrer">
-                awesome-dsh-plugin
+                awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
               </a>{' '}
               提 PR。
             </li>

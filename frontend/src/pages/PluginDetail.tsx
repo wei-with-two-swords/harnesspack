@@ -345,7 +345,7 @@ export default function PluginDetail() {
                   rel="noreferrer noopener"
                   className="btn btn-outline btn-sm"
                 >
-                  数据有误 / 申诉
+                  数据有误 / 申诉<ExternalLink className="icon-trailing" aria-hidden="true" />
                 </a>
               </div>
               <p className="mt-3 mb-0 fs-xs fg-secondary">

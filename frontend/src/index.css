@@ -43,7 +43,8 @@
   /* Type — three levels; weight and leading are part of each level. */
   --fs-meta: 12px;
   --fs-body: 14px;
-  --fs-display: 24px;
+  --fs-display: 32px;
+  --fs-display-compact: 24px;
   --fw-regular: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
@@ -467,7 +468,7 @@
     background-image: radial-gradient(760px circle at 92% -20%, var(--accent-soft), transparent 65%);
   }
   .hp-hero > * { @apply relative z-10; }
-  .hero-grid { @apply grid items-center; grid-template-columns: 1fr; gap: var(--s-3); }
+  .hero-grid { @apply grid items-start; grid-template-columns: 1fr; gap: var(--s-3); }
   .hero-copy { @apply flex flex-col items-start; gap: var(--s-2); }
   .hero-logo {
     @apply self-center;
@@ -482,7 +483,7 @@
     line-height: var(--lh-display);
     letter-spacing: var(--tracking-display);
   }
-  .hero-title em { color: var(--text); font-style: normal; }
+  .hero-title em { color: var(--accent); font-style: normal; }
   .hero-lead { margin-top: var(--s-1); max-width: var(--measure-mid); color: var(--muted); font-size: var(--fs-body); }
   .hero-updated { @apply inline-flex items-center; margin-top: var(--s-1); gap: var(--s-1); color: var(--muted); font-size: var(--fs-meta); }
   .hero-updated-dot {
@@ -515,12 +516,12 @@
     cursor: pointer;
   }
   .hero-links button:hover { text-decoration: underline; }
-  .hero-install { @apply flex flex-col items-start; margin-top: var(--s-2); gap: var(--s-1); max-width: var(--measure-short); }
+  .hero-install { @apply flex flex-col items-start; margin-top: var(--s-2); gap: var(--s-2); max-width: var(--measure-short); }
+  .hero-install-item { @apply flex items-center; gap: var(--s-1); width: 100%; }
   .hero-install-title { @apply fw-semibold; font-size: var(--fs-meta); color: var(--muted); }
   .hero-install-row {
-    @apply flex items-center rounded-sm2;
+    @apply flex items-center rounded-sm2 min-w-0 flex-1;
     gap: var(--s-1);
-    width: 100%;
     padding: var(--s-1);
     border: var(--hairline) solid var(--line);
     background: var(--surface-2);
@@ -551,7 +552,7 @@
     font-weight: var(--fw-semibold);
     line-height: var(--lh-display);
     letter-spacing: var(--tracking-display);
-    color: var(--text);
+    color: var(--accent);
   }
   .hero-change {
     margin-top: var(--s-1);
@@ -614,17 +615,28 @@
     @apply inline-flex items-center justify-center shrink-0;
     width: var(--s-4);
     height: var(--s-4);
-    border-radius: var(--radius-none);
+    border-radius: var(--radius-round);
     background: transparent;
     color: var(--muted);
     font-size: var(--fs-meta);
     font-variant-numeric: tabular-nums;
     font-weight: var(--fw-semibold);
   }
-  /* Rank tone is carried by the number alone; no filled badges. */
-  .rank-medal.gold { color: var(--rank-1); }
-  .rank-medal.silver { color: var(--rank-2); }
-  .rank-medal.bronze { color: var(--rank-3); }
+  /* Top three: number colour and background share the same rank role token.
+     Only colour/background are added (radius is round on all medals); size and
+     spacing stay untouched, so the row rhythm is intact. */
+  .rank-medal.gold {
+    color: var(--rank-1);
+    background: color-mix(in srgb, var(--rank-1) 16%, transparent);
+  }
+  .rank-medal.silver {
+    color: var(--rank-2);
+    background: color-mix(in srgb, var(--rank-2) 16%, transparent);
+  }
+  .rank-medal.bronze {
+    color: var(--rank-3);
+    background: color-mix(in srgb, var(--rank-3) 16%, transparent);
+  }
   .rank-avatar {
     @apply shrink-0;
     border-radius: var(--radius-round);
@@ -962,6 +974,7 @@
     .workspace { grid-template-columns: calc(var(--s-8) * 3 + var(--s-3)) 1fr; align-items: start; }
   }
   @media (max-width: 575px) {
+    .hero-title, .hero-stat-value { font-size: var(--fs-display-compact); }
     .hero-copy { gap: var(--s-2); }
     .hero-logo { width: var(--s-8); height: var(--s-8); }
     .rank-category { width: calc(var(--s-8) + var(--s-1)); }

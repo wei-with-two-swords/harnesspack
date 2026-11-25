@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 
 const UPSTREAM = 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin';
 const UPSTREAM_NEW = `${UPSTREAM}/blob/main/data/plugins/README.md`;
@@ -40,17 +41,17 @@ export default function SubmitSection() {
             去上游提 PR：在 <code>data/plugins/&lt;owner&gt;__&lt;repo&gt;.yml</code> 新增一个文件
             （url、name、category、description.en 必填），格式见{' '}
             <a href={UPSTREAM_NEW} target="_blank" rel="noreferrer noopener" className={LINK}>
-              上游说明
+              上游说明<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>
             。
           </li>
         </ol>
         <div className="mt-4 d-flex flex-wrap gap-2">
           <a href={prUrl} target="_blank" rel="noreferrer noopener" className="btn btn-solid">
-            用模板发起上游 PR / Issue
+            用模板发起上游 PR / Issue<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <a href={UPSTREAM} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
-            打开 awesome-dsh-plugin
+            打开 awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
         </div>
 
@@ -69,7 +70,7 @@ export default function SubmitSection() {
         </p>
         <div className="d-flex flex-wrap gap-2">
           <a href={ISSUE} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
-            在本站提 issue
+            在本站提 issue<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <Link to="/about/changelog" className="btn btn-outline">
             名单变更

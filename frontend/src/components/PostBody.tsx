@@ -1,4 +1,5 @@
 import { Fragment, type ReactNode } from 'react';
+import { ExternalLink } from 'lucide-react';
 
 const URL_RE = /(https?:\/\/[^\s<>"'）】]+|www\.[^\s<>"'）】]+)/g;
 
@@ -13,7 +14,7 @@ function renderText(text: string, keyPrefix: string): ReactNode[] {
     const href = value.startsWith('www.') ? `https://${value}` : value;
     nodes.push(
       <a key={`${keyPrefix}-${match.index}`} href={href} target="_blank" rel="noreferrer noopener">
-        {value}
+        {value}<ExternalLink className="icon-trailing" aria-hidden="true" />
       </a>,
     );
     last = match.index + value.length;

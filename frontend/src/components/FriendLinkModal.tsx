@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { copyText } from '../lib/clipboard';
 
@@ -130,7 +130,9 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
           <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={t('friend.fieldUrl')} type="url" required />
           <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t('friend.fieldIcon')} type="url" />
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder={t('friend.fieldDesc')} rows={2} />
-          <button type="submit" className="btn btn-outline btn-sm">{t('friend.applySubmit')}</button>
+          <button type="submit" className="btn btn-outline btn-sm">
+            {t('friend.applySubmit')}<ExternalLink className="icon-trailing" aria-hidden="true" />
+          </button>
         </form>
       </div>
     </div>

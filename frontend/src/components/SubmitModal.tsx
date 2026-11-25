@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
+import { ExternalLink, X } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 const UPSTREAM = 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin';
@@ -50,10 +50,10 @@ export function SubmitModal({ open, onClose }: { open: boolean; onClose: () => v
         </div>
         <div className="mt-4 d-flex flex-wrap gap-2">
           <a href={PR_URL} target="_blank" rel="noreferrer noopener" className="btn btn-solid">
-            {t('hero.submitPr')}
+            {t('hero.submitPr')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <a href={UPSTREAM} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
-            {t('hero.submitRepo')}
+            {t('hero.submitRepo')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
         </div>
       </div>

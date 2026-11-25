@@ -249,7 +249,7 @@ const zh: Dict = {
   'footer.sitemap': '站点地图',
   'footer.feed': 'XML 订阅',
   'hero.title': '插件榜单',
-  'hero.lead': '收录社区 DeepSeek Harness 插件，按真实 GitHub STAR 与 npm 下载量排名。每日快照，不美化、不回填。',
+  'hero.lead': '收录社区 DeepSeek Harness 插件，按真实 GitHub STAR 与 npm 下载量排名。',
   'hero.tracked': '收录插件',
   'hero.updated': '更新于',
   'hero.asOf': '数据截至',

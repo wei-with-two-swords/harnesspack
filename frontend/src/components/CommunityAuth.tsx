@@ -1,3 +1,4 @@
+import { ExternalLink } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { useAuth } from '../lib/useAuth';
 
@@ -29,7 +30,7 @@ export function CommunityAuth({ user, oauthEnabled, signOut }: AuthState) {
     <div className="d-flex align-items-center gap-2 flex-wrap mb-3">
       <span className="fs-sm fg-secondary">{t('community.signInHint')}</span>
       <a href="/api/auth/github" className="btn btn-sm btn-outline">
-        {t('auth.signIn')}
+        {t('auth.signIn')}<ExternalLink className="icon-trailing" aria-hidden="true" />
       </a>
     </div>
   );

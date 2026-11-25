@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ExternalLink } from 'lucide-react';
 import { useTitle } from '../lib/useTitle';
 
 const REPO = 'https://github.com/wei-with-two-swords/harnesspack';
@@ -22,7 +23,7 @@ export default function Terms() {
           <p className="mt-2 mb-0 fg-secondary">
             STAR 数来自 GitHub 公开 REST / GraphQL API；名单与分类来自{' '}
             <a className={LINK} href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noreferrer">
-              awesome-dsh-plugin
+              awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>{' '}
             清单（CC0-1.0）。我们只做仓库级去重、每日快照、榜单与衍生指标。
           </p>
@@ -36,7 +37,7 @@ export default function Terms() {
             <li className="mb-2">
               <strong className="fg-body">每日快照</strong>（仓库里的 <code>data/snapshots/</code>）：按{' '}
               <a className={LINK} href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="noreferrer">
-                CC BY 4.0
+                CC BY 4.0<ExternalLink className="icon-trailing" aria-hidden="true" />
               </a>{' '}
               提供，转载、研究、做二次分析都可以，但必须保留署名并链接回 harnesspack.dev。
             </li>
@@ -81,7 +82,7 @@ export default function Terms() {
             只读 JSON，前缀 <code>/api/v1</code>。默认每 IP 每分钟 120 次；<code>/og/</code> 图片每分钟 20 次。
             超限返回 <code>429</code> 与 <code>Retry-After</code>。需要更高配额或批量导出，请在{' '}
             <a className={LINK} href={`${REPO}/issues`} target="_blank" rel="noreferrer">
-              仓库 issue
+              仓库 issue<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>{' '}
             说明用途。
           </p>
@@ -104,7 +105,7 @@ export default function Terms() {
           <p className="mt-2 mb-0 fg-secondary">
             条款变更会随代码提交记录公开。问题、授权申请或下架请求，请到{' '}
             <a className={LINK} href={`${REPO}/issues`} target="_blank" rel="noreferrer">
-              GitHub Issues
+              GitHub Issues<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>
             ；一般 7 天内回复。另见{' '}
             <Link className={LINK} to="/about#rules">
