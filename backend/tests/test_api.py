@@ -93,10 +93,7 @@ def test_robots_and_sitemap(client):
     assert sitemap.headers["content-type"].startswith("application/xml")
     body = sitemap.text
     assert "http://testserver/plugins/alpha-one" in body
-    assert "http://testserver/about/data" in body
-    assert "http://testserver/status" in body
-    assert "http://testserver/about/terms" in body
-    assert "http://testserver/about/api" in body
+    assert "http://testserver/about" in body
     assert "http://testserver/api" in body
     assert "http://testserver/community" in body
     # Removed legacy pages must not be advertised to crawlers.
@@ -104,9 +101,17 @@ def test_robots_and_sitemap(client):
         "<loc>http://testserver/rankings",
         "<loc>http://testserver/categories<",
         "<loc>http://testserver/plugins<",
+        "<loc>http://testserver/about/api<",
+        "<loc>http://testserver/about/rules<",
+        "<loc>http://testserver/about/data<",
+        "<loc>http://testserver/about/changelog<",
+        "<loc>http://testserver/about/terms<",
+        "<loc>http://testserver/status<",
+        "<loc>http://testserver/submit<",
+        "<loc>http://testserver/sponsors<",
     ):
         assert stale not in body
-    assert body.count("<url>") == 13
+    assert body.count("<url>") == 8
 
 
 def test_spa_missing_dist_returns_404(client):

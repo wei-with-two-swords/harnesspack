@@ -31,4 +31,4 @@ star 数是 GitHub 的公开事实，GitHub 的服务条款同样适用；本许
 抓取、清洗、聚合后的快照文件，不改变 GitHub 对其平台数据的主张。
 
 批量获取请优先使用公开仓库里的快照文件，而不是绕过线上限流抓 API；
-完整条款见 <https://harnesspack.dev/about/terms>。
+完整条款见 <https://harnesspack.dev/about#terms>。

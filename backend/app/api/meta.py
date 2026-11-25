@@ -234,7 +234,7 @@ def feed(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Resp
         items.append(
             "<item>"
             f"<title>{xml_escape(title)}</title>"
-            f"<link>{xml_escape(base + '/about/changelog')}</link>"
+            f"<link>{xml_escape(base + '/about#changelog')}</link>"
             f"<guid isPermaLink=\"false\">hp-changelog-{xml_escape(at)}</guid>"
             f"<pubDate>{format_datetime(stamp)}</pubDate>"
             "<description>上游清单同步结果</description>"

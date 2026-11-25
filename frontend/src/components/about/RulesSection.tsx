@@ -45,7 +45,7 @@ export default function RulesSection() {
 
         <p className="mt-4 mb-0 fs-sm fg-secondary">
           完整规则见仓库 <code>docs/收录规则.md</code>；每次同步的变更记录在{' '}
-          <Link to="/about/changelog" className={LINK}>
+          <Link to="/about#changelog" className={LINK}>
             名单变更
           </Link>{' '}
           页，可审计。

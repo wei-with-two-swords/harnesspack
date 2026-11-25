@@ -42,8 +42,10 @@ export function SubmitModal({ open, onClose }: { open: boolean; onClose: () => v
         onClick={(e) => e.stopPropagation()}
       >
         <div className="friend-dialog-head">
-          <h2 className="fs-lg fw-semibold mb-1">{t('hero.submit')}</h2>
-          <p className="fs-xs fg-secondary mb-0">{t('hero.submitIntro')}</p>
+          <div className="friend-dialog-head-text">
+            <h2 className="fs-lg fw-semibold mb-1">{t('hero.submit')}</h2>
+            <p className="fs-xs fg-secondary mb-0">{t('hero.submitIntro')}</p>
+          </div>
           <button type="button" className="btn-icon friend-close" onClick={onClose} aria-label={t('common.close')}>
             <X aria-hidden="true" />
           </button>

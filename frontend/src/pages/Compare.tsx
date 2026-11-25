@@ -1,10 +1,12 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import { Search } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
 import type { ComparePlugin, CompareResponse } from '../types';
 import { CompareChart } from '../components/CompareChart';
+import { ComparePicker } from '../components/ComparePicker';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { formatDelta, formatNumber } from '../lib/format';
 
@@ -16,7 +18,7 @@ function growth(plugin: ComparePlugin): number | null {
 }
 
 export default function Compare() {
-  const [params] = useSearchParams();
+  const [params, setParams] = useSearchParams();
   const slugs = useMemo(
     () =>
       (params.get('slugs') ?? '')
@@ -25,6 +27,7 @@ export default function Compare() {
         .filter(Boolean),
     [params],
   );
+  const [pickerOpen, setPickerOpen] = useState(false);
   useTitle('插件对比');
   const invalid = slugs.length < 2 || slugs.length > 5;
   const { data, error, loading } = useApi<CompareResponse>(
@@ -32,32 +35,69 @@ export default function Compare() {
     [slugs.join(',')],
   );
 
+  const apply = (next: string[]) => {
+    setParams({ slugs: next.join(',') });
+    setPickerOpen(false);
+  };
+
+  const picker = (
+    <ComparePicker
+      open={pickerOpen}
+      initialSlugs={slugs}
+      onClose={() => setPickerOpen(false)}
+      onApply={apply}
+    />
+  );
+
   if (invalid) {
     return (
-      <EmptyState title="选择 2-5 个插件再对比">
-        从插件库勾选，或在插件详情页点「加入对比」。也可以直接在地址栏写{' '}
-        <code className="fg-body">/compare?slugs=a,b</code>。
-        <div className="mt-4">
-          <Link to="/?view=directory&sort=stars" className="btn btn-solid">
-            去插件库挑选
-          </Link>
-        </div>
-      </EmptyState>
+      <>
+        <EmptyState title="选择 2-5 个插件再对比">
+          点击下方按钮，搜索并勾选你想对比的插件即可。
+          <div className="mt-4">
+            <button type="button" className="btn btn-solid" onClick={() => setPickerOpen(true)}>
+              <Search className="icon-leading" aria-hidden="true" />
+              搜索插件
+            </button>
+          </div>
+        </EmptyState>
+        {picker}
+      </>
     );
   }
 
-  if (error) return <ErrorState error={error} />;
-  if (loading || !data) return <Loading rows={4} />;
+  if (error) {
+    return (
+      <>
+        <ErrorState error={error} />
+        {picker}
+      </>
+    );
+  }
+  if (loading || !data) {
+    return (
+      <>
+        <Loading rows={4} />
+        {picker}
+      </>
+    );
+  }
 
   const plugins = data.plugins;
 
   return (
     <div className="d-flex flex-column gap-4">
-      <div>
-        <h1 className="fs-3xl fw-semibold mb-1">插件对比</h1>
-        <p className="fs-sm fg-secondary mb-0">
-          {plugins.length} 个插件 · 近 {data.days} 天 · 截至 {data.as_of ?? '—'}。缺失的快照日留空，不插值。
-        </p>
+      <div className="d-flex flex-wrap align-items-end justify-content-between gap-3">
+        <div>
+          <h1 className="fs-3xl fw-semibold mb-1">插件对比</h1>
+          <p className="fs-sm fg-secondary mb-0">
+            {plugins.length} 个插件 · 近 {data.days} 天 · 截至 {data.as_of ?? '—'}。缺失的快照日留空，不插值。
+          </p>
+        </div>
+        <button type="button" className="btn btn-outline btn-sm" onClick={() => setPickerOpen(true)}>
+          <Search className="icon-leading" aria-hidden="true" />
+          添加 / 更换插件
+        </button>
       </div>
 
       <section className="card">
@@ -114,9 +154,9 @@ export default function Compare() {
       </section>
 
       <p className="fs-xs fg-secondary mb-0">
-        想加入更多曲线？去 <Link to="/?view=directory&sort=stars" className="text-decoration-none">插件库</Link>{' '}
-        或在插件详情页点「加入对比」。
+        想调整对比对象？点上方「添加 / 更换插件」搜索即可。
       </p>
+      {picker}
     </div>
   );
 }

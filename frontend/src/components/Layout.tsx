@@ -20,11 +20,11 @@ function Logo({ size = 28 }: { size?: number }) {
 }
 
 const FOOTER = [
-  { to: '/about/data', key: 'footer.data' },
-  { to: '/status', key: 'footer.status' },
-  { to: '/changelog', key: 'footer.changelog' },
+  { to: '/about#data', key: 'footer.data' },
+  { to: '/about#status', key: 'footer.status' },
+  { to: '/about#changelog', key: 'footer.changelog' },
   { to: '/compare', key: 'footer.compare' },
-  { to: '/about/terms', key: 'footer.terms' },
+  { to: '/about#terms', key: 'footer.terms' },
   { to: '/about#sponsors', key: 'footer.sponsors' },
   { to: '/about', key: 'footer.about' },
 ];

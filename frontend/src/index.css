@@ -802,8 +802,9 @@
     border: var(--hairline) solid var(--line);
     box-shadow: var(--shadow-overlay);
   }
-  .friend-dialog-head { @apply relative; }
-  .friend-close { @apply absolute; top: 0; right: 0; color: var(--muted); }
+  .friend-dialog-head { @apply flex items-start; gap: var(--s-2); }
+  .friend-dialog-head-text { @apply min-w-0 flex-grow-1; }
+  .friend-close { @apply flex-shrink-0; color: var(--muted); }
   .friend-site { @apply flex items-center; margin-top: var(--s-1); gap: var(--s-1); }
   .friend-site-icon { @apply rounded-sm2 shrink-0; }
   .friend-info-rows { @apply flex flex-col; margin-top: var(--s-1); gap: var(--s-1); }
@@ -826,6 +827,38 @@
     resize: vertical;
   }
   .friend-apply button { align-self: flex-start; }
+
+  /* ---- Compare picker dialog ---- */
+  .compare-picker { max-width: var(--measure-short); }
+  .compare-picker-selected { @apply flex flex-wrap; margin-top: var(--s-2); gap: var(--s-1); }
+  .compare-picker-chip {
+    @apply d-inline-flex align-items-center rounded-xs border-0;
+    padding: 0 var(--s-2);
+    gap: var(--s-1);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--fs-meta);
+    line-height: 1.9;
+  }
+  .compare-picker-search { @apply flex items-center; margin-top: var(--s-2); gap: var(--s-2); color: var(--muted); }
+  .compare-picker-search .form-control { flex: 1 1 auto; }
+  .compare-picker-results {
+    @apply overflow-y-auto;
+    margin-top: var(--s-2);
+    max-height: calc(var(--s-8) * 6);
+    border-top: var(--hairline) solid var(--line);
+    border-bottom: var(--hairline) solid var(--line);
+  }
+  .compare-picker-item {
+    @apply w-full d-flex align-items-center border-0 bg-transparent text-left;
+    padding: var(--s-2) var(--s-1);
+    gap: var(--s-2);
+    color: var(--text);
+  }
+  .compare-picker-item:hover { background: var(--hover); }
+  .compare-picker-item.selected { background: var(--accent-soft); }
+  .compare-picker-check { @apply flex-shrink-0 d-flex align-items-center justify-content-center; width: var(--s-4); height: var(--s-4); color: var(--accent); }
+  .compare-picker-foot { @apply d-flex align-items-center justify-content-between; margin-top: var(--s-2); }
 
   /* ---- Catalog sidebar ---- */
   .catalog-sidebar { @apply self-start; padding: var(--s-1); }

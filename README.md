@@ -48,7 +48,7 @@ pnpm dev          # http://127.0.0.1:5173，/api 代理到 8000
 pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 ```
 
-页面：`/` 首页、`/rankings/{board}` 六个榜单、`/rankings/category/{category}` 分类榜、`/categories` 分类索引、`/plugins` 插件库、`/plugins/{slug}` 详情与曲线、`/compare` 插件对比、`/community` DSH 讨论区（`/community/p/{id}` 详情、`/community/u/{login}` 用户页）、`/about/*` 数据口径/规则/变更/条款/API、`/status` 数据状态、`/submit` 提交、`/sponsors` 推荐位说明。
+核心页面：`/` 榜单（通过 `?board=`、`?view=directory` 等查询参数切换榜单/分类/插件库视图）、`/community` DSH 讨论区（`/community/p/{id}` 详情、`/community/u/{login}` 用户页）、`/api` API 说明。功能页：`/plugins/{slug}` 详情与曲线、`/compare` 插件对比（弹窗搜索选插件）。描述性内容统一收在 `/about`，以锚点分区：站点简介、收录规则、插件提交、数据口径、数据状态、名单变更、使用条款、推荐位。旧的独立描述页、榜单页、插件库页与 `/submit`、`/sponsors` 等路径已移除。
 
 ### SEO
 
@@ -140,7 +140,7 @@ v1 列表统一返回 `{items, total, as_of}`（社区列表返回 `{items, tota
 - README 徽章：![](https://harnesspack.dev/badge/<slug>.svg)，显示总榜名次与今日增量。
 - 分享图：https://harnesspack.dev/og/<slug>.png（1200×630，服务端生成并缓存）。
 - RSS：https://harnesspack.dev/feed.xml（竞速榜前 20 + 最近名单变更）。
-- 提交插件：https://harnesspack.dev/submit，名单与分类以上游 awesome-dsh-plugin 为准。
+- 提交插件：https://harnesspack.dev/about#submit，名单与分类以上游 awesome-dsh-plugin 为准。
 
 ## 数据口径
 
@@ -156,6 +156,6 @@ v1 列表统一返回 `{items, total, as_of}`（社区列表返回 `{items, tota
 - 每日快照（`data/snapshots/`）：CC BY 4.0，转载需署名并链接 `https://harnesspack.dev`，详见 `DATA-LICENSE.md`。
 - 站点文案、图表与模板：CC BY-NC 4.0，禁止整体复制成竞争站点。
 - API 默认每 IP 每分钟 120 次（`/og/` 20 次），超限返回 `429` + `Retry-After`；批量数据请直接读仓库里的快照文件。
-- 完整条款：https://harnesspack.dev/about/terms
+- 完整条款：https://harnesspack.dev/about#terms
 
 

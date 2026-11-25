@@ -10,7 +10,7 @@ const SITE = {
   descEn:
     'DeepSeek Harness plugin rankings by real GitHub STARs and npm downloads. Daily snapshots, no embellishment.',
   descZh:
-    '收录社区 DeepSeek Harness 插件，按真实 GitHub STAR 与 npm 下载量排名。每日快照，不美化、不回填。',
+    '收录社区 DeepSeek Harness 插件，按真实 GitHub STAR 与 npm 下载量排名。',
 };
 
 const ISSUE_URL =
@@ -96,8 +96,10 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
         onClick={(e) => e.stopPropagation()}
       >
         <div className="friend-dialog-head">
-          <h2 className="fs-lg fw-semibold mb-1">{t('friend.title')}</h2>
-          <p className="fs-xs fg-secondary mb-0">{t('friend.subtitle')}</p>
+          <div className="friend-dialog-head-text">
+            <h2 className="fs-lg fw-semibold mb-1">{t('friend.title')}</h2>
+            <p className="fs-xs fg-secondary mb-0">{t('friend.subtitle')}</p>
+          </div>
           <button type="button" className="btn-icon friend-close" onClick={onClose} aria-label={t('friend.close')}>
             <X aria-hidden="true" />
           </button>

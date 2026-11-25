@@ -32,7 +32,7 @@ export default function ApiDocs() {
           <a href="/api/v1/openapi.json" target="_blank" rel="noreferrer noopener" className="btn btn-outline">
             OpenAPI JSON
           </a>
-          <Link to="/about/data" className="btn btn-outline">{t('footer.data')}</Link>
+          <Link to="/about#data" className="btn btn-outline">{t('footer.data')}</Link>
         </div>
       </div>
 

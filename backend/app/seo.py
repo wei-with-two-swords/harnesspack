@@ -59,15 +59,10 @@ CATEGORY_LABELS: dict[str, str] = {
 }
 
 PAGES: dict[str, tuple[str, str]] = {
-    "about": ("关于", "收录规则、推荐位与插件提交说明。"),
-    "about/data": ("数据口径", "名单来源、榜单公式、快照时间与异常标记是怎么算的。"),
-    "about/rules": ("收录规则", "名单来自 awesome-dsh-plugin 精选清单，每日同步并保留退出机制。"),
-    "about/changelog": ("名单变更", "上游清单每次同步的新增、移除与变更记录。"),
-    "about/terms": ("使用条款与数据许可", "快照 CC BY 4.0、站点内容 CC BY-NC 4.0、代码 MIT 与 API 限流说明。"),
-    "about/api": ("API 说明", "只读 JSON API：榜单、插件详情、曲线、对比与名单变更。"),
-    "sponsors": ("推荐位", "推荐位独立成块、明确标注赞助，不参与任何排名。"),
-    "submit": ("提交插件", "把插件提交到上游清单，HarnessPack 会在下一次同步自动收录。"),
-    "status": ("数据状态", "快照覆盖率、最近一次抓取、失败清单与数据库计数全部公开。"),
+    "about": (
+        "关于",
+        "站点简介、收录规则、插件提交、数据口径、数据状态、名单变更、使用条款与推荐位说明。",
+    ),
     "api": ("API", "只读 JSON API：榜单、插件详情、曲线、对比与名单变更。"),
     "community": ("DSH 讨论区", "DeepSeek Harness 开发者的公开广场，用 GitHub 账号登录发帖、评论与点赞。"),
 }
@@ -135,7 +130,7 @@ def plugin_jsonld(detail: dict[str, Any], base: str) -> list[dict[str, Any]]:
                     "applicationCategory": "DeveloperApplication",
                     "operatingSystem": "Any",
                     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
-                    "softwareHelp": f"{base}/about/api",
+                    "softwareHelp": f"{base}/api",
                     "author": {"@type": "Organization", "name": detail["owner"]},
                 },
                 {

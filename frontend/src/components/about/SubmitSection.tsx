@@ -72,7 +72,7 @@ export default function SubmitSection() {
           <a href={ISSUE} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
             在本站提 issue<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
-          <Link to="/about/changelog" className="btn btn-outline">
+          <Link to="/about#changelog" className="btn btn-outline">
             名单变更
           </Link>
         </div>

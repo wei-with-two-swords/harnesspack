@@ -209,7 +209,7 @@ curl -s  https://harnesspack.dev/sitemap.xml | head -3
 curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 ```
 
-浏览器：`/`、`/rankings/velocity`、`/rankings/total`、`/plugins/anthropics-skills`、`/about`、`/sponsors` 均能打开；移动端卡片列表正常。
+浏览器：`/`、`/?board=velocity`、`/plugins/anthropics-skills`、`/about`、`/api`、`/community` 均能打开；移动端卡片列表正常。旧的独立榜单页与 `/sponsors`、`/submit` 等路径已移除。
 
 ## 9. 日常运维
 

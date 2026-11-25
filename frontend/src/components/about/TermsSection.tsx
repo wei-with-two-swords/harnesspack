@@ -1,25 +1,20 @@
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
-import { useTitle } from '../lib/useTitle';
 
 const REPO = 'https://github.com/wei-with-two-swords/harnesspack';
 const LINK = 'text-decoration-none';
 
-export default function Terms() {
-  useTitle('使用条款与数据许可', 'HarnessPack 的数据来源、许可范围、API 限流与使用边界。');
-
+export default function TermsSection() {
   return (
-    <article className="fs-sm" style={{ maxWidth: 'var(--measure-wide)' }}>
-      <header className="mb-4">
-        <h1 className="fs-3xl fw-semibold mb-2">使用条款与数据许可</h1>
-        <p className="mb-0 fg-secondary">
-          一句话：数据尽量开放、署名即可用；站点内容与批量数据保留权利；请不要绕过限流把全量历史拿去转售。
-        </p>
-      </header>
+    <section id="terms" className="hp-anchor mb-4">
+      <h2 className="fs-xl fw-semibold mb-2">使用条款与数据许可</h2>
+      <p className="fs-sm fg-secondary mb-3">
+        一句话：数据尽量开放、署名即可用；站点内容与批量数据保留权利；请不要绕过限流把全量历史拿去转售。
+      </p>
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">1. 数据来源</h2>
+          <h3 className="fs-lg fw-semibold">1. 数据来源</h3>
           <p className="mt-2 mb-0 fg-secondary">
             STAR 数来自 GitHub 公开 REST / GraphQL API；名单与分类来自{' '}
             <a className={LINK} href="https://github.com/awesome-dsh-plugin/awesome-dsh-plugin" target="_blank" rel="noreferrer">
@@ -32,7 +27,7 @@ export default function Terms() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">2. 许可范围</h2>
+          <h3 className="fs-lg fw-semibold">2. 许可范围</h3>
           <ul className="mt-2 mb-0 ps-4 fg-secondary">
             <li className="mb-2">
               <strong className="fg-body">每日快照</strong>（仓库里的 <code>data/snapshots/</code>）：按{' '}
@@ -53,7 +48,7 @@ export default function Terms() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">3. 你可以做什么</h2>
+          <h3 className="fs-lg fw-semibold">3. 你可以做什么</h3>
           <ul className="mt-2 mb-0 ps-4 fg-secondary">
             <li className="mb-1">在 README、博客、论文里引用榜单或曲线，附上来源链接即可。</li>
             <li className="mb-1">用公开 API 做个人工具、机器人、看板；合理频率下无需申请。</li>
@@ -65,7 +60,7 @@ export default function Terms() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">4. 请不要做什么</h2>
+          <h3 className="fs-lg fw-semibold">4. 请不要做什么</h3>
           <ul className="mt-2 mb-0 ps-4 fg-secondary">
             <li className="mb-1">用自动化手段绕过限流、批量抓取全量历史，用于转售或搭建替代站点。</li>
             <li className="mb-1">去掉署名、伪造来源，或把数据包装成你自己的原始观测。</li>
@@ -77,7 +72,7 @@ export default function Terms() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">5. API 与限流</h2>
+          <h3 className="fs-lg fw-semibold">5. API 与限流</h3>
           <p className="mt-2 mb-0 fg-secondary">
             只读 JSON，前缀 <code>/api/v1</code>。默认每 IP 每分钟 120 次；<code>/og/</code> 图片每分钟 20 次。
             超限返回 <code>429</code> 与 <code>Retry-After</code>。需要更高配额或批量导出，请在{' '}
@@ -91,7 +86,7 @@ export default function Terms() {
 
       <section className="card mb-4">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">6. 免责声明</h2>
+          <h3 className="fs-lg fw-semibold">6. 免责声明</h3>
           <p className="mt-2 mb-0 fg-secondary">
             数据按「现状」提供，不保证完整、实时或无误差；STAR 数可能被第三方操纵，我们只做异常标注、不改原始记录。
             本站非 DeepSeek 官方项目，榜单不构成任何形式的推荐或投资建议。
@@ -101,7 +96,7 @@ export default function Terms() {
 
       <section className="card">
         <div className="card-body">
-          <h2 className="fs-lg fw-semibold">7. 变更与联系</h2>
+          <h3 className="fs-lg fw-semibold">7. 变更与联系</h3>
           <p className="mt-2 mb-0 fg-secondary">
             条款变更会随代码提交记录公开。问题、授权申请或下架请求，请到{' '}
             <a className={LINK} href={`${REPO}/issues`} target="_blank" rel="noreferrer">
@@ -112,7 +107,7 @@ export default function Terms() {
               收录规则
             </Link>{' '}
             与{' '}
-            <Link className={LINK} to="/about">
+            <Link className={LINK} to="/about#data">
               数据口径
             </Link>
             。
@@ -121,6 +116,6 @@ export default function Terms() {
       </section>
 
       <p className="mt-4 mb-0 fs-xs fg-secondary">最后更新：2026-11-20。本页不构成法律意见。</p>
-    </article>
+    </section>
   );
 }

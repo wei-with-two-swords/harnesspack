@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
-import { api } from '../lib/api';
-import { useApi } from '../lib/useApi';
-import { useTitle } from '../lib/useTitle';
-import type { StatusResponse } from '../types';
-import { formatDate, formatNumber, formatPercent } from '../lib/format';
-import { ErrorState, Loading } from '../components/States';
+import { api } from '../../lib/api';
+import { useApi } from '../../lib/useApi';
+import type { StatusResponse } from '../../types';
+import { formatDate, formatNumber, formatPercent } from '../../lib/format';
+import { ErrorState, Loading } from '../States';
 
 const LINK = 'text-decoration-none';
 
@@ -22,35 +21,32 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
   );
 }
 
-export default function Status() {
-  useTitle('数据状态', '公开的抓取覆盖率、失败清单与数据库计数，便于独立核对。');
+export default function StatusSection() {
   const { data, error, loading } = useApi<StatusResponse>(() => api.status(), []);
   const [showAll, setShowAll] = useState(false);
 
   return (
-    <section className="d-flex flex-column gap-4">
-      <header>
-        <h1 className="fs-3xl fw-semibold mb-1">数据状态</h1>
-        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
-          抓取覆盖率、失败清单与数据库计数全部公开；快照文件本身在
-          <a
-            className={`mx-1 ${LINK}`}
-            href="https://github.com/wei-with-two-swords/harnesspack/tree/main/data/snapshots"
-            target="_blank"
-            rel="noreferrer"
-          >
-            仓库 data/snapshots<ExternalLink className="icon-trailing" aria-hidden="true" />
-          </a>
-          里，可直接下载核对。
-        </p>
-      </header>
+    <section id="status" className="hp-anchor mb-4">
+      <h2 className="fs-xl fw-semibold mb-2">数据状态</h2>
+      <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: 'var(--measure)' }}>
+        抓取覆盖率、失败清单与数据库计数全部公开；快照文件本身在
+        <a
+          className={`mx-1 ${LINK}`}
+          href="https://github.com/wei-with-two-swords/harnesspack/tree/main/data/snapshots"
+          target="_blank"
+          rel="noreferrer"
+        >
+          仓库 data/snapshots<ExternalLink className="icon-trailing" aria-hidden="true" />
+        </a>
+        里，可直接下载核对。
+      </p>
 
       {error ? <ErrorState error={error} /> : null}
       {loading ? <Loading /> : null}
 
       {data ? (
         <>
-          <div className="row g-3">
+          <div className="row g-3 mb-3">
             <div className="col-12 sm:col-6 lg:col-3">
               <Stat
                 label="快照天数"
@@ -81,15 +77,11 @@ export default function Status() {
               />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat
-                label="异常标记"
-                value={formatNumber(data.database.anomalies)}
-                hint="只标注，不删原始数据"
-              />
+              <Stat label="异常标记" value={formatNumber(data.database.anomalies)} hint="只标注，不删原始数据" />
             </div>
           </div>
 
-          <div className="row g-3">
+          <div className="row g-3 mb-3">
             <div className="col-12 sm:col-6 lg:col-3">
               <Stat label="数据库插件" value={formatNumber(data.database.plugins)} hint={`活跃 ${formatNumber(data.database.active)}`} />
             </div>
@@ -105,10 +97,10 @@ export default function Status() {
           </div>
 
           {data.snapshots.latest ? (
-            <div className="card">
+            <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
-                  <h2 className="fs-lg fw-semibold mb-0">最近一次抓取</h2>
+                  <h3 className="fs-lg fw-semibold mb-0">最近一次抓取</h3>
                   <p className="num fs-xs fg-secondary mb-0">
                     {data.snapshots.latest.date} · 耗时 {data.snapshots.latest.elapsed_s ?? '—'}s
                     {data.last_catalog_sync
@@ -131,9 +123,9 @@ export default function Status() {
           ) : null}
 
           {data.snapshots.failures.length > 0 ? (
-            <div className="card overflow-hidden">
+            <div className="card overflow-hidden mb-3">
               <div className="d-flex align-items-center justify-content-between border-bottom px-4 py-3">
-                <h2 className="fs-lg fw-semibold mb-0">失败清单（最多显示 50 条）</h2>
+                <h3 className="fs-lg fw-semibold mb-0">失败清单（最多显示 50 条）</h3>
                 {data.snapshots.failures.length > 10 ? (
                   <button
                     type="button"
@@ -159,7 +151,7 @@ export default function Status() {
           ) : null}
 
           <p className="fs-xs fg-secondary mb-0">
-            口径说明见 <Link className={LINK} to="/about">数据口径</Link>；
+            口径说明见 <Link className={LINK} to="/about#data">数据口径</Link>；
             发现异常可在 <Link className={LINK} to="/about#submit">提交插件</Link> 页发起申诉。
             {data.snapshots.as_of ? ` 数据截至 ${formatDate(data.snapshots.as_of)}。` : ''}
           </p>

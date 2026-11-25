@@ -190,7 +190,9 @@ export default function PluginDetail() {
             </div>
             <div className="flex-shrink-0 sm:text-end">
               <div className="fs-xs text-uppercase fg-secondary">STAR</div>
-              <div className="num fs-3xl fw-semibold">{formatNumber(data.stars)}</div>
+              <div className="num fs-3xl fw-semibold" style={{ color: 'var(--accent)' }}>
+                {formatNumber(data.stars)}
+              </div>
               <div className="mt-1 fs-sm">
                 <DeltaBadge value={data.delta} anomaly={data.is_anomaly} />
               </div>
@@ -351,7 +353,7 @@ export default function PluginDetail() {
               <p className="mt-3 mb-0 fs-xs fg-secondary">
                 STAR 与 Fork 来自 GitHub 公开 API 的每日快照；下载量是 npm tarball 数，含 CI 与依赖，不等于用户安装数。
                 收录标准见 <Link to="/about#rules" className="text-decoration-none">收录规则</Link>
-                ，接口说明见 <Link to="/about/api" className="text-decoration-none">API</Link>。
+                ，接口说明见 <Link to="/api" className="text-decoration-none">API</Link>。
               </p>
             </div>
           </div>

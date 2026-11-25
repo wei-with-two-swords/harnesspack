@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
-import { api } from '../lib/api';
-import { useApi } from '../lib/useApi';
-import { useTitle } from '../lib/useTitle';
-import { formatDate } from '../lib/format';
-import { EmptyState, ErrorState, Loading } from '../components/States';
-import type { ChangelogEntry, ChangelogResponse } from '../types';
+import { api } from '../../lib/api';
+import { useApi } from '../../lib/useApi';
+import { formatDate } from '../../lib/format';
+import { EmptyState, ErrorState, Loading } from '../States';
+import type { ChangelogEntry, ChangelogResponse } from '../../types';
 
 const LINK = 'text-decoration-none';
 
@@ -47,28 +46,25 @@ function Entry({ entry }: { entry: ChangelogEntry }) {
   );
 }
 
-export default function Changelog() {
-  useTitle('名单变更', 'HarnessPack 收录名单的进入、退出与变更记录，来自 awesome-dsh-plugin 清单同步。');
+export default function ChangelogSection() {
   const { data, error, loading } = useApi<ChangelogResponse>(() => api.changelog(50), []);
 
   return (
-    <section>
-      <div className="mb-4">
-        <h1 className="fs-3xl fw-semibold mb-1">名单变更</h1>
-        <p className="fs-sm fg-secondary mb-0" style={{ maxWidth: 'var(--measure)' }}>
-          每次同步上游清单后记录新增、移除与变更的仓库。完整规则见{' '}
-          <Link to="/about#rules" className={LINK}>
-            收录规则
-          </Link>
-          ，名单源文件与变更日志都在公开仓库里可审计。
-        </p>
-      </div>
+    <section id="changelog" className="hp-anchor mb-4">
+      <h2 className="fs-xl fw-semibold mb-2">名单变更</h2>
+      <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: 'var(--measure)' }}>
+        每次同步上游清单后记录新增、移除与变更的仓库。完整规则见{' '}
+        <Link to="/about#rules" className={LINK}>
+          收录规则
+        </Link>
+        ，名单源文件与变更日志都在公开仓库里可审计。
+      </p>
 
       {error ? <ErrorState error={error} /> : null}
       {loading ? <Loading /> : null}
       {!loading && !error && data ? (
         data.items.length > 0 ? (
-          <ul className="card list-unstyled overflow-hidden mb-0">
+          <ul className="card list-unstyled overflow-hidden mb-3">
             {data.items.map((entry) => (
               <Entry key={`${entry.at}-${entry.added}-${entry.removed}`} entry={entry} />
             ))}
@@ -79,7 +75,7 @@ export default function Changelog() {
       ) : null}
 
       {data?.as_of ? (
-        <p className="mt-4 mb-0 fs-xs fg-secondary">
+        <p className="mt-3 mb-0 fs-xs fg-secondary">
           数据截至 {formatDate(data.as_of)} · 来自 awesome-dsh-plugin 清单同步
         </p>
       ) : null}
