@@ -1,18 +1,16 @@
-"""Lightweight per-IP rate limiting.
+"""Cheap, per-visitor rate limiting for a single-worker FastAPI box.
 
-The site is public and cacheable, so the goal is not bullet-proof abuse
-prevention but a clear, cheap brake on bulk scraping: normal browsing and
-embeds stay untouched, while a single IP hammering the JSON API or the
-image endpoints gets ``429`` with ``Retry-After``.
-
-State is in-process on purpose (single uvicorn worker, ~11k plugins): no
-Redis dependency for a 1C1G box. Restarting the API resets the counters.
+Ordinary HTML pages and images keep the old, generous buckets. JSON API
+traffic gets a tighter two-tier quota: anonymous visitors share 10/min and
+50/day per IP, signed-in GitHub users get 50/min and 500/day per account.
+State is in process on purpose: no Redis on a 1C1G machine.
 """
 
 from __future__ import annotations
 
 import time
 from collections import deque
+from typing import Any
 
 from fastapi import Request
 from starlette.responses import JSONResponse
@@ -24,6 +22,8 @@ EXEMPT_PATHS = frozenset(
         "/robots.txt",
         "/sitemap.xml",
         "/favicon.svg",
+        "/favicon-light.svg",
+        "/favicon-dark.svg",
     }
 )
 
@@ -66,6 +66,30 @@ class SlidingWindowLimiter:
             self._hits.pop(key, None)
 
 
+class DailyLimiter:
+    """Count hits per key within the server's local calendar day."""
+
+    def __init__(self, limit: int) -> None:
+        self.limit = max(1, int(limit))
+        self._days: dict[str, dict[str, int]] = {}
+
+    def check(self, key: str, now: float | None = None) -> tuple[bool, int]:
+        moment = time.time() if now is None else now
+        day = time.strftime("%Y-%m-%d", time.localtime(moment))
+        counts = self._days.get(day)
+        if counts is None:
+            if len(self._days) > 2:
+                for old in sorted(self._days)[:-2]:
+                    self._days.pop(old, None)
+            counts = self._days[day] = {}
+        used = counts.get(key, 0)
+        if used >= self.limit:
+            tomorrow = time.mktime(time.strptime(day, "%Y-%m-%d")) + 86_400
+            return False, max(1, int(tomorrow - moment) + 1)
+        counts[key] = used + 1
+        return True, 0
+
+
 def client_ip(request: Request) -> str:
     """Best-effort client IP behind Cloudflare and nginx.
 
@@ -84,10 +108,37 @@ def client_ip(request: Request) -> str:
     return request.client.host if request.client else "unknown"
 
 
-def install_rate_limit(app, *, general_per_minute: int, og_per_minute: int) -> None:
-    """Attach the middleware to ``app`` (no-op when limits are disabled)."""
+def _deny(scope: str, limit: int, window_seconds: int, retry_after: int) -> JSONResponse:
+    return JSONResponse(
+        {
+            "detail": "rate limit exceeded",
+            "scope": scope,
+            "limit": limit,
+            "window_seconds": window_seconds,
+            "retry_after": retry_after,
+        },
+        status_code=429,
+        headers={"Retry-After": str(retry_after), "Cache-Control": "no-store"},
+    )
+
+
+def install_rate_limit(
+    app: Any,
+    *,
+    general_per_minute: int,
+    og_per_minute: int,
+    api_anon_per_minute: int = 10,
+    api_anon_per_day: int = 50,
+    api_auth_per_minute: int = 50,
+    api_auth_per_day: int = 500,
+) -> None:
+    """Attach middleware: page/image brakes plus the two-tier API quota."""
     general = SlidingWindowLimiter(general_per_minute)
     images = SlidingWindowLimiter(og_per_minute)
+    anon_minute = SlidingWindowLimiter(api_anon_per_minute)
+    anon_day = DailyLimiter(api_anon_per_day)
+    auth_minute = SlidingWindowLimiter(api_auth_per_minute)
+    auth_day = DailyLimiter(api_auth_per_day)
 
     @app.middleware("http")
     async def rate_limit(request: Request, call_next):
@@ -95,21 +146,41 @@ def install_rate_limit(app, *, general_per_minute: int, og_per_minute: int) -> N
         if request.method == "OPTIONS" or path.startswith("/assets/") or path in EXEMPT_PATHS:
             return await call_next(request)
 
-        limiter = images if path.startswith(OG_PREFIX) else general
+        ip = client_ip(request)
 
-        # Badge SVGs are cheap and embedded in READMEs; keep them in the
-        # general bucket but skip counting them entirely for tiny images.
-        key = f"{client_ip(request)}:{'img' if limiter is images else 'api'}"
-        allowed, retry_after = limiter.check(key)
+        # Sign-in endpoints must stay usable but are not part of the API quota.
+        if path.startswith("/api/auth/"):
+            allowed, retry_after = general.check(f"{ip}:auth")
+            if not allowed:
+                return _deny("auth", general.limit, int(general.window), retry_after)
+            return await call_next(request)
+
+        if path.startswith("/api/"):
+            user = getattr(request.state, "user", None)
+            if user is not None:
+                identity = f"user:{user.login}"
+                minute, day = auth_minute, auth_day
+                tier = "authenticated"
+            else:
+                identity = f"ip:{ip}"
+                minute, day = anon_minute, anon_day
+                tier = "anonymous"
+
+            minute_ok, minute_retry = minute.check(f"{identity}:minute")
+            day_ok, day_retry = day.check(f"{identity}:day")
+            if not minute_ok:
+                return _deny(f"{tier}-minute", minute.limit, int(minute.window), minute_retry)
+            if not day_ok:
+                return _deny(f"{tier}-day", day.limit, 86_400, day_retry)
+            return await call_next(request)
+
+        if path.startswith(OG_PREFIX):
+            allowed, retry_after = images.check(f"{ip}:img")
+            if not allowed:
+                return _deny("image", images.limit, int(images.window), retry_after)
+            return await call_next(request)
+
+        allowed, retry_after = general.check(f"{ip}:page")
         if not allowed:
-            return JSONResponse(
-                {
-                    "detail": "rate limit exceeded",
-                    "limit": limiter.limit,
-                    "window_seconds": int(limiter.window),
-                    "retry_after": retry_after,
-                },
-                status_code=429,
-                headers={"Retry-After": str(retry_after), "Cache-Control": "no-store"},
-            )
+            return _deny("page", general.limit, int(general.window), retry_after)
         return await call_next(request)

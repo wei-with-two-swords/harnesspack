@@ -27,6 +27,15 @@ class Settings:
     rate_limit_enabled: bool = True
     rate_limit_per_minute: int = 120
     og_rate_limit_per_minute: int = 20
+    # /api/* gets a tighter, two-tier quota than ordinary page browsing.
+    api_anon_per_minute: int = 10
+    api_anon_per_day: int = 50
+    api_auth_per_minute: int = 50
+    api_auth_per_day: int = 500
+    # GitHub OAuth (empty client id disables sign-in entirely).
+    github_client_id: str = ""
+    github_client_secret: str = ""
+    session_secret: str = ""
 
 
 def _env_path(name: str, default: Path) -> Path:
@@ -48,4 +57,11 @@ def get_settings() -> Settings:
         rate_limit_enabled=os.environ.get("HARNESSPACK_RATE_LIMIT", "1") != "0",
         rate_limit_per_minute=int(os.environ.get("HARNESSPACK_RATE_LIMIT_PER_MIN", "120")),
         og_rate_limit_per_minute=int(os.environ.get("HARNESSPACK_OG_LIMIT_PER_MIN", "20")),
+        api_anon_per_minute=int(os.environ.get("HARNESSPACK_API_ANON_PER_MIN", "10")),
+        api_anon_per_day=int(os.environ.get("HARNESSPACK_API_ANON_PER_DAY", "50")),
+        api_auth_per_minute=int(os.environ.get("HARNESSPACK_API_AUTH_PER_MIN", "50")),
+        api_auth_per_day=int(os.environ.get("HARNESSPACK_API_AUTH_PER_DAY", "500")),
+        github_client_id=os.environ.get("GITHUB_CLIENT_ID", ""),
+        github_client_secret=os.environ.get("GITHUB_CLIENT_SECRET", ""),
+        session_secret=os.environ.get("HARNESSPACK_SESSION_SECRET", ""),
     )

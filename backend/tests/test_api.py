@@ -233,6 +233,8 @@ def test_rate_limit_returns_429(tmp_path, data_dir):
         frontend_dist=tmp_path / "dist",
         rate_limit_per_minute=2,
         og_rate_limit_per_minute=1,
+        api_anon_per_minute=2,
+        api_anon_per_day=100,
     )
     with TestClient(create_app(settings)) as client:
         assert client.get("/api/v1/health").status_code == 200
@@ -242,6 +244,7 @@ def test_rate_limit_returns_429(tmp_path, data_dir):
         assert blocked.status_code == 429
         assert blocked.headers["Retry-After"].isdigit()
         assert blocked.json()["detail"] == "rate limit exceeded"
+        assert blocked.json()["scope"] == "anonymous-minute"
 
 
 def test_new_static_pages_have_meta(client_with_dist):

@@ -18,6 +18,8 @@ Environment=HARNESSPACK_INGEST=0
 ExecStart=/opt/harnesspack/.venv/bin/uvicorn backend.app.main:app \
     --host 127.0.0.1 --port 8000 --workers 1 \
     --proxy-headers --forwarded-allow-ips=127.0.0.1
+# Hard cap: keep a runaway API from starving nginx/SSH on this 1G box.
+MemoryMax=384M
 Restart=always
 RestartSec=3
 TimeoutStopSec=15

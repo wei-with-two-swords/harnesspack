@@ -133,6 +133,10 @@ def client(tmp_path: Path, data_dir: tuple[Path, Path]):
         snapshot_dir=snaps,
         seed_path=seed,
         frontend_dist=tmp_path / "dist",
+        api_anon_per_minute=1000,
+        api_anon_per_day=1000,
+        api_auth_per_minute=1000,
+        api_auth_per_day=1000,
     )
     app = create_app(settings)
     with TestClient(app) as test_client:
@@ -159,6 +163,10 @@ def client_with_dist(tmp_path: Path, data_dir: tuple[Path, Path]):
         snapshot_dir=snaps,
         seed_path=seed,
         frontend_dist=dist,
+        api_anon_per_minute=1000,
+        api_anon_per_day=1000,
+        api_auth_per_minute=1000,
+        api_auth_per_day=1000,
     )
     app = create_app(settings)
     with TestClient(app) as test_client:

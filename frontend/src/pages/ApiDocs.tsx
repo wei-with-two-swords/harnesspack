@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useI18n } from '../lib/i18n';
+import { useAuth } from '../lib/useAuth';
 
 const ENDPOINTS: { method: string; path: string; noteKey: string }[] = [
   { method: 'GET', path: '/api/v1/health', noteKey: 'api.ep.health' },
@@ -15,6 +16,7 @@ const ENDPOINTS: { method: string; path: string; noteKey: string }[] = [
 
 export default function ApiDocs() {
   const { t } = useI18n();
+  const { oauthEnabled } = useAuth();
   return (
     <div className="d-flex flex-column gap-4">
       <div>
@@ -32,6 +34,17 @@ export default function ApiDocs() {
           <Link to="/about/data" className="btn btn-outline theme-secondary">{t('footer.data')}</Link>
         </div>
       </div>
+
+      <section className="card">
+        <div className="card-body">
+          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-2">{t('auth.rateTitle')}</h2>
+          <div className="fs-xs fg-secondary">{t('auth.anonQuota')}</div>
+          <div className="fs-xs fg-secondary">{t('auth.authQuota')}</div>
+          <div className="fs-xs fg-secondary mt-1">
+            {t('auth.quotaNote')} {oauthEnabled ? <a href="/api/auth/github">GitHub</a> : null}
+          </div>
+        </div>
+      </section>
 
       <section className="card overflow-hidden">
         <div className="table-responsive">

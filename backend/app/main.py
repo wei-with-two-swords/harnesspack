@@ -20,7 +20,8 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
-from . import seo
+from . import auth, seo
+from .api.auth import router as auth_router
 from .api.meta import router as meta_router
 from .api.site import router as site_router
 from .api.v1 import router as v1_router
@@ -244,7 +245,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             app,
             general_per_minute=settings.rate_limit_per_minute,
             og_per_minute=settings.og_rate_limit_per_minute,
+            api_anon_per_minute=settings.api_anon_per_minute,
+            api_anon_per_day=settings.api_anon_per_day,
+            api_auth_per_minute=settings.api_auth_per_minute,
+            api_auth_per_day=settings.api_auth_per_day,
         )
+    # Registered after the limiter so it runs first and sets request.state.user.
+    auth.install_auth(app)
+    app.include_router(auth_router, prefix="/api/auth")
     app.include_router(v1_router, prefix="/api/v1")
     app.include_router(meta_router)
     app.include_router(site_router)
