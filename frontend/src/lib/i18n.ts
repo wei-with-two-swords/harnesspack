@@ -57,6 +57,8 @@ const en: Dict = {
   // footer
   'footer.note': 'Plugin list from awesome-dsh-plugin; STAR data from the public GitHub API.',
   'footer.unofficial': 'Unofficial project',
+  'footer.disclaimer': 'This is a community-maintained, unofficial project with no affiliation or association with DeepSeek.',
+  'footer.related': 'Related sites',
   'footer.data': 'Data methods',
   'footer.api': 'API',
   'footer.status': 'Status',
@@ -237,6 +239,8 @@ const zh: Dict = {
   'auth.rateTitle': 'API 调用限额',
   'footer.note': 'HarnessPack 的名单来自 awesome-dsh-plugin 清单，STAR 数据来自 GitHub 公开 API。',
   'footer.unofficial': '非官方项目',
+  'footer.disclaimer': '本站为社区维护的非官方项目，与 DeepSeek 官方无隶属或关联关系。',
+  'footer.related': '相关站点',
   'footer.data': '数据口径',
   'footer.api': 'API',
   'footer.status': '数据状态',

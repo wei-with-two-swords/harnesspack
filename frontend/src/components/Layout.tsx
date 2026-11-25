@@ -6,14 +6,14 @@ import { LangSwitcher } from './LangSwitcher';
 import { BackToTop } from './BackToTop';
 import { useI18n } from '../lib/i18n';
 
-function Logo() {
+function Logo({ size = 28 }: { size?: number }) {
   return (
     <img
       src="/favicon-64.png"
       alt=""
       aria-hidden="true"
-      width="28"
-      height="28"
+      width={size}
+      height={size}
       className="flex-shrink-0 hp-brand-logo"
     />
   );
@@ -105,9 +105,15 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <footer className="hp-footer py-4 mt-auto">
         <div className="container footer-inner">
-          <p className="mb-2 fs-xs fg-secondary">{t('footer.note')}</p>
-          <div className="footer-links fs-xs fg-secondary">
-            <span>{t('footer.unofficial')}</span>
+          <div className="footer-brand">
+            <Logo size={64} />
+            <div className="footer-brand-text">
+              <span className="footer-brand-name">HarnessPack</span>
+              <span className="footer-disclaimer">{t('footer.disclaimer')}</span>
+              <span className="footer-note">{t('footer.note')}</span>
+            </div>
+          </div>
+          <div className="footer-links footer-nav fs-xs fg-secondary">
             {FOOTER.map((item) => (
               <Link key={item.to} to={item.to} className="text-decoration-none">{t(item.key)}</Link>
             ))}
@@ -117,7 +123,8 @@ export default function Layout({ children }: { children: ReactNode }) {
               {t('footer.repo')}
             </a>
           </div>
-          <div className="footer-links fs-xs fg-secondary">
+          <div className="footer-links footer-related fs-xs fg-secondary">
+            <span className="footer-related-label">{t('footer.related')}</span>
             {FRIEND_LINKS.map((item) => (
               <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className="text-decoration-none">
                 {item.label}

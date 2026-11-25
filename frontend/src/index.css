@@ -675,7 +675,7 @@
   }
   .rank-value {
     @apply shrink-0 text-right;
-    color: var(--text);
+    color: var(--accent);
     font-size: var(--fs-body);
     font-variant-numeric: tabular-nums;
     font-weight: var(--fw-semibold);
@@ -740,9 +740,34 @@
   .mobile-nav .nav-link { @apply block; padding-block: var(--s-1); }
 
   /* ---- Footer ---- */
-  .footer-inner { @apply flex flex-col; gap: var(--s-1); }
+  .footer-inner { @apply flex flex-col; gap: var(--s-2); }
+  .footer-brand { @apply flex items-start; gap: var(--s-1); }
+  .footer-brand-text { @apply flex flex-col; gap: calc(var(--s-1) / 2); }
+  .footer-brand-name { @apply fw-semibold; font-size: var(--fs-body); color: var(--text); }
+  .footer-disclaimer { color: var(--muted); font-size: var(--fs-meta); }
+  .footer-note { color: var(--faint); font-size: var(--fs-meta); }
+  .footer-nav { gap: var(--s-1); }
+  .footer-related {
+    gap: var(--s-1);
+    margin-top: var(--s-1);
+    padding-top: var(--s-2);
+    border-top: var(--hairline) solid var(--line);
+  }
+  .footer-related-label {
+    @apply shrink-0 fw-semibold;
+    color: var(--accent);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--tracking-label);
+    margin-inline-end: var(--s-1);
+  }
   .footer-links { @apply flex flex-wrap items-center; gap: var(--s-1) var(--s-2); }
-  .footer-links > * { color: var(--muted); }
+  .footer-links > a { color: var(--muted); }
+  .footer-nav > a:not(:last-child)::after,
+  .footer-related > a:not(:last-child)::after {
+    content: '·';
+    color: var(--faint);
+    margin-inline-start: var(--s-1);
+  }
 
   /* ---- Friend link dialog ---- */
   .friend-overlay {
