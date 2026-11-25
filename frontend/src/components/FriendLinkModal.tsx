@@ -5,7 +5,7 @@ import { copyText } from '../lib/clipboard';
 const SITE = {
   name: 'HarnessPack',
   url: 'https://harnesspack.dev',
-  icon: 'https://harnesspack.dev/favicon-light.svg',
+  icon: 'https://harnesspack.dev/favicon-180.png',
   descEn:
     'DeepSeek Harness plugin rankings by real GitHub STARs and npm downloads. Daily snapshots, no embellishment.',
   descZh:
@@ -105,7 +105,7 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
         </div>
 
         <div className="friend-site">
-          <img src="/favicon-light.svg" alt="" width="40" height="40" className="friend-site-icon" />
+          <img src="/favicon-180.png" alt="" width="40" height="40" className="friend-site-icon" />
           <div className="min-w-0">
             <div className="fw-semibold">{SITE.name}</div>
             <div className="fs-xs fg-secondary">{description}</div>

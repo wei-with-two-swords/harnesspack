@@ -4,14 +4,12 @@ import { ThemeSwitcher } from './ThemeSwitcher';
 import { LangSwitcher } from './LangSwitcher';
 import { BackToTop } from './BackToTop';
 import { useI18n } from '../lib/i18n';
-import { useThemeVersion, isDarkMode } from '../lib/theme';
 import { useAuth } from '../lib/useAuth';
 
 function Logo() {
-  useThemeVersion();
   return (
     <img
-      src={isDarkMode() ? '/favicon-dark.svg' : '/favicon-light.svg'}
+      src="/favicon-64.png"
       alt=""
       aria-hidden="true"
       width="28"

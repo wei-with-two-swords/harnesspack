@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
-import { useThemeVersion, isDarkMode } from '../lib/theme';
+import { useThemeVersion } from '../lib/theme';
 import { formatNumber } from '../lib/format';
 import { type View } from '../components/CatalogSidebar';
 import { BoardSwitcher } from '../components/BoardSwitcher';
@@ -194,7 +194,7 @@ export default function Home() {
           <div className="hero-copy">
             <img
               className="hero-logo"
-              src={isDarkMode() ? '/favicon-dark.svg' : '/favicon-light.svg'}
+              src="/favicon-180.png"
               alt=""
               aria-hidden="true"
               width="88"

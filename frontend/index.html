@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" data-theme-icon="/favicon" data-icon-ext="svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180-light.png" data-theme-icon="/favicon-180" data-icon-ext="png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
     <meta
       name="description"
       content="HarnessPack：DeepSeek Harness（DSH）插件排行榜，每日快照真实 star 增速，含近 24 小时、区间增速、总榜、名次、最新、稳健与 NPM 榜。"
@@ -26,11 +27,6 @@
           var t = localStorage.getItem('harnesspack-theme');
           var dark = t === 'dark';
           document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
-          var suffix = dark ? 'dark' : 'light';
-          document.querySelectorAll('link[data-theme-icon]').forEach(function (link) {
-            var ext = link.getAttribute('data-icon-ext') || 'png';
-            link.href = link.getAttribute('data-theme-icon') + '-' + suffix + '.' + ext;
-          });
           var lang = localStorage.getItem('harnesspack-lang');
           document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
         } catch (e) {}
