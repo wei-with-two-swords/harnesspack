@@ -219,10 +219,8 @@ export default function Home() {
         </div>
         <div className="hero-install">
           <div className="hero-install-title">{t('hero.install')} · dsh-market</div>
-          <InstallCommand
-            label={t('hero.installNpm')}
-            value="npm install -g dsh1024 && dsh1024 plugin --profile web add dsh1024@latest"
-          />
+          <InstallCommand label={t('hero.installNpm')} value="npm install dshmarket" />
+          <InstallCommand label={t('hero.installDsh')} value="dsh plugin --profile web add dshmarket" />
         </div>
         <div className="hero-links">
           <a
