@@ -81,6 +81,11 @@ def truncate(text: str | None, limit: int = 155) -> str:
 
 def _jsonld_block(payload: dict[str, Any]) -> str:
     body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    # json.dumps does not escape <, >, &, so a malicious description containing
+    # "</script><img onerror=...>" would break out of the script element. Emit
+    # them as JSON \uXXXX escapes: semantically identical inside a JSON string,
+    # but impossible to use as markup.
+    body = body.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
     return f'<script type="application/ld+json">{body}</script>'
 
 

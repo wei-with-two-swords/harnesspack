@@ -94,17 +94,23 @@ class DailyLimiter:
 
 
 def client_ip(request: Request) -> str:
-    """Best-effort client IP behind Cloudflare and nginx.
+    """Resolve the visitor IP from the nginx-rewritten header only.
 
-    ``CF-Connecting-IP`` is set by Cloudflare and cannot be spoofed by the
-    visitor; nginx fills ``X-Forwarded-For``/``X-Real-IP`` for direct access.
+    Trust boundary: uvicorn binds to 127.0.0.1, so every production request
+    arrives through nginx, which *overwrites* ``X-Real-IP`` with ``$remote_addr``
+    on every proxied location. With ngx_http_realip_module configured from the
+    Cloudflare IP ranges, ``$remote_addr`` is the real visitor IP; a direct-to-
+    origin request is not in those ranges, so it stays the attacker's own IP.
+    Either way the caller cannot forge it by sending their own header.
+
+    We deliberately ignore client-supplied ``CF-Connecting-IP`` and
+    ``X-Forwarded-For``: both are attacker-controlled when someone bypasses
+    Cloudflare and hits the origin directly, and trusting them would let a
+    visitor reset the rate-limit bucket at will by changing the header.
+
+    In local development (uvicorn without nginx) these headers are absent, so
+    we fall back to the ASGI peer address (127.0.0.1).
     """
-    cf = request.headers.get("cf-connecting-ip")
-    if cf:
-        return cf.strip()
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
     real = request.headers.get("x-real-ip")
     if real:
         return real.strip()
