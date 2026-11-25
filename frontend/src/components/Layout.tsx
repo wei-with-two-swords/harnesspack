@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { LangSwitcher } from './LangSwitcher';
 import { BackToTop } from './BackToTop';
@@ -80,9 +81,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 aria-expanded={navOpen}
                 onClick={() => setNavOpen((v) => !v)}
               >
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-                  <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.5" fill="none" />
-                </svg>
+                <Menu aria-hidden="true" />
               </button>
             </div>
           </div>

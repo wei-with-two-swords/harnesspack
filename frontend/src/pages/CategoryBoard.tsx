@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
@@ -69,7 +70,7 @@ export default function CategoryBoard() {
 
       <div className="mt-4 fs-sm">
         <Link to="/rankings/total" className="text-decoration-none">
-          ← 返回总榜
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回总榜</>
         </Link>
       </div>
     </section>

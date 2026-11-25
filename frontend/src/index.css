@@ -33,6 +33,13 @@
   --hairline: 1px;
   --rule: 2px;
 
+  /* Icons — one stroke language for every lucide glyph. 16px = 2 × 8px base.
+     --icon-gap is typographic kerning between a glyph and adjacent text, not
+     layout spacing, so half a base step is intentional. */
+  --icon-size: 16px;
+  --icon-stroke: 1.5;
+  --icon-gap: 4px;
+
   /* Type — three levels; weight and leading are part of each level. */
   --fs-meta: 12px;
   --fs-body: 14px;
@@ -62,6 +69,7 @@
   --muted: #52525b;
   --faint: #6b7280;
   --accent: #4f46e5;
+  --accent-hover: #4338ca;
   --accent-soft: rgba(79, 70, 229, 0.08);
   --link: #4f46e5;
   --on-accent: #fafaff;
@@ -108,6 +116,7 @@
   --muted: #c0c0ca;
   --faint: #a1a1aa;
   --accent: #818cf8;
+  --accent-hover: #a5b4fc;
   --accent-soft: rgba(129, 140, 248, 0.14);
   --link: #a5b4fc;
   --on-accent: #101018;
@@ -194,25 +203,27 @@
   .btn:disabled, .btn.disabled { opacity: 0.5; pointer-events: none; }
   .btn-sm { padding: 0 var(--s-1); min-height: var(--s-4); font-size: var(--fs-meta); }
   .btn-solid { background: var(--accent); color: var(--on-accent); }
-  .btn-solid:hover { background: var(--link); color: var(--on-accent); }
+  .btn-solid:hover { background: var(--accent-hover); }
   .btn-outline { background: transparent; border-color: var(--line-strong); }
   .btn-outline:hover { background: var(--hover); }
   .btn-text { background: transparent; color: var(--link); padding-inline: var(--s-1); }
-  .btn-text:hover { background: var(--accent-soft); }
+  .btn-text:hover { background: var(--hover); }
   .btn-icon {
-    @apply inline-flex items-center justify-center rounded-xs border-0;
+    @apply inline-flex items-center justify-center rounded-xs;
     width: var(--s-5);
     height: var(--s-5);
     padding: 0;
+    border: var(--hairline) solid transparent;
     background: transparent;
     color: var(--muted);
   }
-  .btn-icon:hover { background: var(--hover); color: var(--text); }
+  .btn-icon:hover { background: var(--hover); }
   .btn-close {
-    @apply relative rounded-xs border-0;
+    @apply relative rounded-xs;
     width: var(--s-4);
     height: var(--s-4);
     padding: 0;
+    border: var(--hairline) solid transparent;
     background: transparent;
     color: var(--muted);
   }
@@ -225,7 +236,7 @@
     font-size: var(--fs-body);
     line-height: var(--lh-control);
   }
-  .btn-close:hover { background: var(--hover); color: var(--text); }
+  .btn-close:hover { background: var(--hover); }
   .btn-group { @apply inline-flex; }
   .btn-group > .btn { border-radius: var(--radius-none); margin-left: calc(-1 * var(--hairline)); }
   .btn-group > .btn:first-child { border-radius: var(--radius) 0 0 var(--radius); margin-left: 0; }
@@ -240,7 +251,7 @@
     background: var(--surface-2);
     color: var(--muted);
     font-size: var(--fs-meta);
-    font-weight: var(--fw-semibold);
+    font-weight: var(--fw-medium);
     line-height: var(--lh-body);
     white-space: nowrap;
   }
@@ -275,7 +286,6 @@
     font-weight: var(--fw-semibold);
     font-size: var(--fs-body);
   }
-  .navbar-brand:hover { color: var(--text); text-decoration: none; }
   .navbar-nav { @apply flex flex-col; gap: 0; }
   .nav { @apply flex flex-wrap; gap: 0; }
   .nav-item { list-style: none; }
@@ -287,7 +297,6 @@
     font-weight: var(--fw-medium);
     background: transparent;
   }
-  .nav-link:hover { color: var(--text); background: transparent; text-decoration: none; }
   .nav-link.active { color: var(--text); }
   .nav-scroll { overflow-x: auto; scrollbar-width: none; }
   .nav-scroll::-webkit-scrollbar { display: none; }
@@ -312,7 +321,9 @@
     border-bottom: var(--rule) solid transparent;
     white-space: nowrap;
   }
-  .nav-tabs .nav-link:hover { background: var(--hover); border-bottom-color: var(--line); }
+  /* Tabs are switch controls (button class): background-only feedback.
+     Extra .nav-item ancestor raises specificity above plain .nav-link:hover. */
+  .nav-item .nav-tabs .nav-link:hover { background: var(--hover); text-decoration: none; }
   .nav-tabs .nav-link.active {
     color: var(--text);
     background: transparent;
@@ -387,9 +398,9 @@
   .list-group { @apply flex flex-col; }
   .list-group-flush > .list-group-item { background: transparent; border: 0; border-bottom: var(--hairline) solid var(--line); }
   .list-group-flush > .list-group-item + .list-group-item { border-top: 0; }
-  .list-group-item { padding: var(--s-2) var(--s-3); }
+  .list-group-item { padding: var(--s-2); }
   .list-group-item-action { color: var(--text); text-decoration: none; }
-  .list-group-item-action:hover { background: var(--hover); color: var(--text); text-decoration: none; }
+  .list-group-item-action:hover { background: var(--hover); text-decoration: none; }
   .list-unstyled { padding: var(--s-0); list-style: none; }
 
   .pagination { @apply flex; padding: var(--s-0); gap: var(--s-1); list-style: none; }
@@ -495,7 +506,7 @@
     @apply inline-flex items-center no-underline;
     color: var(--muted);
   }
-  .hero-links a:hover { color: var(--accent); text-decoration: none; }
+  .hero-links a:hover { text-decoration: underline; }
   .hero-links button {
     @apply inline-flex items-center no-underline border-0 bg-transparent;
     padding: 0;
@@ -562,7 +573,7 @@
     font-size: var(--fs-body);
     font-weight: var(--fw-semibold);
   }
-  .switch-tab:hover { color: var(--text); text-decoration: none; }
+  .switch-tab:hover { background: var(--hover); text-decoration: none; }
   /* Active state is signalled by the underline only — no color/weight change. */
   .switch-tab.active { color: var(--muted); }
   .switch-tab.active::after {
@@ -587,7 +598,7 @@
     font-weight: var(--fw-medium);
     white-space: nowrap;
   }
-  .switch-chip:hover { border-color: var(--line-strong); color: var(--text); text-decoration: none; }
+  .switch-chip:hover { background: var(--hover); text-decoration: none; }
   .switch-chip.active { background: var(--accent-soft); color: var(--accent); }
 
   /* ---- Vertical ranking list ---- */
@@ -690,7 +701,7 @@
     color: var(--muted);
     line-height: var(--lh-control);
   }
-  .theme-trigger:hover { background: var(--hover); color: var(--text); }
+  .theme-trigger:hover { background: var(--hover); }
   .lang-trigger { min-height: var(--s-5); padding-inline: var(--s-2); font-weight: var(--fw-semibold); font-size: var(--fs-meta); }
 
   /* ---- Back to top ---- */
@@ -708,7 +719,7 @@
     z-index: 150;
     transition: background-color 0.14s ease, color 0.14s ease, transform 0.14s ease;
   }
-  .back-to-top:hover { background: var(--accent); color: var(--on-accent); transform: translateY(calc(-1 * var(--rule))); }
+  .back-to-top:hover { background: var(--hover); }
 
   /* ---- Top nav layout ---- */
   .desktop-nav { margin-left: var(--s-3); @apply flex-row items-center; gap: 0; }
@@ -720,7 +731,6 @@
   .footer-inner { @apply flex flex-col; gap: var(--s-1); }
   .footer-links { @apply flex flex-wrap items-center; gap: var(--s-1) var(--s-2); }
   .footer-links > * { color: var(--muted); }
-  .footer-links a:hover { color: var(--text); }
 
   /* ---- Friend link dialog ---- */
   .friend-overlay {
@@ -777,7 +787,7 @@
     font-weight: var(--fw-semibold);
     letter-spacing: var(--tracking-label);
   }
-  .catalog-group-title:hover { background: var(--hover); color: var(--text); }
+  .catalog-group-title:hover { background: var(--hover); }
   .catalog-group-items { padding-block: var(--s-1); }
   .catalog-link {
     @apply block rounded-xs no-underline;
@@ -786,7 +796,7 @@
     font-size: var(--fs-body);
     transition: background-color 0.12s ease, color 0.12s ease;
   }
-  .catalog-link:hover { background: var(--hover); color: var(--text); text-decoration: none; }
+  .catalog-link:hover { background: var(--hover); text-decoration: none; }
   .catalog-link.active { background: var(--accent-soft); color: var(--accent); }
   .catalog-sub-title { @apply uppercase; padding: var(--s-1) var(--s-2) 0; letter-spacing: var(--tracking-label); }
   .catalog-chips { @apply flex flex-wrap; gap: var(--s-1); padding: 0 var(--s-2) var(--s-1); }
@@ -798,7 +808,7 @@
     color: var(--muted);
     font-size: var(--fs-meta);
   }
-  .catalog-chip:hover { background: var(--hover); color: var(--text); text-decoration: none; }
+  .catalog-chip:hover { background: var(--hover); text-decoration: none; }
   .catalog-chip.active { background: var(--accent-soft); color: var(--accent); }
 
   /* ---- Global search ---- */
@@ -837,11 +847,14 @@
   .row > * { padding-inline: var(--s-2); }
   .col-6 { flex: 0 0 50%; max-width: 50%; }
   .col-12 { flex: 0 0 100%; max-width: 100%; }
-  .g-2 { margin-inline: calc(-1 * var(--s-1)); margin-block: calc(-1 * var(--s-1)); }
+  /* Gutters cancel horizontally only. The child's vertical padding already
+     provides vertical rhythm; a negative margin-block would override any
+     sibling margin utility (e.g. .mt-4) and collapse adjacent sections. */
+  .g-2 { margin-inline: calc(-1 * var(--s-1)); }
   .g-2 > * { padding-inline: var(--s-1); padding-block: var(--s-1); }
-  .g-3 { margin-inline: calc(-1 * var(--s-2)); margin-block: calc(-1 * var(--s-2)); }
+  .g-3 { margin-inline: calc(-1 * var(--s-2)); }
   .g-3 > * { padding-inline: var(--s-2); padding-block: var(--s-2); }
-  .g-4 { margin-inline: calc(-1 * var(--s-3)); margin-block: calc(-1 * var(--s-3)); }
+  .g-4 { margin-inline: calc(-1 * var(--s-3)); }
   .g-4 > * { padding-inline: var(--s-3); padding-block: var(--s-3); }
 
   .d-flex { display: flex !important; }
@@ -893,8 +906,6 @@
   .text-center { text-align: center; }
   .text-end { text-align: right; }
   .text-uppercase { text-transform: uppercase; }
-  .text-decoration-none { text-decoration: none; }
-  .text-decoration-none:hover { text-decoration: underline; }
   .num { font-variant-numeric: tabular-nums; }
 
   .fg-secondary { color: var(--muted); }
@@ -988,6 +999,79 @@
 /* Tables stay dense even when legacy px-4/py-3 utilities are present:
    unlayered rules outrank Tailwind's utilities layer. */
 .table > :not(caption) > * > * { padding: var(--s-1) var(--s-2); }
+
+/* lucide-react adds .lucide at runtime, so this rule must live outside
+   @layer base — otherwise Tailwind's usage scan purges the selector. */
+svg.lucide {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  stroke-width: var(--icon-stroke);
+  flex-shrink: 0;
+}
+.icon-leading { margin-inline-end: var(--icon-gap); }
+.icon-trailing { margin-inline-start: var(--icon-gap); }
+
+/* Link hover is role-based. These rules live outside @layer so they outrank
+   Tailwind's utilities layer; .text-decoration-none used to sit there and
+   leaked underline into nav/footer/card links. Keep this order: inline-link
+   base first, then role overrides. */
+.text-decoration-none { text-decoration: none; }
+.text-decoration-none:hover {
+  color: var(--link);
+  background: transparent;
+  text-decoration: underline;
+}
+
+/* Body inline links: underline, never a background block. */
+.card-body p a:hover,
+.card-body li a:hover,
+article p a:hover,
+article li a:hover,
+.hp-post-body a:hover {
+  color: var(--link);
+  background: transparent;
+  text-decoration: underline;
+}
+
+/* Navigation: color + background block, no underline. */
+.navbar .nav-link:hover,
+article header nav a:hover,
+section > header a.text-decoration-none:hover {
+  color: var(--text);
+  background: var(--hover);
+  text-decoration: none;
+}
+.navbar-brand:hover,
+a:has(.icon-leading):hover {
+  color: var(--text);
+  background: transparent;
+  text-decoration: none;
+}
+
+/* Card titles / list items: keep existing border or background feedback,
+   only suppress the underline inherited from inline links. */
+a.card:hover,
+a.hp-hover:hover,
+.rank-link:hover,
+.list-group-item-action:hover,
+.catalog-link:hover,
+.catalog-chip:hover,
+.switch-tab:hover,
+.switch-chip:hover,
+.page-link:hover,
+.table a.text-decoration-none:hover,
+.list-unstyled > li > a.text-decoration-none:hover {
+  text-decoration: none;
+}
+.list-unstyled > li > a.text-decoration-none:hover { background: var(--hover); }
+
+/* Footer: color change only. */
+.footer-links a:hover,
+.footer-links a.text-decoration-none:hover {
+  color: var(--text);
+  background: transparent;
+  text-decoration: none;
+}
 
 /* uPlot ships its own defaults (18px/700 title, 4px marker gap, black tint).
    Re-map them to the site scale; higher specificity wins regardless of bundle order. */

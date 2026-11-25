@@ -72,7 +72,7 @@ export function Composer({
           </span>
           <button
             type="button"
-            className="btn btn-sm btn-outline theme-secondary"
+            className="btn btn-sm btn-outline"
             disabled={busy || value.trim().length === 0}
             onClick={() => void submit()}
           >

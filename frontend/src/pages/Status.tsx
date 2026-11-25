@@ -137,7 +137,7 @@ export default function Status() {
                   <button
                     type="button"
                     onClick={() => setShowAll((v) => !v)}
-                    className="btn btn-text theme-secondary btn-sm"
+                    className="btn btn-text btn-sm"
                   >
                     {showAll ? '收起' : `展开全部 ${data.snapshots.failures.length} 条`}
                   </button>

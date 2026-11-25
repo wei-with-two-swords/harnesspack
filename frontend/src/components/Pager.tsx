@@ -1,3 +1,4 @@
+import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { formatNumber } from '../lib/format';
 
 interface PagerProps {
@@ -49,7 +50,7 @@ export function Pager({ page, pageSize, total, onChange }: PagerProps) {
               onClick={() => go(0)}
               aria-label="第一页"
             >
-              «
+              <ChevronsLeft aria-hidden="true" />
             </button>
           </li>
           <li className={`page-item${page === 0 ? ' disabled' : ''}`}>
@@ -98,7 +99,7 @@ export function Pager({ page, pageSize, total, onChange }: PagerProps) {
               onClick={() => go(pages - 1)}
               aria-label="最后一页"
             >
-              »
+              <ChevronsRight aria-hidden="true" />
             </button>
           </li>
         </ul>

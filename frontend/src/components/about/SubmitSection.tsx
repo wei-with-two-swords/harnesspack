@@ -46,10 +46,10 @@ export default function SubmitSection() {
           </li>
         </ol>
         <div className="mt-4 d-flex flex-wrap gap-2">
-          <a href={prUrl} target="_blank" rel="noreferrer noopener" className="btn btn-solid theme-secondary">
+          <a href={prUrl} target="_blank" rel="noreferrer noopener" className="btn btn-solid">
             用模板发起上游 PR / Issue
           </a>
-          <a href={UPSTREAM} target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary">
+          <a href={UPSTREAM} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
             打开 awesome-dsh-plugin
           </a>
         </div>
@@ -68,10 +68,10 @@ export default function SubmitSection() {
           也可以在插件详情页点「数据有误 / 申诉」。
         </p>
         <div className="d-flex flex-wrap gap-2">
-          <a href={ISSUE} target="_blank" rel="noreferrer noopener" className="btn btn-outline theme-secondary">
+          <a href={ISSUE} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
             在本站提 issue
           </a>
-          <Link to="/about/changelog" className="btn btn-outline theme-secondary">
+          <Link to="/about/changelog" className="btn btn-outline">
             名单变更
           </Link>
         </div>

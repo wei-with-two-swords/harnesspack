@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 import { api } from '../lib/api';
 import { copyText } from '../lib/clipboard';
 import { formatDateTime } from '../lib/format';
@@ -102,13 +103,13 @@ export function PostCard({ post, user, onDelete, detail = false }: Props) {
         <div className="d-flex align-items-center gap-3 mt-3 flex-wrap fs-xs fg-secondary">
           <button
             type="button"
-            className="btn btn-sm btn-icon p-0"
+            className="btn btn-sm btn-text p-0"
             onClick={() => void toggleLike()}
             aria-pressed={liked}
             title={t('community.like')}
           >
             <span style={{ color: liked ? 'var(--blue)' : undefined }}>
-              {liked ? '♥' : '♡'} {likeCount}
+              <Heart aria-hidden="true" fill={liked ? 'currentColor' : 'none'} /> {likeCount}
             </span>
           </button>
           {detail ? null : (
@@ -119,11 +120,11 @@ export function PostCard({ post, user, onDelete, detail = false }: Props) {
               {t('community.comments')} {post.comment_count}
             </Link>
           )}
-          <button type="button" className="btn btn-sm btn-icon p-0" onClick={() => void copy()}>
+          <button type="button" className="btn btn-sm btn-text p-0" onClick={() => void copy()}>
             {copied ? t('community.copied') : t('community.copyLink')}
           </button>
           {owned ? (
-            <button type="button" className="btn btn-sm btn-icon p-0 fg-danger" onClick={() => void remove()}>
+            <button type="button" className="btn btn-sm btn-text p-0 fg-danger" onClick={() => void remove()}>
               {t('community.delete')}
             </button>
           ) : null}

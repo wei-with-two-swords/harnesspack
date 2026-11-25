@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useI18n } from '../lib/i18n';
@@ -13,6 +14,7 @@ import { PluginList } from '../components/PluginList';
 import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { FriendLinkModal } from '../components/FriendLinkModal';
+import { SubmitModal } from '../components/SubmitModal';
 import { copyText } from '../lib/clipboard';
 import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, StatusResponse } from '../types';
 
@@ -89,6 +91,7 @@ export default function Home() {
   const netToday = addedToday - exitedToday;
   const changeDetail = `${t('hero.addedToday')} ${addedToday} · ${t('hero.exitedToday')} ${exitedToday}`;
   const [friendOpen, setFriendOpen] = useState(false);
+  const [submitOpen, setSubmitOpen] = useState(false);
 
   useEffect(() => {
     setPage(0);
@@ -240,17 +243,18 @@ export default function Home() {
             target="_blank"
             rel="noreferrer noopener"
           >
-            {t('hero.author')} ↗
+            {t('hero.author')}<ArrowRight className="icon-trailing" aria-hidden="true" />
           </a>
           <a href="https://dshmarket.com" target="_blank" rel="noreferrer noopener">
-            {t('hero.market')} ↗
+            {t('hero.market')}<ArrowRight className="icon-trailing" aria-hidden="true" />
           </a>
-          <Link to="/about#submit">{t('hero.submit')}</Link>
+          <button type="button" onClick={() => setSubmitOpen(true)}>{t('hero.submit')}</button>
           <button type="button" onClick={() => setFriendOpen(true)}>{t('hero.friendLink')}</button>
         </div>
       </div>
 
       <FriendLinkModal open={friendOpen} onClose={() => setFriendOpen(false)} />
+      <SubmitModal open={submitOpen} onClose={() => setSubmitOpen(false)} />
 
       <div className="mb-4"><GlobalSearch /></div>
 

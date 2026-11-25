@@ -104,7 +104,7 @@ export function Comments({ postId, user, onChanged }: Props) {
                 {owned ? (
                   <button
                     type="button"
-                    className="btn btn-sm btn-icon p-0 ms-auto fg-danger"
+                    className="btn btn-sm btn-text p-0 ms-auto fg-danger"
                     onClick={() => void remove(item.id)}
                   >
                     {t('community.delete')}
@@ -122,7 +122,7 @@ export function Comments({ postId, user, onChanged }: Props) {
       {items.length < total ? (
         <button
           type="button"
-          className="btn btn-sm btn-outline theme-secondary"
+          className="btn btn-sm btn-outline"
           onClick={() => void load(items.length, true)}
         >
           {t('common.loadMore')}

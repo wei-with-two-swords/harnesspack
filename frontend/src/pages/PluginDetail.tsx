@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
@@ -53,7 +54,7 @@ function CopyLine({ label, value, disabled = false }: { label: string; value: st
         type="button"
         onClick={handleCopy}
         disabled={disabled}
-        className="btn btn-outline theme-secondary btn-sm flex-shrink-0"
+        className="btn btn-outline btn-sm flex-shrink-0"
         aria-label={`复制${label}`}
       >
         {copied ? '已复制' : '复制'}
@@ -77,7 +78,7 @@ export default function PluginDetail() {
     return (
       <div className="d-flex flex-column gap-4">
         <Link to="/rankings/total" className="fs-sm text-decoration-none">
-          ← 返回总榜
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回总榜</>
         </Link>
         {err.message.includes('404') ? (
           <EmptyState title="没有找到这个插件">它可能已被移出名单，或链接有误。</EmptyState>
@@ -112,7 +113,7 @@ export default function PluginDetail() {
     <div className="d-flex flex-column gap-4">
       <div className="d-flex flex-wrap align-items-center gap-2 fs-sm fg-secondary">
         <Link to="/rankings/total" className="text-decoration-none">
-          ← 返回榜单
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回榜单</>
         </Link>
         <span>/</span>
         <span>{data.harness ?? 'harness'}</span>
@@ -153,7 +154,7 @@ export default function PluginDetail() {
                     rel="noreferrer noopener"
                     className="text-decoration-none"
                   >
-                    {data.owner}/{data.repo}
+                    {data.owner}/{data.repo}<ExternalLink className="icon-trailing" aria-hidden="true" />
                   </a>
                   <a
                     href={`https://github.com/${encodeURIComponent(data.owner)}`}
@@ -161,7 +162,7 @@ export default function PluginDetail() {
                     rel="noreferrer noopener"
                     className="text-decoration-none"
                   >
-                    作者主页 ↗
+                    作者主页<ExternalLink className="icon-trailing" aria-hidden="true" />
                   </a>
                   {data.category ? (
                     <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
@@ -222,7 +223,7 @@ export default function PluginDetail() {
                     key={value}
                     type="button"
                     onClick={() => setDays(value)}
-                    className={`btn ${days === value ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
+                    className={`btn ${days === value ? 'btn-solid active' : 'btn-outline'}`}
                     aria-pressed={days === value}
                   >
                     近 {value} 天
@@ -244,7 +245,7 @@ export default function PluginDetail() {
           <div className="card-body">
             <div className="mb-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
               <h2 className={SECTION_TITLE}>同分类对比</h2>
-              <Link to={compareHref} className="btn btn-outline theme-secondary btn-sm">
+              <Link to={compareHref} className="btn btn-outline btn-sm">
                 对比已选 {compareSlugs.length} 个
               </Link>
             </div>
@@ -304,7 +305,7 @@ export default function PluginDetail() {
                       className="text-decoration-none text-truncate"
                       title={data.npm_package}
                     >
-                      npmjs.com/package/{data.npm_package}
+                      npmjs.com/package/{data.npm_package}<ExternalLink className="icon-trailing" aria-hidden="true" />
                     </a>
                   ) : '—'],
                 ].map(([label, value]) => (
@@ -342,7 +343,7 @@ export default function PluginDetail() {
                   href={`${ISSUE_URL}${encodeURIComponent(`[数据] ${data.owner}/${data.repo}`)}`}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="btn btn-outline theme-secondary btn-sm"
+                  className="btn btn-outline btn-sm"
                 >
                   数据有误 / 申诉
                 </a>

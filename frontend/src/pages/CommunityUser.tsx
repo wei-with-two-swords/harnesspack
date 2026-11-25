@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { CommunityAuth } from '../components/CommunityAuth';
 import { PostCard } from '../components/PostCard';
 import { EmptyState, Loading } from '../components/States';
@@ -52,7 +53,7 @@ export default function CommunityUser() {
   return (
     <section style={{ maxWidth: 'var(--measure-mid)' }}>
       <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
-        ← {t('community.backToFeed')}
+        <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
       </Link>
       <CommunityAuth {...auth} />
       {error ? (
@@ -97,7 +98,7 @@ export default function CommunityUser() {
           {posts.length < total ? (
             <button
               type="button"
-              className="btn btn-sm btn-outline theme-secondary"
+              className="btn btn-sm btn-outline"
               onClick={() => void load(posts.length, true)}
             >
               {t('common.loadMore')}

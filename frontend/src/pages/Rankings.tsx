@@ -78,7 +78,7 @@ export default function Rankings() {
                 type="button"
                 onClick={() => setWindow(option)}
                 aria-pressed={window === option}
-                className={`btn ${window === option ? 'btn-solid theme-secondary active' : 'btn-outline'}`}
+                className={`btn ${window === option ? 'btn-solid active' : 'btn-outline'}`}
               >
                 近 {option} 天{board === 'npm' ? '下载' : ''}
               </button>

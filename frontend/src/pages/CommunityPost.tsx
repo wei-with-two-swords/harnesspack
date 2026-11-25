@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { Comments } from '../components/Comments';
 import { CommunityAuth } from '../components/CommunityAuth';
 import { PostCard } from '../components/PostCard';
@@ -46,7 +47,7 @@ export default function CommunityPost() {
   return (
     <section style={{ maxWidth: 'var(--measure-mid)' }}>
       <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
-        ← {t('community.backToFeed')}
+        <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
       </Link>
       <CommunityAuth {...auth} />
       {error ? (

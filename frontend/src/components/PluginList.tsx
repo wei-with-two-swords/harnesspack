@@ -32,7 +32,7 @@ export function PluginList({
               {item.description ? <span className="rank-desc">{item.description}</span> : null}
               <span className="rank-meta">
                 {item.category ? (
-                  <span className="badge" title={categoryDescription(lang, item.category)}>
+                  <span className="badge badge-subtle theme-secondary" title={categoryDescription(lang, item.category)}>
                     {categoryLabel(lang, item.category)}
                   </span>
                 ) : null}

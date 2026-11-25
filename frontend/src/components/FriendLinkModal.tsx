@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { X } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 import { copyText } from '../lib/clipboard';
 
@@ -29,7 +30,7 @@ function CopyRow({ label, value }: { label: string; value: string }) {
     <div className="copy-line">
       <span className="copy-line-label">{label}</span>
       <code className="copy-line-code" title={value}>{value}</code>
-      <button type="button" onClick={handleCopy} className="btn btn-outline theme-secondary btn-sm flex-shrink-0">
+      <button type="button" onClick={handleCopy} className="btn btn-outline btn-sm flex-shrink-0">
         {copied ? t('common.copied') : t('common.copy')}
       </button>
     </div>
@@ -98,9 +99,7 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
           <h2 className="fs-lg fw-semibold mb-1">{t('friend.title')}</h2>
           <p className="fs-xs fg-secondary mb-0">{t('friend.subtitle')}</p>
           <button type="button" className="btn-icon friend-close" onClick={onClose} aria-label={t('friend.close')}>
-            <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+            <X aria-hidden="true" />
           </button>
         </div>
 
@@ -119,7 +118,7 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
           <CopyRow label={t('friend.siteDesc')} value={description} />
         </div>
         <div className="friend-copy-all-row">
-          <button id="friend-copy-all" type="button" onClick={handleCopyAll} className="btn btn-outline theme-secondary btn-sm">
+          <button id="friend-copy-all" type="button" onClick={handleCopyAll} className="btn btn-outline btn-sm">
             {t('friend.copyAll')}
           </button>
         </div>
@@ -131,7 +130,7 @@ export function FriendLinkModal({ open, onClose }: { open: boolean; onClose: () 
           <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder={t('friend.fieldUrl')} type="url" required />
           <input value={icon} onChange={(e) => setIcon(e.target.value)} placeholder={t('friend.fieldIcon')} type="url" />
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder={t('friend.fieldDesc')} rows={2} />
-          <button type="submit" className="btn btn-outline theme-secondary btn-sm">{t('friend.applySubmit')}</button>
+          <button type="submit" className="btn btn-outline btn-sm">{t('friend.applySubmit')}</button>
         </form>
       </div>
     </div>

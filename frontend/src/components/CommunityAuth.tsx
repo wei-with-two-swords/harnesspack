@@ -18,7 +18,7 @@ export function CommunityAuth({ user, oauthEnabled, signOut }: AuthState) {
         <span className="fs-sm fg-secondary" title={`${t('auth.signedInAs')}: ${user.login}`}>
           @{user.login}
         </span>
-        <button type="button" className="btn btn-sm btn-outline theme-secondary" onClick={() => void signOut()}>
+        <button type="button" className="btn btn-sm btn-outline" onClick={() => void signOut()}>
           {t('auth.signOut')}
         </button>
       </div>
@@ -28,7 +28,7 @@ export function CommunityAuth({ user, oauthEnabled, signOut }: AuthState) {
   return (
     <div className="d-flex align-items-center gap-2 flex-wrap mb-3">
       <span className="fs-sm fg-secondary">{t('community.signInHint')}</span>
-      <a href="/api/auth/github" className="btn btn-sm btn-outline theme-secondary">
+      <a href="/api/auth/github" className="btn btn-sm btn-outline">
         {t('auth.signIn')}
       </a>
     </div>

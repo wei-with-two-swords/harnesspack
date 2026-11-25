@@ -85,7 +85,7 @@ export default function Community() {
       {posts.length < total ? (
         <button
           type="button"
-          className="btn btn-sm btn-outline theme-secondary"
+          className="btn btn-sm btn-outline"
           onClick={() => void load(posts.length, true)}
         >
           {t('common.loadMore')}

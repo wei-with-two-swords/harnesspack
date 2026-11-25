@@ -38,7 +38,7 @@ export default function Compare() {
         从插件库勾选，或在插件详情页点「加入对比」。也可以直接在地址栏写{' '}
         <code className="fg-body">/compare?slugs=a,b</code>。
         <div className="mt-4">
-          <Link to="/plugins" className="btn btn-solid theme-secondary">
+          <Link to="/plugins" className="btn btn-solid">
             去插件库挑选
           </Link>
         </div>

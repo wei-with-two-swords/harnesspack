@@ -52,8 +52,8 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
     hint: t('desc.npm'),
   }));
   const dirChips: Chip[] = [
-    { key: 'stars', label: `${t('catalog.sortStars')} ↓`, to: viewToUrl({ kind: 'directory', sort: 'stars' }) },
-    { key: 'downloads', label: `${t('catalog.sortDownloads')} ↓`, to: viewToUrl({ kind: 'directory', sort: 'downloads' }) },
+    { key: 'stars', label: t('catalog.sortStars'), to: viewToUrl({ kind: 'directory', sort: 'stars' }) },
+    { key: 'downloads', label: t('catalog.sortDownloads'), to: viewToUrl({ kind: 'directory', sort: 'downloads' }) },
     { key: 'category', label: t('catalog.categories'), to: viewToUrl({ kind: 'directory', sort: 'category' }) },
   ];
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 import { useI18n } from '../lib/i18n';
 
 export type View =
@@ -31,10 +32,8 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
         onClick={() => setOpen((v) => !v)}
       >
         <span>{title}</span>
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
-          style={{ transform: open ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>
-          <path d="M6 3l5 5-5 5z" />
-        </svg>
+        <ChevronRight className="catalog-caret" aria-hidden="true"
+          style={{ transform: open ? 'rotate(90deg)' : 'none' }} />
       </button>
       {open ? <div className="catalog-group-items">{children}</div> : null}
     </div>
@@ -56,10 +55,8 @@ export function CatalogSidebar({ view }: { view: View }) {
         onClick={() => setMobileOpen((v) => !v)}
       >
         <span className="fs-sm fw-semibold">{t('catalog.title')}</span>
-        <svg className="catalog-mobile-caret" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
-          style={{ transform: mobileOpen ? 'rotate(90deg)' : 'none', transition: 'transform .15s' }}>
-          <path d="M6 3l5 5-5 5z" />
-        </svg>
+        <ChevronRight className="catalog-mobile-caret catalog-caret" aria-hidden="true"
+          style={{ transform: mobileOpen ? 'rotate(90deg)' : 'none' }} />
       </button>
       <div className={`catalog-body${mobileOpen ? ' mobile-open' : ''}`}>
 
@@ -88,11 +85,11 @@ export function CatalogSidebar({ view }: { view: View }) {
       <Group title={t('catalog.directory')}>
         <Link to={viewToUrl({ kind: 'directory', sort: 'stars' })}
           className={`catalog-link${view.kind === 'directory' && view.sort === 'stars' ? ' active' : ''}`}>
-          {t('catalog.sortStars')} ↓
+          {t('catalog.sortStars')}
         </Link>
         <Link to={viewToUrl({ kind: 'directory', sort: 'downloads' })}
           className={`catalog-link${view.kind === 'directory' && view.sort === 'downloads' ? ' active' : ''}`}>
-          {t('catalog.sortDownloads')} ↓
+          {t('catalog.sortDownloads')}
         </Link>
         <Link to={viewToUrl({ kind: 'directory', sort: 'category' })}
           className={`catalog-link${view.kind === 'directory' && view.sort === 'category' ? ' active' : ''}`}>

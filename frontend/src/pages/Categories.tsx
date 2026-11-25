@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
 import { useTitle } from '../lib/useTitle';
@@ -49,7 +50,7 @@ export default function Categories() {
                       </li>
                     ))}
                   </ol>
-                  <div className="mt-3 fs-sm fg-info">查看 {categoryLabel(item.category)} →</div>
+                  <div className="mt-3 fs-sm fg-info">查看 {categoryLabel(item.category)}<ArrowRight className="icon-trailing" aria-hidden="true" /></div>
                 </div>
               </Link>
             </div>
