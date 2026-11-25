@@ -68,8 +68,6 @@ PAGES: dict[str, tuple[str, str]] = {
     "sponsors": ("推荐位", "推荐位独立成块、明确标注赞助，不参与任何排名。"),
     "submit": ("提交插件", "把插件提交到上游清单，HarnessPack 会在下一次同步自动收录。"),
     "status": ("数据状态", "快照覆盖率、最近一次抓取、失败清单与数据库计数全部公开。"),
-    "plugins": ("插件库", "搜索 11,700+ 个可安装进 DeepSeek Harness 的插件，按 star、名称或创建时间浏览。"),
-    "categories": ("分类", "23 个分类各自的 star 排名，每个分类单独计算名次。"),
     "api": ("API", "只读 JSON API：榜单、插件详情、曲线、对比与名单变更。"),
     "community": ("DSH 讨论区", "DeepSeek Harness 开发者的公开广场，用 GitHub 账号登录发帖、评论与点赞。"),
 }
@@ -143,9 +141,8 @@ def plugin_jsonld(detail: dict[str, Any], base: str) -> list[dict[str, Any]]:
                 {
                     "@type": "BreadcrumbList",
                     "itemListElement": [
-                        {"@type": "ListItem", "position": 1, "name": "总榜", "item": f"{base}/rankings/total"},
-                        {"@type": "ListItem", "position": 2, "name": "插件库", "item": f"{base}/plugins"},
-                        {"@type": "ListItem", "position": 3, "name": detail["name"], "item": canonical},
+                        {"@type": "ListItem", "position": 1, "name": "首页", "item": f"{base}/"},
+                        {"@type": "ListItem", "position": 2, "name": detail["name"], "item": canonical},
                     ],
                 },
             ],

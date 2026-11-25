@@ -38,7 +38,7 @@ export default function Compare() {
         从插件库勾选，或在插件详情页点「加入对比」。也可以直接在地址栏写{' '}
         <code className="fg-body">/compare?slugs=a,b</code>。
         <div className="mt-4">
-          <Link to="/plugins" className="btn btn-solid">
+          <Link to="/?view=directory&sort=stars" className="btn btn-solid">
             去插件库挑选
           </Link>
         </div>
@@ -114,7 +114,7 @@ export default function Compare() {
       </section>
 
       <p className="fs-xs fg-secondary mb-0">
-        想加入更多曲线？去 <Link to="/plugins" className="text-decoration-none">插件库</Link>{' '}
+        想加入更多曲线？去 <Link to="/?view=directory&sort=stars" className="text-decoration-none">插件库</Link>{' '}
         或在插件详情页点「加入对比」。
       </p>
     </div>

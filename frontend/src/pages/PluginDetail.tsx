@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
@@ -65,6 +65,9 @@ function CopyLine({ label, value, disabled = false }: { label: string; value: st
 
 export default function PluginDetail() {
   const { slug = '' } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const from = (location.state as { from?: string } | null)?.from ?? '';
+  const backTo = from.startsWith('?') ? `/${from}` : '/';
   const [days, setDays] = useState(90);
   const [selected, setSelected] = useState<string[]>([]);
   const detail = useApi<Detail>(() => api.plugin(slug), [slug]);
@@ -77,8 +80,8 @@ export default function PluginDetail() {
     const err = detail.error;
     return (
       <div className="d-flex flex-column gap-4">
-        <Link to="/rankings/total" className="fs-sm text-decoration-none">
-          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回总榜</>
+        <Link to={backTo} className="fs-sm text-decoration-none">
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回首页</>
         </Link>
         {err.message.includes('404') ? (
           <EmptyState title="没有找到这个插件">它可能已被移出名单，或链接有误。</EmptyState>
@@ -112,8 +115,8 @@ export default function PluginDetail() {
   return (
     <div className="d-flex flex-column gap-4">
       <div className="d-flex flex-wrap align-items-center gap-2 fs-sm fg-secondary">
-        <Link to="/rankings/total" className="text-decoration-none">
-          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回榜单</>
+        <Link to={backTo} className="text-decoration-none">
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回首页</>
         </Link>
         <span>/</span>
         <span>{data.harness ?? 'harness'}</span>
@@ -266,6 +269,7 @@ export default function PluginDetail() {
                     </span>
                     <Link
                       to={`/plugins/${peer.slug}`}
+                      state={{ from }}
                       className="min-w-0 flex-grow-1 text-truncate text-decoration-none"
                     >
                       {peer.name}

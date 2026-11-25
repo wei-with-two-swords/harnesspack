@@ -104,7 +104,7 @@ def _day_range(conn) -> tuple[str | None, str | None]:
     return row["first"], row["last"]
 
 
-def _route_meta(conn, path: str, base: str, npm_dir: Path | None = None) -> dict[str, Any]:
+def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
     image = f"{base}/og/site.png"
     first_day, last_day = _day_range(conn)
 
@@ -136,65 +136,6 @@ def _route_meta(conn, path: str, base: str, npm_dir: Path | None = None) -> dict
             canonical=canonical,
             image=f"{base}/og/{detail['slug']}.png",
             jsonld=seo.plugin_jsonld(detail, base),
-        )
-
-    if path == "plugins":
-        label, description = seo.PAGES["plugins"]
-        return _meta(
-            title=f"{label} · HarnessPack",
-            description=description,
-            canonical=f"{base}/plugins",
-            image=image,
-        )
-
-    if path == "categories":
-        label, description = seo.PAGES["categories"]
-        return _meta(
-            title=f"{label} · HarnessPack",
-            description=description,
-            canonical=f"{base}/categories",
-            image=image,
-        )
-
-    if path == "rankings":
-        return _meta(
-            title="榜单 · HarnessPack",
-            description=seo.BOARDS["velocity"][1],
-            canonical=f"{base}/rankings/velocity",
-            image=image,
-        )
-
-    if path.startswith("rankings/category/"):
-        parts = path.split("/")
-        category = parts[2] if len(parts) >= 3 else ""
-        label = seo.CATEGORY_LABELS.get(category)
-        if label is None:
-            return _not_found(base, "分类未找到 · HarnessPack", "这个分类不在上游清单的 23 个分类里。")
-        canonical = f"{base}/rankings/category/{category}"
-        result = ranking.board(conn, "total", category=category)
-        items = result["items"][:10]
-        return _meta(
-            title=f"{label}分类榜 · HarnessPack",
-            description=f"{label}分类下的 DSH 插件按当前 star 排名，共 {len(result['items'])} 个在册插件。",
-            canonical=canonical,
-            image=image,
-            jsonld=seo.board_jsonld(f"{label}分类榜", items, base, canonical),
-        )
-
-    if path.startswith("rankings/"):
-        name = path.split("/", 1)[1].split("/")[0]
-        board = seo.BOARDS.get(name)
-        if board is None:
-            return _not_found(base, "榜单未找到 · HarnessPack", "这个榜单不存在。")
-        label, description = board
-        canonical = f"{base}/rankings/{name}"
-        items = ranking.get_board(conn, name, npm_dir=npm_dir)["items"][:10]
-        return _meta(
-            title=f"{label} · HarnessPack",
-            description=description,
-            canonical=canonical,
-            image=image,
-            jsonld=seo.board_jsonld(label, items, base, canonical),
         )
 
     if path == "compare":
@@ -315,7 +256,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             path = full_path.strip("/")
             conn = connect(settings.db_path)
             try:
-                meta = _route_meta(conn, path, base, settings.npm_downloads_dir)
+                meta = _route_meta(conn, path, base)
             finally:
                 conn.close()
             html = _render_shell(

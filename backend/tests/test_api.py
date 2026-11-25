@@ -92,20 +92,21 @@ def test_robots_and_sitemap(client):
     assert sitemap.status_code == 200
     assert sitemap.headers["content-type"].startswith("application/xml")
     body = sitemap.text
-    assert "http://testserver/rankings/velocity" in body
     assert "http://testserver/plugins/alpha-one" in body
-    assert "http://testserver/categories" in body
-    assert "http://testserver/plugins" in body
     assert "http://testserver/about/data" in body
-    assert "http://testserver/rankings/category/workflow" in body
     assert "http://testserver/status" in body
     assert "http://testserver/about/terms" in body
     assert "http://testserver/about/api" in body
-    assert "http://testserver/rankings/quality" in body
-    assert "http://testserver/rankings/npm" in body
     assert "http://testserver/api" in body
     assert "http://testserver/community" in body
-    assert body.count("<url>") == 26
+    # Removed legacy pages must not be advertised to crawlers.
+    for stale in (
+        "<loc>http://testserver/rankings",
+        "<loc>http://testserver/categories<",
+        "<loc>http://testserver/plugins<",
+    ):
+        assert stale not in body
+    assert body.count("<url>") == 13
 
 
 def test_spa_missing_dist_returns_404(client):
@@ -184,13 +185,19 @@ def test_home_page_has_dataset_metadata(client_with_dist):
     assert '"@type":"Dataset"' in html
 
 
-def test_board_page_has_item_list(client_with_dist):
+def test_removed_board_page_returns_404_meta(client_with_dist):
     response = client_with_dist.get("/rankings/total")
-    assert response.status_code == 200
+    assert response.status_code == 404
     html = response.text
-    assert "<title>总榜 · HarnessPack</title>" in html
-    assert 'rel="canonical" href="http://testserver/rankings/total"' in html
-    assert '"@type":"ItemList"' in html
+    assert "<title>页面未找到" in html
+    assert 'rel="canonical"' not in html
+
+
+def test_removed_catalog_pages_return_404_meta(client_with_dist):
+    for path in ("/categories", "/plugins", "/rankings/category/workflow"):
+        response = client_with_dist.get(path)
+        assert response.status_code == 404, path
+        assert "<title>页面未找到" in response.text
 
 
 def test_unknown_plugin_returns_404_and_noindex(client_with_dist):

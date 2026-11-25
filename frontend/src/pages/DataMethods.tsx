@@ -129,7 +129,7 @@ export default function DataMethods() {
             抓取失败会记录在快照的 failures 里并告警；缺日不补、绝不伪造。站点只做只读展示，
             STAR 数据归 GitHub 与各仓库作者所有。本项目非 GitHub 或任何 harness 官方项目。
           </p>
-          <Link to="/rankings/velocity" className="btn btn-solid mt-2">
+          <Link to="/?board=velocity" className="btn btn-solid mt-2">
             去看近 24 小时榜
           </Link>
         </div>

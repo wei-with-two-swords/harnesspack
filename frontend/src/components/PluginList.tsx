@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { PluginListItem } from '../types';
 import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
 import { formatCompact, formatDate, formatNumber } from '../lib/format';
@@ -15,13 +15,15 @@ export function PluginList({
   offset?: number;
 }) {
   const { t, lang } = useI18n();
+  const location = useLocation();
+  const fromHome = location.pathname === '/' ? location.search : '';
   const byDownloads = sort === 'downloads';
 
   return (
     <ul className="list-group list-group-flush">
       {items.map((item, index) => (
         <li key={item.slug} className="rank-row list-group-item p-0">
-          <Link to={`/plugins/${item.slug}`} className="rank-link">
+          <Link to={`/plugins/${item.slug}`} state={{ from: fromHome }} className="rank-link">
             <RankMedal rank={offset + index + 1} />
             <Avatar owner={item.owner} />
             <span className="rank-main">

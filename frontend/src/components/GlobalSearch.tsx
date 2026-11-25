@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useI18n } from '../lib/i18n';
 import { formatNumber } from '../lib/format';
@@ -8,6 +8,8 @@ import type { PluginListItem } from '../types';
 /** Homepage global search: queries /api/v1/plugins?query= with debounce. */
 export function GlobalSearch() {
   const { t } = useI18n();
+  const location = useLocation();
+  const fromHome = location.pathname === '/' ? location.search : '';
   const [input, setInput] = useState('');
   const [items, setItems] = useState<PluginListItem[]>([]);
   const [open, setOpen] = useState(false);
@@ -73,6 +75,7 @@ export function GlobalSearch() {
                 <li key={item.slug} className="list-group-item list-group-item-action p-0">
                   <Link
                     to={`/plugins/${item.slug}`}
+                    state={{ from: fromHome }}
                     className="d-flex align-items-center gap-3 px-3 py-2 text-decoration-none"
                     onClick={() => {
                       setOpen(false);

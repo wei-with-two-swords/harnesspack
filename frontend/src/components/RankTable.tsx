@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { RankingItem } from '../types';
 import { formatCompact, formatDate, formatDelta, formatNumber, formatPercent } from '../lib/format';
 import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
@@ -124,6 +124,8 @@ export function RankTable({
   window?: number | string | null;
 }) {
   const { t, lang } = useI18n();
+  const location = useLocation();
+  const fromHome = location.pathname === '/' ? location.search : '';
   const compact = (v: number | null | undefined) => formatCompact(v, lang);
   const isNpm = board === 'npm';
   const hasPrev = !isNpm || items.some((i) => i.has_prev === true);
@@ -151,7 +153,7 @@ export function RankTable({
 
         return (
           <li key={item.slug} className="rank-row list-group-item p-0">
-            <Link to={`/plugins/${item.slug}`} className="rank-link">
+            <Link to={`/plugins/${item.slug}`} state={{ from: fromHome }} className="rank-link">
               <RankMedal rank={item.rank} />
               <Avatar owner={item.owner} />
               <span className="rank-main">

@@ -8,12 +8,9 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import Response
 
 from ..db import connect
-from ..seo import BOARDS as BOARD_LABELS
 from ..services import ranking
 
 router = APIRouter()
-
-BOARD_PATHS = list(BOARD_LABELS)
 
 
 def get_conn(request: Request):
@@ -51,17 +48,7 @@ def robots(request: Request) -> Response:
 def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     base = _base_url(request)
     lastmod = ranking.latest_date(conn)
-    urls = [
-        _url_entry(f"{base}/", lastmod),
-        _url_entry(f"{base}/rankings", lastmod),
-    ]
-    urls += [_url_entry(f"{base}/rankings/{board}", lastmod) for board in BOARD_PATHS]
-    urls.append(_url_entry(f"{base}/categories", lastmod))
-    urls.append(_url_entry(f"{base}/plugins", lastmod))
-    urls += [
-        _url_entry(f"{base}/rankings/category/{item['category']}", lastmod)
-        for item in ranking.categories(conn)["items"]
-    ]
+    urls = [_url_entry(f"{base}/", lastmod)]
     rows = conn.execute(
         "SELECT slug FROM plugins WHERE status = 'active' ORDER BY slug"
     ).fetchall()

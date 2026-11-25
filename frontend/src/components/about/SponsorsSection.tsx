@@ -32,7 +32,7 @@ export default function SponsorsSection() {
           榜单的价值来自「数字可信」。一旦名次可以购买，所有 STAR 曲线都会失去解释力。
           推荐位与榜单分离，是这个小站的长期承诺。
         </p>
-        <Link to="/rankings/velocity" className="btn btn-solid mt-3">
+        <Link to="/?board=velocity" className="btn btn-solid mt-3">
           返回近 24 小时榜
         </Link>
       </div>

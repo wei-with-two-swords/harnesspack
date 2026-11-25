@@ -2,13 +2,9 @@ import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import Rankings from './pages/Rankings';
 import PluginDetail from './pages/PluginDetail';
 import About from './pages/About';
 import DataMethods from './pages/DataMethods';
-import Categories from './pages/Categories';
-import CategoryBoard from './pages/CategoryBoard';
-import Plugins from './pages/Plugins';
 import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
@@ -37,11 +33,6 @@ export default function App() {
         <Route path="/community" element={<Community />} />
         <Route path="/community/p/:id" element={<CommunityPost />} />
         <Route path="/community/u/:login" element={<CommunityUser />} />
-        <Route path="/rankings" element={<Navigate to="/rankings/velocity" replace />} />
-        <Route path="/rankings/category/:category" element={<CategoryBoard />} />
-        <Route path="/rankings/:board" element={<Rankings />} />
-        <Route path="/categories" element={<Categories />} />
-        <Route path="/plugins" element={<Plugins />} />
         <Route path="/plugins/:slug" element={<PluginDetail />} />
         <Route path="/about" element={<About />} />
         <Route path="/about/data" element={<DataMethods />} />
