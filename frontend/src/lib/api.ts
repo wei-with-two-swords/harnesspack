@@ -9,6 +9,11 @@ import type {
   PluginDetail,
   PluginListItem,
   SeriesResponse,
+  CommunityPost,
+  CommunityComment,
+  CommunityList,
+  CommunityProfile,
+  LikeResult,
 } from '../types';
 
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? '';
@@ -26,6 +31,28 @@ export class ApiError extends Error {
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     headers: { Accept: 'application/json' },
+  });
+  if (!res.ok) {
+    let detail = res.statusText;
+    try {
+      const payload = (await res.json()) as { detail?: string };
+      if (payload.detail) detail = payload.detail;
+    } catch {
+      /* non-JSON error body */
+    }
+    throw new ApiError(res.status, detail);
+  }
+  return (await res.json()) as T;
+}
+
+async function write<T>(method: 'POST' | 'DELETE', path: string, body?: unknown): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, {
+    method,
+    headers: {
+      Accept: 'application/json',
+      ...(body === undefined ? {} : { 'Content-Type': 'application/json' }),
+    },
+    body: body === undefined ? undefined : JSON.stringify(body),
   });
   if (!res.ok) {
     let detail = res.statusText;
@@ -80,4 +107,26 @@ export const api = {
     get<CompareResponse>(
       `/api/v1/compare?slugs=${encodeURIComponent(slugs.join(','))}&days=${days}`,
     ),
+  community: {
+    posts: (limit = 20, offset = 0) =>
+      get<CommunityList<CommunityPost>>(`/api/community/posts?limit=${limit}&offset=${offset}`),
+    post: (id: number) => get<CommunityPost>(`/api/community/posts/${id}`),
+    createPost: (body: string) =>
+      write<CommunityPost>('POST', '/api/community/posts', { body }),
+    deletePost: (id: number) => write<{ ok: boolean }>('DELETE', `/api/community/posts/${id}`),
+    comments: (postId: number, limit = 50, offset = 0) =>
+      get<CommunityList<CommunityComment>>(
+        `/api/community/posts/${postId}/comments?limit=${limit}&offset=${offset}`,
+      ),
+    createComment: (postId: number, body: string) =>
+      write<CommunityComment>('POST', `/api/community/posts/${postId}/comments`, { body }),
+    deleteComment: (id: number) =>
+      write<{ ok: boolean }>('DELETE', `/api/community/comments/${id}`),
+    like: (postId: number) =>
+      write<LikeResult>('POST', `/api/community/posts/${postId}/like`),
+    user: (login: string, limit = 20, offset = 0) =>
+      get<CommunityProfile>(
+        `/api/community/users/${encodeURIComponent(login)}?limit=${limit}&offset=${offset}`,
+      ),
+  },
 };

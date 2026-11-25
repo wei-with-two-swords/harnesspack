@@ -92,6 +92,35 @@ CREATE TABLE IF NOT EXISTS points_ledger (
 );
 CREATE INDEX IF NOT EXISTS idx_ledger_user ON points_ledger (user_id);
 
+-- Community: GitHub-only authors, one-level comments and one like per post.
+CREATE TABLE IF NOT EXISTS posts (
+    id         INTEGER PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    body       TEXT    NOT NULL,
+    created_at TEXT    NOT NULL,
+    is_hidden  INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_posts_feed ON posts (is_hidden, id DESC);
+CREATE INDEX IF NOT EXISTS idx_posts_user ON posts (user_id, id DESC);
+
+CREATE TABLE IF NOT EXISTS comments (
+    id         INTEGER PRIMARY KEY,
+    post_id    INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    user_id    INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    body       TEXT    NOT NULL,
+    created_at TEXT    NOT NULL,
+    is_hidden  INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_comments_post ON comments (post_id, is_hidden, id);
+
+CREATE TABLE IF NOT EXISTS post_likes (
+    post_id    INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    user_id    INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    created_at TEXT    NOT NULL,
+    PRIMARY KEY (post_id, user_id)
+);
+CREATE INDEX IF NOT EXISTS idx_likes_user ON post_likes (user_id);
+
 CREATE TABLE IF NOT EXISTS sponsor_slots (
     id         INTEGER PRIMARY KEY,
     week       TEXT    NOT NULL,

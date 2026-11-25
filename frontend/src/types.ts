@@ -225,3 +225,59 @@ export interface CompareResponse {
   days: number;
   plugins: ComparePlugin[];
 }
+
+export interface CommunityAuthor {
+  login: string;
+  name: string | null;
+  avatar_url: string | null;
+}
+
+export interface CommunityPluginCard {
+  slug: string;
+  name: string;
+  owner: string;
+  repo: string;
+  description: string | null;
+  url: string;
+  stars_latest: number | null;
+  category: string | null;
+  harness: string | null;
+}
+
+export interface CommunityPost {
+  id: number;
+  body: string;
+  created_at: string;
+  author: CommunityAuthor;
+  like_count: number;
+  comment_count: number;
+  liked_by_me: boolean;
+  plugins: CommunityPluginCard[];
+}
+
+export interface CommunityComment {
+  id: number;
+  post_id: number;
+  body: string;
+  created_at: string;
+  author: CommunityAuthor;
+  plugins: CommunityPluginCard[];
+}
+
+export interface CommunityList<T> {
+  items: T[];
+  total: number;
+}
+
+export interface CommunityUser extends CommunityAuthor {
+  created_at?: string;
+}
+
+export interface CommunityProfile extends CommunityList<CommunityPost> {
+  user: CommunityUser;
+}
+
+export interface LikeResult {
+  liked: boolean;
+  like_count: number;
+}

@@ -48,7 +48,7 @@ pnpm dev          # http://127.0.0.1:5173，/api 代理到 8000
 pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 ```
 
-页面：`/` 首页、`/rankings/{board}` 六个榜单、`/rankings/category/{category}` 分类榜、`/categories` 分类索引、`/plugins` 插件库、`/plugins/{slug}` 详情与曲线、`/compare` 插件对比、`/about/*` 数据口径/规则/变更/条款/API、`/status` 数据状态、`/submit` 提交、`/sponsors` 推荐位说明。
+页面：`/` 首页、`/rankings/{board}` 六个榜单、`/rankings/category/{category}` 分类榜、`/categories` 分类索引、`/plugins` 插件库、`/plugins/{slug}` 详情与曲线、`/compare` 插件对比、`/community` DSH 讨论区（`/community/p/{id}` 详情、`/community/u/{login}` 用户页）、`/about/*` 数据口径/规则/变更/条款/API、`/status` 数据状态、`/submit` 提交、`/sponsors` 推荐位说明。
 
 ### SEO
 
@@ -106,9 +106,27 @@ GET /api/v1/plugins/{slug}
 GET /api/v1/plugins/{slug}/series?days=90
 GET /api/v1/compare?slugs=a,b[,c]
 GET /api/v1/sponsors
+
+# 社区（读公开，写需 GitHub 登录）
+GET/POST /api/community/posts
+GET/DELETE /api/community/posts/{id}
+GET /api/community/posts/{id}/comments
+POST /api/community/posts/{id}/comments
+DELETE /api/community/comments/{id}
+POST /api/community/posts/{id}/like
+GET /api/community/users/{login}
 ```
 
-列表统一返回 `{items, total, as_of}`；`growth` / `darkhorse` 需要恰好的基准日快照，缺失时返回空列表与 `reason`。
+v1 列表统一返回 `{items, total, as_of}`（社区列表返回 `{items, total}`）；`growth` / `darkhorse` 需要恰好的基准日快照，缺失时返回空列表与 `reason`。
+
+## DSH 讨论区
+
+只发文字，GitHub 账号登录即可发言，没有等级和积分。正文里的 `@owner/name` 或插件详情页链接会带出本地插件卡片，写不存在的插件不会有卡片；作者可随时删掉自己的帖子和评论。
+
+- 读取走社区独立限流桶；发帖 5 次/分、50 次/天，评论与点赞各自独立额度，删除自己内容不受写额度限制。
+- 广告、人身攻击、与 DSH 无关的内容可下架（不物理删除）：
+  `python -m backend.app.cli community hide post <id>` / `community unhide comment <id>`。
+- 登录依赖 `GITHUB_CLIENT_ID`、`GITHUB_CLIENT_SECRET`、`HARNESSPACK_SESSION_SECRET` 与 `HARNESSPACK_BASE_URL`（OAuth 回调地址由 base URL 拼出）。
 
 ## 部署
 

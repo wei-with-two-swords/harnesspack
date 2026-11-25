@@ -22,13 +22,14 @@ from fastapi.staticfiles import StaticFiles
 
 from . import auth, seo
 from .api.auth import router as auth_router
+from .api.community import router as community_router
 from .api.meta import router as meta_router
 from .api.site import router as site_router
 from .api.v1 import router as v1_router
 from .config import Settings, get_settings
 from .db import connect, init_db
 from .rate_limit import install_rate_limit
-from .services import ranking
+from .services import community, ranking
 from .services.ingest import ingest
 
 _META_RE = re.compile(
@@ -205,6 +206,32 @@ def _route_meta(conn, path: str, base: str, npm_dir: Path | None = None) -> dict
             robots="noindex,follow",
         )
 
+    if path.startswith("community/p/"):
+        parts = path.split("/")
+        if len(parts) != 3 or not parts[2].isdigit():
+            return _not_found(base, "帖子未找到 · HarnessPack", "这条帖子不存在或已被删除。")
+        post = community.get_post(conn, int(parts[2]))
+        if post is None:
+            return _not_found(base, "帖子未找到 · HarnessPack", "这条帖子不存在或已被删除。")
+        return _meta(
+            title=f"{post['author']['login']} · DSH 讨论区 · HarnessPack",
+            description=seo.truncate(post["body"]),
+            canonical=f"{base}/community/p/{post['id']}",
+            image=image,
+        )
+
+    if path.startswith("community/u/"):
+        parts = path.split("/")
+        if len(parts) != 3 or not parts[2]:
+            return _not_found(base, "页面未找到 · HarnessPack", "这个地址不存在。")
+        return _meta(
+            title=f"@{parts[2]} · DSH 讨论区 · HarnessPack",
+            description=f"@{parts[2]} 在 HarnessPack DSH 讨论区发的帖子。",
+            canonical=None,
+            image=image,
+            robots="noindex,follow",
+        )
+
     if path in seo.PAGES:
         label, description = seo.PAGES[path]
         return _meta(
@@ -249,10 +276,18 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             api_anon_per_day=settings.api_anon_per_day,
             api_auth_per_minute=settings.api_auth_per_minute,
             api_auth_per_day=settings.api_auth_per_day,
+            community_read_per_minute=settings.community_read_per_minute,
+            community_post_per_minute=settings.community_post_per_minute,
+            community_post_per_day=settings.community_post_per_day,
+            community_comment_per_minute=settings.community_comment_per_minute,
+            community_comment_per_day=settings.community_comment_per_day,
+            community_like_per_minute=settings.community_like_per_minute,
+            community_like_per_day=settings.community_like_per_day,
         )
     # Registered after the limiter so it runs first and sets request.state.user.
     auth.install_auth(app)
     app.include_router(auth_router, prefix="/api/auth")
+    app.include_router(community_router, prefix="/api/community")
     app.include_router(v1_router, prefix="/api/v1")
     app.include_router(meta_router)
     app.include_router(site_router)

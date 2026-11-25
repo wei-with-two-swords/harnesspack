@@ -13,6 +13,8 @@ import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
 import Community from './pages/Community';
+import CommunityPost from './pages/CommunityPost';
+import CommunityUser from './pages/CommunityUser';
 import Status from './pages/Status';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
@@ -33,6 +35,8 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/api" element={<ApiDocs />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/community/p/:id" element={<CommunityPost />} />
+        <Route path="/community/u/:login" element={<CommunityUser />} />
         <Route path="/rankings" element={<Navigate to="/rankings/velocity" replace />} />
         <Route path="/rankings/category/:category" element={<CategoryBoard />} />
         <Route path="/rankings/:board" element={<Rankings />} />

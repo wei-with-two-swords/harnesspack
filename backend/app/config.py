@@ -32,6 +32,15 @@ class Settings:
     api_anon_per_day: int = 50
     api_auth_per_minute: int = 50
     api_auth_per_day: int = 500
+    # Community browsing is cheap; writing is not. Keep separate buckets so
+    # the tight general API quota does not break the community feed.
+    community_read_per_minute: int = 120
+    community_post_per_minute: int = 5
+    community_post_per_day: int = 50
+    community_comment_per_minute: int = 10
+    community_comment_per_day: int = 100
+    community_like_per_minute: int = 30
+    community_like_per_day: int = 300
     # GitHub OAuth (empty client id disables sign-in entirely).
     github_client_id: str = ""
     github_client_secret: str = ""
@@ -61,6 +70,17 @@ def get_settings() -> Settings:
         api_anon_per_day=int(os.environ.get("HARNESSPACK_API_ANON_PER_DAY", "50")),
         api_auth_per_minute=int(os.environ.get("HARNESSPACK_API_AUTH_PER_MIN", "50")),
         api_auth_per_day=int(os.environ.get("HARNESSPACK_API_AUTH_PER_DAY", "500")),
+        community_read_per_minute=int(
+            os.environ.get("HARNESSPACK_COMMUNITY_READ_PER_MIN", "120")
+        ),
+        community_post_per_minute=int(os.environ.get("HARNESSPACK_COMMUNITY_POST_PER_MIN", "5")),
+        community_post_per_day=int(os.environ.get("HARNESSPACK_COMMUNITY_POST_PER_DAY", "50")),
+        community_comment_per_minute=int(
+            os.environ.get("HARNESSPACK_COMMUNITY_COMMENT_PER_MIN", "10")
+        ),
+        community_comment_per_day=int(os.environ.get("HARNESSPACK_COMMUNITY_COMMENT_PER_DAY", "100")),
+        community_like_per_minute=int(os.environ.get("HARNESSPACK_COMMUNITY_LIKE_PER_MIN", "30")),
+        community_like_per_day=int(os.environ.get("HARNESSPACK_COMMUNITY_LIKE_PER_DAY", "300")),
         github_client_id=os.environ.get("GITHUB_CLIENT_ID", ""),
         github_client_secret=os.environ.get("GITHUB_CLIENT_SECRET", ""),
         session_secret=os.environ.get("HARNESSPACK_SESSION_SECRET", ""),

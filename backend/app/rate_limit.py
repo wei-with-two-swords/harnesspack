@@ -21,15 +21,18 @@ EXEMPT_PATHS = frozenset(
         "/api/v1/health",
         "/robots.txt",
         "/sitemap.xml",
-        "/favicon.svg",
-        "/favicon-light.svg",
-        "/favicon-dark.svg",
+        "/favicon.ico",
+        "/favicon-32.png",
+        "/favicon-64.png",
+        "/favicon-180.png",
+        "/whale.png",
     }
 )
 
 #: Image endpoints are much more expensive than JSON, so they get their own,
 #: smaller bucket (a social crawler fetching a preview must not drain the API).
 OG_PREFIX = "/og/"
+COMMUNITY_PREFIX = "/api/community/"
 
 MAX_TRACKED_CLIENTS = 20_000
 
@@ -131,6 +134,13 @@ def install_rate_limit(
     api_anon_per_day: int = 50,
     api_auth_per_minute: int = 50,
     api_auth_per_day: int = 500,
+    community_read_per_minute: int = 120,
+    community_post_per_minute: int = 5,
+    community_post_per_day: int = 50,
+    community_comment_per_minute: int = 10,
+    community_comment_per_day: int = 100,
+    community_like_per_minute: int = 30,
+    community_like_per_day: int = 300,
 ) -> None:
     """Attach middleware: page/image brakes plus the two-tier API quota."""
     general = SlidingWindowLimiter(general_per_minute)
@@ -139,6 +149,21 @@ def install_rate_limit(
     anon_day = DailyLimiter(api_anon_per_day)
     auth_minute = SlidingWindowLimiter(api_auth_per_minute)
     auth_day = DailyLimiter(api_auth_per_day)
+    community_reads = SlidingWindowLimiter(community_read_per_minute)
+    community_buckets = {
+        "post": (
+            SlidingWindowLimiter(community_post_per_minute),
+            DailyLimiter(community_post_per_day),
+        ),
+        "comment": (
+            SlidingWindowLimiter(community_comment_per_minute),
+            DailyLimiter(community_comment_per_day),
+        ),
+        "like": (
+            SlidingWindowLimiter(community_like_per_minute),
+            DailyLimiter(community_like_per_day),
+        ),
+    }
 
     @app.middleware("http")
     async def rate_limit(request: Request, call_next):
@@ -147,6 +172,43 @@ def install_rate_limit(
             return await call_next(request)
 
         ip = client_ip(request)
+
+        # Community browsing gets its own roomy read bucket. Posting,
+        # commenting and liking have independent per-user quotas; deleting
+        # your own content is never throttled.
+        if path.startswith(COMMUNITY_PREFIX):
+            if request.method == "GET":
+                allowed, retry_after = community_reads.check(f"{ip}:community-read")
+                if not allowed:
+                    return _deny(
+                        "community-read",
+                        community_reads.limit,
+                        int(community_reads.window),
+                        retry_after,
+                    )
+                return await call_next(request)
+            if request.method == "DELETE":
+                return await call_next(request)
+            if path.endswith("/comments"):
+                scope = "comment"
+            elif path.endswith("/like"):
+                scope = "like"
+            elif path == COMMUNITY_PREFIX + "posts":
+                scope = "post"
+            else:
+                return await call_next(request)
+            user = getattr(request.state, "user", None)
+            identity = f"user:{user.login}" if user else f"ip:{ip}"
+            minute, day = community_buckets[scope]
+            minute_ok, minute_retry = minute.check(f"{identity}:{scope}:minute")
+            day_ok, day_retry = day.check(f"{identity}:{scope}:day")
+            if not minute_ok:
+                return _deny(
+                    f"community-{scope}-minute", minute.limit, int(minute.window), minute_retry
+                )
+            if not day_ok:
+                return _deny(f"community-{scope}-day", day.limit, 86_400, day_retry)
+            return await call_next(request)
 
         # Sign-in endpoints must stay usable but are not part of the API quota.
         if path.startswith("/api/auth/"):

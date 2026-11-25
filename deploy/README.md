@@ -221,11 +221,14 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 
 ## 9.1 GitHub 登录与 API 限流
 
-站点用 GitHub OAuth 区分 API 配额（无用户表，会话是 HMAC 签名的 Cookie）：
+站点用 GitHub OAuth 区分 API 配额（会话是 HMAC 签名的 Cookie；社区首次发言时才懒创建 users 行）：
 
 1. 在 GitHub → Settings → Developer settings → OAuth Apps 新建应用：
    - Homepage URL：`https://harnesspack.dev`
-   - Authorization callback URL：`https://harnesspack.dev/api/auth/github/callback`
+   - Redirect URIs（旧界面叫 Authorization callback URL；GitHub 2026-08 起改称 Redirect URIs，并支持多个）：`https://harnesspack.dev/api/auth/github/callback`
+   - 只登记这一个精确地址；**不要开 Allow wildcard matching**（站点有 `/community/p/:id` 等 UGC 路由，通配会把 code 送到不可控路径）。
+   - **不要勾 Enable Device Flow**：那是给 CLI / 无浏览器设备用的授权方式，本站是标准网页登录，用不到。
+   - **Expire user access tokens 保持默认勾选**：本站换到 token 后立刻读一次 `/user`，只存自己的签名 Cookie，不保存 GitHub token，短期令牌没有影响。
 2. 把凭据写入 `/etc/harnesspack-api.env`（`root:harnesspack`，`640`）：
 
    ```bash
@@ -236,10 +239,12 @@ curl -s  https://harnesspack.dev/api/v1/dashboard | head -c 200
 
    会话密钥可用 `python3 -c 'import secrets; print(secrets.token_urlsafe(48))'` 生成。
    三个值任一为空则登录入口自动隐藏，所有人按未登录配额计算。
+   `HARNESSPACK_BASE_URL` 不写在这里，已在 `harnesspack-api.service` 中设为站点根地址；回调地址由它拼出，必须与 GitHub 后台登记的 Redirect URI 完全一致（含 `https`、域名、末尾 `/callback`，不带查询参数）。
 3. `systemctl restart harnesspack-api`，`curl -s https://harnesspack.dev/api/auth/config` 应返回 `{"enabled":true}`。
 
 配额：`/api/*` 未登录 10 次/分钟、50 次/天（按 IP）；已登录 50 次/分钟、500 次/天（按账号）。
 普通页面、`/assets/` 和 `/og/` 使用原有宽松桶，不占 API 配额。超限返回 429 与 `Retry-After`。
+社区读取另走独立宽松桶；发帖 5 次/分、50 次/天，评论 10 次/分、100 次/天，点赞 30 次/分、300 次/天；删除自己内容不占写额度。
 
 ## 10. Cloudflare（当前已启用）
 

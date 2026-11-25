@@ -5,6 +5,8 @@ Examples:
     python -m backend.app.cli ingest
     python -m backend.app.cli rebuild
     python -m backend.app.cli stats
+    python -m backend.app.cli community hide post 42
+    python -m backend.app.cli community unhide comment 7
 """
 
 from __future__ import annotations
@@ -84,6 +86,27 @@ def cmd_stats(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_community(args: argparse.Namespace) -> int:
+    """Hide or restore a post/comment that breaks the community rules."""
+    settings = get_settings()
+    conn = connect(settings.db_path)
+    try:
+        init_db(conn)
+        table = "posts" if args.target == "post" else "comments"
+        hidden = 1 if args.action == "hide" else 0
+        cursor = conn.execute(
+            f"UPDATE {table} SET is_hidden = ? WHERE id = ?", (hidden, args.id)
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            print(f"error: {args.target} {args.id} not found", file=sys.stderr)
+            return 1
+        _print({"table": table, "id": args.id, "is_hidden": hidden})
+        return 0
+    finally:
+        conn.close()
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="harnesspack", description="HarnessPack operator CLI")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -91,6 +114,10 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("ingest", help="replay snapshot files into the database")
     sub.add_parser("rebuild", help="delete the database and replay every snapshot")
     sub.add_parser("stats", help="print database counters")
+    moderation = sub.add_parser("community", help="hide or restore community content")
+    moderation.add_argument("action", choices=["hide", "unhide"])
+    moderation.add_argument("target", choices=["post", "comment"])
+    moderation.add_argument("id", type=int)
     return parser
 
 
@@ -101,6 +128,7 @@ def main(argv: list[str] | None = None) -> int:
         "ingest": cmd_ingest,
         "rebuild": cmd_rebuild,
         "stats": cmd_stats,
+        "community": cmd_community,
     }
     try:
         return handlers[args.command](args)

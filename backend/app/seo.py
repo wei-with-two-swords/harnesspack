@@ -71,7 +71,7 @@ PAGES: dict[str, tuple[str, str]] = {
     "plugins": ("插件库", "搜索 11,700+ 个可安装进 DeepSeek Harness 的插件，按 star、名称或创建时间浏览。"),
     "categories": ("分类", "23 个分类各自的 star 排名，每个分类单独计算名次。"),
     "api": ("API", "只读 JSON API：榜单、插件详情、曲线、对比与名单变更。"),
-    "community": ("社区", "使用 GitHub 账号登录参与讨论，评论功能即将开放。"),
+    "community": ("DSH 讨论区", "DeepSeek Harness 开发者的公开广场，用 GitHub 账号登录发帖、评论与点赞。"),
 }
 
 
