@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CommunityAuth } from '../components/CommunityAuth';
 import { Composer } from '../components/Composer';
+import { Pager } from '../components/Pager';
 import { PostCard } from '../components/PostCard';
 import { EmptyState, Loading } from '../components/States';
 import { api, ApiError } from '../lib/api';
@@ -9,7 +10,7 @@ import { useAuth } from '../lib/useAuth';
 import { useTitle } from '../lib/useTitle';
 import type { CommunityPost } from '../types';
 
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 10;
 
 export default function Community() {
   const { t } = useI18n();
@@ -18,13 +19,14 @@ export default function Community() {
   const { user } = auth;
   const [posts, setPosts] = useState<CommunityPost[]>([]);
   const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const load = useCallback(async (offset: number, append = false) => {
+  const load = useCallback(async (nextPage: number) => {
     try {
-      const data = await api.community.posts(PAGE_SIZE, offset);
-      setPosts((prev) => (append ? [...prev, ...data.items] : data.items));
+      const data = await api.community.posts(PAGE_SIZE, nextPage * PAGE_SIZE);
+      setPosts(data.items);
       setTotal(data.total);
       setError('');
     } catch (err) {
@@ -35,62 +37,58 @@ export default function Community() {
   }, []);
 
   useEffect(() => {
-    void load(0);
-  }, [load]);
-
-  const refresh = () => void load(0);
+    void load(page);
+  }, [load, page]);
 
   const publish = async (body: string) => {
     await api.community.createPost(body);
-    refresh();
+    if (page === 0) void load(0);
+    else setPage(0);
   };
 
   return (
-    <section style={{ maxWidth: 'var(--measure-mid)' }}>
+    <section>
       <div className="mb-4">
         <h1 className="fs-3xl fw-semibold mb-1">{t('community.discussion')}</h1>
         <p className="fs-sm fg-secondary mb-0">{t('community.subtitle')}</p>
       </div>
 
-      <CommunityAuth {...auth} />
+      <div className="row g-3 align-items-start">
+        <div className="col-12 lg:col-8">
+          <Composer
+            user={user}
+            onSubmit={publish}
+            placeholder={t('community.postPlaceholder')}
+            buttonLabel={t('community.publish')}
+          />
 
-      <div className="card mb-4">
-        <div className="card-body">
-          <div className="fw-semibold mb-2">{t('community.rulesTitle')}</div>
-          <ul className="fs-sm fg-secondary mb-0 ps-3">
-            {[1, 2, 3, 4, 5, 6].map((n) => (
-              <li key={n} className="mb-1">
-                {t(`community.rule${n}`)}
-              </li>
-            ))}
-          </ul>
+          {error ? <div className="fs-sm mb-3 fg-danger">{error}</div> : null}
+          {loading ? <Loading /> : null}
+          {!loading && posts.length === 0 ? (
+            <EmptyState title={t('community.noPosts')}>{t('community.noPostsHint')}</EmptyState>
+          ) : null}
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} user={user} onDelete={() => void load(page)} />
+          ))}
+          <Pager page={page} pageSize={PAGE_SIZE} total={total} onChange={setPage} />
+        </div>
+
+        <div className="col-12 lg:col-4">
+          <div className="card">
+            <div className="card-body">
+              <CommunityAuth {...auth} />
+              <div className="fw-semibold mb-2">{t('community.rulesTitle')}</div>
+              <ul className="fs-sm fg-secondary mb-0 ps-3">
+                {[1, 2, 3, 4, 5, 6].map((n) => (
+                  <li key={n} className="mb-1">
+                    {t(`community.rule${n}`)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-
-      <Composer
-        user={user}
-        onSubmit={publish}
-        placeholder={t('community.postPlaceholder')}
-        buttonLabel={t('community.publish')}
-      />
-
-      {error ? <div className="fs-sm mb-3 fg-danger">{error}</div> : null}
-      {loading ? <Loading /> : null}
-      {!loading && posts.length === 0 ? (
-        <EmptyState title={t('community.noPosts')}>{t('community.noPostsHint')}</EmptyState>
-      ) : null}
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} user={user} onDelete={refresh} />
-      ))}
-      {posts.length < total ? (
-        <button
-          type="button"
-          className="btn btn-sm btn-outline"
-          onClick={() => void load(posts.length, true)}
-        >
-          {t('common.loadMore')}
-        </button>
-      ) : null}
     </section>
   );
 }
