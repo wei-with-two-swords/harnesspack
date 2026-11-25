@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-25T00:18:56Z",
+ "updated_at": "2026-11-25T01:41:36Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -105,6 +105,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:55Z"
   },
+  "acanese1/dsh-work-guard": {
+   "owner": "Ch1nSe1",
+   "repo": "dsh-work-guard",
+   "url": "https://github.com/Ch1nSe1/dsh-work-guard",
+   "slug": "ch1nse1-dsh-work-guard",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-25T01:41:03Z"
+  },
   "antonio-mastropaolo/dsh-anthropic-membership": {
    "owner": "antonio-mastropaolo",
    "repo": "dsh-model-hub",
@@ -112,6 +120,14 @@
    "slug": "antonio-mastropaolo-dsh-model-hub",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:57Z"
+  },
+  "b-tq/dsh-wallpaper": {
+   "owner": "The-Bluebu",
+   "repo": "dsh-wallpaper",
+   "url": "https://github.com/The-Bluebu/dsh-wallpaper",
+   "slug": "the-bluebu-dsh-wallpaper",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-25T01:41:05Z"
   },
   "baisbt/baisbt-dsh-service-manager": {
    "owner": "Baisbt",
@@ -184,6 +200,14 @@
    "slug": "futurechanger53-dsh-ears-prosody",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:04Z"
+  },
+  "chy1021653908/want-to-type": {
+   "owner": "moon-ai-kingdom",
+   "repo": "want-to-type",
+   "url": "https://github.com/moon-ai-kingdom/want-to-type",
+   "slug": "moon-ai-kingdom-want-to-type",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-25T01:41:10Z"
   },
   "clair0314/dsh-bilibili-viral": {
    "owner": "nekonya77",
@@ -697,6 +721,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:16Z"
   },
+  "shinji00222/dsh-persona-continuity": {
+   "owner": "shinji00222",
+   "repo": "dsh-persona-continuity-bot",
+   "url": "https://github.com/shinji00222/dsh-persona-continuity-bot",
+   "slug": "shinji00222-dsh-persona-continuity-bot",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-25T01:41:23Z"
+  },
   "songoao25/dsh-chatgpt-subscription": {
    "owner": "songoao25",
    "repo": "dsh-chatgpt-sub",
@@ -768,6 +800,14 @@
    "slug": "firnspiegel-dsh-upload-origin",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-21T13:58:27Z"
+  },
+  "wojiao42/dsh-chatgpt-to-memory": {
+   "owner": "wojiao42",
+   "repo": "dsh-chat-to-memory",
+   "url": "https://github.com/wojiao42/dsh-chat-to-memory",
+   "slug": "wojiao42-dsh-chat-to-memory",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-25T01:41:28Z"
   },
   "wojiao42/dsh-memory-file": {
    "owner": "wojiao42",

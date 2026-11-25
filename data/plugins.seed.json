@@ -6836,17 +6836,6 @@
    "note": ""
   },
   {
-   "owner": "ACAneSe1",
-   "repo": "dsh-work-guard",
-   "slug": "acanese1-dsh-work-guard",
-   "name": "dsh-work-guard",
-   "category": "workflow",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ACAneSe1/dsh-work-guard",
-   "note": ""
-  },
-  {
    "owner": "Accelerater-tech",
    "repo": "dsh-latex",
    "slug": "accelerater-tech-dsh-latex",
@@ -13876,17 +13865,6 @@
    "note": ""
   },
   {
-   "owner": "B-TQ",
-   "repo": "dsh-wallpaper",
-   "slug": "b-tq-dsh-wallpaper",
-   "name": "dsh-wallpaper",
-   "category": "theme",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/B-TQ/dsh-wallpaper",
-   "note": ""
-  },
-  {
    "owner": "b1inkie",
    "repo": "dsh-rtk-bridge",
    "slug": "b1inkie-dsh-rtk-bridge",
@@ -19805,6 +19783,17 @@
    "note": ""
   },
   {
+   "owner": "Ch1nSe1",
+   "repo": "dsh-work-guard",
+   "slug": "ch1nse1-dsh-work-guard",
+   "name": "dsh-work-guard",
+   "category": "workflow",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/Ch1nSe1/dsh-work-guard",
+   "note": ""
+  },
+  {
    "owner": "Chael-Chael",
    "repo": "dsh-ascii-whales",
    "slug": "chael-chael-dsh-ascii-whales",
@@ -22387,17 +22376,6 @@
    "npm": "dsh-jp-vocab",
    "harness": "dsh",
    "url": "https://github.com/chuuu4536-gh/dsh-jp-vocab",
-   "note": ""
-  },
-  {
-   "owner": "chy1021653908",
-   "repo": "want-to-type",
-   "slug": "chy1021653908-want-to-type",
-   "name": "want-to-type",
-   "category": "fun",
-   "npm": "dsh-plugin-type",
-   "harness": "dsh",
-   "url": "https://github.com/chy1021653908/want-to-type",
    "note": ""
   },
   {
@@ -77632,6 +77610,17 @@
    "note": ""
   },
   {
+   "owner": "moon-ai-kingdom",
+   "repo": "want-to-type",
+   "slug": "moon-ai-kingdom-want-to-type",
+   "name": "want-to-type",
+   "category": "fun",
+   "npm": "dsh-plugin-type",
+   "harness": "dsh",
+   "url": "https://github.com/moon-ai-kingdom/want-to-type",
+   "note": ""
+  },
+  {
    "owner": "Moon-Cold-Sir",
    "repo": "dsh-plugin-star-radar",
    "slug": "moon-cold-sir-dsh-plugin-star-radar",
@@ -99413,17 +99402,6 @@
   },
   {
    "owner": "shinji00222",
-   "repo": "dsh-persona-continuity",
-   "slug": "shinji00222-dsh-persona-continuity",
-   "name": "dsh-persona-continuity",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/shinji00222/dsh-persona-continuity",
-   "note": ""
-  },
-  {
-   "owner": "shinji00222",
    "repo": "dsh-persona-continuity-bot",
    "slug": "shinji00222-dsh-persona-continuity-bot",
    "name": "dsh-persona-continuity-bot",
@@ -108407,6 +108385,17 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/thawline/dsh-wechat-bridge",
+   "note": ""
+  },
+  {
+   "owner": "The-Bluebu",
+   "repo": "dsh-wallpaper",
+   "slug": "the-bluebu-dsh-wallpaper",
+   "name": "dsh-wallpaper",
+   "category": "theme",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/The-Bluebu/dsh-wallpaper",
    "note": ""
   },
   {
@@ -118916,13 +118905,13 @@
   },
   {
    "owner": "wojiao42",
-   "repo": "dsh-chatgpt-to-memory",
-   "slug": "wojiao42-dsh-chatgpt-to-memory",
+   "repo": "dsh-chat-to-memory",
+   "slug": "wojiao42-dsh-chat-to-memory",
    "name": "dsh-chatgpt-to-memory",
    "category": "memory",
    "npm": "",
    "harness": "dsh",
-   "url": "https://github.com/wojiao42/dsh-chatgpt-to-memory",
+   "url": "https://github.com/wojiao42/dsh-chat-to-memory",
    "note": ""
   },
   {
