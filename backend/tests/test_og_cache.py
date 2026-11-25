@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import threading
+import time
 
 from backend.app import og_cache
 
@@ -72,3 +73,26 @@ def test_prune_removes_stale_temp_files(tmp_path):
     og_cache.prune(tmp_path, max_files=10, max_bytes=1024)
     assert not list(tmp_path.glob("*.tmp"))
     assert (tmp_path / "card.png").exists()
+
+
+def test_guard_limits_concurrent_requests():
+    active = 0
+    peak = 0
+    lock = threading.Lock()
+
+    @og_cache.guard
+    def work():
+        nonlocal active, peak
+        with lock:
+            active += 1
+            peak = max(peak, active)
+        time.sleep(0.03)
+        with lock:
+            active -= 1
+
+    threads = [threading.Thread(target=work) for _ in range(10)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert peak <= 2, f"guard let {peak} requests run at once"

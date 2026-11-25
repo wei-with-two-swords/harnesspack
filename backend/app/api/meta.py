@@ -106,6 +106,7 @@ def badge(slug: str, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
 
 
 @router.get("/og/site.png")
+@og_cache.guard
 def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     """Site-wide social card used by the home page and every non-plugin route."""
     from PIL import Image, ImageDraw
@@ -157,6 +158,7 @@ def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
 
 
 @router.get("/og/{slug}.png")
+@og_cache.guard
 def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     from PIL import Image, ImageDraw
 

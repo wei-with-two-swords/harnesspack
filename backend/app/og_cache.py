@@ -25,8 +25,10 @@ import hashlib
 import os
 import re
 import threading
+from contextlib import contextmanager
+from functools import wraps
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, Iterator
 
 DEFAULT_MAX_FILES = 5000
 DEFAULT_MAX_BYTES = 200 * 1024 * 1024
@@ -51,6 +53,32 @@ def _key_lock(path: Path) -> threading.Lock:
             lock = threading.Lock()
             _key_locks[key] = lock
         return lock
+
+
+@contextmanager
+def processing_slot() -> Iterator[None]:
+    """Gate the *whole* OG request (data load + render), not just the render.
+
+    ``plugin_detail`` itself allocates ~10 MB of temporary ranking rows. If 20
+    request threads each run it before queueing to render, peak memory still
+    blows past the worker limit. This slot is acquired first so at most a
+    couple of requests hold expensive state at any instant; the rest wait
+    cheaply on the semaphore.
+    """
+    with _render_slots:
+        yield
+
+
+def guard(func: Callable) -> Callable:
+    """Decorator: run the whole endpoint under the processing semaphore.
+
+    ``functools.wraps`` preserves the signature FastAPI inspects for DI.
+    """
+    @wraps(func)
+    def wrapped(*args: Any, **kwargs: Any):
+        with _render_slots:
+            return func(*args, **kwargs)
+    return wrapped
 
 
 def safe_name(value: str, limit: int = 60) -> str:
@@ -92,24 +120,20 @@ def write_atomic(path: Path, payload: bytes) -> None:
 
 
 def render_once(path: Path, render: Callable[[], bytes]) -> bytes:
-    """Render once per key under a global concurrency limit.
+    """Render once per key.
 
-    A per-key lock collapses N simultaneous misses for the same image into a
-    single render; the semaphore caps how many *different* images may render at
-    once, which is what bounds peak memory. Both re-check the cache after
-    waiting so a thread never re-renders an image another thread just wrote.
+    Callers wrap the whole request in :func:`processing_slot`, which is what
+    bounds global concurrency/memory; here a per-key lock only collapses N
+    simultaneous misses for the same image into a single render. The cache is
+    re-checked after waiting so no thread re-renders what another just wrote.
     """
     with _key_lock(path):
         existing = read_cached(path)
         if existing is not None:
             return existing
-        with _render_slots:
-            existing = read_cached(path)
-            if existing is not None:
-                return existing
-            payload = render()
-            write_atomic(path, payload)
-            return payload
+        payload = render()
+        write_atomic(path, payload)
+        return payload
 
 
 def prune(cache_dir: Path, *, max_files: int = DEFAULT_MAX_FILES, max_bytes: int = DEFAULT_MAX_BYTES) -> None:
