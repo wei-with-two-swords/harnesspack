@@ -47,18 +47,14 @@ function CopyLine({ label, value, disabled = false }: { label: string; value: st
   return (
     <div className="copy-line">
       <span className="copy-line-label">{label}</span>
-      <code className="copy-line-code" title={disabled ? '该插件未映射 npm 包' : value}>
-        {disabled ? '未映射 npm 包' : value}
-      </code>
-      <button
-        type="button"
-        onClick={handleCopy}
-        disabled={disabled}
-        className="btn btn-outline btn-sm flex-shrink-0"
-        aria-label={`复制${label}`}
-      >
-        {copied ? '已复制' : '复制'}
-      </button>
+      <div className="copy-line-row">
+        <code className="copy-line-code" title={disabled ? '该插件未映射 npm 包' : value}>
+          {disabled ? '未映射 npm 包' : value}
+        </code>
+        <button type="button" onClick={handleCopy} disabled={disabled} aria-label={`复制${label}`}>
+          {copied ? '已复制' : '复制'}
+        </button>
+      </div>
     </div>
   );
 }

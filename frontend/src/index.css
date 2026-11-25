@@ -682,11 +682,9 @@
   }
   .rank-value small { display: block; color: var(--muted); font-size: var(--fs-meta); font-weight: var(--fw-regular); }
   .copy-line {
-    @apply flex items-center rounded-sm2;
+    @apply flex items-center;
     gap: var(--s-1);
-    padding: var(--s-1);
-    border: var(--hairline) solid var(--line);
-    background: var(--surface-2);
+    width: 100%;
   }
   .copy-line-label {
     @apply shrink-0 fw-semibold;
@@ -694,13 +692,31 @@
     font-size: var(--fs-meta);
     color: var(--muted);
   }
+  .copy-line-row {
+    @apply flex items-center rounded-sm2 min-w-0 flex-1;
+    gap: var(--s-1);
+    padding: var(--s-1);
+    border: var(--hairline) solid var(--line);
+    background: var(--surface-2);
+  }
   .copy-line-code {
-    @apply min-w-0 flex-1 truncate;
+    @apply min-w-0 flex-1;
+    overflow-wrap: anywhere;
+    word-break: break-all;
     font-family: var(--font-mono);
     font-size: var(--fs-meta);
     color: var(--text);
   }
-  .copy-line button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .copy-line-row button {
+    @apply shrink-0 rounded-xs border-0;
+    padding: var(--s-1);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: var(--fs-meta);
+    font-weight: var(--fw-semibold);
+    cursor: pointer;
+  }
+  .copy-line-row button:disabled { opacity: 0.5; cursor: not-allowed; }
   .hp-row { border-radius: var(--radius); padding-inline: var(--s-1); margin-inline: calc(-1 * var(--s-1)); transition: background-color 0.14s ease; }
   .hp-row:hover { background: var(--hover); }
   .hp-anchor { scroll-margin-top: calc(var(--s-8) + var(--s-3)); }
@@ -1005,15 +1021,6 @@
     .rank-category { width: calc(var(--s-8) + var(--s-1)); }
     .rank-category .badge { max-width: calc(var(--s-8) + var(--s-1)); font-size: var(--fs-meta); }
     .rank-secondary { width: var(--s-6); }
-    .copy-line { flex-wrap: wrap; }
-    .copy-line-code {
-      flex-basis: 100%;
-      order: 3;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: clip;
-      word-break: break-all;
-    }
   }
   @media (max-width: 767px) {
     .desktop-nav { display: none !important; }
