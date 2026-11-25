@@ -10,7 +10,7 @@ import { DeltaBadge } from '../components/DeltaBadge';
 import { Avatar } from '../components/RankTable';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { formatDate, formatDateTime, formatNumber } from '../lib/format';
-import { categoryDescription } from '../lib/i18n';
+import { categoryLabel, categoryDescription, useI18n } from '../lib/i18n';
 import { copyText } from '../lib/clipboard';
 
 function RankChip({ label, value }: { label: string; value: number | null }) {
@@ -30,6 +30,7 @@ const ISSUE_URL =
   'https://github.com/wei-with-two-swords/harnesspack/issues/new?labels=data&title=';
 
 function CopyLine({ label, value, disabled = false }: { label: string; value: string; disabled?: boolean }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | null>(null);
   useEffect(() => () => {
@@ -48,11 +49,11 @@ function CopyLine({ label, value, disabled = false }: { label: string; value: st
     <div className="copy-line">
       <span className="copy-line-label">{label}</span>
       <div className="copy-line-row">
-        <code className="copy-line-code" title={disabled ? '该插件未映射 npm 包' : value}>
-          {disabled ? '未映射 npm 包' : value}
+        <code className="copy-line-code" title={disabled ? t('detail.npmNotMapped') : value}>
+          {disabled ? t('detail.npmNotMapped') : value}
         </code>
-        <button type="button" onClick={handleCopy} disabled={disabled} aria-label={`复制${label}`}>
-          {copied ? '已复制' : '复制'}
+        <button type="button" onClick={handleCopy} disabled={disabled} aria-label={`${t('detail.copyPrefix')}${label}`}>
+          {copied ? t('common.copied') : t('common.copy')}
         </button>
       </div>
     </div>
@@ -60,6 +61,7 @@ function CopyLine({ label, value, disabled = false }: { label: string; value: st
 }
 
 export default function PluginDetail() {
+  const { t, lang } = useI18n();
   const { slug = '' } = useParams<{ slug: string }>();
   const location = useLocation();
   const from = (location.state as { from?: string } | null)?.from ?? '';
@@ -70,17 +72,17 @@ export default function PluginDetail() {
   const series = useApi<SeriesResponse>(() => api.series(slug, days), [slug, days]);
   const points = useMemo(() => series.data?.items ?? [], [series.data]);
   const data = detail.data;
-  useTitle(data ? `${data.name} · ${data.owner}/${data.repo}` : '插件详情', data?.description ?? undefined);
+  useTitle(data ? `${data.name} · ${data.owner}/${data.repo}` : t('detail.title'), data?.description ?? undefined);
 
   if (detail.error) {
     const err = detail.error;
     return (
       <div className="d-flex flex-column gap-4">
         <Link to={backTo} className="fs-sm text-decoration-none">
-          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回首页</>
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('detail.back')}</>
         </Link>
         {err.message.includes('404') ? (
-          <EmptyState title="没有找到这个插件">它可能已被移出名单，或链接有误。</EmptyState>
+          <EmptyState title={t('detail.notFound')}>{t('detail.notFoundHint')}</EmptyState>
         ) : (
           <ErrorState error={err} />
         )}
@@ -112,29 +114,29 @@ export default function PluginDetail() {
     <div className="d-flex flex-column gap-4">
       <div className="d-flex flex-wrap align-items-center gap-2 fs-sm fg-secondary">
         <Link to={backTo} className="text-decoration-none">
-          <><ArrowLeft className="icon-leading" aria-hidden="true" />返回首页</>
+          <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('detail.back')}</>
         </Link>
         <span>/</span>
         <span>{data.harness ?? 'harness'}</span>
         <span>/</span>
-        <span>{data.category ?? '未分类'}</span>
+        <span>{data.category ? categoryLabel(lang, data.category) : t('detail.uncategorized')}</span>
       </div>
 
       {data.status === 'exited' ? (
         <div className="alert theme-warning bg-subtle-warning fs-sm">
-          <span className="fw-semibold fg-emphasis-warning">已退出榜单</span>
+          <span className="fw-semibold fg-emphasis-warning">{t('detail.exited')}</span>
           <span className="ms-2">
-            {data.exit_reason ?? '已从上游清单移除'}
-            {data.exited_at ? `（${formatDate(data.exited_at)}）` : ''}。历史曲线保留在下方，不再参与排名。
+            {data.exit_reason ?? t('detail.exitFallback')}
+            {data.exited_at ? `（${formatDate(data.exited_at)}）` : ''}{t('detail.exitHint')}
           </span>
         </div>
       ) : null}
 
       {!data.available ? (
         <div className="alert theme-danger bg-subtle-danger fs-sm">
-          <span className="fw-semibold fg-emphasis-danger">最近一次快照中该仓库不可用</span>
+          <span className="fw-semibold fg-emphasis-danger">{t('detail.unavailable')}</span>
           <span className="ms-2">
-            可能已删除或改名；我们不会用旧值冒充新值，历史数据仍保留。
+            {t('detail.unavailableHint')}
           </span>
         </div>
       ) : null}
@@ -161,16 +163,16 @@ export default function PluginDetail() {
                     rel="noreferrer noopener"
                     className="text-decoration-none"
                   >
-                    作者主页<ExternalLink className="icon-trailing" aria-hidden="true" />
+                    {t('detail.author')}<ExternalLink className="icon-trailing" aria-hidden="true" />
                   </a>
                   {data.category ? (
-                    <span className="badge theme-secondary badge-subtle" title={categoryDescription('zh', data.category)}>{data.category}</span>
+                    <span className="badge theme-secondary badge-subtle" title={categoryDescription(lang, data.category)}>{categoryLabel(lang, data.category)}</span>
                   ) : null}
                   {data.harness ? (
                     <span className="badge theme-secondary badge-subtle">{data.harness}</span>
                   ) : null}
                   {data.archived ? (
-                    <span className="badge theme-danger badge-subtle">已归档</span>
+                    <span className="badge theme-danger badge-subtle">{t('detail.archived')}</span>
                   ) : null}
                   {data.status !== 'active' ? (
                     <span className="badge theme-secondary badge-subtle">{data.status}</span>
@@ -183,8 +185,8 @@ export default function PluginDetail() {
                 ) : null}
                 <div className="mt-3 d-flex flex-column gap-2" style={{ maxWidth: 'var(--measure)' }}>
                   <CopyLine label="Git Clone" value={cloneCommand} />
-                  <CopyLine label="npm 安装" value={npmCommand} disabled={!npmPackage} />
-                  <CopyLine label="插件安装" value={pluginCommand} />
+                  <CopyLine label={t('detail.npmInstall')} value={npmCommand} disabled={!npmPackage} />
+                  <CopyLine label={t('detail.pluginInstall')} value={pluginCommand} />
                 </div>
               </div>
             </div>
@@ -201,9 +203,9 @@ export default function PluginDetail() {
 
           <div className="row g-2 mt-4 rank-chips">
             {[
-              ['STAR 总榜', data.rank_total],
-              ['今日新增', data.rank_velocity],
-              ['NPM 近 1 年下载榜', data.rank_npm_total],
+              [t('detail.rankTotal'), data.rank_total],
+              [t('detail.rankVelocity'), data.rank_velocity],
+              [t('detail.rankNpm'), data.rank_npm_total],
             ].map(([label, value]) => (
               <div key={label as string} className="col-6">
                 <RankChip label={label as string} value={value as number | null} />
@@ -216,9 +218,9 @@ export default function PluginDetail() {
       <section className="card">
         <div className="card-body">
           <div className="mb-3 d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <h2 className={SECTION_TITLE}>STAR 曲线</h2>
+            <h2 className={SECTION_TITLE}>{t('detail.starCurve')}</h2>
             <div className="d-flex align-items-center gap-2">
-              <div className="btn-group btn-group-sm" role="group" aria-label="曲线区间">
+              <div className="btn-group btn-group-sm" role="group" aria-label={t('detail.range')}>
                 {[30, 90].map((value) => (
                   <button
                     key={value}
@@ -227,16 +229,16 @@ export default function PluginDetail() {
                     className={`btn ${days === value ? 'btn-solid active' : 'btn-outline'}`}
                     aria-pressed={days === value}
                   >
-                    近 {value} 天
+                    {t('detail.days', { n: value })}
                   </button>
                 ))}
               </div>
-              <span className="fs-xs fg-secondary">截至 {formatDate(data.as_of)}</span>
+              <span className="fs-xs fg-secondary">{t('detail.asOf', { date: formatDate(data.as_of) })}</span>
             </div>
           </div>
           {series.loading ? <Loading rows={1} /> : <StarsChart points={points} />}
           {points.length === 1 ? (
-            <p className="mt-2 mb-0 fs-xs fg-secondary">首日只有基线，明日快照后开始计算日增量。</p>
+            <p className="mt-2 mb-0 fs-xs fg-secondary">{t('detail.onlyBaseline')}</p>
           ) : null}
         </div>
       </section>
@@ -245,9 +247,9 @@ export default function PluginDetail() {
         <section className="card">
           <div className="card-body">
             <div className="mb-2 d-flex flex-wrap align-items-center justify-content-between gap-2">
-              <h2 className={SECTION_TITLE}>同分类对比</h2>
+              <h2 className={SECTION_TITLE}>{t('detail.peers')}</h2>
               <Link to={compareHref} className="btn btn-outline btn-sm">
-                对比已选 {compareSlugs.length} 个
+                {t('detail.compareSelected', { n: compareSlugs.length })}
               </Link>
             </div>
             <ul className="list-unstyled mb-0 fs-sm">
@@ -260,7 +262,7 @@ export default function PluginDetail() {
                       checked={checked}
                       onChange={() => togglePeer(peer.slug)}
                       className="check"
-                      aria-label={`对比 ${peer.name}`}
+                      aria-label={t('detail.comparePeer', { name: peer.name })}
                     />
                     <span className="num flex-shrink-0 fs-xs fg-secondary" style={{ width: 'var(--s-5)' }}>
                       #{peer.rank}
@@ -278,7 +280,7 @@ export default function PluginDetail() {
               })}
             </ul>
             <p className="mt-2 mb-0 fs-xs fg-secondary">
-              勾选最多 4 个同类插件，与当前插件一起对比（曲线可叠加 2-5 条）。
+              {t('detail.peerHint')}
             </p>
           </div>
         </section>

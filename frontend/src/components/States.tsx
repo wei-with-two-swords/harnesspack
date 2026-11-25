@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useI18n } from '../lib/i18n';
 
 export function EmptyState({
   title,
@@ -23,9 +24,10 @@ export function EmptyState({
 }
 
 export function ErrorState({ error }: { error: Error }) {
+  const { t } = useI18n();
   return (
     <div className="alert theme-danger bg-subtle-danger" role="alert">
-      加载失败：{error.message}
+      {t('common.loadFailed', { message: error.message })}
     </div>
   );
 }

@@ -3,12 +3,14 @@ import uPlot from 'uplot';
 import 'uplot/dist/uPlot.min.css';
 import type { SeriesPoint } from '../types';
 import { chartColors, useThemeVersion } from '../lib/theme';
+import { useI18n } from '../lib/i18n';
 
 /**
  * Star history chart. Renders a placeholder until there are at least two
  * snapshots — the first day has no delta and a one-point line says nothing.
  */
 export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; height?: number }) {
+  const { t } = useI18n();
   const host = useRef<HTMLDivElement | null>(null);
   const chart = useRef<uPlot | null>(null);
   const themeVersion = useThemeVersion();
@@ -74,7 +76,7 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
         className="d-flex align-items-center justify-content-center border rounded-3 px-3 text-center fs-sm fg-secondary"
         style={{ height }}
       >
-        数据积累中：每日快照累计 2 天后显示曲线
+        {t('chart.accumulating')}
       </div>
     );
   }

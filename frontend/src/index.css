@@ -1043,7 +1043,9 @@
   .text-uppercase { text-transform: uppercase; }
   .num { font-variant-numeric: tabular-nums; }
 
+  .fg-body { color: var(--text); }
   .fg-secondary { color: var(--muted); }
+  .fg-success { color: var(--green); }
   .fg-danger { color: var(--red); }
   .fg-info { color: var(--blue); }
   .fg-warning { color: var(--amber); }
@@ -1232,4 +1234,67 @@ html .u-select { background: var(--accent-soft); }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* Hero rank competition background — decorative only, never in layout. */
+.hp-hero > .hero-rank-chart {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--text);
+  pointer-events: none;
+}
+.hero-rank-chart .chart-axis,
+.hero-rank-chart .chart-grid {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: square;
+}
+.hero-rank-chart .chart-axis { stroke-opacity: 0.08; stroke-width: 1; }
+.hero-rank-chart .chart-grid { stroke-opacity: 0.04; stroke-width: 0.75; }
+.hero-rank-chart .chart-curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hero-rank-chart-draw 1.8s ease-out forwards;
+}
+.hero-rank-chart .chart-curve-top1 { stroke-width: 1.4; stroke-opacity: 0.32; }
+.hero-rank-chart .chart-curve-top23 { stroke-width: 1.2; stroke-opacity: 0.22; animation-delay: 0.12s; }
+.hero-rank-chart .chart-curve-rookie { stroke-width: 1; stroke-opacity: 0.14; animation-delay: 0.24s; }
+[data-bs-theme='dark'] .hero-rank-chart .chart-curve-top1 { stroke-opacity: 0.34; }
+[data-bs-theme='dark'] .hero-rank-chart .chart-curve-top23 { stroke-opacity: 0.24; }
+[data-bs-theme='dark'] .hero-rank-chart .chart-curve-rookie { stroke-opacity: 0.15; }
+.hero-rank-chart .chart-endpoint-core,
+.hero-rank-chart .chart-endpoint-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.hero-rank-chart .chart-endpoint-core {
+  fill: var(--accent);
+  fill-opacity: 0.32;
+  animation: hp-breathe 2.4s ease-in-out infinite;
+}
+.hero-rank-chart .chart-endpoint-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-opacity: 0.14;
+  animation: hp-breathe-ring 2.4s ease-out infinite;
+}
+[data-bs-theme='dark'] .hero-rank-chart .chart-endpoint-core { fill-opacity: 0.34; }
+[data-bs-theme='dark'] .hero-rank-chart .chart-endpoint-ring { stroke-opacity: 0.15; }
+
+@keyframes hero-rank-chart-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rank-chart .chart-curve { animation: none; stroke-dashoffset: 0; }
+  .hero-rank-chart .chart-endpoint-core,
+  .hero-rank-chart .chart-endpoint-ring { animation: none; }
+  .hero-rank-chart .chart-endpoint-ring { display: none; }
+  .hero-rank-chart .chart-endpoint-core { opacity: 1; }
 }

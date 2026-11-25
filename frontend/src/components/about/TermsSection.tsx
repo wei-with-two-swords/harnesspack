@@ -74,7 +74,7 @@ export default function TermsSection() {
         <div className="card-body">
           <h3 className="fs-lg fw-semibold">5. API 与限流</h3>
           <p className="mt-2 mb-0 fg-secondary">
-            只读 JSON，前缀 <code>/api/v1</code>。默认每 IP 每分钟 120 次；<code>/og/</code> 图片每分钟 20 次。
+            只读 JSON，前缀 <code>/api/v1</code>。未登录每 IP 每分钟 20 次、每天 100 次；GitHub 登录每分钟 50 次、每天 500 次；<code>/og/</code> 图片每分钟 20 次。
             超限返回 <code>429</code> 与 <code>Retry-After</code>。需要更高配额或批量导出，请在{' '}
             <a className={LINK} href={`${REPO}/issues`} target="_blank" rel="noreferrer">
               仓库 issue<ExternalLink className="icon-trailing" aria-hidden="true" />

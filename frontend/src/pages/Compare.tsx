@@ -9,6 +9,7 @@ import { CompareChart } from '../components/CompareChart';
 import { ComparePicker } from '../components/ComparePicker';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { formatDelta, formatNumber } from '../lib/format';
+import { useI18n } from '../lib/i18n';
 
 function growth(plugin: ComparePlugin): number | null {
   const first = plugin.series[0];
@@ -18,6 +19,7 @@ function growth(plugin: ComparePlugin): number | null {
 }
 
 export default function Compare() {
+  const { t } = useI18n();
   const [params, setParams] = useSearchParams();
   const slugs = useMemo(
     () =>
@@ -28,7 +30,7 @@ export default function Compare() {
     [params],
   );
   const [pickerOpen, setPickerOpen] = useState(false);
-  useTitle('插件对比');
+  useTitle(t('compare.title'));
   const invalid = slugs.length < 2 || slugs.length > 5;
   const { data, error, loading } = useApi<CompareResponse>(
     () => (invalid ? Promise.reject(new Error('needs 2-5 slugs')) : api.compare(slugs)),
@@ -52,12 +54,12 @@ export default function Compare() {
   if (invalid) {
     return (
       <>
-        <EmptyState title="选择 2-5 个插件再对比">
-          点击下方按钮，搜索并勾选你想对比的插件即可。
+        <EmptyState title={t('compare.emptyTitle')}>
+          {t('compare.emptyHint')}
           <div className="mt-4">
             <button type="button" className="btn btn-solid" onClick={() => setPickerOpen(true)}>
               <Search className="icon-leading" aria-hidden="true" />
-              搜索插件
+              {t('common.search')}
             </button>
           </div>
         </EmptyState>
@@ -89,20 +91,20 @@ export default function Compare() {
     <div className="d-flex flex-column gap-4">
       <div className="d-flex flex-wrap align-items-end justify-content-between gap-3">
         <div>
-          <h1 className="fs-3xl fw-semibold mb-1">插件对比</h1>
+          <h1 className="fs-3xl fw-semibold mb-1">{t('compare.title')}</h1>
           <p className="fs-sm fg-secondary mb-0">
-            {plugins.length} 个插件 · 近 {data.days} 天 · 截至 {data.as_of ?? '—'}。缺失的快照日留空，不插值。
+            {t('compare.meta', { n: plugins.length, days: data.days, asOf: data.as_of ?? '—' })}
           </p>
         </div>
         <button type="button" className="btn btn-outline btn-sm" onClick={() => setPickerOpen(true)}>
           <Search className="icon-leading" aria-hidden="true" />
-          添加 / 更换插件
+          {t('compare.change')}
         </button>
       </div>
 
       <section className="card">
         <div className="card-body">
-          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-3">STAR 曲线</h2>
+          <h2 className="fs-sm text-uppercase fg-secondary fw-semibold mb-3">{t('compare.starCurve')}</h2>
           <CompareChart plugins={plugins} />
         </div>
       </section>
@@ -112,15 +114,15 @@ export default function Compare() {
           <table className="table table-hover align-middle mb-0">
             <thead className="fs-xs text-uppercase fg-secondary">
               <tr>
-                <th className="px-4 py-3 fw-medium">插件</th>
+                <th className="px-4 py-3 fw-medium">{t('compare.colPlugin')}</th>
                 <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) * 2 - var(--s-2))' }}>
-                  当前 STAR
+                  {t('compare.colCurrent')}
                 </th>
                 <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) + var(--s-4))' }}>
-                  最新增量
+                  {t('compare.colDelta')}
                 </th>
                 <th className="px-2 py-3 text-end fw-medium" style={{ width: 'calc(var(--s-8) + var(--s-4))' }}>
-                  区间涨幅
+                  {t('compare.colGrowth')}
                 </th>
               </tr>
             </thead>
@@ -154,7 +156,7 @@ export default function Compare() {
       </section>
 
       <p className="fs-xs fg-secondary mb-0">
-        想调整对比对象？点上方「添加 / 更换插件」搜索即可。
+        {t('compare.tip')}
       </p>
       {picker}
     </div>

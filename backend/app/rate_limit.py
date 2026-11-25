@@ -1,8 +1,8 @@
 """Cheap, per-visitor rate limiting for a single-worker FastAPI box.
 
 Ordinary HTML pages and images keep the old, generous buckets. JSON API
-traffic gets a tighter two-tier quota: anonymous visitors share 10/min and
-50/day per IP, signed-in GitHub users get 50/min and 500/day per account.
+traffic gets a tighter two-tier quota: anonymous visitors share 20/min and
+100/day per IP, signed-in GitHub users get 50/min and 500/day per account.
 State is in process on purpose: no Redis on a 1C1G machine.
 """
 

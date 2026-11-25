@@ -5,17 +5,19 @@ import SubmitSection from '../components/about/SubmitSection';
 import DataSection from '../components/about/DataSection';
 import TermsSection from '../components/about/TermsSection';
 import { useTitle } from '../lib/useTitle';
+import { useI18n } from '../lib/i18n';
 
 const ANCHORS = [
-  { id: 'intro', label: '站点简介' },
-  { id: 'rules', label: '收录规则' },
-  { id: 'submit', label: '插件提交' },
-  { id: 'data', label: '数据口径' },
-  { id: 'terms', label: '使用条款' },
+  { id: 'intro', key: 'about.intro' },
+  { id: 'rules', key: 'about.rules' },
+  { id: 'submit', key: 'about.submit' },
+  { id: 'data', key: 'about.data' },
+  { id: 'terms', key: 'about.terms' },
 ];
 
 export default function About() {
-  useTitle('关于', 'HarnessPack 的站点简介、收录规则、插件提交、数据口径与使用条款。');
+  const { t } = useI18n();
+  useTitle(t('about.title'), t('about.metaDesc'));
   const { hash } = useLocation();
 
   useEffect(() => {
@@ -27,15 +29,14 @@ export default function About() {
   return (
     <article className="fs-sm">
       <header id="intro" className="mb-4 hp-anchor">
-        <h1 className="fs-3xl fw-semibold mb-2">关于 HarnessPack</h1>
+        <h1 className="fs-3xl fw-semibold mb-2">{t('about.h1')}</h1>
         <p className="mb-3 fg-secondary" style={{ maxWidth: 'var(--measure)' }}>
-          HarnessPack 只做一件事：把 DeepSeek Harness 插件的 STAR 变化如实记录下来，并让增速可比。
-          名单与分类来自上游精选清单，我们不重复做人工评审。
+          {t('about.lead')}
         </p>
-        <nav className="d-flex flex-wrap gap-3" aria-label="关于页目录">
+        <nav className="d-flex flex-wrap gap-3" aria-label={t('about.toc')}>
           {ANCHORS.map((item) => (
             <Link key={item.id} to={`/about#${item.id}`} className="text-decoration-none">
-              {item.label}
+              {t(item.key)}
             </Link>
           ))}
         </nav>

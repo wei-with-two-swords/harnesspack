@@ -1,4 +1,5 @@
 import { formatDelta } from '../lib/format';
+import { useI18n } from '../lib/i18n';
 
 export function DeltaBadge({
   value,
@@ -9,6 +10,7 @@ export function DeltaBadge({
   anomaly?: boolean;
   suffix?: string;
 }) {
+  const { t } = useI18n();
   const text = suffix ? `${formatDelta(value)}${suffix}` : formatDelta(value);
   const tone =
     value === null
@@ -24,9 +26,9 @@ export function DeltaBadge({
       {anomaly ? (
         <span
           className="badge theme-warning badge-subtle"
-          title="单日涨幅异常，已标记但仍保留数据"
+          title={t('delta.anomalyTitle')}
         >
-          异常
+          {t('delta.anomaly')}
         </span>
       ) : null}
     </span>

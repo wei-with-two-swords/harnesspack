@@ -3,12 +3,14 @@ import uPlot from 'uplot';
 import 'uplot/dist/uPlot.min.css';
 import type { ComparePlugin } from '../types';
 import { chartColors, useThemeVersion } from '../lib/theme';
+import { useI18n } from '../lib/i18n';
 
 /**
  * Multi-series star chart for the compare page. Missing days are gaps, not
  * interpolated — same rule as the single-plugin chart.
  */
 export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin[]; height?: number }) {
+  const { t } = useI18n();
   const host = useRef<HTMLDivElement | null>(null);
   const chart = useRef<uPlot | null>(null);
   const themeVersion = useThemeVersion();
@@ -82,7 +84,7 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
         className="d-flex align-items-center justify-content-center border rounded-3 px-3 text-center fs-sm fg-secondary"
         style={{ height }}
       >
-        数据积累中：每日快照累计 2 天后显示对比曲线
+        {t('chart.accumulatingCompare')}
       </div>
     );
   }

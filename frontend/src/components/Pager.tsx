@@ -1,5 +1,6 @@
 import { ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { formatNumber } from '../lib/format';
+import { useI18n } from '../lib/i18n';
 
 interface PagerProps {
   page: number;
@@ -23,6 +24,7 @@ function pageItems(page: number, pages: number): (number | null)[] {
 }
 
 export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }: PagerProps) {
+  const { t } = useI18n();
   const pages = Math.max(1, Math.ceil(total / pageSize));
   if (pages <= 1) return null;
 
@@ -40,9 +42,9 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
   return (
     <div className="mt-4 d-flex flex-column sm:flex-row align-items-center justify-content-between gap-2 fs-sm fg-secondary">
       <span className="num">
-        第 {formatNumber(from)}–{formatNumber(to)} 条 / 共 {formatNumber(total)} 条
+        {t('pager.range', { from: formatNumber(from), to: formatNumber(to), total: formatNumber(total) })}
       </span>
-      <nav aria-label="分页">
+      <nav aria-label={t('pager.nav')}>
         <ul className="pagination pagination-sm mb-0 flex-wrap">
           <li className={`page-item${page === 0 ? ' disabled' : ''}`}>
             <button
@@ -50,7 +52,7 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
               className="page-link"
               disabled={page === 0}
               onClick={() => go(0)}
-              aria-label="第一页"
+              aria-label={t('pager.first')}
             >
               <ChevronsLeft aria-hidden="true" />
             </button>
@@ -62,7 +64,7 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
               disabled={page === 0}
               onClick={() => go(page - 1)}
             >
-              上一页
+              {t('pager.prev')}
             </button>
           </li>
           {pageItems(page, pages).map((item, index) =>
@@ -90,7 +92,7 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
               disabled={page >= pages - 1}
               onClick={() => go(page + 1)}
             >
-              下一页
+              {t('pager.next')}
             </button>
           </li>
           <li className={`page-item${page >= pages - 1 ? ' disabled' : ''}`}>
@@ -99,7 +101,7 @@ export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }
               className="page-link"
               disabled={page >= pages - 1}
               onClick={() => go(pages - 1)}
-              aria-label="最后一页"
+              aria-label={t('pager.last')}
             >
               <ChevronsRight aria-hidden="true" />
             </button>

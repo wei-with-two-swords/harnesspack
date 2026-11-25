@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -20,10 +20,27 @@ function ScrollToTop() {
   return null;
 }
 
+/** hm.js only reports the initial page; SPA navigations need an explicit PV. */
+function BaiduPageView() {
+  const { pathname, search } = useLocation();
+  const current = `${pathname}${search}`;
+  const previous = useRef(current);
+
+  useEffect(() => {
+    if (previous.current === current) return;
+    previous.current = current;
+    const hmt = (window as Window & { _hmt?: { push: (...args: unknown[]) => void } })._hmt;
+    hmt?.push(['_trackPageview', current]);
+  }, [current]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <Layout>
       <ScrollToTop />
+      <BaiduPageView />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/api" element={<ApiDocs />} />

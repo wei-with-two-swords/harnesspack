@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Check, Search, X } from 'lucide-react';
 import { api } from '../lib/api';
 import { formatNumber } from '../lib/format';
+import { useI18n } from '../lib/i18n';
 import type { PluginListItem } from '../types';
 
 const MIN = 2;
@@ -18,6 +19,7 @@ export function ComparePicker({
   onClose: () => void;
   onApply: (slugs: string[]) => void;
 }) {
+  const { t } = useI18n();
   const [query, setQuery] = useState('');
   const [items, setItems] = useState<PluginListItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -71,15 +73,15 @@ export function ComparePicker({
         className="friend-dialog compare-picker"
         role="dialog"
         aria-modal="true"
-        aria-label="搜索插件对比"
+        aria-label={t('picker.aria')}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="friend-dialog-head">
           <div className="friend-dialog-head-text">
-            <h2 className="fs-lg fw-semibold mb-1">选择要对比的插件</h2>
-            <p className="fs-xs fg-secondary mb-0">搜索并勾选 {MIN}-{MAX} 个插件，曲线会叠加在同一张图上。</p>
+            <h2 className="fs-lg fw-semibold mb-1">{t('picker.title')}</h2>
+            <p className="fs-xs fg-secondary mb-0">{t('picker.hint', { min: MIN, max: MAX })}</p>
           </div>
-          <button type="button" className="btn-icon friend-close" onClick={onClose} aria-label="关闭">
+          <button type="button" className="btn-icon friend-close" onClick={onClose} aria-label={t('common.close')}>
             <X aria-hidden="true" />
           </button>
         </div>
@@ -87,7 +89,7 @@ export function ComparePicker({
         {selected.length ? (
           <div className="compare-picker-selected">
             {selected.map((slug) => (
-              <button key={slug} type="button" className="compare-picker-chip" onClick={() => toggle(slug)} title="点击移除">
+              <button key={slug} type="button" className="compare-picker-chip" onClick={() => toggle(slug)} title={t('picker.remove')}>
                 {slug} <X aria-hidden="true" />
               </button>
             ))}
@@ -100,8 +102,8 @@ export function ComparePicker({
             className="form-control"
             type="search"
             value={query}
-            placeholder="输入插件名或 owner/repo 搜索"
-            aria-label="搜索插件"
+            placeholder={t('picker.searchPlaceholder')}
+            aria-label={t('common.search')}
             onChange={(event) => setQuery(event.target.value)}
             autoFocus
           />
@@ -109,11 +111,11 @@ export function ComparePicker({
 
         <div className="compare-picker-results">
           {loading ? (
-            <p className="fs-sm fg-secondary mb-0">搜索中…</p>
+            <p className="fs-sm fg-secondary mb-0">{t('picker.searching')}</p>
           ) : !query.trim() ? (
-            <p className="fs-sm fg-secondary mb-0">输入关键词开始搜索</p>
+            <p className="fs-sm fg-secondary mb-0">{t('picker.idle')}</p>
           ) : items.length === 0 ? (
-            <p className="fs-sm fg-secondary mb-0">没有匹配的插件</p>
+            <p className="fs-sm fg-secondary mb-0">{t('picker.empty')}</p>
           ) : (
             <ul className="list-unstyled mb-0">
               {items.map((item) => {
@@ -143,16 +145,16 @@ export function ComparePicker({
         </div>
 
         <div className="compare-picker-foot">
-          <span className="fs-xs fg-secondary">已选 {selected.length}/{MAX}</span>
+          <span className="fs-xs fg-secondary">{t('picker.selected', { n: selected.length, max: MAX })}</span>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-outline btn-sm" onClick={onClose}>取消</button>
+            <button type="button" className="btn btn-outline btn-sm" onClick={onClose}>{t('picker.cancel')}</button>
             <button
               type="button"
               className="btn btn-solid btn-sm"
               disabled={selected.length < MIN}
               onClick={() => onApply(selected)}
             >
-              开始对比
+              {t('picker.apply')}
             </button>
           </div>
         </div>

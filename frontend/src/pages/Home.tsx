@@ -15,6 +15,7 @@ import { Pager } from '../components/Pager';
 import { EmptyState, ErrorState, Loading } from '../components/States';
 import { FriendLinkModal } from '../components/FriendLinkModal';
 import { SubmitModal } from '../components/SubmitModal';
+import { HeroRankChart } from '../components/HeroRankChart';
 import { copyText } from '../lib/clipboard';
 import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, StatusResponse } from '../types';
 
@@ -199,6 +200,7 @@ export default function Home() {
   return (
     <section>
       <div className="hp-hero p-4 lg:p-5 mb-4">
+        <HeroRankChart />
         <div className="hero-grid">
           <div className="hero-copy">
             <img
