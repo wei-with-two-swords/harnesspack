@@ -60,7 +60,7 @@ export default function DataSection() {
             所有榜单只统计「在册且状态为 active」的仓库；缺快照的日子不参与计算，也不会用插值补。
             分类沿用上游清单的 23 个分类，只在同一分类内重新排名。
             稳健先剔除被标为异常的单日涨幅，再按剩余 30 天的日均新增排序，至少 3 天样本才入榜；
-            覆盖率与失败清单见 <Link className={LINK} to="/about#status">数据状态</Link>。
+            覆盖率与失败清单见 <Link className={LINK} to="/changelog#status">数据状态</Link>。
           </p>
         </div>
       </section>

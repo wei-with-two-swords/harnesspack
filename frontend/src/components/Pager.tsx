@@ -6,6 +6,8 @@ interface PagerProps {
   pageSize: number;
   total: number;
   onChange: (page: number) => void;
+  /** Inner lists usually want to stay in place; full-page tables scroll to top. */
+  scrollOnChange?: boolean;
 }
 
 /** Page numbers to render: first/last plus a small window around the current page. */
@@ -20,7 +22,7 @@ function pageItems(page: number, pages: number): (number | null)[] {
   return items;
 }
 
-export function Pager({ page, pageSize, total, onChange }: PagerProps) {
+export function Pager({ page, pageSize, total, onChange, scrollOnChange = true }: PagerProps) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
   if (pages <= 1) return null;
 
@@ -29,7 +31,7 @@ export function Pager({ page, pageSize, total, onChange }: PagerProps) {
     const target = clamp(next);
     if (target === page) return;
     onChange(target);
-    if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
+    if (scrollOnChange && typeof window !== 'undefined') window.scrollTo({ top: 0 });
   };
 
   const from = page * pageSize + 1;

@@ -1,4 +1,6 @@
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useApi } from '../../lib/useApi';
 import { formatDate } from '../../lib/format';
@@ -11,37 +13,73 @@ function Chip({ name }: { name: string }) {
   return <span className="badge theme-secondary badge-subtle fs-xs">{name}</span>;
 }
 
-function Entry({ entry }: { entry: ChangelogEntry }) {
-  const lists: { label: string; count: number; sample: string[]; tone: string }[] = [
-    { label: '新增', count: entry.added, sample: entry.added_sample, tone: 'fg-success' },
-    { label: '移除', count: entry.removed, sample: entry.removed_sample, tone: 'fg-danger' },
-    { label: '变更', count: entry.changed, sample: entry.changed_sample, tone: 'fg-warning' },
-  ];
+function totals(entries: ChangelogEntry[]) {
+  return {
+    added: entries.reduce((sum, entry) => sum + entry.added, 0),
+    removed: entries.reduce((sum, entry) => sum + entry.removed, 0),
+    changed: entries.reduce((sum, entry) => sum + entry.changed, 0),
+  };
+}
+
+function DayNode({
+  day,
+  entries,
+  defaultOpen,
+}: {
+  day: string;
+  entries: ChangelogEntry[];
+  defaultOpen: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const sum = totals(entries);
+  const isDate = /^\d{4}-\d{2}-\d{2}$/.test(day);
+
   return (
-    <li className="px-4 py-3 border-bottom">
-      <div className="d-flex flex-wrap align-items-center gap-3">
-        <span className="fs-sm">{entry.at ? entry.at.replace('T', ' ').slice(0, 16) : '未知时间'}</span>
-        {lists.map((list) =>
-          list.count > 0 ? (
-            <span key={list.label} className={`fs-xs ${list.tone}`}>
-              {list.label} {list.count}
-            </span>
-          ) : null,
-        )}
-        {entry.added === 0 && entry.removed === 0 && entry.changed === 0 ? (
-          <span className="fs-xs fg-secondary">无变化</span>
+    <li className="hp-timeline-item">
+      <span className="hp-timeline-dot" aria-hidden="true" />
+      <div className="card overflow-hidden">
+        <button
+          type="button"
+          className="hp-timeline-toggle"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+        >
+          <ChevronDown className={`icon-leading hp-timeline-chevron${open ? ' is-open' : ''}`} aria-hidden="true" />
+          <span className="fw-semibold fs-md">{isDate ? formatDate(day) : day}</span>
+          <span className="ms-auto d-flex flex-wrap gap-3 fs-xs">
+            {sum.added > 0 ? <span className="fg-success">+{sum.added} 新增</span> : null}
+            {sum.removed > 0 ? <span className="fg-danger">-{sum.removed} 移除</span> : null}
+            {sum.changed > 0 ? <span className="fg-warning">~{sum.changed} 变更</span> : null}
+            {sum.added === 0 && sum.removed === 0 && sum.changed === 0 ? (
+              <span className="fg-secondary">无变化</span>
+            ) : null}
+          </span>
+        </button>
+        {open ? (
+          <div className="hp-timeline-body border-top">
+            {entries.map((entry, index) => (
+              <div className="hp-timeline-entry" key={`${entry.at ?? 'unknown'}-${index}`}>
+                <div className="d-flex flex-wrap align-items-center gap-3 fs-xs fg-secondary">
+                  <span className="num">{entry.at ? entry.at.slice(11, 16) : '未知时间'}</span>
+                  <span className="fg-success">新增 {entry.added}</span>
+                  <span className="fg-danger">移除 {entry.removed}</span>
+                  <span className="fg-warning">变更 {entry.changed}</span>
+                </div>
+                {entry.added_sample.length > 0 ? (
+                  <div className="mt-2 d-flex flex-wrap gap-2 align-items-center">
+                    {entry.added_sample.map((name) => (
+                      <Chip key={name} name={name} />
+                    ))}
+                    {entry.added > entry.added_sample.length ? (
+                      <span className="fs-xs fg-secondary">等 {entry.added} 个</span>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </div>
         ) : null}
       </div>
-      {entry.added_sample.length > 0 ? (
-        <div className="mt-2 d-flex flex-wrap gap-2">
-          {entry.added_sample.map((name) => (
-            <Chip key={name} name={name} />
-          ))}
-          {entry.added > entry.added_sample.length ? (
-            <span className="fs-xs fg-secondary">等 {entry.added} 个</span>
-          ) : null}
-        </div>
-      ) : null}
     </li>
   );
 }
@@ -49,11 +87,22 @@ function Entry({ entry }: { entry: ChangelogEntry }) {
 export default function ChangelogSection() {
   const { data, error, loading } = useApi<ChangelogResponse>(() => api.changelog(50), []);
 
+  const groups = useMemo(() => {
+    const byDay = new Map<string, ChangelogEntry[]>();
+    for (const entry of data?.items ?? []) {
+      const day = entry.at ? entry.at.slice(0, 10) : '未知日期';
+      const list = byDay.get(day) ?? [];
+      list.push(entry);
+      byDay.set(day, list);
+    }
+    return Array.from(byDay, ([day, entries]) => ({ day, entries }));
+  }, [data]);
+
   return (
     <section id="changelog" className="hp-anchor mb-4">
       <h2 className="fs-xl fw-semibold mb-2">名单变更</h2>
       <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: 'var(--measure)' }}>
-        每次同步上游清单后记录新增、移除与变更的仓库。完整规则见{' '}
+        每次同步上游清单后记录新增、移除与变更的仓库，按天折叠。完整规则见{' '}
         <Link to="/about#rules" className={LINK}>
           收录规则
         </Link>
@@ -63,10 +112,10 @@ export default function ChangelogSection() {
       {error ? <ErrorState error={error} /> : null}
       {loading ? <Loading /> : null}
       {!loading && !error && data ? (
-        data.items.length > 0 ? (
-          <ul className="card list-unstyled overflow-hidden mb-3">
-            {data.items.map((entry) => (
-              <Entry key={`${entry.at}-${entry.added}-${entry.removed}`} entry={entry} />
+        groups.length > 0 ? (
+          <ul className="hp-timeline">
+            {groups.map((group, index) => (
+              <DayNode key={group.day} day={group.day} entries={group.entries} defaultOpen={index === 0} />
             ))}
           </ul>
         ) : (

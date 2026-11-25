@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import PluginDetail from './pages/PluginDetail';
 import About from './pages/About';
+import Changelog from './pages/Changelog';
 import Compare from './pages/Compare';
 import ApiDocs from './pages/ApiDocs';
 import Community from './pages/Community';
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/community/u/:login" element={<CommunityUser />} />
         <Route path="/plugins/:slug" element={<PluginDetail />} />
         <Route path="/about" element={<About />} />
+        <Route path="/changelog" element={<Changelog />} />
         <Route path="/about/api" element={<Navigate to="/api" replace />} />
         <Route path="/compare" element={<Compare />} />
         <Route path="*" element={<NotFound />} />

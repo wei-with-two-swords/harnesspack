@@ -48,7 +48,7 @@ pnpm dev          # http://127.0.0.1:5173，/api 代理到 8000
 pnpm build        # 产出 frontend/dist，由 FastAPI 同端口托管
 ```
 
-核心页面：`/` 榜单（通过 `?board=`、`?view=directory` 等查询参数切换榜单/分类/插件库视图）、`/community` DSH 讨论区（`/community/p/{id}` 详情、`/community/u/{login}` 用户页）、`/api` API 说明。功能页：`/plugins/{slug}` 详情与曲线、`/compare` 插件对比（弹窗搜索选插件）。描述性内容统一收在 `/about`，以锚点分区：站点简介、收录规则、插件提交、数据口径、数据状态、名单变更、使用条款、推荐位。旧的独立描述页、榜单页、插件库页与 `/submit`、`/sponsors` 等路径已移除。
+核心页面：`/` 榜单（通过 `?board=`、`?view=directory` 等查询参数切换榜单/分类/插件库视图）、`/community` DSH 讨论区（`/community/p/{id}` 详情、`/community/u/{login}` 用户页）、`/api` API 说明。功能页：`/plugins/{slug}` 详情与曲线、`/compare` 插件对比（弹窗搜索选插件）、`/changelog` 名单变更与数据状态（含最近抓取、失败清单）。描述性内容统一收在 `/about`，以锚点分区：站点简介、收录规则、插件提交、数据口径、使用条款。旧的独立描述页、榜单页、插件库页与 `/submit`、`/sponsors` 等路径已移除。
 
 ### SEO
 

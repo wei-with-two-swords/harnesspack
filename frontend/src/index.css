@@ -487,11 +487,23 @@
   .hero-lead { margin-top: var(--s-1); max-width: var(--measure-mid); color: var(--muted); font-size: var(--fs-body); }
   .hero-updated { @apply inline-flex items-center; margin-top: var(--s-1); gap: var(--s-1); color: var(--muted); font-size: var(--fs-meta); }
   .hero-updated-dot {
+    position: relative;
     width: var(--s-1);
     height: var(--s-1);
     flex-shrink: 0;
     border-radius: var(--radius-round);
     background: var(--accent);
+  }
+  /* Only pulses when a real snapshot date is present — no false "live" signal. */
+  .hero-updated-dot.is-live { animation: hp-breathe 2.4s ease-in-out infinite; }
+  .hero-updated-dot.is-live::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: inherit;
+    animation: hp-breathe-ring 2.4s ease-out infinite;
+    pointer-events: none;
   }
   .hero-stat { text-align: left; }
   .hero-stat .hero-updated { justify-content: flex-end; }
@@ -720,6 +732,43 @@
   .hp-row { border-radius: var(--radius); padding-inline: var(--s-1); margin-inline: calc(-1 * var(--s-1)); transition: background-color 0.14s ease; }
   .hp-row:hover { background: var(--hover); }
   .hp-anchor { scroll-margin-top: calc(var(--s-8) + var(--s-3)); }
+
+  /* ---- Vertical changelog timeline ---- */
+  .hp-timeline { list-style: none; margin: 0 0 0 var(--s-2); padding-left: var(--s-4); border-left: var(--hairline) solid var(--line); }
+  .hp-timeline-item { position: relative; padding-bottom: var(--s-3); }
+  .hp-timeline-item:last-child { padding-bottom: 0; }
+  .hp-timeline-dot {
+    position: absolute;
+    top: var(--s-3);
+    left: calc(-1 * var(--s-4) - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-round);
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--surface);
+  }
+  .hp-timeline-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    width: 100%;
+    padding: var(--s-3) var(--s-4);
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .hp-timeline-toggle:hover { background: var(--hover); }
+  .hp-timeline-chevron { transition: transform 0.16s ease; transform: rotate(-90deg); }
+  .hp-timeline-chevron.is-open { transform: rotate(0); }
+  .hp-timeline-body { padding: var(--s-2) var(--s-4) var(--s-3); }
+  .hp-timeline-entry + .hp-timeline-entry {
+    margin-top: var(--s-2);
+    padding-top: var(--s-2);
+    border-top: var(--hairline) solid var(--line);
+  }
 
   .theme-trigger {
     @apply inline-flex items-center rounded-xs border-0;
@@ -1160,6 +1209,14 @@ html .u-cursor-pt { border-radius: var(--radius-round); }
 html .u-select { background: var(--accent-soft); }
 
 @keyframes hp-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+@keyframes hp-breathe {
+  0%, 100% { opacity: 0.6; transform: scale(0.82); }
+  50% { opacity: 1; transform: scale(1); }
+}
+@keyframes hp-breathe-ring {
+  0% { opacity: 0.45; transform: scale(1); }
+  70%, 100% { opacity: 0; transform: scale(2.8); }
+}
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

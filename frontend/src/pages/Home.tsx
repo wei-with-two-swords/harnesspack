@@ -218,7 +218,7 @@ export default function Home() {
             <div className="hero-stat-label">{t('hero.tracked')}</div>
             <div className="hero-stat-value">{tracked ? formatNumber(tracked) : '—'}</div>
             <div className="hero-updated">
-              <span className="hero-updated-dot" aria-hidden="true" />
+              <span className={`hero-updated-dot${updated ? ' is-live' : ''}`} aria-hidden="true" />
               <span>{updated ? `${t('hero.asOf')} ${updated}` : '—'}</span>
             </div>
             <div className="hero-tracking">

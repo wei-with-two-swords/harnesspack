@@ -6,8 +6,10 @@ import { useApi } from '../../lib/useApi';
 import type { StatusResponse } from '../../types';
 import { formatDate, formatNumber, formatPercent } from '../../lib/format';
 import { ErrorState, Loading } from '../States';
+import { Pager } from '../Pager';
 
 const LINK = 'text-decoration-none';
+const FAILURE_PAGE_SIZE = 10;
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -23,7 +25,7 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 
 export default function StatusSection() {
   const { data, error, loading } = useApi<StatusResponse>(() => api.status(), []);
-  const [showAll, setShowAll] = useState(false);
+  const [failPage, setFailPage] = useState(0);
 
   return (
     <section id="status" className="hp-anchor mb-4">
@@ -125,28 +127,31 @@ export default function StatusSection() {
           {data.snapshots.failures.length > 0 ? (
             <div className="card overflow-hidden mb-3">
               <div className="d-flex align-items-center justify-content-between border-bottom px-4 py-3">
-                <h3 className="fs-lg fw-semibold mb-0">失败清单（最多显示 50 条）</h3>
-                {data.snapshots.failures.length > 10 ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowAll((v) => !v)}
-                    className="btn btn-text btn-sm"
-                  >
-                    {showAll ? '收起' : `展开全部 ${data.snapshots.failures.length} 条`}
-                  </button>
-                ) : null}
+                <h3 className="fs-lg fw-semibold mb-0">失败清单</h3>
+                <span className="fs-xs fg-secondary num">共 {formatNumber(data.snapshots.failures.length)} 条</span>
               </div>
               <ul className="list-unstyled mb-0 fs-sm">
-                {(showAll ? data.snapshots.failures : data.snapshots.failures.slice(0, 10)).map((f) => (
-                  <li key={f.slug} className="d-flex align-items-center justify-content-between gap-3 px-4 py-2 border-bottom">
-                    <span className="text-truncate">
-                      <span>{f.repo}</span>
-                      <span className="ms-2 fs-xs fg-secondary">{f.slug}</span>
-                    </span>
-                    <span className="flex-shrink-0 fs-xs fg-danger">{f.status}</span>
-                  </li>
-                ))}
+                {data.snapshots.failures
+                  .slice(failPage * FAILURE_PAGE_SIZE, (failPage + 1) * FAILURE_PAGE_SIZE)
+                  .map((f) => (
+                    <li key={f.slug} className="d-flex align-items-center justify-content-between gap-3 px-4 py-2 border-bottom">
+                      <span className="text-truncate">
+                        <span>{f.repo}</span>
+                        <span className="ms-2 fs-xs fg-secondary">{f.slug}</span>
+                      </span>
+                      <span className="flex-shrink-0 fs-xs fg-danger">{f.status}</span>
+                    </li>
+                  ))}
               </ul>
+              <div className="px-4 pb-3">
+                <Pager
+                  page={failPage}
+                  pageSize={FAILURE_PAGE_SIZE}
+                  total={data.snapshots.failures.length}
+                  onChange={setFailPage}
+                  scrollOnChange={false}
+                />
+              </div>
             </div>
           ) : null}
 

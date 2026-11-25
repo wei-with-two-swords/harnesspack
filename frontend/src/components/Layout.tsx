@@ -20,12 +20,8 @@ function Logo({ size = 28 }: { size?: number }) {
 }
 
 const FOOTER = [
-  { to: '/about#data', key: 'footer.data' },
-  { to: '/about#status', key: 'footer.status' },
-  { to: '/about#changelog', key: 'footer.changelog' },
+  { to: '/changelog', key: 'footer.changelog' },
   { to: '/compare', key: 'footer.compare' },
-  { to: '/about#terms', key: 'footer.terms' },
-  { to: '/about#sponsors', key: 'footer.sponsors' },
   { to: '/about', key: 'footer.about' },
 ];
 
@@ -34,6 +30,7 @@ const FRIEND_LINKS = [
   { label: 'DeepSeek AI', href: 'https://github.com/deepseek-ai' },
   { label: 'DSH Market', href: 'https://dshmarket.com' },
   { label: 'DeepSeek1024', href: 'https://deepseek1024.com/' },
+  { label: 'WorkBuddy', href: 'https://www.workbuddy.cn/' },
   { label: 'awesome-dsh-plugin', href: 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin' },
   { label: 'HarnessPack', href: 'https://github.com/wei-with-two-swords/harnesspack' },
 ];
@@ -119,9 +116,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             ))}
             <a href="/sitemap.xml" className="text-decoration-none">{t('footer.sitemap')}</a>
             <a href="/feed.xml" className="text-decoration-none">{t('footer.feed')}</a>
-            <a href="https://github.com/traffictoolbox/awesome-dsh-plugin" target="_blank" rel="noreferrer" className="text-decoration-none">
-              {t('footer.repo')}
-            </a>
           </div>
           <div className="footer-links footer-related fs-xs fg-secondary">
             <span className="footer-related-label">{t('footer.related')}</span>

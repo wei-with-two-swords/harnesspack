@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import DataSection from '../components/about/DataSection';
-import StatusSection from '../components/about/StatusSection';
-import ChangelogSection from '../components/about/ChangelogSection';
-import TermsSection from '../components/about/TermsSection';
 import RulesSection from '../components/about/RulesSection';
-import SponsorsSection from '../components/about/SponsorsSection';
 import SubmitSection from '../components/about/SubmitSection';
+import DataSection from '../components/about/DataSection';
+import TermsSection from '../components/about/TermsSection';
 import { useTitle } from '../lib/useTitle';
 
 const ANCHORS = [
@@ -14,14 +11,11 @@ const ANCHORS = [
   { id: 'rules', label: '收录规则' },
   { id: 'submit', label: '插件提交' },
   { id: 'data', label: '数据口径' },
-  { id: 'status', label: '数据状态' },
-  { id: 'changelog', label: '名单变更' },
   { id: 'terms', label: '使用条款' },
-  { id: 'sponsors', label: '推荐位' },
 ];
 
 export default function About() {
-  useTitle('关于', 'HarnessPack 的站点简介、收录规则、数据口径、数据状态、名单变更与使用条款。');
+  useTitle('关于', 'HarnessPack 的站点简介、收录规则、插件提交、数据口径与使用条款。');
   const { hash } = useLocation();
 
   useEffect(() => {
@@ -31,10 +25,10 @@ export default function About() {
   }, [hash]);
 
   return (
-    <article className="fs-sm" style={{ maxWidth: 'var(--measure-wide)' }}>
+    <article className="fs-sm">
       <header id="intro" className="mb-4 hp-anchor">
         <h1 className="fs-3xl fw-semibold mb-2">关于 HarnessPack</h1>
-        <p className="mb-3 fg-secondary">
+        <p className="mb-3 fg-secondary" style={{ maxWidth: 'var(--measure)' }}>
           HarnessPack 只做一件事：把 DeepSeek Harness 插件的 STAR 变化如实记录下来，并让增速可比。
           名单与分类来自上游精选清单，我们不重复做人工评审。
         </p>
@@ -47,13 +41,16 @@ export default function About() {
         </nav>
       </header>
 
-      <RulesSection />
-      <SubmitSection />
-      <DataSection />
-      <StatusSection />
-      <ChangelogSection />
-      <TermsSection />
-      <SponsorsSection />
+      <div className="row g-3 align-items-start">
+        <div className="col-12 lg:col-6">
+          <RulesSection />
+          <DataSection />
+        </div>
+        <div className="col-12 lg:col-6">
+          <SubmitSection />
+          <TermsSection />
+        </div>
+      </div>
     </article>
   );
 }
