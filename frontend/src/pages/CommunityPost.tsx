@@ -42,7 +42,10 @@ export default function CommunityPost() {
       return;
     }
     void load();
-  }, [load, postId, t]);
+    // `t` is deliberately not a dependency: it only changes with the UI
+    // language, which must not refetch the post. It is stable since the
+    // useI18n memo anyway.
+  }, [load, postId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <section style={{ maxWidth: 'var(--measure-mid)' }}>

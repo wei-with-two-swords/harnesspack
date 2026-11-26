@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export type Lang = 'en' | 'zh';
 
@@ -1025,10 +1025,16 @@ export function translate(lang: Lang, key: string, vars?: Record<string, string 
 /** Hook returning a t() function bound to the current language. */
 export function useI18n() {
   const lang = useLang();
-  return {
-    lang,
-    t: (key: string, vars?: Record<string, string | number>) => translate(lang, key, vars),
-  };
+  // The returned object must be referentially stable between renders: effects
+  // elsewhere depend on `t`, and a fresh closure per render once caused an
+  // infinite refetch loop (see the rate-limit incident of 2026-11-26).
+  return useMemo(
+    () => ({
+      lang,
+      t: (key: string, vars?: Record<string, string | number>) => translate(lang, key, vars),
+    }),
+    [lang],
+  );
 }
 
 /** Resolve category labels for display (categories are lowercase slugs). */
