@@ -1156,6 +1156,33 @@
   .community-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 }
 
+/* Community account card (sidebar). Outside @layer so Tailwind keeps it. */
+.community-auth { display: flex; flex-direction: column; gap: var(--s-2); }
+.community-auth-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.community-auth-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hover);
+  color: var(--muted);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+}
+.community-auth-divider { border-top: var(--hairline) solid var(--line); }
+.community-auth-notif {
+  color: inherit;
+  padding: var(--s-1);
+  margin: calc(-1 * var(--s-1));
+  border-radius: var(--radius-round);
+}
+.community-auth-notif:hover { background: var(--hover); }
+
 /* Chart hover tooltip (uPlot). Outside @layer so Tailwind keeps it;
    colors come from theme tokens so light/dark both work. */
 .u-wrap-tip { position: relative; }

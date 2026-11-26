@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Comments } from '../components/Comments';
-import { CommunityAuth } from '../components/CommunityAuth';
+import { CommunitySidebar } from '../components/CommunitySidebar';
 import { PostCard } from '../components/PostCard';
 import { Loading } from '../components/States';
 import { api, ApiError } from '../lib/api';
@@ -48,32 +48,36 @@ export default function CommunityPost() {
   }, [load, postId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <section style={{ maxWidth: 'var(--measure-mid)' }}>
-      <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
-        <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
-      </Link>
-      <CommunityAuth {...auth} />
-      {error ? (
-        <div className="card">
-          <div className="card-body fs-sm fg-danger">{t('community.postNotFound')}</div>
+    <section>
+      <div className="community-grid">
+        <div style={{ minWidth: 0 }}>
+          <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
+            <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
+          </Link>
+          {error ? (
+            <div className="card">
+              <div className="card-body fs-sm fg-danger">{t('community.postNotFound')}</div>
+            </div>
+          ) : null}
+          {loading ? <Loading /> : null}
+          {post ? (
+            <>
+              <PostCard
+                post={post}
+                user={user}
+                detail
+                onDelete={() => navigate('/community')}
+              />
+              <Comments
+                postId={post.id}
+                user={user}
+                onChanged={() => void load()}
+              />
+            </>
+          ) : null}
         </div>
-      ) : null}
-      {loading ? <Loading /> : null}
-      {post ? (
-        <>
-          <PostCard
-            post={post}
-            user={user}
-            detail
-            onDelete={() => navigate('/community')}
-          />
-          <Comments
-            postId={post.id}
-            user={user}
-            onChanged={() => void load()}
-          />
-        </>
-      ) : null}
+        <CommunitySidebar auth={auth} />
+      </div>
     </section>
   );
 }
