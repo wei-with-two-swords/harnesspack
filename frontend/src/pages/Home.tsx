@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
@@ -23,6 +23,8 @@ import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, S
 const PAGE_SIZE = 20;
 const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
 const FIXED_BOARD_WINDOW: Record<string, number> = { darkhorse: 7, quality: 30 };
+/** sessionStorage key for the last scroll position per home view. */
+const HOME_POS_KEY = 'harnesspack-home-pos';
 
 function parseView(params: URLSearchParams): View {
   const board = params.get('board');
@@ -79,10 +81,14 @@ function InstallCommand({ label, value }: { label: string; value: string }) {
 export default function Home() {
   const { t } = useI18n();
   useThemeVersion();
-  const [params] = useSearchParams();
+  const location = useLocation();
+  const [params, setParams] = useSearchParams();
   const view = parseView(params);
   const currentWindow = view.kind === 'star' ? (view.window ?? 7) : 7;
-  const [page, setPage] = useState(0);
+  // Page lives in the URL (?page=1-based) so the browser back / the detail
+  // page's "back to home" link restores the page the user was browsing.
+  const page = Math.max(0, (Number.parseInt(params.get('page') ?? '', 10) || 1) - 1);
+  const boardAnchor = useRef<HTMLDivElement | null>(null);
 
   const cats = useApi<CategoriesResponse>(() => api.categories(), []);
   const status = useApi<StatusResponse>(() => api.status(), []);
@@ -97,14 +103,36 @@ export default function Home() {
   const [friendOpen, setFriendOpen] = useState(false);
   const [submitOpen, setSubmitOpen] = useState(false);
 
+  const changePage = (next: number) => {
+    const nextParams = new URLSearchParams(params);
+    if (next <= 0) nextParams.delete('page');
+    else nextParams.set('page', String(next + 1));
+    setParams(nextParams, { replace: true });
+    // Land the fresh page at the top of the board (tab row), not the hero.
+    const anchor = boardAnchor.current;
+    if (anchor) {
+      const top = anchor.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: Math.max(0, Math.round(top)) });
+    }
+  };
+
+  // Remember where the user was on this view while they browse list rows;
+  // restored once data is ready after coming back from a detail page.
+  const scrollRef = useRef(0);
   useEffect(() => {
-    setPage(0);
-  }, [
-    view.kind,
-    view.kind === 'star' ? view.board : '',
-    view.kind === 'directory' ? `${view.sort}:${view.category ?? ''}` : '',
-    currentWindow,
-  ]);
+    scrollRef.current = window.scrollY;
+    const onScroll = () => { scrollRef.current = window.scrollY; };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      try {
+        sessionStorage.setItem(
+          HOME_POS_KEY,
+          JSON.stringify({ search: location.search, y: Math.round(scrollRef.current) }),
+        );
+      } catch { /* ignore */ }
+    };
+  }, [location.search]);
 
   const titleKey = view.kind === 'star' && view.board === 'growth'
     ? (currentWindow === 30 ? 'board.window30' : 'board.window7')
@@ -143,6 +171,24 @@ export default function Home() {
       : Promise.resolve({ items: [], total: 0, as_of: null } as ListResponse<PluginListItem>),
     [view.kind, dirSort, dirCategory, page],
   );
+
+  // Restore the saved scroll position once the list data for this view is
+  // ready (only once per mount; coming back from a detail page re-mounts).
+  const restoreState = view.kind === 'directory' ? dirState : boardState;
+  const restoredRef = useRef(false);
+  useEffect(() => {
+    if (restoredRef.current) return;
+    if (restoreState.loading || !restoreState.data) return;
+    restoredRef.current = true;
+    try {
+      const saved = JSON.parse(sessionStorage.getItem(HOME_POS_KEY) ?? 'null') as
+        | { search: string; y: number }
+        | null;
+      if (saved && saved.search === location.search && saved.y > 0) {
+        requestAnimationFrame(() => window.scrollTo(0, saved.y));
+      }
+    } catch { /* ignore */ }
+  }, [restoreState.loading, restoreState.data, location.search]);
 
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
 
@@ -183,7 +229,7 @@ export default function Home() {
               <>
                 <RankTable items={data.items} board={boardName} window={boardWindow} />
                 <div className="px-4 pb-3">
-                  <Pager page={page} pageSize={PAGE_SIZE} total={data.total ?? data.items.length} onChange={setPage} />
+                  <Pager page={page} pageSize={PAGE_SIZE} total={data.total ?? data.items.length} onChange={changePage} scrollOnChange={false} />
                 </div>
               </>
             ) : <EmptyState bare title={t('common.noData')}>{data.reason ?? ''}</EmptyState>
@@ -205,7 +251,7 @@ export default function Home() {
                 sort={view.sort === 'downloads' ? 'downloads' : 'stars'}
                 offset={page * PAGE_SIZE}
               />
-              <div className="px-4 pb-3"><Pager page={page} pageSize={PAGE_SIZE} total={data.total} onChange={setPage} /></div>
+              <div className="px-4 pb-3"><Pager page={page} pageSize={PAGE_SIZE} total={data.total} onChange={changePage} scrollOnChange={false} /></div>
             </>
           ) : <EmptyState bare title={t('common.noData')} />
         ) : null}
@@ -278,7 +324,9 @@ export default function Home() {
 
       <div className="mb-4"><GlobalSearch /></div>
 
-      <BoardSwitcher view={view} categories={categories} actions={toolbar} />
+      <div ref={boardAnchor}>
+        <BoardSwitcher view={view} categories={categories} actions={toolbar} />
+      </div>
       {content}
     </section>
   );
