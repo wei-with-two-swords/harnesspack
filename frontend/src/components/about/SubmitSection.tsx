@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
+import { useI18n } from '../../lib/i18n';
 
 const UPSTREAM = 'https://github.com/awesome-dsh-plugin/awesome-dsh-plugin';
 const UPSTREAM_NEW = `${UPSTREAM}/blob/main/data/plugins/README.md`;
@@ -21,59 +22,55 @@ const PR_BODY = `## 新增插件
 `;
 
 export default function SubmitSection() {
+  const { t } = useI18n();
   const prUrl = `${UPSTREAM}/issues/new?title=${encodeURIComponent('[plugin] <owner>/<repo>')}&body=${encodeURIComponent(PR_BODY)}`;
   return (
     <section id="submit" className="card mb-4 hp-anchor">
       <div className="card-body">
-        <h2 className="fs-xl fw-semibold mb-2">插件提交</h2>
-        <p className="fs-sm fg-secondary">
-          HarnessPack 的名单与分类直接来自 awesome-dsh-plugin 精选清单。想让插件出现在这里，
-          请先提交到上游；我们每天同步一次，收录后第二天开始有曲线。
-        </p>
+        <h2 className="fs-xl fw-semibold mb-2">{t('about.submit')}</h2>
+        <p className="fs-sm fg-secondary">{t('submit.lead')}</p>
 
-        <h3 className="fs-md fw-semibold mt-4">两步提交</h3>
+        <h3 className="fs-md fw-semibold mt-4">{t('submit.stepsTitle')}</h3>
         <ol className="ps-4 fs-sm fg-secondary mb-0">
           <li className="mb-2">
-            确认仓库可安装：<code>package.json</code> 里有 <code>dsh.bundle</code>（配{' '}
-            <code>cordis.patch.yml</code>），仓库有 <code>dsh-plugin</code> topic，README 写清安装命令。
+            {t('submit.step1A')}<code>package.json</code>{t('submit.step1B')}<code>dsh.bundle</code>
+            {t('submit.step1C')}<code>cordis.patch.yml</code>{t('submit.step1D')}<code>dsh-plugin</code>
+            {t('submit.step1E')}
           </li>
           <li>
-            去上游提 PR：在 <code>data/plugins/&lt;owner&gt;__&lt;repo&gt;.yml</code> 新增一个文件
-            （url、name、category、description.en 必填），格式见{' '}
+            {t('submit.step2A')}<code>data/plugins/&lt;owner&gt;__&lt;repo&gt;.yml</code>
+            {t('submit.step2B')}{' '}
             <a href={UPSTREAM_NEW} target="_blank" rel="noreferrer noopener" className={LINK}>
-              上游说明<ExternalLink className="icon-trailing" aria-hidden="true" />
+              {t('link.upstreamGuide')}<ExternalLink className="icon-trailing" aria-hidden="true" />
             </a>
-            。
+            {t('submit.step2C')}
           </li>
         </ol>
         <div className="mt-4 d-flex flex-wrap gap-2">
           <a href={prUrl} target="_blank" rel="noreferrer noopener" className="btn btn-solid">
-            用模板发起上游 PR / Issue<ExternalLink className="icon-trailing" aria-hidden="true" />
+            {t('submit.prButton')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <a href={UPSTREAM} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
-            打开 awesome-dsh-plugin<ExternalLink className="icon-trailing" aria-hidden="true" />
+            {t('submit.upstreamButton')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
         </div>
 
-        <h3 className="fs-md fw-semibold mt-4">提交后会发生什么</h3>
+        <h3 className="fs-md fw-semibold mt-4">{t('submit.afterTitle')}</h3>
         <ul className="list-unstyled fs-sm fg-secondary mb-0">
-          <li className="mb-1">· 上游合并后，我们下一次每日同步会自动收录（通常一天内）。</li>
-          <li className="mb-1">· 新插件首日只有基线，第二天开始有「今日增量」和曲线。</li>
-          <li className="mb-1">· 满 30 天且 STAR ≥ 10 才会进入最新榜。</li>
-          <li>· 被上游移除时保留历史曲线，但退出所有榜单。</li>
+          <li className="mb-1">{t('submit.after1')}</li>
+          <li className="mb-1">{t('submit.after2')}</li>
+          <li className="mb-1">{t('submit.after3')}</li>
+          <li>{t('submit.after4')}</li>
         </ul>
 
-        <h3 className="fs-md fw-semibold mt-4">数据不对 / 想申诉？</h3>
-        <p className="fs-sm fg-secondary mb-2">
-          榜单、退出、异常标记有异议，可以直接在本站仓库提 issue，7 天内回复；
-          也可以在插件详情页点「数据有误 / 申诉」。
-        </p>
+        <h3 className="fs-md fw-semibold mt-4">{t('submit.appealTitle')}</h3>
+        <p className="fs-sm fg-secondary mb-2">{t('submit.appealBody')}</p>
         <div className="d-flex flex-wrap gap-2">
           <a href={ISSUE} target="_blank" rel="noreferrer noopener" className="btn btn-outline">
-            在本站提 issue<ExternalLink className="icon-trailing" aria-hidden="true" />
+            {t('submit.issueButton')}<ExternalLink className="icon-trailing" aria-hidden="true" />
           </a>
           <Link to="/changelog" className="btn btn-outline">
-            名单变更
+            {t('link.catalogChanges')}
           </Link>
         </div>
       </div>

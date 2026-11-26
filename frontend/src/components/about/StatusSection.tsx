@@ -7,6 +7,7 @@ import type { StatusResponse } from '../../types';
 import { formatDate, formatNumber, formatPercent } from '../../lib/format';
 import { ErrorState, Loading } from '../States';
 import { Pager } from '../Pager';
+import { useI18n } from '../../lib/i18n';
 
 const LINK = 'text-decoration-none';
 const FAILURE_PAGE_SIZE = 10;
@@ -24,23 +25,24 @@ function Stat({ label, value, hint }: { label: string; value: string; hint?: str
 }
 
 export default function StatusSection() {
+  const { t } = useI18n();
   const { data, error, loading } = useApi<StatusResponse>(() => api.status(), []);
   const [failPage, setFailPage] = useState(0);
 
   return (
     <section id="status" className="hp-anchor mb-4">
-      <h2 className="fs-xl fw-semibold mb-2">数据状态</h2>
+      <h2 className="fs-xl fw-semibold mb-2">{t('status.title')}</h2>
       <p className="fs-sm fg-secondary mb-3" style={{ maxWidth: 'var(--measure)' }}>
-        抓取覆盖率、失败清单与数据库计数全部公开；快照文件本身在
+        {t('status.leadA')}
         <a
           className={`mx-1 ${LINK}`}
           href="https://github.com/wei-with-two-swords/harnesspack/tree/main/data/snapshots"
           target="_blank"
           rel="noreferrer"
         >
-          仓库 data/snapshots<ExternalLink className="icon-trailing" aria-hidden="true" />
+          {t('status.repoLink')}<ExternalLink className="icon-trailing" aria-hidden="true" />
         </a>
-        里，可直接下载核对。
+        {t('status.leadB')}
       </p>
 
       {error ? <ErrorState error={error} /> : null}
@@ -51,18 +53,18 @@ export default function StatusSection() {
           <div className="row g-3 mb-3">
             <div className="col-12 sm:col-6 lg:col-3">
               <Stat
-                label="快照天数"
+                label={t('status.stat.days')}
                 value={formatNumber(data.snapshots.days)}
                 hint={
                   data.snapshots.first_date
-                    ? `自 ${data.snapshots.first_date} 起`
-                    : '等待首份快照'
+                    ? t('status.stat.since', { date: data.snapshots.first_date })
+                    : t('status.stat.waiting')
                 }
               />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
               <Stat
-                label="最近快照成功率"
+                label={t('status.stat.okRate')}
                 value={data.snapshots.ok_rate === null ? '—' : formatPercent(data.snapshots.ok_rate)}
                 hint={
                   data.snapshots.latest
@@ -73,28 +75,40 @@ export default function StatusSection() {
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
               <Stat
-                label="名单覆盖率"
+                label={t('status.stat.coverage')}
                 value={data.snapshots.coverage === null ? '—' : formatPercent(data.snapshots.coverage)}
-                hint={`名单 ${formatNumber(data.snapshots.seed_count)} 个仓库`}
+                hint={t('status.stat.coverageHint', { n: formatNumber(data.snapshots.seed_count) })}
               />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="异常标记" value={formatNumber(data.database.anomalies)} hint="只标注，不删原始数据" />
+              <Stat
+                label={t('status.stat.anomalies')}
+                value={formatNumber(data.database.anomalies)}
+                hint={t('status.stat.anomaliesHint')}
+              />
             </div>
           </div>
 
           <div className="row g-3 mb-3">
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="数据库插件" value={formatNumber(data.database.plugins)} hint={`活跃 ${formatNumber(data.database.active)}`} />
+              <Stat
+                label={t('status.stat.plugins')}
+                value={formatNumber(data.database.plugins)}
+                hint={t('status.stat.pluginsHint', { n: formatNumber(data.database.active) })}
+              />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="已退出" value={formatNumber(data.database.exited)} hint="保留历史曲线" />
+              <Stat label={t('status.stat.exited')} value={formatNumber(data.database.exited)} hint={t('status.stat.exitedHint')} />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="不可用" value={formatNumber(data.database.unavailable)} hint="最近快照 404" />
+              <Stat label={t('status.stat.unavailable')} value={formatNumber(data.database.unavailable)} hint={t('status.stat.unavailableHint')} />
             </div>
             <div className="col-12 sm:col-6 lg:col-3">
-              <Stat label="STAR 记录" value={formatNumber(data.database.stars_rows)} hint={`截至 ${data.database.as_of ?? '—'}`} />
+              <Stat
+                label={t('status.stat.stars')}
+                value={formatNumber(data.database.stars_rows)}
+                hint={t('status.stat.asOf', { date: data.database.as_of ?? '—' })}
+              />
             </div>
           </div>
 
@@ -102,22 +116,27 @@ export default function StatusSection() {
             <div className="card mb-3">
               <div className="card-body">
                 <div className="d-flex flex-wrap align-items-baseline justify-content-between gap-2">
-                  <h3 className="fs-lg fw-semibold mb-0">最近一次抓取</h3>
+                  <h3 className="fs-lg fw-semibold mb-0">{t('status.latestTitle')}</h3>
                   <p className="num fs-xs fg-secondary mb-0">
-                    {data.snapshots.latest.date} · 耗时 {data.snapshots.latest.elapsed_s ?? '—'}s
+                    {data.snapshots.latest.date} · {t('status.took', { s: data.snapshots.latest.elapsed_s ?? '—' })}
                     {data.last_catalog_sync
-                      ? ` · 名单同步 ${data.last_catalog_sync.at.slice(0, 16).replace('T', ' ')}`
+                      ? ` · ${t('status.catalogSync', { ts: data.last_catalog_sync.at.slice(0, 16).replace('T', ' ') })}`
                       : ''}
                   </p>
                 </div>
                 <p className="mt-2 mb-0 fs-sm fg-secondary">
-                  {formatNumber(data.snapshots.latest.ok)} 个仓库成功，{formatNumber(data.snapshots.latest.failed)} 个失败；
-                  失败的仓库会被记录但不会从榜单消失，详情页会说明「最近一次快照不可用」。
+                  {t('status.latestBody', {
+                    ok: formatNumber(data.snapshots.latest.ok),
+                    failed: formatNumber(data.snapshots.latest.failed),
+                  })}
                 </p>
                 {data.last_catalog_sync ? (
                   <p className="mt-1 mb-0 fs-sm fg-secondary">
-                    最近一次名单同步：新增 {data.last_catalog_sync.added}、移除 {data.last_catalog_sync.removed}、变更{' '}
-                    {data.last_catalog_sync.changed}。
+                    {t('status.syncLine', {
+                      added: data.last_catalog_sync.added,
+                      removed: data.last_catalog_sync.removed,
+                      changed: data.last_catalog_sync.changed,
+                    })}
                   </p>
                 ) : null}
               </div>
@@ -127,8 +146,10 @@ export default function StatusSection() {
           {data.snapshots.failures.length > 0 ? (
             <div className="card overflow-hidden mb-3">
               <div className="d-flex align-items-center justify-content-between border-bottom px-4 py-3">
-                <h3 className="fs-lg fw-semibold mb-0">失败清单</h3>
-                <span className="fs-xs fg-secondary num">共 {formatNumber(data.snapshots.failures.length)} 条</span>
+                <h3 className="fs-lg fw-semibold mb-0">{t('status.failuresTitle')}</h3>
+                <span className="fs-xs fg-secondary num">
+                  {t('status.failuresCount', { n: formatNumber(data.snapshots.failures.length) })}
+                </span>
               </div>
               <ul className="list-unstyled mb-0 fs-sm">
                 {data.snapshots.failures
@@ -156,9 +177,10 @@ export default function StatusSection() {
           ) : null}
 
           <p className="fs-xs fg-secondary mb-0">
-            口径说明见 <Link className={LINK} to="/about#data">数据口径</Link>；
-            发现异常可在 <Link className={LINK} to="/about#submit">提交插件</Link> 页发起申诉。
-            {data.snapshots.as_of ? ` 数据截至 ${formatDate(data.snapshots.as_of)}。` : ''}
+            {t('status.footA')}<Link className={LINK} to="/about#data">{t('link.dataMethods')}</Link>
+            {t('status.footB')}<Link className={LINK} to="/about#submit">{t('about.submit')}</Link>
+            {t('status.footC')}
+            {data.snapshots.as_of ? t('status.dataAsOf', { date: formatDate(data.snapshots.as_of) }) : ''}
           </p>
         </>
       ) : null}
