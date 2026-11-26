@@ -587,6 +587,9 @@
     font-weight: var(--fw-semibold);
   }
   .switch-tab:hover { background: var(--hover); text-decoration: none; }
+  /* Right-aligned toolbar (copy view / exports) inside the tab row.
+     Wraps below the tabs on narrow screens instead of squeezing them. */
+  .switch-tabs-actions { margin-left: auto; }
   /* Active state is signalled by the underline only — no color/weight change. */
   .switch-tab.active { color: var(--muted); }
   .switch-tab.active::after {
@@ -1099,6 +1102,7 @@
     .workspace { grid-template-columns: calc(var(--s-8) * 3 + var(--s-3)) 1fr; align-items: start; }
   }
   @media (max-width: 575px) {
+    .switch-tabs-actions { margin-left: 0; width: 100%; }
     .hero-title, .hero-stat-value { font-size: var(--fs-display-compact); }
     .hero-copy { gap: var(--s-2); }
     .hero-logo { width: var(--s-8); height: var(--s-8); }

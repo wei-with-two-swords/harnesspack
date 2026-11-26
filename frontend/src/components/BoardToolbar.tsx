@@ -88,7 +88,7 @@ export function BoardToolbar({ fetchPage, fileHint }: Props) {
   };
 
   return (
-    <div className="d-flex align-items-center gap-3 fs-xs fg-secondary mb-2 flex-wrap">
+    <div className="d-flex align-items-center gap-2 fs-xs fg-secondary flex-wrap">
       <button type="button" className="btn btn-text btn-sm p-0" onClick={() => void share()}>
         <Copy aria-hidden="true" size={13} /> {copied ? t('toolbar.copied') : t('toolbar.share')}
       </button>

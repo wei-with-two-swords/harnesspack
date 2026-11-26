@@ -278,8 +278,7 @@ export default function Home() {
 
       <div className="mb-4"><GlobalSearch /></div>
 
-      <BoardSwitcher view={view} categories={categories} />
-      {toolbar}
+      <BoardSwitcher view={view} categories={categories} actions={toolbar} />
       {content}
     </section>
   );

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useI18n, categoryLabel, categoryDescription } from '../lib/i18n';
 import { viewToUrl, type View } from './CatalogSidebar';
@@ -9,7 +10,12 @@ const NPM_RANGES = ['1y', 'ytd', '24h', '7d', '30d'];
 type Chip = { key: string; label: string; to: string; hint?: string };
 
 /** Two-level switcher: tabs for STAR / NPM / directory, chips for each board. */
-export function BoardSwitcher({ view, categories }: { view: View; categories: string[] }) {
+export function BoardSwitcher({ view, categories, actions }: {
+  view: View;
+  categories: string[];
+  /** Optional right-aligned actions (copy view / exports) inside the tab row. */
+  actions?: ReactNode;
+}) {
   const { t, lang } = useI18n();
   const tab = view.kind === 'npm' ? 'npm' : view.kind === 'directory' ? 'directory' : 'star';
 
@@ -88,6 +94,7 @@ export function BoardSwitcher({ view, categories }: { view: View; categories: st
             {item.label}
           </Link>
         ))}
+        {actions ? <div className="switch-tabs-actions">{actions}</div> : null}
       </div>
 
       <div className="switch-chips mt-3">
