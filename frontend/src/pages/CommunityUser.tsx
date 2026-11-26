@@ -52,7 +52,7 @@ export default function CommunityUser() {
 
   return (
     <section style={{ maxWidth: 'var(--measure-mid)' }}>
-      <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-3">
+      <Link to="/community" className="fs-sm fg-secondary text-decoration-none inline-block mb-4">
         <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
       </Link>
       <CommunityAuth {...auth} />

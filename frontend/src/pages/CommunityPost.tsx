@@ -51,7 +51,7 @@ export default function CommunityPost() {
     <section>
       <div className="community-grid">
         <div style={{ minWidth: 0 }}>
-          <Link to="/community" className="fs-sm fg-secondary text-decoration-none d-inline-block mb-4">
+          <Link to="/community" className="fs-sm fg-secondary text-decoration-none inline-block mb-4">
             <><ArrowLeft className="icon-leading" aria-hidden="true" />{t('community.backToFeed')}</>
           </Link>
           {error ? (
