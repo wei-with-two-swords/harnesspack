@@ -31,7 +31,9 @@ export function Avatar({ owner, size = 32 }: { owner: string; size?: number }) {
     <img
       className="rank-avatar"
       style={style}
-      src={`https://github.com/${encodeURIComponent(owner)}.png?size=${Math.max(64, size * 2)}`}
+      // Proxied + week-long cached server-side; github.com is unreliable for
+      // many mainland visitors, and a board loads 20+ avatars at once.
+      src={`/api/v1/avatar/${encodeURIComponent(owner)}.png?s=${Math.max(64, size * 2)}`}
       alt=""
       loading="lazy"
       onError={() => setFailed(true)}

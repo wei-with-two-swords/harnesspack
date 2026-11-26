@@ -92,8 +92,8 @@ def content_key(*fields: Any) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
-def cache_path(cache_dir: Path, prefix: str, day: str, digest: str) -> Path:
-    return cache_dir / f"{safe_name(prefix)}-{safe_name(day, 16)}-{digest}.png"
+def cache_path(cache_dir: Path, prefix: str, day: str, digest: str, ext: str = ".png") -> Path:
+    return cache_dir / f"{safe_name(prefix)}-{safe_name(day, 16)}-{digest}{ext}"
 
 
 def read_cached(path: Path) -> bytes | None:
@@ -155,7 +155,7 @@ def prune(cache_dir: Path, *, max_files: int = DEFAULT_MAX_FILES, max_bytes: int
                     p.unlink()
                 except OSError:
                     pass
-        pngs = [p for p in files if p.suffix == ".png"]
+        pngs = [p for p in files if p.suffix in (".png", ".webp")]
         try:
             sized = [(p.stat().st_mtime_ns, p.stat().st_size, p) for p in pngs]
         except OSError:

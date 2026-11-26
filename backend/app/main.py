@@ -22,6 +22,7 @@ from fastapi.staticfiles import StaticFiles
 
 from . import auth, seo
 from .api.auth import router as auth_router
+from .api.avatar import router as avatar_router
 from .api.community import router as community_router
 from .api.meta import router as meta_router
 from .api.site import router as site_router
@@ -92,7 +93,7 @@ def _not_found(base: str, title: str, description: str) -> dict[str, Any]:
         title=title,
         description=description,
         canonical=None,
-        image=f"{base}/og/site.png",
+        image=f"{base}/og/site.webp",
         robots="noindex,follow",
         status=404,
     )
@@ -106,7 +107,7 @@ def _day_range(conn) -> tuple[str | None, str | None]:
 
 
 def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
-    image = f"{base}/og/site.png"
+    image = f"{base}/og/site.webp"
     first_day, last_day = _day_range(conn)
 
     if path == "":
@@ -135,7 +136,7 @@ def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
             title=f"{detail['name']} · {detail['owner']}/{detail['repo']} · HarnessPack",
             description=seo.truncate(detail.get("description")),
             canonical=canonical,
-            image=f"{base}/og/{detail['slug']}.png",
+            image=f"{base}/og/{detail['slug']}.webp",
             jsonld=seo.plugin_jsonld(detail, base),
         )
 
@@ -250,8 +251,36 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(community_router, prefix="/api/community")
     app.include_router(subscribe_router, prefix="/api/subscribe")
     app.include_router(v1_router, prefix="/api/v1")
+    app.include_router(avatar_router, prefix="/api/v1")
     app.include_router(meta_router)
     app.include_router(site_router)
+
+    # Public, user-independent GET endpoints: let Cloudflare's edge serve the
+    # hot path (data refreshes every ~11 min, so a 60s edge TTL is safe).
+    _CACHEABLE_PREFIXES = (
+        "/api/v1/rankings",
+        "/api/v1/plugins",
+        "/api/v1/categories",
+        "/api/v1/status",
+        "/api/v1/compare",
+        "/api/v1/changelog",
+        "/api/v1/sponsors",
+        "/api/v1/dashboard",
+    )
+
+    @app.middleware("http")
+    async def public_cache_headers(request: Request, call_next):
+        response = await call_next(request)
+        if (
+            request.method == "GET"
+            and response.status_code == 200
+            and request.url.path.startswith(_CACHEABLE_PREFIXES)
+        ):
+            response.headers.setdefault(
+                "Cache-Control",
+                "public, max-age=30, s-maxage=60, stale-while-revalidate=300",
+            )
+        return response
 
     # Bing IndexNow key verification file, only mounted when configured.
     if settings.indexnow_key:

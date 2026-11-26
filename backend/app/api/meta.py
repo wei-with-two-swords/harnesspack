@@ -133,10 +133,29 @@ def badge(slug: str, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
     return _badge_svg("HarnessPack", " · ".join(parts))
 
 
+_OG_MIME = {"png": "image/png", "webp": "image/webp"}
+
+
+def _encode(image, fmt: str) -> bytes:
+    """Encode a rendered card. WebP at q88 is ~60% smaller than optimized PNG."""
+    buffer = io.BytesIO()
+    if fmt == "webp":
+        image.save(buffer, format="WEBP", quality=88, method=5)
+    else:
+        image.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()
+
+
+@router.get("/og/site.webp")
 @router.get("/og/site.png")
 @og_cache.guard
 def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
-    """Site-wide social card used by the home page and every non-plugin route."""
+    """Site-wide social card used by the home page and every non-plugin route.
+
+    Served as WebP (.webp, referenced by meta tags) and PNG (.png, kept for
+    links already circulating externally).
+    """
+    fmt = "webp" if request.url.path.endswith(".webp") else "png"
     from PIL import Image, ImageDraw
 
     day = ranking.latest_date(conn) or "unknown"
@@ -147,11 +166,11 @@ def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
     cache_dir = Path(request.app.state.settings.db_path).parent / "cache" / "og"
     cache_dir.mkdir(parents=True, exist_ok=True)
     digest = og_cache.content_key("site", day, row["plugins"], row["stars"], days)
-    cached = og_cache.cache_path(cache_dir, "site", day, digest)
+    cached = og_cache.cache_path(cache_dir, "site", day, digest, ext=f".{fmt}")
     headers = {"Cache-Control": "public, max-age=3600"}
     hit = og_cache.read_cached(cached)
     if hit is not None:
-        return Response(content=hit, media_type="image/png", headers=headers)
+        return Response(content=hit, media_type=_OG_MIME[fmt], headers=headers)
 
     def render() -> bytes:
         width, height = 1200, 630
@@ -176,18 +195,18 @@ def og_site(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
         draw.text((100, 380), "Ranks by real star growth, not by ads.", font=_font(22), fill=GOLD)
         draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
 
-        buffer = io.BytesIO()
-        image.save(buffer, format="PNG", optimize=True)
-        return buffer.getvalue()
+        return _encode(image, fmt)
 
     payload = og_cache.render_once(cached, render)
     og_cache.prune(cache_dir)
-    return Response(content=payload, media_type="image/png", headers=headers)
+    return Response(content=payload, media_type=_OG_MIME[fmt], headers=headers)
 
 
+@router.get("/og/{slug}.webp")
 @router.get("/og/{slug}.png")
 @og_cache.guard
 def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> Response:
+    fmt = "webp" if request.url.path.endswith(".webp") else "png"
     from PIL import Image, ImageDraw
 
     detail = ranking.plugin_detail(conn, slug)
@@ -207,11 +226,11 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
         detail.get("category"),
         day,
     )
-    cached = og_cache.cache_path(cache_dir, slug, day, digest)
+    cached = og_cache.cache_path(cache_dir, slug, day, digest, ext=f".{fmt}")
     headers = {"Cache-Control": "public, max-age=3600"}
     hit = og_cache.read_cached(cached)
     if hit is not None:
-        return Response(content=hit, media_type="image/png", headers=headers)
+        return Response(content=hit, media_type=_OG_MIME[fmt], headers=headers)
 
     def render() -> bytes:
         width, height = 1200, 630
@@ -248,13 +267,11 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
 
         draw.text((100, 600), f"harnesspack.dev · {day}", font=_font(16), fill=MUTED)
 
-        buffer = io.BytesIO()
-        image.save(buffer, format="PNG", optimize=True)
-        return buffer.getvalue()
+        return _encode(image, fmt)
 
     payload = og_cache.render_once(cached, render)
     og_cache.prune(cache_dir)
-    return Response(content=payload, media_type="image/png", headers=headers)
+    return Response(content=payload, media_type=_OG_MIME[fmt], headers=headers)
 
 
 @router.get("/feed.xml")

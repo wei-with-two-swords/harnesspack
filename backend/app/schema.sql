@@ -26,6 +26,12 @@ CREATE TABLE IF NOT EXISTS plugins (
 );
 CREATE INDEX IF NOT EXISTS idx_plugins_status ON plugins (status);
 CREATE INDEX IF NOT EXISTS idx_plugins_harness ON plugins (harness);
+-- Covering index for the plugin directory default sort (stars_latest DESC,
+-- name, slug): turns a full-scan + TEMP B-TREE sort over 12k+ rows into an
+-- index-only read (~5ms -> ~0.01ms). The name/slug tail matters: without it
+-- the two-level ORDER BY falls back to a temp b-tree and the index is useless.
+CREATE INDEX IF NOT EXISTS idx_plugins_status_stars ON plugins
+    (status, stars_latest DESC, name COLLATE NOCASE, slug);
 
 CREATE TABLE IF NOT EXISTS stars (
     plugin_id       INTEGER NOT NULL REFERENCES plugins (id) ON DELETE CASCADE,

@@ -25,7 +25,6 @@ EXEMPT_PATHS = frozenset(
         "/favicon-32.png",
         "/favicon-64.png",
         "/favicon-180.png",
-        "/whale.png",
     }
 )
 

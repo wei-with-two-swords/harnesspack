@@ -164,10 +164,20 @@ def test_badge_og_and_feed(client):
     assert site_og.status_code == 200
     assert site_og.headers["content-type"] == "image/png"
 
+    site_og_webp = client.get("/og/site.webp")
+    assert site_og_webp.status_code == 200
+    assert site_og_webp.headers["content-type"] == "image/webp"
+    assert site_og_webp.content[:4] == b"RIFF"
+
     og = client.get("/og/alpha-one.png")
     assert og.status_code == 200
     assert og.headers["content-type"] == "image/png"
     assert og.content[:8] == b"\x89PNG\r\n\x1a\n"
+
+    og_webp = client.get("/og/alpha-one.webp")
+    assert og_webp.status_code == 200
+    assert og_webp.headers["content-type"] == "image/webp"
+    assert og_webp.content[:4] == b"RIFF"
 
     feed = client.get("/feed.xml")
     assert feed.status_code == 200
@@ -180,7 +190,7 @@ def test_plugin_page_injects_social_meta(client_with_dist):
     assert response.status_code == 200
     html = response.text
     assert 'property="og:image"' in html
-    assert "http://testserver/og/alpha-one.png" in html
+    assert "http://testserver/og/alpha-one.webp" in html
     assert "<title>Alpha One" in html
     assert 'rel="canonical" href="http://testserver/plugins/alpha-one"' in html
     assert "application/ld+json" in html
@@ -190,7 +200,7 @@ def test_plugin_page_injects_social_meta(client_with_dist):
 def test_home_page_has_dataset_metadata(client_with_dist):
     html = client_with_dist.get("/").text
     assert 'rel="canonical" href="http://testserver/"' in html
-    assert 'property="og:image" content="http://testserver/og/site.png"' in html
+    assert 'property="og:image" content="http://testserver/og/site.webp"' in html
     assert 'name="twitter:card" content="summary_large_image"' in html
     assert '"@type":"Dataset"' in html
 
