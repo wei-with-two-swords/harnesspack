@@ -326,7 +326,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 robots=meta["robots"],
                 jsonld=meta["jsonld"],
             )
-            return Response(content=html, media_type="text/html", status_code=meta["status"])
+            return Response(
+                content=html,
+                media_type="text/html",
+                status_code=meta["status"],
+                # The shell references hashed assets; stale HTML would keep
+                # loading a retired bundle after each deploy. Revalidate it
+                # on every navigation (the file is tiny).
+                headers={"Cache-Control": "no-cache"},
+            )
 
     return app
 

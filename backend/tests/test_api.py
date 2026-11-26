@@ -316,3 +316,6 @@ def test_new_static_pages_have_meta(client_with_dist):
         assert response.status_code == 200
         assert "<title>" in response.text
         assert "noindex" not in response.text.lower()
+        # HTML must always be revalidated, or browsers keep rendering a
+        # retired bundle after each deploy.
+        assert response.headers["cache-control"] == "no-cache"
