@@ -1,0 +1,18 @@
+[Unit]
+Description=HarnessPack daily npm downloads snapshot (incremental, last 7 days)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=APP_ROOT=/opt/harnesspack
+Environment=HOME=/var/lib/harnesspack
+ExecStart=/opt/harnesspack/.venv/bin/python scripts/snapshot_npm.py --incremental
+TimeoutStartSec=1800
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

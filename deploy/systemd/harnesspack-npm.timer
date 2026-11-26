@@ -1,0 +1,12 @@
+[Unit]
+Description=Run npm downloads snapshot daily after the star capture window
+
+[Timer]
+# 04:10 UTC = 12:10 Beijing; the daily capture (catalog + stars) finishes its
+# last run at 03:10 UTC, so newly added plugins are already in the DB.
+OnCalendar=*-*-* 04:10:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+
+[Install]
+WantedBy=timers.target
