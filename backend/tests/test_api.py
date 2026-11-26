@@ -93,6 +93,10 @@ def test_robots_and_sitemap(client):
     assert sitemap.headers["content-type"].startswith("application/xml")
     body = sitemap.text
     assert "http://testserver/plugins/alpha-one" in body
+    # hreflang alternates: zh canonical + en via ?lang=.
+    assert 'hreflang="en" href="http://testserver/plugins/alpha-one?lang=en"' in body
+    assert 'hreflang="x-default" href="http://testserver/"' in body
+    assert 'xmlns:xhtml=' in body
     assert "http://testserver/about" in body
     assert "http://testserver/changelog" in body
     assert "http://testserver/api" in body

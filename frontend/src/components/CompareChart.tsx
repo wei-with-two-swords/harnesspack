@@ -4,6 +4,7 @@ import 'uplot/dist/uPlot.min.css';
 import type { ComparePlugin } from '../types';
 import { chartColors, useThemeVersion } from '../lib/theme';
 import { useI18n } from '../lib/i18n';
+import { tooltipHooks } from '../lib/chartTooltip';
 
 /**
  * Multi-series star chart for the compare page. Missing days are gaps, not
@@ -39,6 +40,12 @@ export function CompareChart({ plugins, height = 320 }: { plugins: ComparePlugin
       padding: [12, 10, 0, 0],
       legend: { show: true, live: false },
       cursor: { drag: { x: true, y: false, setScale: true } },
+      hooks: tooltipHooks(
+        plugins.map((plugin, i) => ({
+          label: plugin.name,
+          color: colors.series[i % colors.series.length],
+        })),
+      ),
       scales: { x: { time: true } },
       axes: [
         {

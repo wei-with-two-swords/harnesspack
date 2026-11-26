@@ -1102,9 +1102,30 @@
     .hero-title, .hero-stat-value { font-size: var(--fs-display-compact); }
     .hero-copy { gap: var(--s-2); }
     .hero-logo { width: var(--s-8); height: var(--s-8); }
-    .rank-category { width: calc(var(--s-8) + var(--s-1)); }
-    .rank-category .badge { max-width: calc(var(--s-8) + var(--s-1)); font-size: var(--fs-meta); }
-    .rank-secondary { width: var(--s-6); }
+    /* A3: card-style rank rows. Line 1 keeps medal + avatar + name + value;
+       the category badge and rank-change drop to an indented second line
+       instead of squeezing the name column on narrow screens. */
+    .rank-link { flex-wrap: wrap; row-gap: var(--s-1); }
+    .rank-medal, .rank-avatar { order: 0; }
+    .rank-main { order: 1; flex: 1 1 0; min-width: 0; }
+    .rank-value { order: 2; align-self: center; }
+    .rank-category {
+      order: 3;
+      width: auto;
+      flex: 0 0 auto;
+      text-align: left;
+      margin-left: calc(var(--s-4) * 2 + var(--s-1) * 2);
+    }
+    .rank-category .badge { max-width: 40vw; }
+    .rank-secondary {
+      order: 4;
+      width: auto;
+      flex-direction: row;
+      align-items: baseline;
+      gap: var(--s-1);
+      margin-left: auto;
+      margin-right: var(--s-2);
+    }
   }
   @media (max-width: 767px) {
     .desktop-nav { display: none !important; }
@@ -1131,8 +1152,52 @@
   .community-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 }
 
-/* Notification badge and unread rows. Outside @layer so Tailwind keeps them. */
-.notif-badge {
+/* Chart hover tooltip (uPlot). Outside @layer so Tailwind keeps it;
+   colors come from theme tokens so light/dark both work. */
+.u-wrap-tip { position: relative; }
+.chart-tip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  min-width: 120px;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--radius);
+  background: var(--surface, #fff);
+  border: var(--hairline) solid var(--line);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.12);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-meta);
+  white-space: nowrap;
+}
+.chart-tip-date {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 2px;
+}
+.chart-tip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-1);
+}
+.chart-tip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+}
+.chart-tip-label {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+.chart-tip-value {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+/* Notification badge and unread rows. Outside @layer so Tailwind keeps them. */.notif-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;

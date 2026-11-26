@@ -4,6 +4,7 @@ import 'uplot/dist/uPlot.min.css';
 import type { SeriesPoint } from '../types';
 import { chartColors, useThemeVersion } from '../lib/theme';
 import { useI18n } from '../lib/i18n';
+import { tooltipHooks } from '../lib/chartTooltip';
 
 /**
  * Star history chart. Renders a placeholder until there are at least two
@@ -30,6 +31,7 @@ export function StarsChart({ points, height = 240 }: { points: SeriesPoint[]; he
       padding: [12, 10, 0, 0],
       legend: { show: false },
       cursor: { drag: { x: true, y: false, setScale: true } },
+      hooks: tooltipHooks([{ label: 'STAR', color: colors.line }]),
       scales: { x: { time: true } },
       axes: [
         {

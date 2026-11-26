@@ -7,6 +7,10 @@ export const LANG_EVENT = 'harnesspack:langchange';
 
 export function readLang(): Lang {
   try {
+    // ?lang= wins over localStorage so hreflang links (/…?lang=en) always
+    // render English for crawlers and first-time visitors alike.
+    const fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (fromUrl === 'en' || fromUrl === 'zh') return fromUrl;
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === 'en' || stored === 'zh') return stored;
   } catch {
@@ -28,10 +32,13 @@ export function applyLang(lang: Lang): void {
 export function useLang(): Lang {
   const [lang, setLang] = useState<Lang>(() => readLang());
   useEffect(() => {
+    // Keep <html lang> in sync even when the initial lang came from ?lang=
+    // (applyLang only runs on explicit switches).
+    document.documentElement.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
     const onChange = (event: Event) => setLang((event as CustomEvent<Lang>).detail);
     window.addEventListener(LANG_EVENT, onChange);
     return () => window.removeEventListener(LANG_EVENT, onChange);
-  }, []);
+  }, [lang]);
   return lang;
 }
 

@@ -29,7 +29,14 @@ def _base_url(request: Request) -> str:
 
 
 def _url_entry(loc: str, lastmod: str | None) -> str:
+    # hreflang alternates: zh is the canonical URL, en is the same SPA page
+    # with ?lang=en (the frontend reads ?lang= before localStorage).
     entry = f"  <url><loc>{loc}</loc>"
+    entry += (
+        f'<xhtml:link rel="alternate" hreflang="zh" href="{loc}"/>'
+        f'<xhtml:link rel="alternate" hreflang="en" href="{loc}?lang=en"/>'
+        f'<xhtml:link rel="alternate" hreflang="x-default" href="{loc}"/>'
+    )
     if lastmod:
         entry += f"<lastmod>{lastmod}</lastmod>"
     return entry + "</url>"
@@ -63,7 +70,8 @@ def sitemap(request: Request, conn: sqlite3.Connection = Depends(get_conn)) -> R
     ]
     body = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'
+        ' xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         + "\n".join(urls)
         + "\n</urlset>\n"
     )
