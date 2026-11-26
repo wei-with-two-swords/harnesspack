@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { HOME_POS_KEY } from './lib/homePosition';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import { Loading } from './components/States';
@@ -19,10 +20,17 @@ const Subscribe = lazy(() => import('./pages/Subscribe'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, key } = useLocation();
   useEffect(() => {
+    // Navigating back to a home view Home itself restores: skip the jump to
+    // the top so the position restore happens within the same paint frame.
+    if (pathname === '/' && key !== 'default') {
+      try {
+        if (sessionStorage.getItem(HOME_POS_KEY)) return;
+      } catch { /* ignore */ }
+    }
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
-  }, [pathname]);
+  }, [pathname, key]);
   return null;
 }
 

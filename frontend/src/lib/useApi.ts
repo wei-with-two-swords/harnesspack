@@ -6,9 +6,17 @@ export interface AsyncState<T> {
   loading: boolean;
 }
 
-/** Minimal data-loading hook: one request per dependency change, safe on unmount. */
-export function useApi<T>(loader: () => Promise<T>, deps: unknown[]): AsyncState<T> {
-  const [state, setState] = useState<AsyncState<T>>({ data: null, error: null, loading: true });
+/**
+ * Minimal data-loading hook: one request per dependency change, safe on
+ * unmount. `initialData` renders stale content immediately (e.g. the home
+ * list cache when returning from a detail page) while the request runs.
+ */
+export function useApi<T>(
+  loader: () => Promise<T>,
+  deps: unknown[],
+  initialData: T | null = null,
+): AsyncState<T> {
+  const [state, setState] = useState<AsyncState<T>>({ data: initialData, error: null, loading: true });
 
   useEffect(() => {
     let alive = true;

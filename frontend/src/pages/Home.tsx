@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { HOME_POS_KEY } from '../lib/homePosition';
 import { ExternalLink } from 'lucide-react';
 import { api } from '../lib/api';
 import { useApi } from '../lib/useApi';
@@ -23,8 +24,10 @@ import type { BoardResponse, CategoriesResponse, ListResponse, PluginListItem, S
 const PAGE_SIZE = 20;
 const WINDOW_BOARDS = new Set(['growth', 'darkhorse', 'quality']);
 const FIXED_BOARD_WINDOW: Record<string, number> = { darkhorse: 7, quality: 30 };
-/** sessionStorage key for the last scroll position per home view. */
-const HOME_POS_KEY = 'harnesspack-home-pos';
+/** Per-session list cache: returning from a detail page renders the last
+ * seen page instantly (stale-while-revalidate) so the scroll restore lands
+ * on a full-height document instead of a collapsed loading placeholder. */
+const listCache = new Map<string, unknown>();
 
 function parseView(params: URLSearchParams): View {
   const board = params.get('board');
@@ -150,35 +153,40 @@ export default function Home() {
   const range = view.kind === 'npm' ? view.range : undefined;
   const boardWindow = view.kind === 'star' && WINDOW_BOARDS.has(view.board) ? currentWindow : undefined;
   const catFilter = view.kind === 'category' ? view.category : undefined;
+  const boardCacheKey = isBoard
+    ? `board:${boardName}:${boardWindow ?? ''}:${catFilter ?? ''}:${range ?? ''}:${page}` : '';
+  const dirCacheKey = view.kind === 'directory' ? `dir:${view.sort}:${view.category ?? ''}:${page}` : '';
 
   const boardState = useApi<BoardResponse>(
-    () => isBoard
-      ? api.board(boardName, boardWindow, catFilter, PAGE_SIZE, page * PAGE_SIZE, range)
-      : Promise.resolve({ board: '', as_of: null, window: null, items: [] } as BoardResponse),
+    () => api.board(boardName, boardWindow, catFilter, PAGE_SIZE, page * PAGE_SIZE, range)
+      .then((data) => { listCache.set(boardCacheKey, data); return data; }),
     [isBoard, boardName, boardWindow, range, catFilter, page],
+    (listCache.get(boardCacheKey) as BoardResponse | undefined) ?? null,
   );
 
   const dirSort = view.kind === 'directory' && view.sort === 'downloads' ? 'downloads' : 'stars';
   const dirCategory = view.kind === 'directory' && view.sort === 'category' ? (view.category || '') : '';
   const dirState = useApi<ListResponse<PluginListItem>>(
-    () => view.kind === 'directory'
-      ? api.plugins({
-        sort: dirSort,
-        category: dirCategory || undefined,
-        limit: PAGE_SIZE,
-        offset: page * PAGE_SIZE,
-      })
-      : Promise.resolve({ items: [], total: 0, as_of: null } as ListResponse<PluginListItem>),
+    () => api.plugins({
+      sort: dirSort,
+      category: dirCategory || undefined,
+      limit: PAGE_SIZE,
+      offset: page * PAGE_SIZE,
+    }).then((data) => { listCache.set(dirCacheKey, data); return data; }),
     [view.kind, dirSort, dirCategory, page],
+    (listCache.get(dirCacheKey) as ListResponse<PluginListItem> | undefined) ?? null,
   );
 
   // Restore the saved scroll position once the list data for this view is
-  // ready (only once per mount; coming back from a detail page re-mounts).
+  // available — with the list cache this is the same effect batch as the
+  // mount, so no top-of-page flash is painted. Browser reloads (location
+  // key "default") always start at the top instead.
   const restoreState = view.kind === 'directory' ? dirState : boardState;
   const restoredRef = useRef(false);
   useEffect(() => {
     if (restoredRef.current) return;
-    if (restoreState.loading || !restoreState.data) return;
+    if (location.key === 'default') return;
+    if (!restoreState.data) return;
     restoredRef.current = true;
     try {
       const saved = JSON.parse(sessionStorage.getItem(HOME_POS_KEY) ?? 'null') as
@@ -188,7 +196,7 @@ export default function Home() {
         requestAnimationFrame(() => window.scrollTo(0, saved.y));
       }
     } catch { /* ignore */ }
-  }, [restoreState.loading, restoreState.data, location.search]);
+  }, [restoreState.data, location.search, location.key]);
 
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
 
@@ -223,8 +231,8 @@ export default function Home() {
         {npmNotice}
         <div className="card overflow-hidden">
           {error ? <div className="p-3"><ErrorState error={error} /></div> : null}
-          {loading ? <div className="p-3"><Loading /></div> : null}
-          {!loading && !error && data ? (
+          {loading && !data ? <div className="p-3"><Loading /></div> : null}
+          {data && !error ? (
             data.items.length ? (
               <>
                 <RankTable items={data.items} board={boardName} window={boardWindow} />
@@ -232,7 +240,7 @@ export default function Home() {
                   <Pager page={page} pageSize={PAGE_SIZE} total={data.total ?? data.items.length} onChange={changePage} scrollOnChange={false} />
                 </div>
               </>
-            ) : <EmptyState bare title={t('common.noData')}>{data.reason ?? ''}</EmptyState>
+            ) : loading ? null : <EmptyState bare title={t('common.noData')}>{data.reason ?? ''}</EmptyState>
           ) : null}
         </div>
       </>
@@ -242,8 +250,8 @@ export default function Home() {
     content = (
       <div className="card overflow-hidden">
         {error ? <div className="p-3"><ErrorState error={error} /></div> : null}
-        {loading ? <div className="p-3"><Loading /></div> : null}
-        {!loading && !error && data ? (
+        {loading && !data ? <div className="p-3"><Loading /></div> : null}
+        {data && !error ? (
           data.items.length ? (
             <>
               <PluginList
@@ -253,7 +261,7 @@ export default function Home() {
               />
               <div className="px-4 pb-3"><Pager page={page} pageSize={PAGE_SIZE} total={data.total} onChange={changePage} scrollOnChange={false} /></div>
             </>
-          ) : <EmptyState bare title={t('common.noData')} />
+          ) : loading ? null : <EmptyState bare title={t('common.noData')} />
         ) : null}
       </div>
     );
