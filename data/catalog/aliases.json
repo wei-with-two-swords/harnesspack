@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-26T00:12:04Z",
+ "updated_at": "2026-11-26T01:40:51Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -104,6 +104,14 @@
    "slug": "dsh-wsl-workspace-maintainers-dsh-wsl-workspace",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:55Z"
+  },
+  "6starlong/dsh-starlong": {
+   "owner": "6starlong",
+   "repo": "dsh-plugins",
+   "url": "https://github.com/6starlong/dsh-plugins",
+   "slug": "6starlong-dsh-plugins",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:11Z"
   },
   "acanese1/dsh-work-guard": {
    "owner": "Ch1nSe1",
@@ -625,6 +633,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-24T01:40:59Z"
   },
+  "nonentity303/dsh-plugin-manager": {
+   "owner": "nonentity303",
+   "repo": "dsh-drydock",
+   "url": "https://github.com/nonentity303/dsh-drydock",
+   "slug": "nonentity303-dsh-drydock",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:34Z"
+  },
   "nullcolorcat/dsh-agent-team-fix": {
    "owner": "NULLCOLORcat",
    "repo": "dsh-Smarter-Subagent-level",
@@ -793,6 +809,30 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:28Z"
   },
+  "witherwithwinter/deepseek-balance-whale-widget-bowl": {
+   "owner": "0x2fovo",
+   "repo": "DeepSeek-Balance-Whale-Widget-Bowl",
+   "url": "https://github.com/0x2fovo/DeepSeek-Balance-Whale-Widget-Bowl",
+   "slug": "0x2fovo-deepseek-balance-whale-widget-bowl",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:41Z"
+  },
+  "witherwithwinter/dsh-ccx": {
+   "owner": "0x2fovo",
+   "repo": "dsh-ccx",
+   "url": "https://github.com/0x2fovo/dsh-ccx",
+   "slug": "0x2fovo-dsh-ccx",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:41Z"
+  },
+  "witherwithwinter/dsh-codinput": {
+   "owner": "0x2fovo",
+   "repo": "DSH-Codinput",
+   "url": "https://github.com/0x2fovo/DSH-Codinput",
+   "slug": "0x2fovo-dsh-codinput",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:41Z"
+  },
   "wlc114514/dsh-upload-origin": {
    "owner": "firnspiegel",
    "repo": "dsh-upload-origin",
@@ -848,6 +888,14 @@
    "slug": "xdtrees-dsh-xdpool",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:34Z"
+  },
+  "xian-yu-zhao/dsh-message-manager": {
+   "owner": "xian-yu-zhao",
+   "repo": "dsh-context-manager",
+   "url": "https://github.com/xian-yu-zhao/dsh-context-manager",
+   "slug": "xian-yu-zhao-dsh-context-manager",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:44Z"
   },
   "xianyuyijinban/boardwise": {
    "owner": "XiangyuYue",
@@ -944,6 +992,14 @@
    "slug": "liangyu112212-dsh-aiyting-image-video",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:51Z"
+  },
+  "yuluo554/dsh-prompt-polisher": {
+   "owner": "yuluo554",
+   "repo": "traceproof",
+   "url": "https://github.com/yuluo554/traceproof",
+   "slug": "yuluo554-traceproof",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-26T01:40:48Z"
   },
   "zf-666888/dsh-session-id-for-desktop": {
    "owner": "meowmeowloong",
