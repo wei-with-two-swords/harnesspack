@@ -1131,6 +1131,25 @@
   .community-grid { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
 }
 
+/* Notification badge and unread rows. Outside @layer so Tailwind keeps them. */
+.notif-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: var(--radius-round);
+  background: var(--accent);
+  color: var(--surface, #fff);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.notif-row { color: inherit; }
+.notif-row:hover { text-decoration: none; }
+.notif-unread { border-color: var(--accent); }
+
 /* Rank chips: three equal columns on desktop, two on narrow screens.
    Defined outside @layer so Tailwind does not purge these custom classes. */
 .rank-chips > * { flex: 0 0 33.3333%; max-width: 33.3333%; }

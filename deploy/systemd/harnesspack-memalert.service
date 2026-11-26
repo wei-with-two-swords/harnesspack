@@ -1,0 +1,25 @@
+[Unit]
+Description=HarnessPack memory alert check
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=PYTHONUNBUFFERED=1
+Environment=HARNESSPACK_ENV=production
+Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
+EnvironmentFile=-/etc/harnesspack-mail.env
+ExecStart=/opt/harnesspack/.venv/bin/python -m backend.app.cli check-memory \
+    --service harnesspack-api --threshold-mb 300 --consecutive 3 \
+    --state /var/lib/harnesspack/memalert.json
+TimeoutStartSec=120
+Nice=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/harnesspack/data /var/lib/harnesspack
+StateDirectory=harnesspack

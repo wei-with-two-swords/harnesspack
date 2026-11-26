@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CommunityAuth } from '../components/CommunityAuth';
 import { Composer } from '../components/Composer';
+import { NotificationsBell } from '../components/NotificationsBell';
 import { Pager } from '../components/Pager';
 import { PostCard } from '../components/PostCard';
 import { EmptyState, Loading } from '../components/States';
@@ -76,6 +77,7 @@ export default function Community() {
         <div>
           <div className="card mb-3">
             <div className="card-body">
+              <NotificationsBell user={user} />
               <CommunityAuth {...auth} />
             </div>
           </div>

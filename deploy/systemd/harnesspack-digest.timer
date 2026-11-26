@@ -1,0 +1,10 @@
+[Unit]
+Description=HarnessPack daily Top10 digest timer (09:00 Beijing / 01:00 UTC)
+
+[Timer]
+OnCalendar=*-*-* 01:00:00 UTC
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

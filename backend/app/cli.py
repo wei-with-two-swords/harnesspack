@@ -107,6 +107,98 @@ def cmd_community(args: argparse.Namespace) -> int:
         conn.close()
 
 
+def cmd_send_digest(args: argparse.Namespace) -> int:
+    """Mail the daily Top10 digest; a no-op without SMTP or subscribers."""
+    from .services import digest as digest_service
+
+    settings = get_settings()
+    conn = connect(settings.db_path)
+    try:
+        init_db(conn)
+        result = digest_service.send_digest(conn, settings, force=args.force)
+    finally:
+        conn.close()
+    _print(result)
+    return 0
+
+
+def cmd_check_memory(args: argparse.Namespace) -> int:
+    """Alert by email when the API service stays above a memory threshold.
+
+    State file tracks consecutive over-threshold readings so a single spike
+    stays quiet and one sustained episode triggers exactly one alert, plus a
+    recovery notice when memory comes back down.
+    """
+    import json as _json
+    import subprocess
+    from datetime import datetime, timezone
+    from pathlib import Path
+
+    from .services import mailer
+
+    settings = get_settings()
+    result = subprocess.run(
+        ["systemctl", "show", args.service, "-p", "MemoryCurrent", "--value"],
+        capture_output=True,
+        text=True,
+        timeout=15,
+    )
+    raw = result.stdout.strip()
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    if not raw or raw == "0":
+        # Service stopped or cgroup value unavailable: nothing to judge.
+        _print({"status": "unknown", "service": args.service, "checked_at": now})
+        return 0
+    current_mb = int(raw) / (1024 * 1024)
+    state_path = Path(args.state)
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        state = _json.loads(state_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        state = {"streak": 0, "alerted": False}
+    state = {"streak": int(state.get("streak", 0)), "alerted": bool(state.get("alerted"))}
+
+    if current_mb >= args.threshold_mb:
+        state["streak"] += 1
+        if state["streak"] >= args.consecutive and not state["alerted"]:
+            recipient = settings.alert_email or settings.smtp_from
+            if mailer.mail_configured(settings) and recipient:
+                mailer.send_mail(
+                    settings,
+                    recipient,
+                    f"[HarnessPack] 内存告警 {args.service} {current_mb:.0f}MB",
+                    (
+                        f"{args.service} 连续 {state['streak']} 次检测超过 "
+                        f"{args.threshold_mb}MB 阈值，当前 {current_mb:.0f}MB。\n"
+                        f"时间：{now}\n处理建议：先 systemctl status {args.service} 看是否 "
+                        f"OG/统计热点未清理，必要时 systemctl restart {args.service}。\n"
+                    ),
+                )
+                state["alerted"] = True
+                result_payload: dict = {"status": "alerted"}
+            else:
+                result_payload = {"status": "would-alert", "reason": "SMTP or alert email unset"}
+        else:
+            result_payload = {"status": "over-threshold"}
+    else:
+        if state["alerted"]:
+            recipient = settings.alert_email or settings.smtp_from
+            if mailer.mail_configured(settings) and recipient:
+                mailer.send_mail(
+                    settings,
+                    recipient,
+                    f"[HarnessPack] 内存恢复 {args.service} {current_mb:.0f}MB",
+                    f"{args.service} 内存已回落到 {current_mb:.0f}MB（阈值 {args.threshold_mb}MB）。\n时间：{now}\n",
+                )
+            result_payload = {"status": "recovered"}
+        else:
+            result_payload = {"status": "ok"}
+        state = {"streak": 0, "alerted": False}
+    state_path.write_text(_json.dumps(state), encoding="utf-8")
+    _print({"service": args.service, "memory_mb": round(current_mb, 1), **result_payload})
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="harnesspack", description="HarnessPack operator CLI")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -118,6 +210,13 @@ def build_parser() -> argparse.ArgumentParser:
     moderation.add_argument("action", choices=["hide", "unhide"])
     moderation.add_argument("target", choices=["post", "comment"])
     moderation.add_argument("id", type=int)
+    digest = sub.add_parser("send-digest", help="mail the daily Top10 digest")
+    digest.add_argument("--force", action="store_true", help="send even if today already sent")
+    memory = sub.add_parser("check-memory", help="alert when the API service uses too much memory")
+    memory.add_argument("--service", default="harnesspack-api")
+    memory.add_argument("--threshold-mb", type=int, default=300)
+    memory.add_argument("--consecutive", type=int, default=3)
+    memory.add_argument("--state", default="/var/lib/harnesspack/memalert.json")
     return parser
 
 
@@ -129,6 +228,8 @@ def main(argv: list[str] | None = None) -> int:
         "rebuild": cmd_rebuild,
         "stats": cmd_stats,
         "community": cmd_community,
+        "send-digest": cmd_send_digest,
+        "check-memory": cmd_check_memory,
     }
     try:
         return handlers[args.command](args)

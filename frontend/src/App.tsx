@@ -10,7 +10,9 @@ import ApiDocs from './pages/ApiDocs';
 import Community from './pages/Community';
 import CommunityPost from './pages/CommunityPost';
 import CommunityUser from './pages/CommunityUser';
+import Notifications from './pages/Notifications';
 import NotFound from './pages/NotFound';
+import Subscribe from './pages/Subscribe';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,9 +47,11 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/api" element={<ApiDocs />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/community/notifications" element={<Notifications />} />
         <Route path="/community/p/:id" element={<CommunityPost />} />
         <Route path="/community/u/:login" element={<CommunityUser />} />
         <Route path="/plugins/:slug" element={<PluginDetail />} />
+        <Route path="/subscribe" element={<Subscribe />} />
         <Route path="/about" element={<About />} />
         <Route path="/changelog" element={<Changelog />} />
         <Route path="/about/api" element={<Navigate to="/api" replace />} />

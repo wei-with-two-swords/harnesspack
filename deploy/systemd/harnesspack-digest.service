@@ -1,0 +1,28 @@
+[Unit]
+Description=HarnessPack daily Top10 digest mail
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=PYTHONUNBUFFERED=1
+Environment=HARNESSPACK_ENV=production
+Environment=HARNESSPACK_BASE_URL=https://harnesspack.dev
+Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
+Environment=HARNESSPACK_SNAPSHOTS=/opt/harnesspack/data/snapshots
+Environment=HARNESSPACK_INGEST=0
+# SMTP credentials live outside the repo: HARNESSPACK_SMTP_HOST/PORT/USER/
+# PASSWORD/FROM. See deploy/README.md.
+EnvironmentFile=-/etc/harnesspack-mail.env
+ExecStart=/opt/harnesspack/.venv/bin/python -m backend.app.cli send-digest
+TimeoutStartSec=300
+Nice=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/harnesspack/data

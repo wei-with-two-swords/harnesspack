@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from ..auth import User
+from . import notifications as notifs
 
 MAX_POST_LENGTH = 5000
 MAX_COMMENT_LENGTH = 1000
@@ -20,10 +21,14 @@ MAX_PLUGIN_CARDS = 3
 _MENTION_RE = re.compile(
     r"(?<![\w/])@([A-Za-z0-9][A-Za-z0-9_.-]*)/([A-Za-z0-9][A-Za-z0-9_.-]*)"
 )
+# User mentions: @login outside code fences, not part of a plugin reference
+# (@owner/repo) and not glued to a word, slash or e-mail address.
+_USER_MENTION_RE = re.compile(r"(?<![\w/@])@([A-Za-z0-9][A-Za-z0-9-]{0,38})(?![/\w-])")
 _PLUGIN_PATH_RE = re.compile(
     r"/plugins/([A-Za-z0-9][A-Za-z0-9_.-]*)(?:/([A-Za-z0-9][A-Za-z0-9_.-]*))?"
 )
 _FENCE_RE = re.compile(r"```.*?```", re.S)
+_INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
 
 
 def utc_now() -> str:
@@ -99,6 +104,18 @@ def find_user_id(conn: sqlite3.Connection, login: str) -> int | None:
         "SELECT id FROM users WHERE login = ? COLLATE NOCASE AND deleted_at IS NULL", (login,)
     ).fetchone()
     return int(row["id"]) if row else None
+
+
+def _notify_mentions(
+    conn: sqlite3.Connection, actor_id: int, text: str, post_id: int, comment_id: int | None
+) -> None:
+    """Notify registered users @mentioned outside code (same transaction)."""
+    fenceless = _INLINE_CODE_RE.sub(" ", _FENCE_RE.sub(" ", text))
+    logins = list(dict.fromkeys(_USER_MENTION_RE.findall(fenceless)))
+    for login in logins:
+        target = find_user_id(conn, login)
+        if target is not None:
+            notifs.notify(conn, target, actor_id, "mention", post_id, comment_id)
 
 
 def ensure_user(conn: sqlite3.Connection, user: User) -> int:
@@ -189,6 +206,7 @@ def create_post(conn: sqlite3.Connection, user_id: int, body: Any) -> dict[str, 
         "INSERT INTO posts (user_id, body, created_at) VALUES (?, ?, ?)",
         (user_id, text, utc_now()),
     )
+    _notify_mentions(conn, user_id, text, int(cursor.lastrowid), None)
     conn.commit()
     post = get_post(conn, int(cursor.lastrowid), user_id)
     if post is None:  # pragma: no cover - the insert above always succeeds
@@ -239,13 +257,20 @@ def create_comment(
     conn: sqlite3.Connection, post_id: int, user_id: int, body: Any
 ) -> dict[str, Any]:
     text = validate_body(body, MAX_COMMENT_LENGTH)
-    post = conn.execute("SELECT 1 FROM posts WHERE id = ? AND is_hidden = 0", (post_id,)).fetchone()
+    post = conn.execute(
+        "SELECT user_id FROM posts WHERE id = ? AND is_hidden = 0", (post_id,)
+    ).fetchone()
     if post is None:
         raise LookupError("post not found")
     cursor = conn.execute(
         "INSERT INTO comments (post_id, user_id, body, created_at) VALUES (?, ?, ?, ?)",
         (post_id, user_id, text, utc_now()),
     )
+    comment_id = int(cursor.lastrowid)
+    # Replying on the author's post outranks a mention in the same comment.
+    if int(post["user_id"]) != user_id:
+        notifs.notify(conn, int(post["user_id"]), user_id, "reply", post_id, comment_id)
+    _notify_mentions(conn, user_id, text, post_id, comment_id)
     conn.commit()
     row = conn.execute(
         "SELECT c.id, c.post_id, c.body, c.created_at, "
@@ -267,7 +292,9 @@ def delete_comment(conn: sqlite3.Connection, comment_id: int, user_id: int) -> b
 
 
 def toggle_like(conn: sqlite3.Connection, post_id: int, user_id: int) -> dict[str, Any]:
-    post = conn.execute("SELECT 1 FROM posts WHERE id = ? AND is_hidden = 0", (post_id,)).fetchone()
+    post = conn.execute(
+        "SELECT user_id FROM posts WHERE id = ? AND is_hidden = 0", (post_id,)
+    ).fetchone()
     if post is None:
         raise LookupError("post not found")
     existing = conn.execute(
@@ -284,6 +311,7 @@ def toggle_like(conn: sqlite3.Connection, post_id: int, user_id: int) -> dict[st
                 "INSERT INTO post_likes (post_id, user_id, created_at) VALUES (?, ?, ?)",
                 (post_id, user_id, utc_now()),
             )
+            notifs.notify(conn, int(post["user_id"]), user_id, "like", post_id)
             liked = True
         conn.commit()
     except sqlite3.IntegrityError:  # concurrent double-like: keep a single row

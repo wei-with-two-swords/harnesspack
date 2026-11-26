@@ -283,3 +283,18 @@ export interface LikeResult {
   liked: boolean;
   like_count: number;
 }
+
+export interface CommunityNotification {
+  id: number;
+  kind: 'mention' | 'reply' | 'like';
+  post_id: number;
+  comment_id: number | null;
+  created_at: string;
+  is_read: boolean;
+  actor: CommunityAuthor | null;
+  excerpt: string;
+}
+
+export interface NotificationList extends CommunityList<CommunityNotification> {
+  unread: number;
+}

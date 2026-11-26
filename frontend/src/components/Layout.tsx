@@ -23,6 +23,7 @@ const FOOTER = [
   { to: '/about', key: 'footer.about' },
   { to: '/changelog', key: 'footer.changelog' },
   { to: '/compare', key: 'footer.compare' },
+  { to: '/subscribe', key: 'footer.digest' },
 ];
 
 const FRIEND_LINKS = [

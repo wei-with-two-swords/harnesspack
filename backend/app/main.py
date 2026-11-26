@@ -25,6 +25,7 @@ from .api.auth import router as auth_router
 from .api.community import router as community_router
 from .api.meta import router as meta_router
 from .api.site import router as site_router
+from .api.subscribe import router as subscribe_router
 from .api.v1 import router as v1_router
 from .config import Settings, get_settings
 from .db import connect, init_db
@@ -147,6 +148,15 @@ def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
             robots="noindex,follow",
         )
 
+    if path == "community/notifications":
+        return _meta(
+            title="通知 · DSH 讨论区 · HarnessPack",
+            description="你的提及、回复与点赞通知。",
+            canonical=None,
+            image=image,
+            robots="noindex,nofollow",
+        )
+
     if path.startswith("community/p/"):
         parts = path.split("/")
         if len(parts) != 3 or not parts[2].isdigit():
@@ -169,6 +179,15 @@ def _route_meta(conn, path: str, base: str) -> dict[str, Any]:
             title=f"@{parts[2]} · DSH 讨论区 · HarnessPack",
             description=f"@{parts[2]} 在 HarnessPack DSH 讨论区发的帖子。",
             canonical=None,
+            image=image,
+            robots="noindex,follow",
+        )
+
+    if path == "subscribe":
+        return _meta(
+            title="邮件日报订阅 · HarnessPack",
+            description="每天一封邮件，送上昨日净增 STAR 最多的 10 个 DSH 插件。",
+            canonical=f"{base}/subscribe",
             image=image,
             robots="noindex,follow",
         )
@@ -229,6 +248,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     auth.install_auth(app)
     app.include_router(auth_router, prefix="/api/auth")
     app.include_router(community_router, prefix="/api/community")
+    app.include_router(subscribe_router, prefix="/api/subscribe")
     app.include_router(v1_router, prefix="/api/v1")
     app.include_router(meta_router)
     app.include_router(site_router)

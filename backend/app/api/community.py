@@ -15,7 +15,7 @@ from pydantic import BaseModel
 
 from .. import auth
 from ..db import connect
-from ..services import community
+from ..services import community, notifications
 
 router = APIRouter()
 
@@ -179,3 +179,48 @@ def get_user(
     if profile is None:
         raise HTTPException(status_code=404, detail="user not found")
     return profile
+
+
+@router.get("/notifications/unread-count")
+def unread_count(
+    request: Request,
+    conn: sqlite3.Connection = Depends(get_conn),
+):
+    user = auth.current_user(request)
+    if user is None:
+        return {"unread": 0}
+    user_id = community.find_user_id(conn, user.login)
+    if user_id is None:
+        return {"unread": 0}
+    return {"unread": notifications.unread_count(conn, user_id)}
+
+
+@router.get("/notifications")
+def list_notifications(
+    request: Request,
+    limit: int = Query(20, ge=1, le=50),
+    offset: int = Query(0, ge=0),
+    conn: sqlite3.Connection = Depends(get_conn),
+):
+    user = auth.current_user(request)
+    if user is None:
+        raise HTTPException(status_code=401, detail="sign in required")
+    user_id = community.find_user_id(conn, user.login)
+    if user_id is None:
+        raise HTTPException(status_code=404, detail="user not found")
+    return notifications.list_notifications(conn, user_id, limit, offset)
+
+
+@router.post("/notifications/read")
+def mark_notifications_read(
+    request: Request,
+    conn: sqlite3.Connection = Depends(get_conn),
+):
+    check_origin(request)
+    user = auth.current_user(request)
+    if user is None:
+        raise HTTPException(status_code=401, detail="sign in required")
+    user_id = community.find_user_id(conn, user.login)
+    if user_id is None:
+        raise HTTPException(status_code=404, detail="user not found")
+    return {"updated": notifications.mark_all_read(conn, user_id)}

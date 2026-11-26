@@ -139,3 +139,34 @@ CREATE TABLE IF NOT EXISTS repo_history (
     new_repo   TEXT,
     changed_at TEXT NOT NULL
 );
+
+-- In-site notifications: mentions, replies and likes. One row per event;
+-- duplicates are prevented in code before the insert.
+CREATE TABLE IF NOT EXISTS notifications (
+    id         INTEGER PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    actor_id   INTEGER REFERENCES users (id) ON DELETE SET NULL,
+    kind       TEXT    NOT NULL CHECK (kind IN ('mention', 'reply', 'like')),
+    post_id    INTEGER NOT NULL REFERENCES posts (id) ON DELETE CASCADE,
+    comment_id INTEGER REFERENCES comments (id) ON DELETE CASCADE,
+    created_at TEXT    NOT NULL,
+    is_read    INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications (user_id, is_read, id DESC);
+
+-- Email digest subscribers. Double opt-in: a row only receives mail after
+-- confirmed_at is set; the token also drives the unsubscribe link.
+CREATE TABLE IF NOT EXISTS subscribers (
+    id          INTEGER PRIMARY KEY,
+    email       TEXT    NOT NULL UNIQUE,
+    token       TEXT    NOT NULL UNIQUE,
+    created_at  TEXT    NOT NULL,
+    confirmed_at TEXT,
+    unsubscribed_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS digest_log (
+    date       TEXT PRIMARY KEY,
+    sent_at    TEXT NOT NULL,
+    recipients INTEGER NOT NULL DEFAULT 0
+);

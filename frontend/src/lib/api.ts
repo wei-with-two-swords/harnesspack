@@ -14,6 +14,7 @@ import type {
   CommunityList,
   CommunityProfile,
   LikeResult,
+  NotificationList,
 } from '../types';
 
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? '';
@@ -128,5 +129,11 @@ export const api = {
       get<CommunityProfile>(
         `/api/community/users/${encodeURIComponent(login)}?limit=${limit}&offset=${offset}`,
       ),
+    unreadCount: () => get<{ unread: number }>('/api/community/notifications/unread-count'),
+    notifications: (limit = 20, offset = 0) =>
+      get<NotificationList>(`/api/community/notifications?limit=${limit}&offset=${offset}`),
+    markRead: () => write<{ updated: number }>('POST', '/api/community/notifications/read'),
   },
+  subscribe: (email: string) =>
+    write<{ status: string; email: string }>('POST', '/api/subscribe', { email }),
 };

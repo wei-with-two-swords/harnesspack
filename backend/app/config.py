@@ -45,6 +45,15 @@ class Settings:
     github_client_id: str = ""
     github_client_secret: str = ""
     session_secret: str = ""
+    # Outbound email (SMTP). An empty host disables sending: the digest and
+    # memory-alert commands then exit without touching the network.
+    smtp_host: str = ""
+    smtp_port: int = 465
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""
+    # Where memory/ops alerts go (falls back to smtp_from).
+    alert_email: str = ""
 
 
 def _env_path(name: str, default: Path) -> Path:
@@ -84,4 +93,10 @@ def get_settings() -> Settings:
         github_client_id=os.environ.get("GITHUB_CLIENT_ID", ""),
         github_client_secret=os.environ.get("GITHUB_CLIENT_SECRET", ""),
         session_secret=os.environ.get("HARNESSPACK_SESSION_SECRET", ""),
+        smtp_host=os.environ.get("HARNESSPACK_SMTP_HOST", ""),
+        smtp_port=int(os.environ.get("HARNESSPACK_SMTP_PORT", "465")),
+        smtp_user=os.environ.get("HARNESSPACK_SMTP_USER", ""),
+        smtp_password=os.environ.get("HARNESSPACK_SMTP_PASSWORD", ""),
+        smtp_from=os.environ.get("HARNESSPACK_SMTP_FROM", ""),
+        alert_email=os.environ.get("HARNESSPACK_ALERT_EMAIL", ""),
     )

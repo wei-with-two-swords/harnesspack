@@ -281,3 +281,54 @@ deploy/nginx/harnesspack.dev.conf 后要同步覆盖该文件再
 /badge/*.svg 与 /og/*.png 扩展名会被 Cloudflare 默认按静态资源缓存；首次上线或改版后，
 如果返回的是 HTML，需要在 Cloudflare 后台 Purge Cache（或对这两个路径规则设为 Bypass Cache）。
 
+
+## 11. 邮件：订阅日报与内存告警
+
+出站邮件统一走 SMTP 环境变量（QQ 邮箱 SMTP 等），凭据放在服务器本地文件，
+不入仓库：
+
+```bash
+sudo tee /etc/harnesspack-mail.env >/dev/null <<'ENV'
+HARNESSPACK_SMTP_HOST=smtp.qq.com
+HARNESSPACK_SMTP_PORT=465
+HARNESSPACK_SMTP_USER=honglicha@qq.com
+HARNESSPACK_SMTP_PASSWORD=授权码
+HARNESSPACK_SMTP_FROM=HarnessPack <honglicha@qq.com>
+HARNESSPACK_ALERT_EMAIL=收告警的邮箱
+ENV
+chmod 600 /etc/harnesspack-mail.env
+```
+
+`HARNESSPACK_SMTP_HOST` 为空时所有发信命令直接跳过，不影响站点。
+
+### 每日 Top10 日报（B2）
+
+- 订阅入口 `/subscribe`（双确认：先收确认邮件，点链接才生效），退订链接带 token。
+- 单元：`deploy/systemd/harnesspack-digest.{service,timer}`，每天 09:00（UTC+8）发一次；
+  同日重复触发由 `digest_log` 表去重，不会双发。
+
+```bash
+sudo cp deploy/systemd/harnesspack-digest.* /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now harnesspack-digest.timer
+# 手动试发：sudo systemctl start harnesspack-digest.service
+# 强制重发（跳过当日已发记录）：.venv/bin/python -m backend.app.cli send-digest --force
+```
+
+### 内存告警（C5）
+
+- 单元：`deploy/systemd/harnesspack-memalert.{service,timer}`，每 10 分钟
+  `systemctl show harnesspack-api -p MemoryCurrent` 采样一次。
+- 连续 3 次（可调 `--consecutive`）超过 300MB（`--threshold-mb`）才发一封告警，
+  回落后发恢复通知；状态存 `/var/lib/harnesspack/memalert.json`。
+
+```bash
+sudo cp deploy/systemd/harnesspack-memalert.* /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now harnesspack-memalert.timer
+```
+
+### 部署后冒烟（C4）
+
+```bash
+# 路由 + health 全检；第二个参数是本次前端 JS hash（可选）
+deploy/scripts/smoke.sh https://harnesspack.dev index-XXXXXXXX.js
+```
