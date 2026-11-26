@@ -1,18 +1,22 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
-import PluginDetail from './pages/PluginDetail';
-import About from './pages/About';
-import Changelog from './pages/Changelog';
-import Compare from './pages/Compare';
-import ApiDocs from './pages/ApiDocs';
-import Community from './pages/Community';
-import CommunityPost from './pages/CommunityPost';
-import CommunityUser from './pages/CommunityUser';
-import Notifications from './pages/Notifications';
-import NotFound from './pages/NotFound';
-import Subscribe from './pages/Subscribe';
+import { Loading } from './components/States';
+
+// Route-level code splitting: the landing page stays in the main bundle,
+// everything else loads on demand.
+const PluginDetail = lazy(() => import('./pages/PluginDetail'));
+const About = lazy(() => import('./pages/About'));
+const Changelog = lazy(() => import('./pages/Changelog'));
+const Compare = lazy(() => import('./pages/Compare'));
+const ApiDocs = lazy(() => import('./pages/ApiDocs'));
+const Community = lazy(() => import('./pages/Community'));
+const CommunityPost = lazy(() => import('./pages/CommunityPost'));
+const CommunityUser = lazy(() => import('./pages/CommunityUser'));
+const Notifications = lazy(() => import('./pages/Notifications'));
+const Subscribe = lazy(() => import('./pages/Subscribe'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -45,18 +49,27 @@ export default function App() {
       <BaiduPageView />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/api" element={<ApiDocs />} />
-        <Route path="/community" element={<Community />} />
-        <Route path="/community/notifications" element={<Notifications />} />
-        <Route path="/community/p/:id" element={<CommunityPost />} />
-        <Route path="/community/u/:login" element={<CommunityUser />} />
-        <Route path="/plugins/:slug" element={<PluginDetail />} />
-        <Route path="/subscribe" element={<Subscribe />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/changelog" element={<Changelog />} />
-        <Route path="/about/api" element={<Navigate to="/api" replace />} />
-        <Route path="/compare" element={<Compare />} />
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<Loading />}>
+              <Routes>
+                <Route path="/api" element={<ApiDocs />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/community/notifications" element={<Notifications />} />
+                <Route path="/community/p/:id" element={<CommunityPost />} />
+                <Route path="/community/u/:login" element={<CommunityUser />} />
+                <Route path="/plugins/:slug" element={<PluginDetail />} />
+                <Route path="/subscribe" element={<Subscribe />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/changelog" element={<Changelog />} />
+                <Route path="/about/api" element={<Navigate to="/api" replace />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          }
+        />
       </Routes>
     </Layout>
   );

@@ -8,6 +8,7 @@ import { useThemeVersion } from '../lib/theme';
 import { formatNumber } from '../lib/format';
 import { type View } from '../components/CatalogSidebar';
 import { BoardSwitcher } from '../components/BoardSwitcher';
+import { BoardToolbar } from '../components/BoardToolbar';
 import { GlobalSearch } from '../components/GlobalSearch';
 import { RankTable } from '../components/RankTable';
 import { PluginList } from '../components/PluginList';
@@ -145,6 +146,21 @@ export default function Home() {
 
   const heroTitle = <>DeepSeek Harness <em>{t('hero.title')}</em></>;
 
+  const toolbar = (
+    <BoardToolbar
+      fetchPage={(limit, offset) =>
+        isBoard
+          ? api.board(boardName, boardWindow, catFilter, limit, offset, range)
+          : api.plugins({ sort: dirSort, category: dirCategory || undefined, limit, offset })
+      }
+      fileHint={
+        isBoard
+          ? `${boardName}${boardWindow ? `-${boardWindow}` : ''}${catFilter ? `-${catFilter}` : ''}${range ? `-${range}` : ''}`
+          : `directory-${dirSort}${dirCategory ? `-${dirCategory}` : ''}`
+      }
+    />
+  );
+
   const npmNotice = view.kind === 'npm' && boardState.data && !boardState.data.reason ? (
     <div className="alert alert-secondary py-2 px-3 fs-xs mb-3" role="note">
       {t('npm.notice')}
@@ -263,6 +279,7 @@ export default function Home() {
       <div className="mb-4"><GlobalSearch /></div>
 
       <BoardSwitcher view={view} categories={categories} />
+      {toolbar}
       {content}
     </section>
   );

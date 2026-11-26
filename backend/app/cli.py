@@ -199,6 +199,21 @@ def cmd_check_memory(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_indexnow(args: argparse.Namespace) -> int:
+    """Push changed URLs to Bing IndexNow; idempotent per day."""
+    from .services import indexnow as indexnow_service
+
+    settings = get_settings()
+    conn = connect(settings.db_path)
+    try:
+        init_db(conn)
+        result = indexnow_service.push(conn, settings, force=args.force)
+    finally:
+        conn.close()
+    _print(result)
+    return 0 if result.get("status") in ("ok", "already") else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="harnesspack", description="HarnessPack operator CLI")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -217,6 +232,8 @@ def build_parser() -> argparse.ArgumentParser:
     memory.add_argument("--threshold-mb", type=int, default=300)
     memory.add_argument("--consecutive", type=int, default=3)
     memory.add_argument("--state", default="/var/lib/harnesspack/memalert.json")
+    indexnow = sub.add_parser("indexnow", help="push changed URLs to Bing IndexNow")
+    indexnow.add_argument("--force", action="store_true", help="push even if today already pushed")
     return parser
 
 
@@ -230,6 +247,7 @@ def main(argv: list[str] | None = None) -> int:
         "community": cmd_community,
         "send-digest": cmd_send_digest,
         "check-memory": cmd_check_memory,
+        "indexnow": cmd_indexnow,
     }
     try:
         return handlers[args.command](args)

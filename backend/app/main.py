@@ -253,6 +253,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(meta_router)
     app.include_router(site_router)
 
+    # Bing IndexNow key verification file, only mounted when configured.
+    if settings.indexnow_key:
+        @app.get(f"/{settings.indexnow_key}.txt", include_in_schema=False)
+        def indexnow_key_file():
+            return Response(settings.indexnow_key, media_type="text/plain; charset=utf-8")
+
     dist = Path(settings.frontend_dist)
     if dist.exists():
         assets = dist / "assets"

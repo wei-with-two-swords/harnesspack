@@ -43,9 +43,15 @@ _FONTS = [
     "C:/Windows/Fonts/arial.ttf",
 ]
 
+# Bundled Noto Sans SC subset (ASCII + CJK punctuation + U+4E00-9FFF) so a
+# Chinese plugin name renders on social cards instead of collapsing into
+# spaces. Subset keeps the file ~7MB; FreeType mmaps it and _font() caches
+# one instance per size, so the memory cost is negligible.
+_CJK_FONT = Path(__file__).resolve().parents[2] / "assets" / "NotoSansSC-subset.otf"
+
 
 @lru_cache(maxsize=32)
-def _font(size: int):
+def _font(size: int, cjk: bool = False):
     """Font objects are immutable and safe to share across render threads.
 
     Without this cache every draw call re-reads a TTF file; a burst of OG
@@ -53,16 +59,38 @@ def _font(size: int):
     """
     from PIL import ImageFont
 
+    if cjk and _CJK_FONT.exists():
+        return ImageFont.truetype(str(_CJK_FONT), size=size)
     for candidate in _FONTS:
         if Path(candidate).exists():
             return ImageFont.truetype(candidate, size=size)
     return ImageFont.load_default(size=size)
 
 
-def _ascii(text: str, limit: int = 48) -> str:
-    cleaned = "".join(ch if 32 <= ord(ch) < 127 else " " for ch in text)
+def _has_cjk(text: str) -> bool:
+    return any(0x2E80 <= ord(ch) <= 0x9FFF or 0xFF00 <= ord(ch) <= 0xFFEF for ch in text)
+
+
+def _clean(text: str, limit: int = 48) -> str:
+    """Collapse whitespace and strip control chars, keep non-ASCII text."""
+    cleaned = "".join(ch if ord(ch) >= 32 else " " for ch in text)
     cleaned = " ".join(cleaned.split())
     return cleaned[:limit].rstrip() if cleaned else ""
+
+
+def _fit(draw, text: str, font, max_width: int) -> str:
+    """Truncate to max_width pixels, appending an ellipsis when cut."""
+    if draw.textlength(text, font=font) <= max_width:
+        return text
+    ellipsis = "…"
+    low, high = 0, len(text)
+    while low < high:
+        mid = (low + high + 1) // 2
+        if draw.textlength(text[:mid] + ellipsis, font=font) <= max_width:
+            low = mid
+        else:
+            high = mid - 1
+    return text[:low].rstrip() + ellipsis
 
 
 def get_conn(request: Request):
@@ -192,11 +220,12 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
         draw.rectangle([0, 0, width, 6], fill=BLUE)
         draw.rounded_rectangle([60, 140, 1140, 520], radius=24, fill=SURFACE, outline=LINE, width=2)
 
-        title = _ascii(detail["name"], 26) or f"{detail['owner']}/{detail['repo']}"
-        repo = _ascii(f"{detail['owner']}/{detail['repo']}", 40)
+        title = _clean(detail["name"], 40) or f"{detail['owner']}/{detail['repo']}"
+        repo = _clean(f"{detail['owner']}/{detail['repo']}", 40)
         draw.text((100, 70), "HarnessPack", font=_font(34), fill=BLUE)
         draw.text((100, 112), "DSH plugin star race / daily snapshot", font=_font(18), fill=MUTED)
-        draw.text((100, 180), title, font=_font(64), fill=WHITE)
+        title_font = _font(64, cjk=_has_cjk(title))
+        draw.text((100, 180), _fit(draw, title, title_font, 1000), font=title_font, fill=WHITE)
         draw.text((100, 280), repo, font=_font(26), fill=MUTED)
 
         stars = detail.get("stars")
@@ -210,7 +239,7 @@ def og_image(slug: str, request: Request, conn: sqlite3.Connection = Depends(get
         if delta is not None:
             stats.append(("TODAY", f"{delta:+d}", RISE if delta > 0 else FALL))
         if detail.get("category"):
-            stats.append(("CATEGORY", _ascii(detail["category"], 14), BLUE))
+            stats.append(("CATEGORY", _clean(detail["category"], 14), BLUE))
         x = 100
         for label, value, color in stats[:3]:
             draw.text((x, 570 - 60), label, font=_font(18), fill=MUTED)

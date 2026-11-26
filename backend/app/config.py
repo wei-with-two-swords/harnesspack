@@ -54,6 +54,8 @@ class Settings:
     smtp_from: str = ""
     # Where memory/ops alerts go (falls back to smtp_from).
     alert_email: str = ""
+    # Bing IndexNow key: non-empty enables the key file route and CLI push.
+    indexnow_key: str = ""
 
 
 def _env_path(name: str, default: Path) -> Path:
@@ -99,4 +101,5 @@ def get_settings() -> Settings:
         smtp_password=os.environ.get("HARNESSPACK_SMTP_PASSWORD", ""),
         smtp_from=os.environ.get("HARNESSPACK_SMTP_FROM", ""),
         alert_email=os.environ.get("HARNESSPACK_ALERT_EMAIL", ""),
+        indexnow_key=os.environ.get("HARNESSPACK_INDEXNOW_KEY", ""),
     )

@@ -170,3 +170,14 @@ CREATE TABLE IF NOT EXISTS digest_log (
     sent_at    TEXT NOT NULL,
     recipients INTEGER NOT NULL DEFAULT 0
 );
+
+-- Outbound crawler pushes (IndexNow etc.): one row per kind per day keeps
+-- repeated timer firings from spamming the same URL list.
+CREATE TABLE IF NOT EXISTS push_log (
+    kind       TEXT NOT NULL,
+    date       TEXT NOT NULL,
+    sent_at    TEXT NOT NULL,
+    urls       INTEGER NOT NULL DEFAULT 0,
+    status     TEXT NOT NULL DEFAULT '',
+    PRIMARY KEY (kind, date)
+);

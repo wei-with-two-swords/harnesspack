@@ -332,3 +332,31 @@ sudo systemctl daemon-reload && sudo systemctl enable --now harnesspack-memalert
 # 路由 + health 全检；第二个参数是本次前端 JS hash（可选）
 deploy/scripts/smoke.sh https://harnesspack.dev index-XXXXXXXX.js
 ```
+
+### 必应 IndexNow（D1）
+
+- `HARNESSPACK_INDEXNOW_KEY` 设一个 32 位十六进制 key（`openssl rand -hex 16`）后，
+  站点会自动挂出 `/<key>.txt` 验证文件，CLI 才会真正推送；不设则全部跳过。
+- CLI：`python -m backend.app.cli indexnow`（同日幂等，`--force` 强制重推）。
+- 推送内容：首页/changelog/about/api/community/compare/subscribe + 增量榜 Top200
+  + 近 3 天新收录插件，上限 500 条；`push_log` 表记录每日结果。
+- 单元：`deploy/systemd/harnesspack-indexnow.{service,timer}`，每天 10:30（UTC+8）推一次。
+
+```bash
+sudo cp deploy/systemd/harnesspack-indexnow.* /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now harnesspack-indexnow.timer
+```
+
+### 必应 IndexNow（D1）
+
+- `HARNESSPACK_INDEXNOW_KEY` 设一个 32 位十六进制 key（`openssl rand -hex 16`）后，
+  站点会自动挂出 `/<key>.txt` 验证文件，CLI 才会真正推送；不设则全部跳过。
+- CLI：`python -m backend.app.cli indexnow`（同日幂等，`--force` 强制重推）。
+- 推送内容：首页/changelog/about/api/community/compare/subscribe + 增量榜 Top200
+  + 近 3 天新收录插件，上限 500 条；`push_log` 表记录每日结果。
+- 单元：`deploy/systemd/harnesspack-indexnow.{service,timer}`，每天 10:30（UTC+8）推一次。
+
+```bash
+sudo cp deploy/systemd/harnesspack-indexnow.* /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now harnesspack-indexnow.timer
+```

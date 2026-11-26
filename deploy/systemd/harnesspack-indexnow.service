@@ -1,0 +1,26 @@
+[Unit]
+Description=HarnessPack IndexNow push to Bing
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=harnesspack
+Group=harnesspack
+WorkingDirectory=/opt/harnesspack
+Environment=PYTHONUNBUFFERED=1
+Environment=HARNESSPACK_ENV=production
+Environment=HARNESSPACK_BASE_URL=https://harnesspack.dev
+Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
+Environment=HARNESSPACK_SNAPSHOTS=/opt/harnesspack/data/snapshots
+Environment=HARNESSPACK_INGEST=0
+EnvironmentFile=-/etc/harnesspack-api.env
+ExecStart=/opt/harnesspack/.venv/bin/python -m backend.app.cli indexnow
+TimeoutStartSec=120
+Nice=10
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/harnesspack/data

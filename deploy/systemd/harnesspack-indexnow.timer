@@ -1,0 +1,10 @@
+[Unit]
+Description=HarnessPack IndexNow push timer (daily 02:30 UTC / 10:30 Beijing)
+
+[Timer]
+OnCalendar=*-*-* 02:30:00 UTC
+Persistent=true
+RandomizedDelaySec=600
+
+[Install]
+WantedBy=timers.target

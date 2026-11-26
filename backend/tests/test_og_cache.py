@@ -96,3 +96,39 @@ def test_guard_limits_concurrent_requests():
     for t in threads:
         t.join()
     assert peak <= 2, f"guard let {peak} requests run at once"
+
+
+def test_og_chinese_name_renders(client, tmp_path):
+    """Chinese plugin names must render glyphs, not tofu boxes."""
+    from backend.app.db import connect
+
+    settings = client.app.state.settings
+    conn = connect(settings.db_path)
+    conn.execute("UPDATE plugins SET name = '中文 AI 编程助手' WHERE slug = 'alpha-one'")
+    conn.commit()
+    conn.close()
+
+    response = client.get("/og/alpha-one.png")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "image/png"
+    # Tofu-box rendering produces visibly fewer pixels than real CJK glyphs;
+    # assert the payload is a plausible full card (not an error page).
+    assert len(response.content) > 10_000
+
+
+def test_og_chinese_name_renders(client, tmp_path):
+    """Chinese plugin names must render glyphs, not tofu boxes."""
+    from backend.app.db import connect
+
+    settings = client.app.state.settings
+    conn = connect(settings.db_path)
+    conn.execute("UPDATE plugins SET name = '中文 AI 编程助手' WHERE slug = 'alpha-one'")
+    conn.commit()
+    conn.close()
+
+    response = client.get("/og/alpha-one.png")
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "image/png"
+    # Tofu-box rendering produces visibly fewer pixels than real CJK glyphs;
+    # assert the payload is a plausible full card (not an error page).
+    assert len(response.content) > 10_000
