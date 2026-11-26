@@ -11,7 +11,9 @@ WorkingDirectory=/opt/harnesspack
 Environment=APP_ROOT=/opt/harnesspack
 Environment=HOME=/var/lib/harnesspack
 ExecStart=/opt/harnesspack/.venv/bin/python scripts/snapshot_npm.py --incremental
-TimeoutStartSec=1800
+# 1379 scoped packages need one request each and npm rate-limits them hard
+# (~60 min observed). Keep a 2h ceiling; the script writes files only at the end.
+TimeoutStartSec=7200
 Nice=10
 
 [Install]
