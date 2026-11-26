@@ -64,8 +64,9 @@ export function Comments({ postId, user, onChanged }: Props) {
 
   return (
     <section className="mt-4">
-      <h2 className="fs-xl fw-semibold mb-3">
-        {t('community.comments')} {total > 0 ? `(${total})` : ''}
+      <h2 className="fs-lg fw-semibold mb-3">
+        {t('community.comments')}
+        {total > 0 ? <span className="fg-secondary fw-normal"> ({total})</span> : ''}
       </h2>
       <Composer
         user={user}
