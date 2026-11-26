@@ -13,7 +13,10 @@ dist/
 # Local data & secrets
 data/_cache/
 data/cache/
+# npm download archives are large (37MB) and change daily; each server keeps
+# its own copy (see deploy/scripts/backup.sh) instead of tracking in git.
 data/npm_downloads/raw/
+data/npm_downloads/*.json
 .workbuddy/
 .env
 .env.*
