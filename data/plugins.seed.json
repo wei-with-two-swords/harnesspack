@@ -555,17 +555,6 @@
    "note": ""
   },
   {
-   "owner": "1052326311",
-   "repo": "dsh-plan-lattice",
-   "slug": "1052326311-dsh-plan-lattice",
-   "name": "dsh-plan-lattice",
-   "category": "workflow",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/1052326311/dsh-plan-lattice",
-   "note": ""
-  },
-  {
    "owner": "1069137617",
    "repo": "dsh-reasoning-tiers",
    "slug": "1069137617-dsh-reasoning-tiers",
@@ -662,17 +651,6 @@
    "npm": "dsh-desktop-sidecar",
    "harness": "dsh",
    "url": "https://github.com/111xjyuan/dsh-desktop-sidecar",
-   "note": ""
-  },
-  {
-   "owner": "1122438",
-   "repo": "We-Plugin",
-   "slug": "1122438-we-plugin",
-   "name": "We-Plugin",
-   "category": "fun",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/1122438/We-Plugin",
    "note": ""
   },
   {
@@ -959,17 +937,6 @@
    "npm": "dsh-companion-memory-core",
    "harness": "dsh",
    "url": "https://github.com/1326007879-sys/companion-memory",
-   "note": ""
-  },
-  {
-   "owner": "1334104926",
-   "repo": "dsh-row-multiselect",
-   "slug": "1334104926-dsh-row-multiselect",
-   "name": "dsh-row-multiselect",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/1334104926/dsh-row-multiselect",
    "note": ""
   },
   {
@@ -2712,28 +2679,6 @@
   },
   {
    "owner": "2239058652",
-   "repo": "dsh-codearts-connect",
-   "slug": "2239058652-dsh-codearts-connect",
-   "name": "dsh-codearts-connect",
-   "category": "model",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/2239058652/dsh-codearts-connect",
-   "note": ""
-  },
-  {
-   "owner": "2239058652",
-   "repo": "dsh-loomy-connect",
-   "slug": "2239058652-dsh-loomy-connect",
-   "name": "dsh-loomy-connect",
-   "category": "model",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/2239058652/dsh-loomy-connect",
-   "note": ""
-  },
-  {
-   "owner": "2239058652",
    "repo": "dsh-mcp-workbench",
    "slug": "2239058652-dsh-mcp-workbench",
    "name": "dsh-mcp-workbench",
@@ -2807,17 +2752,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/2370998716-jpg/dsh-turn-eta",
-   "note": ""
-  },
-  {
-   "owner": "23swccp",
-   "repo": "dsh-undo",
-   "slug": "23swccp-dsh-undo",
-   "name": "dsh-undo-plugin",
-   "category": "session",
-   "npm": "dsh-undo-plugin",
-   "harness": "dsh",
-   "url": "https://github.com/23swccp/dsh-undo",
    "note": ""
   },
   {
@@ -5803,17 +5737,6 @@
   },
   {
    "owner": "a1141171521",
-   "repo": "dsh-multi-agent-gateway",
-   "slug": "a1141171521-dsh-multi-agent-gateway",
-   "name": "dsh-multi-agent-gateway",
-   "category": "model",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/a1141171521/dsh-multi-agent-gateway",
-   "note": ""
-  },
-  {
-   "owner": "a1141171521",
    "repo": "dsh-plugin-memfuse",
    "slug": "a1141171521-dsh-plugin-memfuse",
    "name": "dsh-plugin-memfuse",
@@ -7306,17 +7229,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/AdilAlmahmoud/dsh-rtl-chat",
-   "note": ""
-  },
-  {
-   "owner": "Adingo001",
-   "repo": "dsh-notification-desktop",
-   "slug": "adingo001-dsh-notification-desktop",
-   "name": "dsh-notification-desktop",
-   "category": "notify",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Adingo001/dsh-notification-desktop",
    "note": ""
   },
   {
@@ -10818,17 +10730,6 @@
    "note": ""
   },
   {
-   "owner": "AngLi1997",
-   "repo": "dsh-plugin-sync",
-   "slug": "angli1997-dsh-plugin-sync",
-   "name": "dsh-plugin-sync",
-   "category": "tools",
-   "npm": "dsh-plugin-sync",
-   "harness": "dsh",
-   "url": "https://github.com/AngLi1997/dsh-plugin-sync",
-   "note": ""
-  },
-  {
    "owner": "angls4",
    "repo": "dsh-window-drag",
    "slug": "angls4-dsh-window-drag",
@@ -11423,28 +11324,6 @@
    "note": ""
   },
   {
-   "owner": "anzhaohao",
-   "repo": "DragView",
-   "slug": "anzhaohao-dragview",
-   "name": "DragView",
-   "category": "ui",
-   "npm": "dsh-dragview",
-   "harness": "dsh",
-   "url": "https://github.com/anzhaohao/DragView",
-   "note": ""
-  },
-  {
-   "owner": "anzhaohao",
-   "repo": "dsh-side-chat-plus-plus",
-   "slug": "anzhaohao-dsh-side-chat-plus-plus",
-   "name": "dsh-side-chat-plus-plus",
-   "category": "session",
-   "npm": "dsh-side-chat-plus-plus",
-   "harness": "dsh",
-   "url": "https://github.com/anzhaohao/dsh-side-chat-plus-plus",
-   "note": ""
-  },
-  {
    "owner": "aoilang",
    "repo": "dsh-english-cards",
    "slug": "aoilang-dsh-english-cards",
@@ -11687,17 +11566,6 @@
    "note": ""
   },
   {
-   "owner": "apolenkov",
-   "repo": "dsh-provider-proxy",
-   "slug": "apolenkov-dsh-provider-proxy",
-   "name": "dsh-provider-proxy",
-   "category": "model",
-   "npm": "@apolenkov/dsh-provider-proxy",
-   "harness": "dsh",
-   "url": "https://github.com/apolenkov/dsh-provider-proxy",
-   "note": ""
-  },
-  {
    "owner": "apollodsh",
    "repo": "dsh-session-forward",
    "slug": "apollodsh-dsh-session-forward",
@@ -11926,17 +11794,6 @@
    "npm": "dsh-skills-space",
    "harness": "dsh",
    "url": "https://github.com/arch3rPro/Skills-Space",
-   "note": ""
-  },
-  {
-   "owner": "Archaofan",
-   "repo": "dsh-notify-relay",
-   "slug": "archaofan-dsh-notify-relay",
-   "name": "dsh-notify-relay",
-   "category": "notify",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Archaofan/dsh-notify-relay",
    "note": ""
   },
   {
@@ -13730,17 +13587,6 @@
    "npm": "dsh-session-fork-tree",
    "harness": "dsh",
    "url": "https://github.com/ayuanxx-max/dsh-session-fork-tree",
-   "note": ""
-  },
-  {
-   "owner": "ayuanxx-max",
-   "repo": "dsh-smooth",
-   "slug": "ayuanxx-max-dsh-smooth",
-   "name": "dsh-smooth",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ayuanxx-max/dsh-smooth",
    "note": ""
   },
   {
@@ -17176,17 +17022,6 @@
    "note": ""
   },
   {
-   "owner": "bobostudio",
-   "repo": "dsh-session-lens",
-   "slug": "bobostudio-dsh-session-lens",
-   "name": "Session Lens",
-   "category": "session",
-   "npm": "dsh-session-lens",
-   "harness": "dsh",
-   "url": "https://github.com/bobostudio/dsh-session-lens",
-   "note": ""
-  },
-  {
    "owner": "bocchii-the-code",
    "repo": "dsh-nerd-mode",
    "slug": "bocchii-the-code-dsh-nerd-mode",
@@ -20575,17 +20410,6 @@
    "note": ""
   },
   {
-   "owner": "charliesbyte",
-   "repo": "dsh-workspace-activity",
-   "slug": "charliesbyte-dsh-workspace-activity",
-   "name": "dsh-workspace-activity",
-   "category": "ui",
-   "npm": "dsh-workspace-activity",
-   "harness": "dsh",
-   "url": "https://github.com/charliesbyte/dsh-workspace-activity",
-   "note": ""
-  },
-  {
    "owner": "Charliewhale",
    "repo": "bridge",
    "slug": "charliewhale-bridge",
@@ -21892,17 +21716,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/Chhlafiu4312/dsh-mcp-bridge",
-   "note": ""
-  },
-  {
-   "owner": "chiang21fcb",
-   "repo": "cn-linebreak",
-   "slug": "chiang21fcb-cn-linebreak",
-   "name": "cn-linebreak",
-   "category": "tools",
-   "npm": "cn-linebreak",
-   "harness": "dsh",
-   "url": "https://github.com/chiang21fcb/cn-linebreak",
    "note": ""
   },
   {
@@ -23831,17 +23644,6 @@
    "note": ""
   },
   {
-   "owner": "codeMonkey-Pine",
-   "repo": "dsh-wallpaper",
-   "slug": "codemonkey-pine-dsh-wallpaper",
-   "name": "dsh-wallpaper",
-   "category": "theme",
-   "npm": "dsh-wallpaper",
-   "harness": "dsh",
-   "url": "https://github.com/codeMonkey-Pine/dsh-wallpaper",
-   "note": ""
-  },
-  {
    "owner": "Codenestra",
    "repo": "deepseek-harness-plugins",
    "slug": "codenestra-deepseek-harness-plugins",
@@ -23949,61 +23751,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/ColdMagicchess/PTT-Studio",
-   "note": ""
-  },
-  {
-   "owner": "ColdRainLab",
-   "repo": "dsh-feature-check",
-   "slug": "coldrainlab-dsh-feature-check",
-   "name": "dsh-feature-check",
-   "category": "tools",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ColdRainLab/dsh-feature-check",
-   "note": ""
-  },
-  {
-   "owner": "ColdRainLab",
-   "repo": "dsh-session-delete",
-   "slug": "coldrainlab-dsh-session-delete",
-   "name": "dsh-session-delete",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ColdRainLab/dsh-session-delete",
-   "note": ""
-  },
-  {
-   "owner": "ColdRainLab",
-   "repo": "dsh-workspace-plus",
-   "slug": "coldrainlab-dsh-workspace-plus",
-   "name": "dsh-workspace-plus",
-   "category": "ui",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ColdRainLab/dsh-workspace-plus",
-   "note": ""
-  },
-  {
-   "owner": "ColdRainLab",
-   "repo": "dsh-workspace-sync",
-   "slug": "coldrainlab-dsh-workspace-sync",
-   "name": "dsh-workspace-sync",
-   "category": "tools",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ColdRainLab/dsh-workspace-sync",
-   "note": ""
-  },
-  {
-   "owner": "ColdRainLab",
-   "repo": "dsh-workspace-vault",
-   "slug": "coldrainlab-dsh-workspace-vault",
-   "name": "dsh-workspace-vault",
-   "category": "ui",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ColdRainLab/dsh-workspace-vault",
    "note": ""
   },
   {
@@ -24576,28 +24323,6 @@
    "npm": "rulemux-dsh",
    "harness": "dsh",
    "url": "https://github.com/cq-guojia/rulemux",
-   "note": ""
-  },
-  {
-   "owner": "CQin04",
-   "repo": "dsh-playwright-mcp",
-   "slug": "cqin04-dsh-playwright-mcp",
-   "name": "dsh-playwright-mcp",
-   "category": "browser",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/CQin04/dsh-playwright-mcp",
-   "note": ""
-  },
-  {
-   "owner": "CQin04",
-   "repo": "dsh-usage-timer",
-   "slug": "cqin04-dsh-usage-timer",
-   "name": "dsh-usage-timer",
-   "category": "usage",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/CQin04/dsh-usage-timer",
    "note": ""
   },
   {
@@ -34226,17 +33951,6 @@
    "note": ""
   },
   {
-   "owner": "EviMing",
-   "repo": "dsh-qq-shell-commands",
-   "slug": "eviming-dsh-qq-shell-commands",
-   "name": "dsh-qq-shell-commands",
-   "category": "remote",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/EviMing/dsh-qq-shell-commands",
-   "note": ""
-  },
-  {
    "owner": "evolution301",
    "repo": "agent-control-tower",
    "slug": "evolution301-agent-control-tower",
@@ -35455,17 +35169,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/FeiZhuNiU-INFJA/dsh-stock-ticker",
-   "note": ""
-  },
-  {
-   "owner": "FelixJiashengFu",
-   "repo": "dsh-force-collab",
-   "slug": "felixjiashengfu-dsh-force-collab",
-   "name": "dsh-force-collab",
-   "category": "agi",
-   "npm": "dsh-force-collab",
-   "harness": "dsh",
-   "url": "https://github.com/FelixJiashengFu/dsh-force-collab",
    "note": ""
   },
   {
@@ -38876,17 +38579,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/gaolin89898/dsh-usage-meter",
-   "note": ""
-  },
-  {
-   "owner": "gaolin89898",
-   "repo": "remote-session-plugin",
-   "slug": "gaolin89898-remote-session-plugin",
-   "name": "remote-session-plugin",
-   "category": "remote",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/gaolin89898/remote-session-plugin",
    "note": ""
   },
   {
@@ -47525,17 +47217,6 @@
    "note": ""
   },
   {
-   "owner": "huaizhuanghub",
-   "repo": "dsh-persona-dafeiyu",
-   "slug": "huaizhuanghub-dsh-persona-dafeiyu",
-   "name": "dsh-persona-dafeiyu",
-   "category": "identity",
-   "npm": "dsh-persona-dafeiyu",
-   "harness": "dsh",
-   "url": "https://github.com/huaizhuanghub/dsh-persona-dafeiyu",
-   "note": ""
-  },
-  {
    "owner": "huajikano",
    "repo": "bibao",
    "slug": "huajikano-bibao",
@@ -50616,17 +50297,6 @@
    "note": ""
   },
   {
-   "owner": "imMamdouhaboammar",
-   "repo": "get-fable",
-   "slug": "immamdouhaboammar-get-fable",
-   "name": "get-fable",
-   "category": "workflow",
-   "npm": "get-fable",
-   "harness": "dsh",
-   "url": "https://github.com/imMamdouhaboammar/get-fable",
-   "note": ""
-  },
-  {
    "owner": "Imnotndesh",
    "repo": "dsh-peak-pricing-warning",
    "slug": "imnotndesh-dsh-peak-pricing-warning",
@@ -50690,17 +50360,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/imtwa/dsh-recall-sessions",
-   "note": ""
-  },
-  {
-   "owner": "imwhatiam",
-   "repo": "dsh-mosaic",
-   "slug": "imwhatiam-dsh-mosaic",
-   "name": "dsh-mosaic",
-   "category": "ui",
-   "npm": "dsh-mosaic",
-   "harness": "dsh",
-   "url": "https://github.com/imwhatiam/dsh-mosaic",
    "note": ""
   },
   {
@@ -53289,17 +52948,6 @@
    "note": ""
   },
   {
-   "owner": "JeffreySuen-x",
-   "repo": "dsh-skill-dossier",
-   "slug": "jeffreysuen-x-dsh-skill-dossier",
-   "name": "dsh-skill-dossier",
-   "category": "skill",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/JeffreySuen-x/dsh-skill-dossier",
-   "note": ""
-  },
-  {
    "owner": "JeffTsuiCUG",
    "repo": "dsh-connect-minimaxcode",
    "slug": "jefftsuicug-dsh-connect-minimaxcode",
@@ -55057,17 +54705,6 @@
    "npm": "computer-user",
    "harness": "dsh",
    "url": "https://github.com/jing-hy/computer-user",
-   "note": ""
-  },
-  {
-   "owner": "jing-hy",
-   "repo": "dsh-task-runner",
-   "slug": "jing-hy-dsh-task-runner",
-   "name": "dsh-task-runner",
-   "category": "tools",
-   "npm": "dsh-task-runner",
-   "harness": "dsh",
-   "url": "https://github.com/jing-hy/dsh-task-runner",
    "note": ""
   },
   {
@@ -60153,17 +59790,6 @@
    "note": ""
   },
   {
-   "owner": "Kippythisway",
-   "repo": "dsh-team-v3",
-   "slug": "kippythisway-dsh-team-v3",
-   "name": "dsh-team-v3",
-   "category": "workflow",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Kippythisway/dsh-team-v3",
-   "note": ""
-  },
-  {
    "owner": "kira905",
    "repo": "dsh-butler-archive",
    "slug": "kira905-dsh-butler-archive",
@@ -61228,17 +60854,6 @@
    "npm": "@konnga/dsh-hud",
    "harness": "dsh",
    "url": "https://github.com/konnga/dsh-hud",
-   "note": ""
-  },
-  {
-   "owner": "KonshinHaoshin",
-   "repo": "dsh-eni",
-   "slug": "konshinhaoshin-dsh-eni",
-   "name": "dsh-eni",
-   "category": "identity",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/KonshinHaoshin/dsh-eni",
    "note": ""
   },
   {
@@ -70295,28 +69910,6 @@
    "note": ""
   },
   {
-   "owner": "Lostforest7",
-   "repo": "dsh-apirevise",
-   "slug": "lostforest7-dsh-apirevise",
-   "name": "dsh-apirevise",
-   "category": "dev",
-   "npm": "dsh-apirevise",
-   "harness": "dsh",
-   "url": "https://github.com/Lostforest7/dsh-apirevise",
-   "note": ""
-  },
-  {
-   "owner": "Lostforest7",
-   "repo": "dsh-encoding",
-   "slug": "lostforest7-dsh-encoding",
-   "name": "dsh-encoding",
-   "category": "tools",
-   "npm": "dsh-encoding",
-   "harness": "dsh",
-   "url": "https://github.com/Lostforest7/dsh-encoding",
-   "note": ""
-  },
-  {
    "owner": "loud404",
    "repo": "dsh-burp-mcp",
    "slug": "loud404-dsh-burp-mcp",
@@ -72264,17 +71857,6 @@
    "note": ""
   },
   {
-   "owner": "lunaship",
-   "repo": "dsh-links",
-   "slug": "lunaship-dsh-links",
-   "name": "dsh-links",
-   "category": "remote",
-   "npm": "dsh-links",
-   "harness": "dsh",
-   "url": "https://github.com/lunaship/dsh-links",
-   "note": ""
-  },
-  {
    "owner": "lunasi27",
    "repo": "dsh-daily-todo",
    "slug": "lunasi27-dsh-daily-todo",
@@ -73034,17 +72616,6 @@
    "note": ""
   },
   {
-   "owner": "LyaQanYi",
-   "repo": "dsh-ccswitch-usage",
-   "slug": "lyaqanyi-dsh-ccswitch-usage",
-   "name": "dsh-ccswitch-usage",
-   "category": "usage",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/LyaQanYi/dsh-ccswitch-usage",
-   "note": ""
-  },
-  {
    "owner": "LyaxZ",
    "repo": "dsh-fonttune",
    "slug": "lyaxz-dsh-fonttune",
@@ -73251,28 +72822,6 @@
    "npm": "@lyonleeeee/dsh-steer",
    "harness": "dsh",
    "url": "https://github.com/lyonleeeee/dsh-steer",
-   "note": ""
-  },
-  {
-   "owner": "lyp88997",
-   "repo": "dsh-browser-service",
-   "slug": "lyp88997-dsh-browser-service",
-   "name": "dsh-browser-service",
-   "category": "browser",
-   "npm": "dsh-browser-service",
-   "harness": "dsh",
-   "url": "https://github.com/lyp88997/dsh-browser-service",
-   "note": ""
-  },
-  {
-   "owner": "lyp88997",
-   "repo": "dsh-moli-browser",
-   "slug": "lyp88997-dsh-moli-browser",
-   "name": "dsh-moli-browser",
-   "category": "browser",
-   "npm": "dsh-moli-browser",
-   "harness": "dsh",
-   "url": "https://github.com/lyp88997/dsh-moli-browser",
    "note": ""
   },
   {
@@ -74538,17 +74087,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/manyuemeiquqi/dsh-gta6",
-   "note": ""
-  },
-  {
-   "owner": "MAOLEIJIN",
-   "repo": "dsh-mattpocock-skills",
-   "slug": "maoleijin-dsh-mattpocock-skills",
-   "name": "dsh-mattpocock-skills",
-   "category": "skill",
-   "npm": "@maoleijin/dsh-mattpocock-skills",
-   "harness": "dsh",
-   "url": "https://github.com/MAOLEIJIN/dsh-mattpocock-skills",
    "note": ""
   },
   {
@@ -76012,17 +75550,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/melo7up/dsh-wait-reply",
-   "note": ""
-  },
-  {
-   "owner": "melody12311",
-   "repo": "dsh-workspace-folders",
-   "slug": "melody12311-dsh-workspace-folders",
-   "name": "dsh-workspace-folders",
-   "category": "dev",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/melody12311/dsh-workspace-folders",
    "note": ""
   },
   {
@@ -78190,50 +77717,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/misakalemon/dsh-session-backup",
-   "note": ""
-  },
-  {
-   "owner": "Missher12",
-   "repo": "dsh-missher-brain",
-   "slug": "missher12-dsh-missher-brain",
-   "name": "dsh-missher-brain",
-   "category": "memory",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Missher12/dsh-missher-brain",
-   "note": ""
-  },
-  {
-   "owner": "Missher12",
-   "repo": "dsh-missher-enhance",
-   "slug": "missher12-dsh-missher-enhance",
-   "name": "dsh-missher-enhance",
-   "category": "ui",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Missher12/dsh-missher-enhance",
-   "note": ""
-  },
-  {
-   "owner": "Missher12",
-   "repo": "dsh-missher-evolution",
-   "slug": "missher12-dsh-missher-evolution",
-   "name": "dsh-missher-evolution",
-   "category": "workflow",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Missher12/dsh-missher-evolution",
-   "note": ""
-  },
-  {
-   "owner": "Missher12",
-   "repo": "dsh-missher-memory",
-   "slug": "missher12-dsh-missher-memory",
-   "name": "dsh-missher-memory",
-   "category": "memory",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Missher12/dsh-missher-memory",
    "note": ""
   },
   {
@@ -83294,17 +82777,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/NingTiAn-byte/dsh-linked-workspaces",
-   "note": ""
-  },
-  {
-   "owner": "NingYuanLee",
-   "repo": "dsh-grok-byapi",
-   "slug": "ningyuanlee-dsh-grok-byapi",
-   "name": "dsh-grok-byapi",
-   "category": "model",
-   "npm": "dsh-grok-byapi",
-   "harness": "dsh",
-   "url": "https://github.com/NingYuanLee/dsh-grok-byapi",
    "note": ""
   },
   {
@@ -90866,17 +90338,6 @@
   },
   {
    "owner": "Physicolor",
-   "repo": "dsh-lifeline",
-   "slug": "physicolor-dsh-lifeline",
-   "name": "dsh-lifeline",
-   "category": "ui",
-   "npm": "dsh-lifeline",
-   "harness": "dsh",
-   "url": "https://github.com/Physicolor/dsh-lifeline",
-   "note": ""
-  },
-  {
-   "owner": "Physicolor",
    "repo": "dsh-ui-harmonizer",
    "slug": "physicolor-dsh-ui-harmonizer",
    "name": "dsh-ui-harmonizer",
@@ -92985,17 +92446,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/qikairo7/dsh-gemini-pool",
-   "note": ""
-  },
-  {
-   "owner": "qikairo7",
-   "repo": "dsh-web-search-fetch",
-   "slug": "qikairo7-dsh-web-search-fetch",
-   "name": "dsh-web-search-fetch",
-   "category": "browser",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/qikairo7/dsh-web-search-fetch",
    "note": ""
   },
   {
@@ -96508,17 +95958,6 @@
    "note": ""
   },
   {
-   "owner": "RevolutionLA",
-   "repo": "dsh-dream-skin",
-   "slug": "revolutionla-dsh-dream-skin",
-   "name": "dsh-dream-skin",
-   "category": "theme",
-   "npm": "dsh-dream-skin",
-   "harness": "dsh",
-   "url": "https://github.com/RevolutionLA/dsh-dream-skin",
-   "note": ""
-  },
-  {
    "owner": "RevxZxCx",
    "repo": "dsh-where-did-my-tokens-go",
    "slug": "revxzxcx-dsh-where-did-my-tokens-go",
@@ -98045,17 +97484,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/ruisenbai/dsh-annotation",
-   "note": ""
-  },
-  {
-   "owner": "ruisenbai",
-   "repo": "dsh-turn-fold",
-   "slug": "ruisenbai-dsh-turn-fold",
-   "name": "dsh-turn-fold",
-   "category": "ui",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/ruisenbai/dsh-turn-fold",
    "note": ""
   },
   {
@@ -101711,17 +101139,6 @@
    "note": ""
   },
   {
-   "owner": "shimingming520",
-   "repo": "dsh-conversation-process-collapse",
-   "slug": "shimingming520-dsh-conversation-process-collapse",
-   "name": "dsh-conversation-process-collapse",
-   "category": "ui",
-   "npm": "dsh-conversation-process-collapse",
-   "harness": "dsh",
-   "url": "https://github.com/shimingming520/dsh-conversation-process-collapse",
-   "note": ""
-  },
-  {
    "owner": "shin4",
    "repo": "inkpond-dsh",
    "slug": "shin4-inkpond-dsh",
@@ -103336,17 +102753,6 @@
    "npm": "dsh-movein",
    "harness": "dsh",
    "url": "https://github.com/sjh9714/dsh-movein",
-   "note": ""
-  },
-  {
-   "owner": "sjh9714",
-   "repo": "dsh-retry-guard",
-   "slug": "sjh9714-dsh-retry-guard",
-   "name": "dsh-retry-guard",
-   "category": "tools",
-   "npm": "dsh-retry-guard",
-   "harness": "dsh",
-   "url": "https://github.com/sjh9714/dsh-retry-guard",
    "note": ""
   },
   {
@@ -106849,17 +106255,6 @@
   },
   {
    "owner": "Stephen-pc",
-   "repo": "paper-format-check",
-   "slug": "stephen-pc-paper-format-check",
-   "name": "paper-format-check",
-   "category": "skill",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Stephen-pc/paper-format-check",
-   "note": ""
-  },
-  {
-   "owner": "Stephen-pc",
    "repo": "publish-size-check",
    "slug": "stephen-pc-publish-size-check",
    "name": "publish-size-check",
@@ -107758,17 +107153,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/sumingwang233/dsh-provider-quota-rings",
-   "note": ""
-  },
-  {
-   "owner": "sumingwang233",
-   "repo": "dsh-question-bridge",
-   "slug": "sumingwang233-dsh-question-bridge",
-   "name": "dsh-question-bridge",
-   "category": "tools",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/sumingwang233/dsh-question-bridge",
    "note": ""
   },
   {
@@ -109496,17 +108880,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/taffy114514/dsh-plugin-unlock",
-   "note": ""
-  },
-  {
-   "owner": "taikaikaikai-pixel",
-   "repo": "dsh-tap",
-   "slug": "taikaikaikai-pixel-dsh-tap",
-   "name": "dsh-tap",
-   "category": "model",
-   "npm": "dsh-tap",
-   "harness": "dsh",
-   "url": "https://github.com/taikaikaikai-pixel/dsh-tap",
    "note": ""
   },
   {
@@ -115296,17 +114669,6 @@
    "note": ""
   },
   {
-   "owner": "Vast-Unhurried",
-   "repo": "dsh-toolkit",
-   "slug": "vast-unhurried-dsh-toolkit",
-   "name": "dsh-toolkit",
-   "category": "usage",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Vast-Unhurried/dsh-toolkit",
-   "note": ""
-  },
-  {
    "owner": "Vayne-bit",
    "repo": "dsh-island",
    "slug": "vayne-bit-dsh-island",
@@ -115879,17 +115241,6 @@
    "note": ""
   },
   {
-   "owner": "vfuncyy",
-   "repo": "dsh-edge-bridge",
-   "slug": "vfuncyy-dsh-edge-bridge",
-   "name": "dsh-edge-bridge",
-   "category": "browser",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/vfuncyy/dsh-edge-bridge",
-   "note": ""
-  },
-  {
    "owner": "VFVrPQ",
    "repo": "dsh-preview-image",
    "slug": "vfvrpq-dsh-preview-image",
@@ -115942,17 +115293,6 @@
    "npm": "dsh-plugin-save-token",
    "harness": "dsh",
    "url": "https://github.com/vibe-any/dsh-plugin-save-token",
-   "note": ""
-  },
-  {
-   "owner": "VibeDev-Si",
-   "repo": "dsh-ecosystem",
-   "slug": "vibedev-si-dsh-ecosystem",
-   "name": "dsh-ecosystem",
-   "category": "market",
-   "npm": "@vibedev-si/dsh-ecosystem",
-   "harness": "dsh",
-   "url": "https://github.com/VibeDev-Si/dsh-ecosystem",
    "note": ""
   },
   {
@@ -118332,17 +117672,6 @@
    "note": ""
   },
   {
-   "owner": "wbin0001",
-   "repo": "dsh-comfyui-canvas",
-   "slug": "wbin0001-dsh-comfyui-canvas",
-   "name": "dsh-comfyui-canvas",
-   "category": "tools",
-   "npm": "dsh-comfyui-canvas",
-   "harness": "dsh",
-   "url": "https://github.com/wbin0001/dsh-comfyui-canvas",
-   "note": ""
-  },
-  {
    "owner": "WBMGGGG",
    "repo": "dsh-opticforge",
    "slug": "wbmgggg-dsh-opticforge",
@@ -118538,17 +117867,6 @@
    "npm": "@dsh-plugins/dsh-llm-hub",
    "harness": "dsh",
    "url": "https://github.com/webkubor/dsh-llm-hub",
-   "note": ""
-  },
-  {
-   "owner": "webkubor",
-   "repo": "dsh-mirror",
-   "slug": "webkubor-dsh-mirror",
-   "name": "dsh-mirror",
-   "category": "memory",
-   "npm": "@dsh-plugins/dsh-user-mirror",
-   "harness": "dsh",
-   "url": "https://github.com/webkubor/dsh-mirror",
    "note": ""
   },
   {
@@ -122117,17 +121435,6 @@
   },
   {
    "owner": "WSL043",
-   "repo": "dsh-chat-manager",
-   "slug": "wsl043-dsh-chat-manager",
-   "name": "dsh-chat-manager",
-   "category": "session",
-   "npm": "dsh-chat-manager",
-   "harness": "dsh",
-   "url": "https://github.com/WSL043/dsh-chat-manager",
-   "note": ""
-  },
-  {
-   "owner": "WSL043",
    "repo": "dsh-codex-subscription",
    "slug": "wsl043-dsh-codex-subscription",
    "name": "dsh-codex-subscription",
@@ -122135,17 +121442,6 @@
    "npm": "dsh-codex-subscription",
    "harness": "dsh",
    "url": "https://github.com/WSL043/dsh-codex-subscription",
-   "note": ""
-  },
-  {
-   "owner": "WSL043",
-   "repo": "dsh-image-viewer",
-   "slug": "wsl043-dsh-image-viewer",
-   "name": "dsh-image-viewer",
-   "category": "vision",
-   "npm": "dsh-image-viewer",
-   "harness": "dsh",
-   "url": "https://github.com/WSL043/dsh-image-viewer",
    "note": ""
   },
   {
@@ -124767,17 +124063,6 @@
    "note": ""
   },
   {
-   "owner": "XiangSu-ce",
-   "repo": "dsh-plugin-freecodego",
-   "slug": "xiangsu-ce-dsh-plugin-freecodego",
-   "name": "dsh-plugin-freecodego",
-   "category": "model",
-   "npm": "freecodego",
-   "harness": "dsh",
-   "url": "https://github.com/XiangSu-ce/dsh-plugin-freecodego",
-   "note": ""
-  },
-  {
    "owner": "XiangyuYue",
    "repo": "boardwise",
    "slug": "xiangyuyue-boardwise",
@@ -125614,39 +124899,6 @@
    "note": ""
   },
   {
-   "owner": "xiaoxin3309",
-   "repo": "dsh-backup-rescue",
-   "slug": "xiaoxin3309-dsh-backup-rescue",
-   "name": "dsh-backup-rescue",
-   "category": "dev",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/xiaoxin3309/dsh-backup-rescue",
-   "note": ""
-  },
-  {
-   "owner": "xiaoxin3309",
-   "repo": "dsh-mini",
-   "slug": "xiaoxin3309-dsh-mini",
-   "name": "dsh-mini",
-   "category": "ui",
-   "npm": "dsh-mini",
-   "harness": "dsh",
-   "url": "https://github.com/xiaoxin3309/dsh-mini",
-   "note": ""
-  },
-  {
-   "owner": "xiaoxin3309",
-   "repo": "dsh-phone-control",
-   "slug": "xiaoxin3309-dsh-phone-control",
-   "name": "dsh-phone-control",
-   "category": "remote",
-   "npm": "dsh-phone-control",
-   "harness": "dsh",
-   "url": "https://github.com/xiaoxin3309/dsh-phone-control",
-   "note": ""
-  },
-  {
    "owner": "xiaoxue-car",
    "repo": "dsh-card-workbench",
    "slug": "xiaoxue-car-dsh-card-workbench",
@@ -125809,17 +125061,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/xiatian-wuhan/dsh-skills-hub",
-   "note": ""
-  },
-  {
-   "owner": "xiaweiliang060035",
-   "repo": "dsh-opencode-go-usage",
-   "slug": "xiaweiliang060035-dsh-opencode-go-usage",
-   "name": "dsh-opencode-go-usage",
-   "category": "usage",
-   "npm": "@xiaweiliang060035/dsh-opencode-go-usage",
-   "harness": "dsh",
-   "url": "https://github.com/xiaweiliang060035/dsh-opencode-go-usage",
    "note": ""
   },
   {
@@ -127338,17 +126579,6 @@
    "npm": "dshgo-vmbridge",
    "harness": "dsh",
    "url": "https://github.com/xqe-bkflda/dshgo-vmbridge",
-   "note": ""
-  },
-  {
-   "owner": "xqh-jason",
-   "repo": "dsh-sidebar-delete",
-   "slug": "xqh-jason-dsh-sidebar-delete",
-   "name": "dsh-sidebar-delete",
-   "category": "session",
-   "npm": "dsh-sidebar-delete",
-   "harness": "dsh",
-   "url": "https://github.com/xqh-jason/dsh-sidebar-delete",
    "note": ""
   },
   {
@@ -128936,17 +128166,6 @@
    "note": ""
   },
   {
-   "owner": "yang208691-source",
-   "repo": "dsh-nutstore-backup",
-   "slug": "yang208691-source-dsh-nutstore-backup",
-   "name": "dsh-nutstore-backup",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/yang208691-source/dsh-nutstore-backup",
-   "note": ""
-  },
-  {
    "owner": "yangdcm",
    "repo": "dsh-expert-team",
    "slug": "yangdcm-dsh-expert-team",
@@ -130223,17 +129442,6 @@
    "note": ""
   },
   {
-   "owner": "yeastcloud",
-   "repo": "dsh-anchor",
-   "slug": "yeastcloud-dsh-anchor",
-   "name": "dsh-anchor",
-   "category": "session",
-   "npm": "@yeastcloud/dsh-anchor",
-   "harness": "dsh",
-   "url": "https://github.com/yeastcloud/dsh-anchor",
-   "note": ""
-  },
-  {
    "owner": "Yeelight",
    "repo": "dsh-yeelight-smart-home",
    "slug": "yeelight-dsh-yeelight-smart-home",
@@ -130517,17 +129725,6 @@
    "npm": "dsh-engramory-recall",
    "harness": "dsh",
    "url": "https://github.com/yffo/dsh-engramory-recall",
-   "note": ""
-  },
-  {
-   "owner": "yffo",
-   "repo": "dsh-operator",
-   "slug": "yffo-dsh-operator",
-   "name": "dsh-operator",
-   "category": "tools",
-   "npm": "dsh-operator",
-   "harness": "dsh",
-   "url": "https://github.com/yffo/dsh-operator",
    "note": ""
   },
   {
@@ -131100,17 +130297,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/yimengsuper2432/dsh-auto-convert",
-   "note": ""
-  },
-  {
-   "owner": "yimengsuper2432",
-   "repo": "dsh-notice",
-   "slug": "yimengsuper2432-dsh-notice",
-   "name": "dsh-notice",
-   "category": "notify",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/yimengsuper2432/dsh-notice",
    "note": ""
   },
   {
@@ -132970,17 +132156,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/Yuedalao/dsh-connect-minimax",
-   "note": ""
-  },
-  {
-   "owner": "YUEEEEY",
-   "repo": "dsh-desktop-tools",
-   "slug": "yueeeey-dsh-desktop-tools",
-   "name": "dsh-desktop-tools",
-   "category": "tools",
-   "npm": "dsh-desktop-tools",
-   "harness": "dsh",
-   "url": "https://github.com/YUEEEEY/dsh-desktop-tools",
    "note": ""
   },
   {
@@ -135801,17 +134976,6 @@
   },
   {
    "owner": "zeki520",
-   "repo": "dsh-boot-nexus",
-   "slug": "zeki520-dsh-boot-nexus",
-   "name": "dsh-boot-nexus",
-   "category": "ui",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/zeki520/dsh-boot-nexus",
-   "note": ""
-  },
-  {
-   "owner": "zeki520",
    "repo": "dsh-download-nexus",
    "slug": "zeki520-dsh-download-nexus",
    "name": "dsh-download-nexus",
@@ -137304,17 +136468,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/zhaohongxuan/dsh-weread",
-   "note": ""
-  },
-  {
-   "owner": "zhaolianghz",
-   "repo": "dsh-turnscope",
-   "slug": "zhaolianghz-dsh-turnscope",
-   "name": "dsh-turnscope",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/zhaolianghz/dsh-turnscope",
    "note": ""
   },
   {
@@ -139870,17 +139023,6 @@
    "note": ""
   },
   {
-   "owner": "ZK-Andy",
-   "repo": "dsh-frecency",
-   "slug": "zk-andy-dsh-frecency",
-   "name": "dsh-frecency",
-   "category": "tools",
-   "npm": "dsh-frecency",
-   "harness": "dsh",
-   "url": "https://github.com/ZK-Andy/dsh-frecency",
-   "note": ""
-  },
-  {
    "owner": "Zkbnfcnb",
    "repo": "dsh-my-agent-preset",
    "slug": "zkbnfcnb-dsh-my-agent-preset",
@@ -140263,72 +139405,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/znshmily/dsh-model-value",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-artifacts",
-   "slug": "zoahdev-dsh-artifacts",
-   "name": "dsh-artifacts",
-   "category": "tools",
-   "npm": "dsh-artifacts",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-artifacts",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-browser-use",
-   "slug": "zoahdev-dsh-browser-use",
-   "name": "dsh-browser-use",
-   "category": "tools",
-   "npm": "dsh-browser-use",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-browser-use",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-firecrawl",
-   "slug": "zoahdev-dsh-firecrawl",
-   "name": "dsh-firecrawl",
-   "category": "tools",
-   "npm": "dsh-firecrawl",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-firecrawl",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-poison-guard",
-   "slug": "zoahdev-dsh-poison-guard",
-   "name": "dsh-poison-guard",
-   "category": "security",
-   "npm": "dsh-poison-guard",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-poison-guard",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-quality-score",
-   "slug": "zoahdev-dsh-quality-score",
-   "name": "dsh-quality-score",
-   "category": "dev",
-   "npm": "dsh-quality-score",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-quality-score",
-   "note": ""
-  },
-  {
-   "owner": "zoahdev",
-   "repo": "dsh-unplug",
-   "slug": "zoahdev-dsh-unplug",
-   "name": "dsh-unplug",
-   "category": "dev",
-   "npm": "dsh-unplug",
-   "harness": "dsh",
-   "url": "https://github.com/zoahdev/dsh-unplug",
    "note": ""
   },
   {

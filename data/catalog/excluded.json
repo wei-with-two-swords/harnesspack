@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-11-27T01:53:01Z",
+ "updated_at": "2026-11-27T01:55:34Z",
  "rule": "repository not found for 3+ consecutive snapshots; auto-restored when ok again",
  "excluded": {
   "1052326311-dsh-plan-lattice": {
@@ -33,22 +33,12 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "349840432m-dev-dsh-session-dashboard": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "a1141171521-dsh-multi-agent-gateway": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
   },
   "adingo001-dsh-notification-desktop": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "akashyc-dsh-moss-image": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -73,11 +63,6 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "ar-26710-1-dsh-plugin-scu-urp": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "archaofan-dsh-notify-relay": {
    "reason": "repository not found",
    "since": "2026-11-26",
@@ -88,57 +73,7 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "bay-zeddie-dsh-agent-instructions": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "bobostudio-dsh-session-lens": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-arg-guard": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-compaction-audit": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-context-budget": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-openfoam-doctor": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-page-monitor": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-profile-doctor": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-routing-forensics": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bushizhanghan-dsh-workspace-switch-cost": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "bx33661-dsh-omv": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -148,17 +83,7 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "chenhao6682108-dsh-skill-musicbee": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "chiang21fcb-cn-linebreak": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "chlyz621-dsh-unstuck": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -203,21 +128,6 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "disantosmyha-cloud-tempguard": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "duncanlii-dsh-context-kernel": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "engbonuonga-dsh-wordpress-admin": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "eviming-dsh-qq-shell-commands": {
    "reason": "repository not found",
    "since": "2026-11-26",
@@ -228,54 +138,14 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "flylliu-travel-quote-free": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "gaolin89898-remote-session-plugin": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
   },
-  "hao0311-dsh-deferred-approvals": {
+  "haozheou-dsh-discipline-guard": {
    "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-mimo-tts": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-model-price": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-price-badge": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-sidebar-tidy": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-timebox": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "hao0311-dsh-toolbox": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "heiheiha798-dsh-plugin-response-window": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
+   "since": "2026-11-27",
    "streak": 5
   },
   "huaizhuanghub-dsh-persona-dafeiyu": {
@@ -293,9 +163,9 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "iswalterwu-agent-site": {
+  "jackheather-dsh-self-learn": {
    "reason": "repository not found",
-   "since": "2026-11-26",
+   "since": "2026-11-27",
    "streak": 5
   },
   "jeffreysuen-x-dsh-skill-dossier": {
@@ -303,9 +173,24 @@
    "since": "2026-11-26",
    "streak": 5
   },
+  "jiangyinluwei-dsh-pluginone": {
+   "reason": "repository not found",
+   "since": "2026-11-27",
+   "streak": 5
+  },
   "jing-hy-dsh-task-runner": {
    "reason": "repository not found",
    "since": "2026-11-26",
+   "streak": 5
+  },
+  "kiligzzz-dsh-agent-dispatch": {
+   "reason": "repository not found",
+   "since": "2026-11-27",
+   "streak": 5
+  },
+  "kiligzzz-dsh-session-archive": {
+   "reason": "repository not found",
+   "since": "2026-11-27",
    "streak": 5
   },
   "kippythisway-dsh-team-v3": {
@@ -318,9 +203,9 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "laoyingfuhuole-dsh-thinking-channel-guard": {
+  "lijianbin2-dsh-wx-channels-downloader": {
    "reason": "repository not found",
-   "since": "2026-11-26",
+   "since": "2026-11-27",
    "streak": 5
   },
   "lostforest7-dsh-apirevise": {
@@ -383,22 +268,7 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "mypanda-hash-chengxiao": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "ningyuanlee-dsh-grok-byapi": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "ningyuanlee-dsh-gui-auth-url": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "philyue-dsh-llm-manage": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -408,17 +278,7 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "q862877400-ux-dsh-fuhuobi": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "qikairo7-dsh-web-search-fetch": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "regrevia-dsh-install-check": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -434,16 +294,6 @@
    "streak": 5
   },
   "shimingming520-dsh-conversation-process-collapse": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "shuoweifu-dsh-liquid-glass": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "siriuswj-dsh-updater-npm": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -468,9 +318,9 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "topmindspace-dsh-super-mind": {
+  "temotee2103-dsh-ci-co-pilot": {
    "reason": "repository not found",
-   "since": "2026-11-26",
+   "since": "2026-11-27",
    "streak": 5
   },
   "vast-unhurried-dsh-toolkit": {
@@ -488,32 +338,12 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "waldsatte-dsh-theme-taojian": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "wbin0001-dsh-comfyui-canvas": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
   },
-  "webkubor-dsh-env-inspector": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "webkubor-dsh-mirror": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "wenzetan-dsh-llm-newapi": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "wenzetan-dsh-quota-panel": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -524,11 +354,6 @@
    "streak": 5
   },
   "wsl043-dsh-image-viewer": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "wsl043-dsh-reasoning-slider": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
@@ -558,11 +383,6 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "xiex16070-jpg-dsh-prompt-enhance": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "xqh-jason-dsh-sidebar-delete": {
    "reason": "repository not found",
    "since": "2026-11-26",
@@ -583,11 +403,6 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "yikart-aitoearn-dsh-plugin": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
   "yimengsuper2432-dsh-notice": {
    "reason": "repository not found",
    "since": "2026-11-26",
@@ -598,17 +413,12 @@
    "since": "2026-11-26",
    "streak": 5
   },
-  "zci514-dsh-nightwatch": {
+  "zeki520-dsh-boot-nexus": {
    "reason": "repository not found",
-   "since": "2026-11-26",
+   "since": "2026-11-27",
    "streak": 5
   },
   "zhaolianghz-dsh-turnscope": {
-   "reason": "repository not found",
-   "since": "2026-11-26",
-   "streak": 5
-  },
-  "ziyuan258-dsh-prompt-enhance": {
    "reason": "repository not found",
    "since": "2026-11-26",
    "streak": 5
