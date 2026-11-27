@@ -44,7 +44,27 @@ def _url_entry(loc: str, lastmod: str | None) -> str:
 
 @router.get("/robots.txt", include_in_schema=False)
 def robots(request: Request) -> Response:
+    # SEO-analysis bots bring no search indexing and no traffic; nginx also
+    # 403s them by UA (deploy/nginx/harnesspack.dev.conf) as the enforcement
+    # layer. This block is the polite declaration for spec-compliant crawlers.
+    # Per robots.txt rules, specific User-agent groups must precede the "*".
     body = (
+        # --- SEO analysis crawlers: full disallow ---
+        "User-agent: AhrefsBot\n"
+        "Disallow: /\n"
+        "User-agent: SemrushBot\n"
+        "Disallow: /\n"
+        "User-agent: MJ12bot\n"
+        "Disallow: /\n"
+        "User-agent: DotBot\n"
+        "Disallow: /\n"
+        "User-agent: BLEXBot\n"
+        "Disallow: /\n"
+        "User-agent: SerpstatBot\n"
+        "Disallow: /\n"
+        "User-agent: DataForSeoBot\n"
+        "Disallow: /\n"
+        # --- everyone else: index freely, keep them off the JSON API ---
         "User-agent: *\n"
         "Allow: /\n"
         "Disallow: /api/\n"

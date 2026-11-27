@@ -62,6 +62,45 @@ def test_avatar_upstream_404_maps_to_404(client, monkeypatch):
     assert response.status_code == 404
 
 
+def test_avatar_bypasses_api_daily_quota(tmp_path, data_dir, monkeypatch):
+    """Avatars use their own minute bucket and never drain the JSON API quota.
+
+    A board page loads 20+ avatars at once; before the dedicated bucket each
+    one consumed the visitor's 50/day anonymous allowance and got real browsing
+    rate-limited (2026-11-27 incident).
+    """
+    from fastapi.testclient import TestClient
+
+    from backend.app.config import Settings
+    from backend.app.main import create_app
+
+    calls: list[str] = []
+    _fake_github(monkeypatch, calls, payload=b"\x89PNG\r\n\x1a\n-fake")
+
+    seed, snaps = data_dir
+    settings = Settings(
+        db_path=tmp_path / "av.db",
+        snapshot_dir=snaps,
+        seed_path=seed,
+        frontend_dist=tmp_path / "dist",
+        rate_limit_per_minute=100,
+        api_anon_per_minute=5,
+        api_anon_per_day=1,
+    )
+    with TestClient(create_app(settings)) as client:
+        # An avatar hit uses the avatar bucket, leaving the 1/day JSON quota alone.
+        assert client.get("/api/v1/avatar/octocat.png").status_code == 200
+
+        # The single daily JSON request succeeds...
+        assert client.get("/api/v1/status").status_code == 200
+        # ...and the next one is blocked by the daily ceiling as designed...
+        assert client.get("/api/v1/status").status_code == 429
+        assert client.get("/api/v1/status").json()["scope"] == "anonymous-day"
+        # ...while avatars keep working.
+        assert client.get("/api/v1/avatar/octocat.png").status_code == 200
+        assert client.get("/api/v1/avatar/another-owner.png").status_code == 200
+
+
 def test_public_api_cache_headers(client):
     rankings = client.get("/api/v1/rankings/total")
     assert rankings.status_code == 200

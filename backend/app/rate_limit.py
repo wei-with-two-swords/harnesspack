@@ -139,6 +139,7 @@ def install_rate_limit(
     api_anon_per_day: int = 50,
     api_auth_per_minute: int = 50,
     api_auth_per_day: int = 500,
+    avatar_per_minute: int = 120,
     community_read_per_minute: int = 120,
     community_post_per_minute: int = 5,
     community_post_per_day: int = 50,
@@ -154,6 +155,7 @@ def install_rate_limit(
     anon_day = DailyLimiter(api_anon_per_day)
     auth_minute = SlidingWindowLimiter(api_auth_per_minute)
     auth_day = DailyLimiter(api_auth_per_day)
+    avatars = SlidingWindowLimiter(avatar_per_minute)
     community_reads = SlidingWindowLimiter(community_read_per_minute)
     community_buckets = {
         "post": (
@@ -223,6 +225,17 @@ def install_rate_limit(
             return await call_next(request)
 
         if path.startswith("/api/"):
+            # Avatars are served from the server-side disk cache (or fetched
+            # once and cached for a week by browsers and Cloudflare), so they
+            # cost almost nothing -- a board page loads 20+ of them at once
+            # and must not drain the visitor's tiny JSON-API daily quota.
+            # A roomy per-minute brake remains as abuse insurance.
+            if path.startswith("/api/v1/avatar/"):
+                allowed, retry_after = avatars.check(f"{ip}:avatar")
+                if not allowed:
+                    return _deny("avatar", avatars.limit, int(avatars.window), retry_after)
+                return await call_next(request)
+
             user = getattr(request.state, "user", None)
             if user is not None:
                 identity = f"user:{user.login}"

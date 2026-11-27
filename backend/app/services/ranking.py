@@ -15,6 +15,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from .. import og_cache
+
 BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie", "quality")
 NPM_BOARD = "npm"
 WINDOWS = (7, 30)
@@ -627,32 +629,38 @@ def plugin_detail(
                 return item["rank"]
         return None
 
-    detail["rank_total"] = _rank(board(conn, "total", on=day))
-    detail["rank_velocity"] = _rank(board(conn, "velocity", on=day))
-    detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
-    detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
-    detail["rank_quality7"] = _rank(board(conn, "quality", window=7, on=day))
-    detail["rank_quality30"] = _rank(board(conn, "quality", window=30, on=day))
+    # Each board() call scans the whole stars table (~12k plugins) and builds
+    # ~10 MB of temporary rows; six calls plus the category-peer scan below add
+    # up fast. Crawl storms over /plugins/<slug> pages used to run dozens of
+    # these concurrently and OOM-kill the worker. Gate the whole heavy section
+    # behind a small semaphore; other requests wait cheaply instead.
+    with og_cache.detail_slot():
+        detail["rank_total"] = _rank(board(conn, "total", on=day))
+        detail["rank_velocity"] = _rank(board(conn, "velocity", on=day))
+        detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
+        detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
+        detail["rank_quality7"] = _rank(board(conn, "quality", window=7, on=day))
+        detail["rank_quality30"] = _rank(board(conn, "quality", window=30, on=day))
 
-    if plugin["category"]:
-        same = _rows_on(conn, day, plugin["category"])
-        ordered = sorted(same, key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
-        peers = []
-        for i, row in enumerate(ordered):
-            if row["slug"] == slug:
-                detail["rank_category"] = i + 1
-                continue
-            peers.append(
-                {
-                    "slug": row["slug"],
-                    "name": row["name"],
-                    "stars": row["stars"],
-                    "rank": i + 1,
-                }
-            )
-            if len(peers) == 5:
-                break
-        detail["peers"] = peers
+        if plugin["category"]:
+            same = _rows_on(conn, day, plugin["category"])
+            ordered = sorted(same, key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
+            peers = []
+            for i, row in enumerate(ordered):
+                if row["slug"] == slug:
+                    detail["rank_category"] = i + 1
+                    continue
+                peers.append(
+                    {
+                        "slug": row["slug"],
+                        "name": row["name"],
+                        "stars": row["stars"],
+                        "rank": i + 1,
+                    }
+                )
+                if len(peers) == 5:
+                    break
+            detail["peers"] = peers
     return detail
 
 
