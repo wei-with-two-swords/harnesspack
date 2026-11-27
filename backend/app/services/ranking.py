@@ -15,8 +15,6 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from .. import og_cache
-
 BOARDS = ("velocity", "growth", "total", "darkhorse", "rookie", "quality")
 NPM_BOARD = "npm"
 WINDOWS = (7, 30)
@@ -553,6 +551,141 @@ def categories(conn: sqlite3.Connection, on: str | None = None) -> dict[str, Any
     return {"as_of": day, "items": items}
 
 
+def _plugin_ranks(
+    conn: sqlite3.Connection, day: str, slug: str, category: str | None
+) -> dict[str, Any]:
+    """Rank positions for ``plugin_detail`` without materializing board items.
+
+    Semantics mirror :func:`board` exactly -- same candidate filters, same
+    sort keys, same stable-sort order over the same cached rows -- but only
+    slug->rank positions are built instead of a full item dict for every
+    candidate. Six board() calls used to materialize ~12k dicts each
+    (~100 MB of transient garbage per detail request) and drove the worker
+    into its OOM ceiling during the 2026-11-27 crawl storm.
+
+    Called from ``og_image`` while a render slot is held, so it must never
+    acquire the og render semaphore.
+    """
+    total_key = lambda r: (-r["stars"], r["name"].lower(), r["slug"])
+    rows = _rows_on(conn, day)
+    total_order = sorted(rows, key=total_key)
+    total_index = {r["slug"]: i + 1 for i, r in enumerate(total_order)}
+    ranks: dict[str, Any] = {"rank_total": total_index.get(slug)}
+
+    velocity_order = sorted(
+        (r for r in rows if r["delta"] is not None),
+        key=lambda r: (-r["delta"], -r["stars"], r["name"].lower(), r["slug"]),
+    )
+    velocity_index = {r["slug"]: i + 1 for i, r in enumerate(velocity_order)}
+    ranks["rank_velocity"] = velocity_index.get(slug)
+
+    # growth: exact base-day snapshot required; base stars must clear the floor.
+    def growth_rank(window: int) -> int | None:
+        base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
+        base_rows = _rows_on(conn, base_day)
+        if not base_rows:
+            return None
+        base = {r["slug"]: r for r in base_rows}
+        candidates: list[tuple[float, dict[str, Any]]] = []
+        for row in rows:
+            old = base.get(row["slug"])
+            if old is None or old["stars"] < GROWTH_MIN_BASE:
+                continue
+            candidates.append(((row["stars"] - old["stars"]) / old["stars"], row))
+        candidates.sort(
+            key=lambda c: (-c[0], -c[1]["stars"], c[1]["name"].lower(), c[1]["slug"])
+        )
+        for i, (_, row) in enumerate(candidates):
+            if row["slug"] == slug:
+                return i + 1
+        return None
+
+    ranks["rank_growth7"] = growth_rank(7)
+
+    # darkhorse: improvement of the total rank over the window.
+    def darkhorse_rank(window: int) -> int | None:
+        base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
+        base_rows = _rows_on(conn, base_day)
+        if not base_rows:
+            return None
+        base_rank = _rank_map(base_rows)
+        jumps: list[tuple[int, dict[str, Any], int]] = []
+        for i, row in enumerate(total_order):
+            old_rank = base_rank.get(row["slug"])
+            if old_rank is None:
+                continue
+            jumps.append((old_rank - (i + 1), row, old_rank))
+        jumps.sort(
+            key=lambda j: (-j[0], -j[1]["stars"], j[1]["name"].lower(), j[1]["slug"])
+        )
+        for i, (_, row, _) in enumerate(jumps):
+            if row["slug"] == slug:
+                return i + 1
+        return None
+
+    ranks["rank_darkhorse7"] = darkhorse_rank(7)
+
+    # quality: anomaly-free average daily growth over the window.
+    def quality_rank(window: int) -> int | None:
+        base_day = (Date.fromisoformat(day) - timedelta(days=window)).isoformat()
+        stats = {
+            r["plugin_id"]: dict(r)
+            for r in conn.execute(
+                """
+                SELECT plugin_id,
+                       SUM(CASE WHEN is_anomaly = 0 THEN 1 ELSE 0 END) AS observed_days,
+                       SUM(CASE WHEN is_anomaly = 0 THEN delta ELSE 0 END) AS real_delta
+                FROM stars
+                WHERE date > ? AND date <= ? AND delta IS NOT NULL
+                GROUP BY plugin_id
+                """,
+                (base_day, day),
+            ).fetchall()
+        }
+        candidates: list[tuple[float, dict[str, Any]]] = []
+        for row in rows:
+            stat = stats.get(row.get("id"))
+            if stat is None or stat["observed_days"] < QUALITY_MIN_DAYS:
+                continue
+            daily = stat["real_delta"] / stat["observed_days"]
+            candidates.append((daily, row))
+        candidates.sort(
+            key=lambda c: (-c[0], -c[1]["stars"], c[1]["name"].lower(), c[1]["slug"])
+        )
+        for i, (_, row) in enumerate(candidates):
+            if row["slug"] == slug:
+                return i + 1
+        return None
+
+    ranks["rank_quality7"] = quality_rank(7)
+    ranks["rank_quality30"] = quality_rank(30)
+
+    if category:
+        # Mirrors the historical peer loop: the walk stops once 5 peers are
+        # collected, so a plugin ranked 6th-or-lower inside its category keeps
+        # rank_category = None and still gets the top-5 peer cards.
+        ranks["rank_category"] = None
+        ranks["peers"] = []
+        ordered = sorted(_rows_on(conn, day, category), key=total_key)
+        peers: list[dict[str, Any]] = []
+        for i, row in enumerate(ordered):
+            if row["slug"] == slug:
+                ranks["rank_category"] = i + 1
+                continue
+            peers.append(
+                {
+                    "slug": row["slug"],
+                    "name": row["name"],
+                    "stars": row["stars"],
+                    "rank": i + 1,
+                }
+            )
+            if len(peers) == 5:
+                break
+        ranks["peers"] = peers
+    return ranks
+
+
 def plugin_detail(
     conn: sqlite3.Connection,
     slug: str,
@@ -623,44 +756,16 @@ def plugin_detail(
         detail["delta"] = latest["delta"]
         detail["is_anomaly"] = bool(latest["is_anomaly"])
 
-    def _rank(board_payload: dict[str, Any]) -> int | None:
-        for item in board_payload["items"]:
-            if item["slug"] == slug:
-                return item["rank"]
-        return None
-
-    # Each board() call scans the whole stars table (~12k plugins) and builds
-    # ~10 MB of temporary rows; six calls plus the category-peer scan below add
-    # up fast. Crawl storms over /plugins/<slug> pages used to run dozens of
-    # these concurrently and OOM-kill the worker. Gate the whole heavy section
-    # behind a small semaphore; other requests wait cheaply instead.
-    with og_cache.detail_slot():
-        detail["rank_total"] = _rank(board(conn, "total", on=day))
-        detail["rank_velocity"] = _rank(board(conn, "velocity", on=day))
-        detail["rank_growth7"] = _rank(board(conn, "growth", window=7, on=day))
-        detail["rank_darkhorse7"] = _rank(board(conn, "darkhorse", window=7, on=day))
-        detail["rank_quality7"] = _rank(board(conn, "quality", window=7, on=day))
-        detail["rank_quality30"] = _rank(board(conn, "quality", window=30, on=day))
-
-        if plugin["category"]:
-            same = _rows_on(conn, day, plugin["category"])
-            ordered = sorted(same, key=lambda r: (-r["stars"], r["name"].lower(), r["slug"]))
-            peers = []
-            for i, row in enumerate(ordered):
-                if row["slug"] == slug:
-                    detail["rank_category"] = i + 1
-                    continue
-                peers.append(
-                    {
-                        "slug": row["slug"],
-                        "name": row["name"],
-                        "stars": row["stars"],
-                        "rank": i + 1,
-                    }
-                )
-                if len(peers) == 5:
-                    break
-            detail["peers"] = peers
+    ranks = _plugin_ranks(conn, day, slug, plugin["category"])
+    detail["rank_total"] = ranks["rank_total"]
+    detail["rank_velocity"] = ranks["rank_velocity"]
+    detail["rank_growth7"] = ranks["rank_growth7"]
+    detail["rank_darkhorse7"] = ranks["rank_darkhorse7"]
+    detail["rank_quality7"] = ranks["rank_quality7"]
+    detail["rank_quality30"] = ranks["rank_quality30"]
+    if plugin["category"]:
+        detail["rank_category"] = ranks["rank_category"]
+        detail["peers"] = ranks["peers"]
     return detail
 
 

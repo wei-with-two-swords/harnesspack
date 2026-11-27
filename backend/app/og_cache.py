@@ -33,21 +33,12 @@ from typing import Any, Callable, Iterator
 DEFAULT_MAX_FILES = 5000
 DEFAULT_MAX_BYTES = 200 * 1024 * 1024
 DEFAULT_MAX_CONCURRENT = 2
-#: Separate, equally tight gate for ``ranking.plugin_detail``: it runs 5-6 full
-#: board scans (~10 MB of temporary ranking rows each) and is reachable from
-#: /plugins/<slug> page renders and /api/v1/plugins/<slug> directly. A crawler
-#: sweeping plugin pages must not run dozens of those concurrently (2026-11-27:
-#: AhrefsBot did exactly that and OOM-killed the worker 4 times). This is a
-#: *different* lock from ``_render_slots`` so ``og_image`` -- which holds a
-#: render slot and then calls ``plugin_detail`` -- can never deadlock.
-DEFAULT_DETAIL_CONCURRENT = 2
 
 _SAFE = re.compile(r"[^a-zA-Z0-9_-]")
 
 # Render at most a couple of images at once. A PIL card peaks around 10-15 MB;
 # two in flight keeps the worker well under its 384 MB ceiling.
 _render_slots = threading.BoundedSemaphore(DEFAULT_MAX_CONCURRENT)
-_detail_slots = threading.BoundedSemaphore(DEFAULT_DETAIL_CONCURRENT)
 _evict_lock = threading.Lock()
 _key_locks_guard = threading.Lock()
 _key_locks: dict[str, threading.Lock] = {}
@@ -68,25 +59,11 @@ def _key_lock(path: Path) -> threading.Lock:
 def processing_slot() -> Iterator[None]:
     """Gate the *whole* OG request (data load + render), not just the render.
 
-    ``plugin_detail`` itself allocates ~10 MB of temporary ranking rows. If 20
-    request threads each run it before queueing to render, peak memory still
-    blows past the worker limit. This slot is acquired first so at most a
-    couple of requests hold expensive state at any instant; the rest wait
-    cheaply on the semaphore.
+    ``og_image`` loads plugin detail data and renders a PIL card under this
+    slot; the detail rank lookups themselves are lean now (they allocate a few
+    MB, not the ~100 MB of item dicts they used to).
     """
     with _render_slots:
-        yield
-
-
-@contextmanager
-def detail_slot() -> Iterator[None]:
-    """Gate the heavy board-scan section of ``ranking.plugin_detail``.
-
-    Deliberately a second semaphore: ``og_image`` already holds a render slot
-    and calls ``plugin_detail`` inside it, so nesting ``_render_slots`` here
-    would deadlock under load (a BoundedSemaphore is not reentrant).
-    """
-    with _detail_slots:
         yield
 
 

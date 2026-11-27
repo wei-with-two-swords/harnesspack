@@ -186,3 +186,176 @@ def test_quality_board_drops_anomaly_days(db):
     assert beta["growth"] == 5.0
     assert items[2]["growth"] == 0.0
     assert items[3]["growth"] == -10.0
+
+
+# --- plugin_detail rank equivalence: _plugin_ranks must equal board() ---
+
+
+def _board_rank(db, name: str, slug: str, window: int | None = None):
+    """The rank a plugin holds on a public board, or None if absent."""
+    payload = (
+        ranking.board(db, name, window=window) if window else ranking.board(db, name)
+    )
+    for item in payload["items"]:
+        if item["slug"] == slug:
+            return item["rank"]
+    return None
+
+
+def test_detail_ranks_match_boards(db):
+    """On the standard fixture, every detail rank equals its public board rank."""
+    slugs = [
+        r["slug"] for r in db.execute("SELECT slug FROM plugins WHERE status='active'")
+    ]
+    assert len(slugs) == 4
+    for slug in slugs:
+        detail = ranking.plugin_detail(db, slug)
+        assert detail is not None
+        assert detail["rank_total"] == _board_rank(db, "total", slug)
+        assert detail["rank_velocity"] == _board_rank(db, "velocity", slug)
+        assert detail["rank_growth7"] == _board_rank(db, "growth", slug, window=7)
+        assert detail["rank_darkhorse7"] == _board_rank(db, "darkhorse", slug, window=7)
+        assert detail["rank_quality7"] == _board_rank(db, "quality", slug, window=7)
+        assert detail["rank_quality30"] == _board_rank(db, "quality", slug, window=30)
+
+
+def test_detail_ranks_match_boards_adversarial(tmp_path):
+    """Ties, case-variant names, delta gaps, base-threshold edges, anomalies,
+    mid-window newcomers and category peers must all rank identically."""
+    import random
+
+    random.seed(20261127)
+    conn = connect(tmp_path / "adv.db")
+    init_db(conn)
+
+    days = [f"2026-11-{d:02d}" for d in range(1, 21)]  # 20 daily snapshots
+    categories = ["workflow", "coding", "design"]
+    # Case-variant names exercise the name.lower() tie-break; equal stars
+    # exercise the stable-sort fallback.
+    name_styles = ["Zeta Tool", "zeta tool", "ZETA TOOL", "Éta Tool", "eta tool"]
+    plugins = []
+    for i in range(40):
+        style = name_styles[i % len(name_styles)]
+        plugins.append(
+            {
+                "slug": f"p{i:02d}-repo",
+                "owner": f"o{i:02d}",
+                "repo": "repo",
+                # Identical display names within a group force tie-break paths.
+                "name": f"{style} {i % len(name_styles)}",
+                "category": categories[i % len(categories)],
+            }
+        )
+
+    for p in plugins:
+        conn.execute(
+            """
+            INSERT INTO plugins (slug, owner, repo, name, category, url, status,
+                                 repo_created_at, stars_latest)
+            VALUES (?, ?, ?, ?, ?, ?, 'active', '2024-01-01T00:00:00Z', NULL)
+            """,
+            (p["slug"], p["owner"], p["repo"], p["name"], p["category"],
+             f"https://github.com/{p['owner']}/{p['repo']}"),
+        )
+    conn.commit()
+
+    # Stars: heavy ties, three threshold-edge plugins on the growth base day,
+    # a few first-appearance gaps (delta NULL) and flagged anomaly days.
+    base_day = days[12]  # day - 7 == 2026-11-13 for the latest day 2026-11-20
+    star_plan: dict[str, dict[str, int]] = {}
+    for i, p in enumerate(plugins):
+        star_plan[p["slug"]] = {}
+        level = (i * 7) % 60  # many collisions across 40 plugins
+        for j, day in enumerate(days):
+            if i % 9 == 4 and j < 7:
+                continue  # mid-window newcomer: absent early, delta NULL later
+            star_plan[p["slug"]][day] = level + j
+
+    # Threshold edges against GROWTH_MIN_BASE=50 on the base day.
+    star_plan["p00-repo"][base_day] = 50   # exactly at the floor -> candidate
+    star_plan["p01-repo"][base_day] = 49   # just under -> excluded
+    star_plan["p02-repo"][base_day] = 51
+
+    for slug, by_day in star_plan.items():
+        pid = conn.execute(
+            "SELECT id FROM plugins WHERE slug = ?", (slug,)
+        ).fetchone()[0]
+        for day, count in by_day.items():
+            conn.execute(
+                "INSERT INTO stars (plugin_id, date, count, delta, is_anomaly)"
+                " VALUES (?, ?, ?, ?, ?)",
+                (pid, day, count, None, 0),
+            )
+    # Backfill deltas (count - previous count, NULL on first appearance).
+    for slug, by_day in star_plan.items():
+        pid = conn.execute(
+            "SELECT id FROM plugins WHERE slug = ?", (slug,)
+        ).fetchone()[0]
+        prev = None
+        for day in days:
+            if day not in by_day:
+                continue
+            delta = None if prev is None else by_day[day] - prev
+            conn.execute(
+                "UPDATE stars SET delta = ? WHERE plugin_id = ? AND date = ?",
+                (delta, pid, day),
+            )
+            prev = by_day[day]
+    # Flag a handful of days as anomalies on the biggest movers.
+    for slug in ("p03-repo", "p11-repo", "p27-repo"):
+        pid = conn.execute(
+            "SELECT id FROM plugins WHERE slug = ?", (slug,)
+        ).fetchone()[0]
+        for day in days[10:14]:
+            conn.execute(
+                "UPDATE stars SET is_anomaly = 1 WHERE plugin_id = ? AND date = ?",
+                (pid, day),
+            )
+    conn.commit()
+
+    latest = ranking.latest_date(conn)
+    assert latest == "2026-11-20"
+
+    slugs = [p["slug"] for p in plugins]
+    for slug in slugs:
+        detail = ranking.plugin_detail(conn, slug)
+        assert detail is not None, slug
+        assert detail["rank_total"] == _board_rank(conn, "total", slug), slug
+        assert detail["rank_velocity"] == _board_rank(conn, "velocity", slug), slug
+        assert detail["rank_growth7"] == _board_rank(conn, "growth", slug, window=7), slug
+        assert (
+            detail["rank_darkhorse7"] == _board_rank(conn, "darkhorse", slug, window=7)
+        ), slug
+        assert detail["rank_quality7"] == _board_rank(conn, "quality", slug, window=7), slug
+        assert (
+            detail["rank_quality30"] == _board_rank(conn, "quality", slug, window=30)
+        ), slug
+
+        # Category rank and peers: identical to the category board's items.
+        # The peer loop caps at 5 and breaks before walking the rest, so a
+        # plugin ranked 6th-or-lower inside its category keeps rank_category
+        # = None (long-standing board() behavior, preserved here).
+        cat = next(p["category"] for p in plugins if p["slug"] == slug)
+        cat_board = ranking.board(conn, "total", category=cat)
+        expected_peers = []
+        expected_rank_category = None
+        for item in cat_board["items"]:
+            if item["slug"] == slug:
+                expected_rank_category = item["rank"]
+                continue
+            expected_peers.append(
+                {
+                    "slug": item["slug"],
+                    "name": item["name"],
+                    "stars": item["stars"],
+                    "rank": item["rank"],
+                }
+            )
+            if len(expected_peers) == 5:
+                break
+        if expected_rank_category is not None:
+            assert detail["rank_category"] == expected_rank_category, slug
+        else:
+            assert detail["rank_category"] is None, slug
+        assert detail["peers"] == expected_peers, slug
+    conn.close()
