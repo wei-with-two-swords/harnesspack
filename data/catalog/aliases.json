@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-27T00:10:58Z",
+ "updated_at": "2026-11-27T01:41:06Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -56,6 +56,14 @@
    "slug": "ccgo26-dsh-app-updater",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:52Z"
+  },
+  "1lany2a/dsh-domain-role": {
+   "owner": "1Lany2a",
+   "repo": "dsh-post-owner",
+   "url": "https://github.com/1Lany2a/dsh-post-owner",
+   "slug": "1lany2a-dsh-post-owner",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-27T01:40:26Z"
   },
   "2090003781/bridge": {
    "owner": "Charliewhale",
@@ -128,6 +136,14 @@
    "slug": "antonio-mastropaolo-dsh-model-hub",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:06:57Z"
+  },
+  "asthestarsfalll/dsh-answer-card": {
+   "owner": "Asthestarsfalll",
+   "repo": "answer-card",
+   "url": "https://github.com/Asthestarsfalll/answer-card",
+   "slug": "asthestarsfalll-answer-card",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-27T01:40:30Z"
   },
   "b-tq/dsh-wallpaper": {
    "owner": "The-Bluebu",
@@ -385,6 +401,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:07:33Z"
   },
+  "jason-skd/dsh-session-fork": {
+   "owner": "jh76111",
+   "repo": "dsh-session-fork",
+   "url": "https://github.com/jh76111/dsh-session-fork",
+   "slug": "jh76111-dsh-session-fork",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-27T01:40:44Z"
+  },
   "jerryxff26-alt/dsh-delivery-board": {
    "owner": "jerryxff26-alt",
    "repo": "delivery-board",
@@ -616,6 +640,14 @@
    "slug": "mkiea-omnichannel-bridge",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:11Z"
+  },
+  "monagisa/dsh-plugin-shop-accounts": {
+   "owner": "world-geniuses",
+   "repo": "dsh-plugin-shop-accounts",
+   "url": "https://github.com/world-geniuses/dsh-plugin-shop-accounts",
+   "slug": "world-geniuses-dsh-plugin-shop-accounts",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-27T01:40:49Z"
   },
   "ningyuanlee/dsh-minimax-byapi": {
    "owner": "NingYuanLee",
@@ -904,6 +936,14 @@
    "slug": "xiangyuyue-boardwise",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-20T02:08:35Z"
+  },
+  "xiaoge480/dsh-qzone-diary": {
+   "owner": "xiaoge480",
+   "repo": "coopanion-dsh-qzone-diary",
+   "url": "https://github.com/xiaoge480/coopanion-dsh-qzone-diary",
+   "slug": "xiaoge480-coopanion-dsh-qzone-diary",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-27T01:40:58Z"
   },
   "xiaoshihou514/dsh-tui": {
    "owner": "xiaoshihou514",

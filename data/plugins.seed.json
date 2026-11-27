@@ -2426,13 +2426,13 @@
   },
   {
    "owner": "1Lany2a",
-   "repo": "dsh-domain-role",
-   "slug": "1lany2a-dsh-domain-role",
+   "repo": "dsh-post-owner",
+   "slug": "1lany2a-dsh-post-owner",
    "name": "dsh-domain-role",
    "category": "session",
    "npm": "",
    "harness": "dsh",
-   "url": "https://github.com/1Lany2a/dsh-domain-role",
+   "url": "https://github.com/1Lany2a/dsh-post-owner",
    "note": ""
   },
   {
@@ -12755,13 +12755,13 @@
   },
   {
    "owner": "Asthestarsfalll",
-   "repo": "dsh-answer-card",
-   "slug": "asthestarsfalll-dsh-answer-card",
+   "repo": "answer-card",
+   "slug": "asthestarsfalll-answer-card",
    "name": "dsh-answer-card",
    "category": "notify",
    "npm": "",
    "harness": "dsh",
-   "url": "https://github.com/Asthestarsfalll/dsh-answer-card",
+   "url": "https://github.com/Asthestarsfalll/answer-card",
    "note": ""
   },
   {
@@ -52640,17 +52640,6 @@
    "note": ""
   },
   {
-   "owner": "Jason-skd",
-   "repo": "dsh-session-fork",
-   "slug": "jason-skd-dsh-session-fork",
-   "name": "dsh-session-fork",
-   "category": "session",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/Jason-skd/dsh-session-fork",
-   "note": ""
-  },
-  {
    "owner": "Jason25417",
    "repo": "dsh-composer-tweaks",
    "slug": "jason25417-dsh-composer-tweaks",
@@ -53979,6 +53968,17 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/jh0oo/dsh-session-purge",
+   "note": ""
+  },
+  {
+   "owner": "jh76111",
+   "repo": "dsh-session-fork",
+   "slug": "jh76111-dsh-session-fork",
+   "name": "dsh-session-fork",
+   "category": "session",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/jh76111/dsh-session-fork",
    "note": ""
   },
   {
@@ -79202,17 +79202,6 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/momoqiqi-qwq/dsh-session-top-new-plus",
-   "note": ""
-  },
-  {
-   "owner": "monagisa",
-   "repo": "dsh-plugin-shop-accounts",
-   "slug": "monagisa-dsh-plugin-shop-accounts",
-   "name": "dsh-plugin-shop-accounts",
-   "category": "tools",
-   "npm": "dsh-plugin-shop-accounts",
-   "harness": "dsh",
-   "url": "https://github.com/monagisa/dsh-plugin-shop-accounts",
    "note": ""
   },
   {
@@ -121918,6 +121907,17 @@
    "note": ""
   },
   {
+   "owner": "world-geniuses",
+   "repo": "dsh-plugin-shop-accounts",
+   "slug": "world-geniuses-dsh-plugin-shop-accounts",
+   "name": "dsh-plugin-shop-accounts",
+   "category": "tools",
+   "npm": "dsh-plugin-shop-accounts",
+   "harness": "dsh",
+   "url": "https://github.com/world-geniuses/dsh-plugin-shop-accounts",
+   "note": ""
+  },
+  {
    "owner": "woshipixiu1234",
    "repo": "dsh-invest-bundle",
    "slug": "woshipixiu1234-dsh-invest-bundle",
@@ -125087,13 +125087,13 @@
   },
   {
    "owner": "xiaoge480",
-   "repo": "dsh-qzone-diary",
-   "slug": "xiaoge480-dsh-qzone-diary",
+   "repo": "coopanion-dsh-qzone-diary",
+   "slug": "xiaoge480-coopanion-dsh-qzone-diary",
    "name": "dsh-qzone-diary",
    "category": "identity",
    "npm": "",
    "harness": "dsh",
-   "url": "https://github.com/xiaoge480/dsh-qzone-diary",
+   "url": "https://github.com/xiaoge480/coopanion-dsh-qzone-diary",
    "note": ""
   },
   {
