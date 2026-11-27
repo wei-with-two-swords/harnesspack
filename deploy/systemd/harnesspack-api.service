@@ -15,10 +15,22 @@ Environment=HARNESSPACK_DB=/opt/harnesspack/data/harnesspack.db
 Environment=HARNESSPACK_SNAPSHOTS=/opt/harnesspack/data/snapshots
 Environment=HARNESSPACK_FRONTEND=/opt/harnesspack/frontend/dist
 Environment=HARNESSPACK_INGEST=0
+# glibc malloc tuning (2026-11-27 OOM ratchet): plugin_detail allocates ~70 MB
+# of transient Python objects per request. With glibc defaults those pages are
+# freed back to *malloc arenas* but never returned to the OS -- anon RSS
+# ratchets up under light traffic until MemoryMax kills the worker (observed:
+# 390 MB kills twice, ~2 req/min traffic). These three settings make big
+# allocations mmap-backed (returned to the OS on free) and cap arena count.
+Environment=MALLOC_ARENA_MAX=2
+Environment=MALLOC_MMAP_THRESHOLD_=131072
+Environment=MALLOC_TRIM_THRESHOLD_=131072
 EnvironmentFile=/etc/harnesspack-api.env
 ExecStart=/opt/harnesspack/.venv/bin/uvicorn backend.app.main:app \
     --host 127.0.0.1 --port 8000 --workers 1 \
     --proxy-headers --forwarded-allow-ips=127.0.0.1
+# Soft limit first: the kernel reclaims/swaps before the hard kill below, so a
+# traffic spike degrades latency instead of dropping connections (CF 520s).
+MemoryHigh=320M
 # Hard cap: keep a runaway API from starving nginx/SSH on this 1G box.
 MemoryMax=384M
 Restart=always
