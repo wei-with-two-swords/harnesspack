@@ -38,6 +38,21 @@ def main() -> int:
     if aliases_path.exists():
         aliases = json.loads(aliases_path.read_text(encoding="utf-8")).get("aliases") or {}
 
+    # Repositories retired by scripts/prune_seed.py (deleted/private upstream,
+    # not found for N consecutive snapshots). They leave the rankings per the
+    # inclusion rule; the exclusion list restores them automatically if the
+    # repository becomes available again.
+    excluded_path = ROOT / "data" / "catalog" / "excluded.json"
+    excluded: set[str] = set()
+    if excluded_path.exists():
+        try:
+            excluded = set(
+                str(slug)
+                for slug in (json.loads(excluded_path.read_text(encoding="utf-8")).get("excluded") or {})
+            )
+        except (OSError, json.JSONDecodeError):
+            excluded = set()
+
     plugins = []
     for key in sorted(repos):
         item = repos[key]
@@ -95,6 +110,7 @@ def main() -> int:
             )
 
     # Renames can collide with an existing entry; keep the canonical name.
+    plugins = [p for p in plugins if p["slug"] not in excluded]
     by_repo = {}
     for plugin in plugins:
         key = f'{plugin["owner"]}/{plugin["repo"]}'.lower()
@@ -127,7 +143,7 @@ def main() -> int:
     counts: dict[str, int] = {}
     for p in plugins:
         counts[p["category"]] = counts.get(p["category"], 0) + 1
-    print(json.dumps({"plugins": len(plugins), "bytes": out.stat().st_size, "categories": dict(sorted(counts.items(), key=lambda kv: -kv[1]))}, ensure_ascii=False))
+    print(json.dumps({"plugins": len(plugins), "excluded_dead": len(excluded), "bytes": out.stat().st_size, "categories": dict(sorted(counts.items(), key=lambda kv: -kv[1]))}, ensure_ascii=False))
     return 0
 
 

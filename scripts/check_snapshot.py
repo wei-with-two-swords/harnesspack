@@ -102,14 +102,31 @@ def main() -> int:
     total = int(payload.get("total") or 0)
     ok = int(payload.get("ok") or 0)
     failed = payload.get("failed")
-    ok_rate = (ok / total) if total else 0.0
-    report.update({"total": total, "ok": ok, "failed": failed, "ok_rate": round(ok_rate, 4)})
+
+    # "repository not found" records are known-dead upstream repositories that
+    # the seed prune retires after a few days (scripts/prune_seed.py). They are
+    # expected noise, not a collection failure — judge health on the rest.
+    records = payload.get("plugins") if isinstance(payload.get("plugins"), list) else []
+    anticipated = sum(1 for r in records if isinstance(r, dict) and r.get("status") == "not_found")
+    effective_total = max(total - anticipated, 0)
+    ok_rate = (ok / effective_total) if effective_total else 0.0
+    report.update({
+        "total": total,
+        "ok": ok,
+        "failed": failed,
+        "anticipated_failures": anticipated,
+        "effective_total": effective_total,
+        "ok_rate": round(ok_rate, 4),
+    })
 
     problems: list[str] = []
     if total <= 0 or ok <= 0:
         problems.append("snapshot has no successful records")
     elif ok_rate < args.min_ok_rate:
-        problems.append(f"ok rate {ok_rate:.2%} is below {args.min_ok_rate:.2%}")
+        problems.append(
+            f"ok rate {ok_rate:.2%} is below {args.min_ok_rate:.2%}"
+            f" ({ok}/{effective_total}; {anticipated} known-dead repos excluded)"
+        )
     if seed_count and total < seed_count:
         problems.append(f"snapshot covers {total} of {seed_count} seed repositories")
     if gaps:

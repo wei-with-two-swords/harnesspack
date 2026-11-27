@@ -24,6 +24,7 @@ git pull --rebase --autostash || log "warn: git pull failed, continuing"
 # not GitHub, so a failure there must not abort the run.
 "$PY" scripts/vendor_catalog.py || log "warn: catalog refresh failed"
 "$PY" scripts/heal_seed.py || log "warn: renamed-repo healing failed"
+"$PY" scripts/prune_seed.py || log "warn: dead-repo prune failed"
 "$PY" scripts/build_seed.py || { log "error: build_seed failed"; exit 1; }
 
 rc=1
