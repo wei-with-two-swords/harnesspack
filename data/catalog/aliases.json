@@ -1,5 +1,5 @@
 {
- "updated_at": "2026-11-28T00:10:29Z",
+ "updated_at": "2026-11-28T01:40:36Z",
  "aliases": {
   "1250589385/dsh-quick-send": {
    "owner": "Raysnows",
@@ -128,6 +128,14 @@
    "slug": "ch1nse1-dsh-work-guard",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-25T01:41:03Z"
+  },
+  "anthealaffy/dsh-plugin-tomato-todo": {
+   "owner": "AntheaLaffy",
+   "repo": "tomato-todo",
+   "url": "https://github.com/AntheaLaffy/tomato-todo",
+   "slug": "anthealaffy-tomato-todo",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-28T01:40:21Z"
   },
   "antonio-mastropaolo/dsh-anthropic-membership": {
    "owner": "antonio-mastropaolo",
@@ -408,6 +416,14 @@
    "slug": "jh76111-dsh-session-fork",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-27T01:40:44Z"
+  },
+  "jeremycruzfang/dsh-plugin-dshm": {
+   "owner": "VeynAI",
+   "repo": "dsh-plugin-dshm",
+   "url": "https://github.com/VeynAI/dsh-plugin-dshm",
+   "slug": "veynai-dsh-plugin-dshm",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-28T01:40:30Z"
   },
   "jerryxff26-alt/dsh-delivery-board": {
    "owner": "jerryxff26-alt",
@@ -777,6 +793,14 @@
    "source": "snapshot-html-url",
    "detected_at": "2026-11-25T01:41:23Z"
   },
+  "shinji00222/dsh-persona-continuity-bot": {
+   "owner": "shinji00222",
+   "repo": "dsh-persona-twin-bot",
+   "url": "https://github.com/shinji00222/dsh-persona-twin-bot",
+   "slug": "shinji00222-dsh-persona-twin-bot",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-28T01:40:32Z"
+  },
   "songoao25/dsh-chatgpt-subscription": {
    "owner": "songoao25",
    "repo": "dsh-chatgpt-sub",
@@ -1040,6 +1064,14 @@
    "slug": "yuluo554-traceproof",
    "source": "snapshot-html-url",
    "detected_at": "2026-11-26T01:40:48Z"
+  },
+  "zepeng-jin/dsh-completion-notifier": {
+   "owner": "can-mrjin",
+   "repo": "dsh-completion-notifier",
+   "url": "https://github.com/can-mrjin/dsh-completion-notifier",
+   "slug": "can-mrjin-dsh-completion-notifier",
+   "source": "snapshot-html-url",
+   "detected_at": "2026-11-28T01:40:35Z"
   },
   "zf-666888/dsh-session-id-for-desktop": {
    "owner": "meowmeowloong",

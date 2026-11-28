@@ -11160,13 +11160,13 @@
   },
   {
    "owner": "AntheaLaffy",
-   "repo": "dsh-plugin-tomato-todo",
-   "slug": "anthealaffy-dsh-plugin-tomato-todo",
+   "repo": "tomato-todo",
+   "slug": "anthealaffy-tomato-todo",
    "name": "dsh-plugin-tomato-todo",
    "category": "workflow",
    "npm": "dsh-plugin-tomato-todo",
    "harness": "dsh",
-   "url": "https://github.com/AntheaLaffy/dsh-plugin-tomato-todo",
+   "url": "https://github.com/AntheaLaffy/tomato-todo",
    "note": ""
   },
   {
@@ -19057,6 +19057,17 @@
    "note": ""
   },
   {
+   "owner": "can-mrjin",
+   "repo": "dsh-completion-notifier",
+   "slug": "can-mrjin-dsh-completion-notifier",
+   "name": "dsh-completion-notifier",
+   "category": "notify",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/can-mrjin/dsh-completion-notifier",
+   "note": ""
+  },
+  {
    "owner": "canarybuilds",
    "repo": "dsh-mobile-ui",
    "slug": "canarybuilds-dsh-mobile-ui",
@@ -22365,6 +22376,17 @@
    "npm": "dsh-message-outline",
    "harness": "dsh",
    "url": "https://github.com/chongfengdy-dev/dsh-message-outline",
+   "note": ""
+  },
+  {
+   "owner": "ChongYuGit",
+   "repo": "dsh-rider-mcp",
+   "slug": "chongyugit-dsh-rider-mcp",
+   "name": "dsh-rider-mcp",
+   "category": "dev",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/ChongYuGit/dsh-rider-mcp",
    "note": ""
   },
   {
@@ -53520,17 +53542,6 @@
    "note": ""
   },
   {
-   "owner": "JeremyCruzFang",
-   "repo": "dsh-plugin-dshm",
-   "slug": "jeremycruzfang-dsh-plugin-dshm",
-   "name": "dsh-plugin-dshm",
-   "category": "remote",
-   "npm": "dsh-plugin-dshm",
-   "harness": "dsh",
-   "url": "https://github.com/JeremyCruzFang/dsh-plugin-dshm",
-   "note": ""
-  },
-  {
    "owner": "Jeremyly",
    "repo": "dsh-plugin-offline-sync",
    "slug": "jeremyly-dsh-plugin-offline-sync",
@@ -61925,6 +61936,17 @@
   },
   {
    "owner": "KunKun24",
+   "repo": "autonomous-dev-security-auditor-skills",
+   "slug": "kunkun24-autonomous-dev-security-auditor-skills",
+   "name": "autonomous-dev-security-auditor-skills",
+   "category": "skill",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/KunKun24/autonomous-dev-security-auditor-skills",
+   "note": ""
+  },
+  {
+   "owner": "KunKun24",
    "repo": "dsh-enter-newline",
    "slug": "kunkun24-dsh-enter-newline",
    "name": "dsh-enter-newline",
@@ -69390,6 +69412,17 @@
    "npm": "dsh-plugin-reverse-proxy",
    "harness": "dsh",
    "url": "https://github.com/llifco/dsh-plugin-reverse-proxy",
+   "note": ""
+  },
+  {
+   "owner": "lliMill",
+   "repo": "dsh-persona-manager",
+   "slug": "llimill-dsh-persona-manager",
+   "name": "dsh-persona-manager",
+   "category": "identity",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/lliMill/dsh-persona-manager",
    "note": ""
   },
   {
@@ -98708,6 +98741,17 @@
    "note": ""
   },
   {
+   "owner": "ryangallager0323-jpg",
+   "repo": "dsh-skin-atelier",
+   "slug": "ryangallager0323-jpg-dsh-skin-atelier",
+   "name": "dsh-skin-atelier",
+   "category": "theme",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/ryangallager0323-jpg/dsh-skin-atelier",
+   "note": ""
+  },
+  {
    "owner": "RyanShen3",
    "repo": "dsh-toutiao-reader",
    "slug": "ryanshen3-dsh-toutiao-reader",
@@ -102187,11 +102231,22 @@
    "owner": "shinji00222",
    "repo": "dsh-persona-continuity-bot",
    "slug": "shinji00222-dsh-persona-continuity-bot",
+   "name": "dsh-persona-continuity",
+   "category": "session",
+   "npm": "dsh-persona-continuity",
+   "harness": "dsh",
+   "url": "https://github.com/shinji00222/dsh-persona-continuity-bot",
+   "note": ""
+  },
+  {
+   "owner": "shinji00222",
+   "repo": "dsh-persona-twin-bot",
+   "slug": "shinji00222-dsh-persona-twin-bot",
    "name": "dsh-persona-continuity-bot",
    "category": "memory",
    "npm": "dsh-persona-continuity",
    "harness": "dsh",
-   "url": "https://github.com/shinji00222/dsh-persona-continuity-bot",
+   "url": "https://github.com/shinji00222/dsh-persona-twin-bot",
    "note": ""
   },
   {
@@ -103787,6 +103842,17 @@
    "npm": "",
    "harness": "dsh",
    "url": "https://github.com/SkanderBog/dsh-pdf-reader",
+   "note": ""
+  },
+  {
+   "owner": "Skeltx",
+   "repo": "dsh-moduleapi",
+   "slug": "skeltx-dsh-moduleapi",
+   "name": "dsh-moduleapi",
+   "category": "model",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/Skeltx/dsh-moduleapi",
    "note": ""
   },
   {
@@ -116319,6 +116385,17 @@
    "note": ""
   },
   {
+   "owner": "VeynAI",
+   "repo": "dsh-plugin-dshm",
+   "slug": "veynai-dsh-plugin-dshm",
+   "name": "dsh-plugin-dshm",
+   "category": "remote",
+   "npm": "dsh-plugin-dshm",
+   "harness": "dsh",
+   "url": "https://github.com/VeynAI/dsh-plugin-dshm",
+   "note": ""
+  },
+  {
    "owner": "VFVrPQ",
    "repo": "dsh-preview-image",
    "slug": "vfvrpq-dsh-preview-image",
@@ -121530,6 +121607,17 @@
    "npm": "dsh-model-capability",
    "harness": "dsh",
    "url": "https://github.com/WJZ-P/dsh-model-capabilities",
+   "note": ""
+  },
+  {
+   "owner": "wkqian06",
+   "repo": "dsh-knowledgepalace",
+   "slug": "wkqian06-dsh-knowledgepalace",
+   "name": "dsh-knowledgepalace",
+   "category": "memory",
+   "npm": "",
+   "harness": "dsh",
+   "url": "https://github.com/wkqian06/dsh-knowledgepalace",
    "note": ""
   },
   {
@@ -136699,17 +136787,6 @@
    "npm": "dsh-newapi-provider",
    "harness": "dsh",
    "url": "https://github.com/zenVibeCoding/dsh-newapi-provider",
-   "note": ""
-  },
-  {
-   "owner": "zepeng-jin",
-   "repo": "dsh-completion-notifier",
-   "slug": "zepeng-jin-dsh-completion-notifier",
-   "name": "dsh-completion-notifier",
-   "category": "notify",
-   "npm": "",
-   "harness": "dsh",
-   "url": "https://github.com/zepeng-jin/dsh-completion-notifier",
    "note": ""
   },
   {
