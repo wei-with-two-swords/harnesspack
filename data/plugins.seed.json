@@ -351,7 +351,7 @@
    "slug": "0x2fovo-dsh-codinput",
    "name": "DSH-Codinput",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-codinput",
    "harness": "dsh",
    "url": "https://github.com/0x2fovo/DSH-Codinput",
    "note": ""
@@ -7193,7 +7193,7 @@
    "slug": "ade-hale-dsh-skill-conflicts",
    "name": "dsh-skill-conflicts",
    "category": "skill",
-   "npm": "",
+   "npm": "dsh-skill-conflicts",
    "harness": "dsh",
    "url": "https://github.com/Ade-hale/dsh-skill-conflicts",
    "note": ""
@@ -11142,7 +11142,7 @@
    "slug": "antares422-dsh-design-board",
    "name": "dsh-design-board",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-design-board",
    "harness": "dsh",
    "url": "https://github.com/Antares422/dsh-design-board",
    "note": ""
@@ -11439,7 +11439,7 @@
    "slug": "aonysen-dsh-memory-rag",
    "name": "dsh-memory-rag",
    "category": "memory",
-   "npm": "",
+   "npm": "dsh-memory-rag",
    "harness": "dsh",
    "url": "https://github.com/Aonysen/dsh-memory-rag",
    "note": ""
@@ -11659,7 +11659,7 @@
    "slug": "appsganin-dsh-qwen-subscription",
    "name": "dsh-qwen-subscription",
    "category": "model",
-   "npm": "",
+   "npm": "dsh-llm-qwen-subscription",
    "harness": "dsh",
    "url": "https://github.com/AppsGanin/dsh-qwen-subscription",
    "note": ""
@@ -12990,7 +12990,7 @@
    "slug": "augustineclark10145-star-dsh-chat-idea-jump",
    "name": "dsh-chat-idea-jump",
    "category": "dev",
-   "npm": "",
+   "npm": "dsh-chat-idea-jump",
    "harness": "dsh",
    "url": "https://github.com/augustineclark10145-star/dsh-chat-idea-jump",
    "note": ""
@@ -13001,7 +13001,7 @@
    "slug": "augustineclark10145-star-dsh-niuma-harness-widget",
    "name": "dsh-niuma-harness-widget",
    "category": "fun",
-   "npm": "",
+   "npm": "dsh-niuma-harness-widget",
    "harness": "dsh",
    "url": "https://github.com/augustineclark10145-star/dsh-niuma-harness-widget",
    "note": ""
@@ -13012,7 +13012,7 @@
    "slug": "augustineclark10145-star-dsh-subagent-model-badge",
    "name": "dsh-subagent-model-badge",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-subagent-model-badge",
    "harness": "dsh",
    "url": "https://github.com/augustineclark10145-star/dsh-subagent-model-badge",
    "note": ""
@@ -13056,7 +13056,7 @@
    "slug": "aurasuisui-dsh-moonset-theme",
    "name": "dsh-moonset-theme",
    "category": "theme",
-   "npm": "",
+   "npm": "@aurasuisui/dsh-moonset-theme",
    "harness": "dsh",
    "url": "https://github.com/aurasuisui/dsh-moonset-theme",
    "note": ""
@@ -15597,7 +15597,7 @@
    "slug": "beiningcheng-dsh-plugin-browser-bridge",
    "name": "dsh-plugin-browser-bridge",
    "category": "browser",
-   "npm": "",
+   "npm": "dsh-plugin-browser-bridge",
    "harness": "dsh",
    "url": "https://github.com/BeiningCheng/dsh-plugin-browser-bridge",
    "note": ""
@@ -15608,7 +15608,7 @@
    "slug": "beiningcheng-dsh-plugin-linux-computer-use",
    "name": "dsh-plugin-linux-computer-use",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-plugin-linux-computer-use",
    "harness": "dsh",
    "url": "https://github.com/BeiningCheng/dsh-plugin-linux-computer-use",
    "note": ""
@@ -20030,7 +20030,7 @@
    "slug": "cengcengcai-creator-dsh-ruleset",
    "name": "dsh-ruleset",
    "category": "security",
-   "npm": "",
+   "npm": "dsh-ruleset",
    "harness": "dsh",
    "url": "https://github.com/cengcengcai-creator/dsh-ruleset",
    "note": ""
@@ -20624,7 +20624,7 @@
    "slug": "charlieeeo-dsh-next-reply",
    "name": "dsh-next-reply",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-next-reply",
    "harness": "dsh",
    "url": "https://github.com/Charlieeeo/dsh-next-reply",
    "note": ""
@@ -22384,7 +22384,7 @@
    "slug": "chongyugit-dsh-rider-mcp",
    "name": "dsh-rider-mcp",
    "category": "dev",
-   "npm": "",
+   "npm": "dsh-rider-mcp",
    "harness": "dsh",
    "url": "https://github.com/ChongYuGit/dsh-rider-mcp",
    "note": ""
@@ -27587,7 +27587,7 @@
    "slug": "dengmuming-dsh-cloud-sandbox",
    "name": "dsh-cloud-sandbox",
    "category": "security",
-   "npm": "",
+   "npm": "dsh-cloud-sandbox",
    "harness": "dsh",
    "url": "https://github.com/dengmuming/dsh-cloud-sandbox",
    "note": ""
@@ -30744,7 +30744,7 @@
    "slug": "dsai-q-browser-pilot",
    "name": "browser-pilot",
    "category": "browser",
-   "npm": "",
+   "npm": "@dsai-q/browser-pilot",
    "harness": "dsh",
    "url": "https://github.com/dsAI-Q/browser-pilot",
    "note": ""
@@ -32350,7 +32350,7 @@
    "slug": "edisonzszs-web-clone",
    "name": "web-clone",
    "category": "skill",
-   "npm": "",
+   "npm": "dsh-web-clone",
    "harness": "dsh",
    "url": "https://github.com/Edisonzszs/web-clone",
    "note": ""
@@ -32801,7 +32801,7 @@
    "slug": "elementben555-context-hub",
    "name": "context-hub",
    "category": "memory",
-   "npm": "",
+   "npm": "dsh-context-hub",
    "harness": "dsh",
    "url": "https://github.com/ElementBen555/context-hub",
    "note": ""
@@ -33593,7 +33593,7 @@
    "slug": "ericscottlin-dsh-plugin-repeat-tool-guard",
    "name": "dsh-plugin-repeat-tool-guard",
    "category": "security",
-   "npm": "",
+   "npm": "dsh-plugin-repeat-tool-guard",
    "harness": "dsh",
    "url": "https://github.com/EricScottLin/dsh-plugin-repeat-tool-guard",
    "note": ""
@@ -33846,7 +33846,7 @@
    "slug": "eternalnight996-memory-eternal",
    "name": "memory-eternal",
    "category": "memory",
-   "npm": "memory-eternal",
+   "npm": "@mengbot/mem",
    "harness": "dsh",
    "url": "https://github.com/EternalNight996/memory-eternal",
    "note": ""
@@ -34088,7 +34088,7 @@
    "slug": "evan7ang-dsh-agent-hints",
    "name": "dsh-agent-hints",
    "category": "model",
-   "npm": "",
+   "npm": "dsh-agent-hints",
    "harness": "dsh",
    "url": "https://github.com/evan7ang/dsh-agent-hints",
    "note": ""
@@ -35661,7 +35661,7 @@
    "slug": "fengguanghuai-dsh-workspace-tools",
    "name": "dsh-workspace-tools",
    "category": "ui",
-   "npm": "",
+   "npm": "@fengguanghuai/dsh-workspace-tools",
    "harness": "dsh",
    "url": "https://github.com/fengguanghuai/dsh-workspace-tools",
    "note": ""
@@ -36684,7 +36684,7 @@
    "slug": "fleey-deepseek-harness-trae",
    "name": "deepseek-harness-trae",
    "category": "model",
-   "npm": "",
+   "npm": "dsh-trae2api",
    "harness": "dsh",
    "url": "https://github.com/Fleey/deepseek-harness-trae",
    "note": ""
@@ -37894,7 +37894,7 @@
    "slug": "fsrmqi-dsh-research-kit",
    "name": "dsh-research-kit",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-research-kit",
    "harness": "dsh",
    "url": "https://github.com/fsrmqi/dsh-research-kit",
    "note": ""
@@ -37916,7 +37916,7 @@
    "slug": "ftshare-lab-dsh-plugin-fft-bundle",
    "name": "dsh-plugin-fft-bundle",
    "category": "tools",
-   "npm": "",
+   "npm": "@dsh-ft/finance-all-in-one",
    "harness": "dsh",
    "url": "https://github.com/FTShare-Lab/dsh-plugin-fft-bundle",
    "note": ""
@@ -38609,7 +38609,7 @@
    "slug": "fzjmaclearn-zack-calendar",
    "name": "zack-calendar",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-zack-todocalendar",
    "harness": "dsh",
    "url": "https://github.com/fzjmaclearn/zack-calendar",
    "note": ""
@@ -38675,7 +38675,7 @@
    "slug": "g-ty-dsh-delete",
    "name": "dsh-delete",
    "category": "session",
-   "npm": "",
+   "npm": "dsh-delete",
    "harness": "dsh",
    "url": "https://github.com/G-TY/dsh-delete",
    "note": ""
@@ -38686,7 +38686,7 @@
    "slug": "g-ty-dsh-restart-refresh",
    "name": "dsh-restart-refresh",
    "category": "dev",
-   "npm": "",
+   "npm": "dsh-restart-refresh",
    "harness": "dsh",
    "url": "https://github.com/G-TY/dsh-restart-refresh",
    "note": ""
@@ -39093,7 +39093,7 @@
    "slug": "gaudi-xix-dsbot-session-create",
    "name": "dsbot-session-create",
    "category": "session",
-   "npm": "",
+   "npm": "dsbot-session-create",
    "harness": "dsh",
    "url": "https://github.com/Gaudi-XIX/dsbot-session-create",
    "note": ""
@@ -43944,7 +43944,7 @@
    "slug": "happylin122-dsh-restart-menu",
    "name": "dsh-restart-menu",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-restart-menu",
    "harness": "dsh",
    "url": "https://github.com/happylin122/dsh-restart-menu",
    "note": ""
@@ -44065,7 +44065,7 @@
    "slug": "harrylabsj-kiwi",
    "name": "kiwi",
    "category": "tools",
-   "npm": "",
+   "npm": "@harrylabsj/kiwi-dsh-plugin",
    "harness": "dsh",
    "url": "https://github.com/harrylabsj/kiwi",
    "note": ""
@@ -56044,7 +56044,7 @@
    "slug": "joblessjoe-deep-toolbox",
    "name": "deep-toolbox",
    "category": "usage",
-   "npm": "",
+   "npm": "deep-toolbox",
    "harness": "dsh",
    "url": "https://github.com/JoblessJoe/deep-toolbox",
    "note": ""
@@ -57320,7 +57320,7 @@
    "slug": "jszjdyt-singlecell-full-workflow",
    "name": "singlecell-full-workflow",
    "category": "tools",
-   "npm": "dsh-singlecell-workbench",
+   "npm": "",
    "harness": "dsh",
    "url": "https://github.com/jszjdyt/singlecell-full-workflow",
    "note": ""
@@ -57386,7 +57386,7 @@
    "slug": "juki001-dsh-memory-curate",
    "name": "dsh-memory-curate",
    "category": "memory",
-   "npm": "",
+   "npm": "dsh-memory-curate",
    "harness": "dsh",
    "url": "https://github.com/juki001/dsh-memory-curate",
    "note": ""
@@ -57485,7 +57485,7 @@
    "slug": "julypjyt-creator-dsh-word-translate",
    "name": "dsh-word-translate",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-word-translate",
    "harness": "dsh",
    "url": "https://github.com/julypjyt-creator/dsh-word-translate",
    "note": ""
@@ -57903,7 +57903,7 @@
    "slug": "jx70-dsh-comfyui-link",
    "name": "dsh-comfyui-link",
    "category": "vision",
-   "npm": "dsh-comfyui-link",
+   "npm": "",
    "harness": "dsh",
    "url": "https://github.com/jx70/dsh-comfyui-link",
    "note": ""
@@ -58255,7 +58255,7 @@
    "slug": "k99k5-dsh-suggest-card",
    "name": "dsh-suggest-card",
    "category": "ui",
-   "npm": "",
+   "npm": "@k99k5/dsh-suggest-card",
    "harness": "dsh",
    "url": "https://github.com/k99k5/dsh-suggest-card",
    "note": ""
@@ -58904,7 +58904,7 @@
    "slug": "kasdjg-dsh-taskbar-lamp",
    "name": "dsh-taskbar-lamp",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-taskbar-lamp",
    "harness": "dsh",
    "url": "https://github.com/kasdjg/dsh-taskbar-lamp",
    "note": ""
@@ -59927,7 +59927,7 @@
    "slug": "kianwu-dsh-oh-my-workflow",
    "name": "dsh-oh-my-workflow",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-oh-my-workflow",
    "harness": "dsh",
    "url": "https://github.com/KianWu/dsh-oh-my-workflow",
    "note": ""
@@ -61731,7 +61731,7 @@
    "slug": "ku4nc4-dsh-history-window",
    "name": "dsh-history-window",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-history-window",
    "harness": "dsh",
    "url": "https://github.com/ku4nc4/dsh-history-window",
    "note": ""
@@ -64965,7 +64965,7 @@
    "slug": "liam-liyaming-dsh-result-comments",
    "name": "dsh-result-comments",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-result-comments",
    "harness": "dsh",
    "url": "https://github.com/Liam-liyaming/dsh-result-comments",
    "note": ""
@@ -68309,7 +68309,7 @@
    "slug": "liujing9178-dsh-tool-picker",
    "name": "dsh-tool-picker",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-tool-picker",
    "harness": "dsh",
    "url": "https://github.com/liujing9178/dsh-tool-picker",
    "note": ""
@@ -69420,7 +69420,7 @@
    "slug": "llimill-dsh-persona-manager",
    "name": "dsh-persona-manager",
    "category": "identity",
-   "npm": "",
+   "npm": "@kita-z/dsh-persona-manager",
    "harness": "dsh",
    "url": "https://github.com/lliMill/dsh-persona-manager",
    "note": ""
@@ -71554,7 +71554,7 @@
    "slug": "ltrsqks-dsh-answer-cost",
    "name": "dsh-answer-cost",
    "category": "usage",
-   "npm": "",
+   "npm": "dsh-answer-cost",
    "harness": "dsh",
    "url": "https://github.com/ltrsqks/dsh-answer-cost",
    "note": ""
@@ -74183,7 +74183,7 @@
    "slug": "macroguo-ghy-dsh-codex-migration",
    "name": "dsh-codex-migration",
    "category": "session",
-   "npm": "",
+   "npm": "dsh-codex-migration",
    "harness": "dsh",
    "url": "https://github.com/macroguo-ghy/dsh-codex-migration",
    "note": ""
@@ -75217,7 +75217,7 @@
    "slug": "marsma-101-dsh-tag-memory",
    "name": "dsh-tag-memory",
    "category": "memory",
-   "npm": "",
+   "npm": "dsh-tag-memory",
    "harness": "dsh",
    "url": "https://github.com/marsma-101/dsh-tag-memory",
    "note": ""
@@ -79111,7 +79111,7 @@
    "slug": "mochi-fish-dsh-fish",
    "name": "dsh-fish",
    "category": "fun",
-   "npm": "",
+   "npm": "@ssamurias/dsh-fish",
    "harness": "dsh",
    "url": "https://github.com/mochi-fish/dsh-fish",
    "note": ""
@@ -79958,7 +79958,7 @@
    "slug": "moqiaoduo-dsh-qianwen",
    "name": "dsh-qianwen",
    "category": "model",
-   "npm": "",
+   "npm": "dsh-qianwen",
    "harness": "dsh",
    "url": "https://github.com/moqiaoduo/dsh-qianwen",
    "note": ""
@@ -86250,7 +86250,7 @@
    "slug": "omnimux-ai-omnimux-client",
    "name": "omnimux-client",
    "category": "tools",
-   "npm": "",
+   "npm": "omnimux-clip",
    "harness": "dsh",
    "url": "https://github.com/omnimux-ai/omnimux-client",
    "note": ""
@@ -87207,7 +87207,7 @@
    "slug": "ouyang111-video-preview",
    "name": "video-preview",
    "category": "ui",
-   "npm": "",
+   "npm": "@ouyang111/dsh-video-preview",
    "harness": "dsh",
    "url": "https://github.com/ouyang111/video-preview",
    "note": ""
@@ -88021,7 +88021,7 @@
    "slug": "pandaboby-dsh-liangheng",
    "name": "dsh-liangheng",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-liangheng",
    "harness": "dsh",
    "url": "https://github.com/PandaBoby/dsh-liangheng",
    "note": ""
@@ -88637,7 +88637,7 @@
    "slug": "peng6yu-dsh-design-mode",
    "name": "dsh-design-mode",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-design-mode",
    "harness": "dsh",
    "url": "https://github.com/peng6yu/dsh-design-mode",
    "note": ""
@@ -88714,7 +88714,7 @@
    "slug": "pengtang1024-dsh-smart-provider",
    "name": "dsh-smart-provider",
    "category": "model",
-   "npm": "",
+   "npm": "dsh-smart-provider",
    "harness": "dsh",
    "url": "https://github.com/pengtang1024/dsh-smart-provider",
    "note": ""
@@ -92476,7 +92476,7 @@
    "slug": "pseudonymzjt-dsh-direct-human-style",
    "name": "dsh-direct-human-style",
    "category": "identity",
-   "npm": "",
+   "npm": "dsh-direct-human-style",
    "harness": "dsh",
    "url": "https://github.com/pseudonymzjt/dsh-direct-human-style",
    "note": ""
@@ -92718,7 +92718,7 @@
    "slug": "pxvp2008-dsh-feishu-pilot",
    "name": "dsh-feishu-pilot",
    "category": "remote",
-   "npm": "",
+   "npm": "dsh-feishu-pilot",
    "harness": "dsh",
    "url": "https://github.com/pxvp2008/dsh-feishu-pilot",
    "note": ""
@@ -93136,7 +93136,7 @@
    "slug": "qianhaoq-dota2-ai",
    "name": "dota2.ai",
    "category": "fun",
-   "npm": "",
+   "npm": "@qianhaoq/dsh-dota2ai",
    "harness": "dsh",
    "url": "https://github.com/qianhaoq/dota2.ai",
    "note": ""
@@ -94159,7 +94159,7 @@
    "slug": "qiyaogongfang-dsh-rankings",
    "name": "dsh-rankings",
    "category": "tools",
-   "npm": "",
+   "npm": "@qiyaogongfang/dsh-rankings",
    "harness": "dsh",
    "url": "https://github.com/qiyaogongfang/dsh-rankings",
    "note": ""
@@ -97195,7 +97195,7 @@
    "slug": "rickt34-dsh-fake-logos",
    "name": "dsh-fake-logos",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-fake-logos",
    "harness": "dsh",
    "url": "https://github.com/RickT34/dsh-fake-logos",
    "note": ""
@@ -97250,7 +97250,7 @@
    "slug": "rigelmansid-dsh-flick",
    "name": "dsh-flick",
    "category": "notify",
-   "npm": "",
+   "npm": "dsh-flick",
    "harness": "dsh",
    "url": "https://github.com/rigelmansid/dsh-flick",
    "note": ""
@@ -100858,7 +100858,7 @@
    "slug": "serein772-dsh-quick-shot",
    "name": "dsh-quick-shot",
    "category": "ui",
-   "npm": "",
+   "npm": "@serein1178/dsh-quick-shot",
    "harness": "dsh",
    "url": "https://github.com/serein772/dsh-quick-shot",
    "note": ""
@@ -100869,7 +100869,7 @@
    "slug": "serein772-dsh-todo-board",
    "name": "dsh-todo-board",
    "category": "workflow",
-   "npm": "",
+   "npm": "@serein1178/dsh-todo-board",
    "harness": "dsh",
    "url": "https://github.com/serein772/dsh-todo-board",
    "note": ""
@@ -102013,7 +102013,7 @@
    "slug": "shi2008-dsh-qgis-driver",
    "name": "dsh-qgis-driver",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-qgis-driver",
    "harness": "dsh",
    "url": "https://github.com/SHI2008/dsh-qgis-driver",
    "note": ""
@@ -105434,7 +105434,7 @@
    "slug": "sophia-duoduo-dsh-smart-planner",
    "name": "dsh-smart-planner",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-smart-planner",
    "harness": "dsh",
    "url": "https://github.com/Sophia-DuoDuo/dsh-smart-planner",
    "note": ""
@@ -105995,7 +105995,7 @@
    "slug": "spyfighting-dsh-science-review",
    "name": "dsh-science-review",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-science-review",
    "harness": "dsh",
    "url": "https://github.com/SPYfighting/dsh-science-review",
    "note": ""
@@ -108899,7 +108899,7 @@
    "slug": "superltmajor-pixel-dsh-task-sidebar",
    "name": "dsh-task-sidebar",
    "category": "session",
-   "npm": "",
+   "npm": "dsh-task-sidebar",
    "harness": "dsh",
    "url": "https://github.com/superltmajor-pixel/dsh-task-sidebar",
    "note": ""
@@ -110351,7 +110351,7 @@
    "slug": "tanloon-dsh-share-chat-card",
    "name": "dsh-share-chat-card",
    "category": "docs",
-   "npm": "",
+   "npm": "dsh-share-chat-card",
    "harness": "dsh",
    "url": "https://github.com/Tanloon/dsh-share-chat-card",
    "note": ""
@@ -110373,7 +110373,7 @@
    "slug": "tanson515-dsh-usage",
    "name": "dsh-usage",
    "category": "usage",
-   "npm": "",
+   "npm": "dsh-go-quota",
    "harness": "dsh",
    "url": "https://github.com/tanson515/dsh-usage",
    "note": ""
@@ -111880,7 +111880,7 @@
    "slug": "thomas-zz-dsh-worktree-desk",
    "name": "dsh-worktree-desk",
    "category": "git",
-   "npm": "",
+   "npm": "dsh-worktree-desk",
    "harness": "dsh",
    "url": "https://github.com/Thomas-zz/dsh-worktree-desk",
    "note": ""
@@ -112617,7 +112617,7 @@
    "slug": "tino0713-dsh-wechat-bot-talkingabout",
    "name": "dsh_wechat_bot_talkingabout",
    "category": "session",
-   "npm": "",
+   "npm": "dsh_wechat_bot_talkingabout",
    "harness": "dsh",
    "url": "https://github.com/Tino0713/dsh_wechat_bot_talkingabout",
    "note": ""
@@ -121615,7 +121615,7 @@
    "slug": "wkqian06-dsh-knowledgepalace",
    "name": "dsh-knowledgepalace",
    "category": "memory",
-   "npm": "",
+   "npm": "dsh-knowledgepalace",
    "harness": "dsh",
    "url": "https://github.com/wkqian06/dsh-knowledgepalace",
    "note": ""
@@ -122517,7 +122517,7 @@
    "slug": "wphhyan-dsh-window-keeper-mac",
    "name": "dsh-window-keeper-mac",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-window-keeper-mac",
    "harness": "dsh",
    "url": "https://github.com/wphhyan/dsh-window-keeper-mac",
    "note": ""
@@ -125498,7 +125498,7 @@
    "slug": "xiaobaijiadepugongyingpai-coder-dsh-crew-x",
    "name": "dsh-crew-x",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-crew-x",
    "harness": "dsh",
    "url": "https://github.com/xiaobaijiadepugongyingpai-coder/dsh-crew-x",
    "note": ""
@@ -125817,7 +125817,7 @@
    "slug": "xiaomao361-dsh-hello84",
    "name": "dsh-hello84",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-hello84",
    "harness": "dsh",
    "url": "https://github.com/xiaomao361/dsh-hello84",
    "note": ""
@@ -125839,7 +125839,7 @@
    "slug": "xiaomao361-dsh-toaster",
    "name": "dsh-toaster",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-toaster",
    "harness": "dsh",
    "url": "https://github.com/xiaomao361/dsh-toaster",
    "note": ""
@@ -125960,7 +125960,7 @@
    "slug": "xiaosejun-dsh-golden-partner",
    "name": "dsh-golden-partner",
    "category": "workflow",
-   "npm": "",
+   "npm": "dsh-golden-partner",
    "harness": "dsh",
    "url": "https://github.com/xiaosejun/dsh-golden-partner",
    "note": ""
@@ -129436,7 +129436,7 @@
    "slug": "yang-wudi-dsh-video-gen",
    "name": "dsh-video-gen",
    "category": "vision",
-   "npm": "",
+   "npm": "dsh-video-gen",
    "harness": "dsh",
    "url": "https://github.com/Yang-wudi/dsh-video-gen",
    "note": ""
@@ -132527,7 +132527,7 @@
    "slug": "yomxxx-dsh-output-budget",
    "name": "dsh-output-budget",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-output-budget",
    "harness": "dsh",
    "url": "https://github.com/YOMXXX/dsh-output-budget",
    "note": ""
@@ -132615,7 +132615,7 @@
    "slug": "yornii-dsh-session-delete",
    "name": "dsh-session-delete",
    "category": "session",
-   "npm": "",
+   "npm": "@yornni/dsh-session-delete",
    "harness": "dsh",
    "url": "https://github.com/Yornii/dsh-session-delete",
    "note": ""
@@ -132626,7 +132626,7 @@
    "slug": "yornii-dsh-session-unfold",
    "name": "dsh-session-unfold",
    "category": "session",
-   "npm": "",
+   "npm": "@yornni/dsh-session-unfold",
    "harness": "dsh",
    "url": "https://github.com/Yornii/dsh-session-unfold",
    "note": ""
@@ -135596,7 +135596,7 @@
    "slug": "yzzshanyin-rgb-dsh-background-task-engine",
    "name": "dsh-background-task-engine",
    "category": "tools",
-   "npm": "",
+   "npm": "dsh-background-task-engine",
    "harness": "dsh",
    "url": "https://github.com/yzzshanyin-rgb/dsh-background-task-engine",
    "note": ""
@@ -137136,7 +137136,7 @@
    "slug": "zhang-1239-dsh-yupan",
    "name": "dsh-yupan",
    "category": "tools",
-   "npm": "",
+   "npm": "@zhangxij/dsh-yupan",
    "harness": "dsh",
    "url": "https://github.com/zhang-1239/dsh-yupan",
    "note": ""
@@ -140216,7 +140216,7 @@
    "slug": "zizhennini-nextskills",
    "name": "nextskills",
    "category": "skill",
-   "npm": "",
+   "npm": "dsh-plugin-esp-dev-skill",
    "harness": "dsh",
    "url": "https://github.com/zizhennini/nextskills",
    "note": ""
@@ -142328,7 +142328,7 @@
    "slug": "zzr-rui-997-dsh-academic-figure-ops",
    "name": "dsh-academic-figure-ops",
    "category": "skill",
-   "npm": "",
+   "npm": "dsh-academic-figure-ops",
    "harness": "dsh",
    "url": "https://github.com/ZZR-rui-997/dsh-academic-figure-ops",
    "note": ""
@@ -142339,7 +142339,7 @@
    "slug": "zzr-rui-997-dsh-fluent-pyfluent-ops",
    "name": "dsh-fluent-pyfluent-ops",
    "category": "skill",
-   "npm": "",
+   "npm": "dsh-fluent-pyfluent-ops",
    "harness": "dsh",
    "url": "https://github.com/ZZR-rui-997/dsh-fluent-pyfluent-ops",
    "note": ""
@@ -142372,7 +142372,7 @@
    "slug": "zzr-rui-997-dsh-skill-switchboard",
    "name": "dsh-skill-switchboard",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-skill-switchboard",
    "harness": "dsh",
    "url": "https://github.com/ZZR-rui-997/dsh-skill-switchboard",
    "note": ""
@@ -142383,7 +142383,7 @@
    "slug": "zzricls-dsh-deepblue-hud",
    "name": "dsh-deepblue-hud",
    "category": "ui",
-   "npm": "",
+   "npm": "dsh-deepblue-hud",
    "harness": "dsh",
    "url": "https://github.com/zzricls/dsh-deepblue-hud",
    "note": ""
